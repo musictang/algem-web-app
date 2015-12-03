@@ -7,12 +7,39 @@ and open the template in the editor.
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
 */
+body {
+  height:100%;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #111;
+  background-color: #ffab11;
+  /*Personnalisation*/
+/*  background-image:url('../img/personas-header-1280x1024.png');
+  background-position: right 710px;
+  background-repeat: no-repeat;*/
+}
+
+header {
+  position: relative;
+  height: 50px;
+  background-color: #ffab11;
+}
+
+header > nav {
+  float: left;
+  padding:0.5em 0 0.5em 2.2em;
+}
+
 h1, h2, h3 {
   padding: 1em;
   font-family: Arial,sans-serif;
   color: white;
   background-color: dodgerblue;
   border-radius: 10px;
+}
+
+table.vertical-header th, table.vertical-header td {
+  text-align: left;
+  padding: 0.5em 0 0 1em;
 }
 
 .error {
@@ -75,24 +102,61 @@ input[type=submit] {
   /*padding:  0 0 0 1em;*/
 }
 
+a:link,a:visited, a:active {
+  color: #008335;
+}
+a:hover {
+  color: gray;
+}
+
+footer {
+  position: absolute;
+  left: 2.2em;
+  top: 710px; /*660+50*/
+  height: 2em;
+}
+
+footer > address {
+  font-style: normal;
+  font-size: smaller;
+}
+
+ul.disc{
+  list-style: disc;
+  list-style-image: url('../img/puce-green.png');
+  list-style-position: inside
+}
+
+
+@media only screen and (max-width : 520px) {
+  header > nav {
+    padding:0.5em 0;
+  }
+}
+
+/*iPhone 2G, 3G, 4, 4S Media Queries : Portrait*/
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  header > nav {
+    padding:0.5em 0;
+  }
+}
+/*iPhone 2G, 3G, 4, 4S Media Queries : landscape*/
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px)
+and (orientation : landscape) {
+  /* STYLES GO HERE */
+   header > nav {
+    padding:0.5em 0;
+  }
+}
+
 @media (max-width: 800px) {
   .centered {
   width: 100%;
   margin: 1em 0;
   }
 }
-
-/*.hpadded {
-  padding: 0 1em;
-}*/
-.test tr {
-  /*border-bottom: 1px solid lightgray*/
-}
-table.vertical-header th, table.vertical-header td {
-  text-align: left;
-  padding: 0.5em 0 0 1em;
-  /*background-color: #CCC;*/
-}
-
-
 

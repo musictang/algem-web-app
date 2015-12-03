@@ -5,12 +5,11 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <title>TODO supply a title</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head th:include="/tpl/layout :: head">
+    <title></title>
   </head>
   <body>
+    <header th:replace="/tpl/layout :: header"></header>
     <div th:with="now2=${#dates.createNow()}">
       <h2 th:text="${now}"></h2>
       <ul>
@@ -20,9 +19,6 @@ and open the template in the editor.
     </div>
     <a href="perso/home.html">home</a><br />
     <a href="perso/tuto.html">Tuto</a>
-<!--    <div class="estab" th:>
-
-    </div>-->
-
+  <footer th:replace="/tpl/layout :: footer"></footer>
   </body>
 </html>
