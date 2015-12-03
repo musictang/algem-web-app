@@ -20,14 +20,12 @@
  */
 package net.algem.security;
 
-
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @version 1.0.6
  * @since 1.0.0 11/02/13
  */
-
 public class User {
 
 	private int id;

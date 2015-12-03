@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div th:with="now2=${#dates.createNow()}">
+      <h2 th:text="${now}"></h2>
+      <ul>
+        <li th:each="estab: ${estabList}"><a  th:href="@{tuto.html(d=${now},e=${estab.id})}" th:text="${estab.name}"></a></li>
+      </ul>
+      <!--<h2 th:text="${#dates.format(now2, 'dd/MM/YYYY')}"></h2>-->
+    </div>
+    <a href="perso/home.html">home</a><br />
+    <a href="perso/tuto.html">Tuto</a>
+<!--    <div class="estab" th:>
+
+    </div>-->
+
+  </body>
+</html>

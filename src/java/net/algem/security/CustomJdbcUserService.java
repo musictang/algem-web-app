@@ -27,7 +27,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-//import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 
@@ -41,8 +40,8 @@ public class CustomJdbcUserService
         extends JdbcDaoImpl
 {
 
-  private String customUsersByUsernameQuery = "SELECT l.idper,l.login,l.pass,l.clef FROM login l INNER JOIN personne p ON (l.idper = p.id) WHERE l.idper = ?";
-  private String customAuthoritiesByUsernameQuery = "SELECT profil FROM login WHERE idper = ?";
+  private String customUsersByUsernameQuery = "SELECT l.login,l.pass,l.clef FROM login l INNER JOIN personne p ON (l.idper = p.id) WHERE l.login = ?";
+  private String customAuthoritiesByUsernameQuery = "SELECT profil FROM login WHERE login = ?";
 
   public String getCustomUsersByUsernameQuery() {
     return customUsersByUsernameQuery;
@@ -69,23 +68,24 @@ public class CustomJdbcUserService
    */
   @Override
   protected List<UserDetails> loadUsersByUsername(String login) {
-    int idper = getIdFromLogin(login);
+//    int idper = getIdFromLogin(login);
 
-    return getJdbcTemplate().query(customUsersByUsernameQuery, new Object[]{idper}, new RowMapper<UserDetails>()
+    return getJdbcTemplate().query(customUsersByUsernameQuery, new Object[]{login}, new RowMapper<UserDetails>()
     {
       public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
-        String idAsString = String.valueOf(rs.getString(1)); // idper
-        String password = rs.getString(3);
-        String salt = rs.getString(4);
+//        String idAsString = String.valueOf(rs.getString(1)); // idper
+        String login = rs.getString(1);
+        String password = rs.getString(2);
+        String salt = rs.getString(3);
 //        String fullName = rs.getString(5);
         boolean enabled = true;
-        if (idAsString == null || idAsString.isEmpty()) {
-          idAsString = "";
-        }
+//        if (idAsString == null || idAsString.isEmpty()) {
+//          idAsString = "";
+//        }
         if (password == null || password.isEmpty()) {
           password = " ";
         }
-        CustomUserDetails cu = new CustomUserDetails(idAsString, password, enabled, true, true, true, AuthorityUtils.NO_AUTHORITIES);
+        CustomUserDetails cu = new CustomUserDetails(login, password, enabled, true, true, true, AuthorityUtils.NO_AUTHORITIES);
         cu.setSalt(salt == null || salt.isEmpty() ? " " : salt);
 //        cu.setFullName(fullName);
         return cu;
@@ -95,12 +95,13 @@ public class CustomJdbcUserService
   }
 
   protected List<GrantedAuthority> loadUserAuthorities(String login) {
-    int idper = getIdFromLogin(login);
+//    int idper = getIdFromLogin(login);
 
-    return getJdbcTemplate().query(customAuthoritiesByUsernameQuery, new Object[]{idper}, new RowMapper<GrantedAuthority>()
+    return getJdbcTemplate().query(customAuthoritiesByUsernameQuery, new Object[]{login}, new RowMapper<GrantedAuthority>()
     {
       public GrantedAuthority mapRow(ResultSet rs, int rowNum) throws SQLException {
         String roleName = String.valueOf(rs.getInt(1));
+//        String roleName = rs.getString(1);
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(roleName);
 
         return authority;

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @since 1.0.0 11/02/13
  */
 @Controller
+@Scope("session")
 public class LoginCtrl
 {
 
@@ -70,8 +72,20 @@ public class LoginCtrl
 //		this.validator = validator;
 //	}
   @RequestMapping(method = RequestMethod.GET, value = "login.html")
-  public String showLogin() {
-    return "login";
+  public String logIn() {
+    return "tpl/login";
+  }
+
+   // Login form with error
+  @RequestMapping("/login-error.html")
+  public String loginError(Model model) {
+    model.addAttribute("loginError", true);
+    return "tpl/login.html";
+  }
+
+   @RequestMapping(method = RequestMethod.GET, value = "perso/tuto.html")
+  public String tuto() {
+    return "tpl/tuto";
   }
 //
 //	@RequestMapping(method = RequestMethod.POST, value = "login.html")
@@ -101,24 +115,14 @@ public class LoginCtrl
 
   @RequestMapping(method = RequestMethod.GET, value = "perso/home.html")
   public String showHome(Principal p, Model model) {
-
-    int id;
-    System.out.println(p.getName());
-//      CustomUserDetails activeUser = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    try {
-      id = Integer.parseInt(p.getName());
-    } catch (NumberFormatException nfe) {
-      id = -1;
-    }
-    User u = service.findId(id);
+    User u = service.findUserByLogin(p.getName());
     model.addAttribute("user", u);
-    return "welcome";
+    return "tpl/welcome";
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/user.html")
   public String showUserACL(HttpServletRequest request, Model model) {
-    User found = null;
-    found = dao.findById(Integer.parseInt(request.getParameter("id")));
+    User found = dao.findById(Integer.parseInt(request.getParameter("id")));
     model.addAttribute("user", found);
     List<Map<String, Boolean>> list = dao.listMenuAccess(found.getId());
     model.addAttribute("acl", list);

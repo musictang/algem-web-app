@@ -22,11 +22,14 @@ package net.algem.planning;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
+import net.algem.contact.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -81,7 +84,7 @@ public class PlanningCtrl
     model.addAttribute("freeplace", service.getFreePlace(date, estab));
     model.addAttribute("timeOffset", service.getTimeOffset());
 
-    return "daily";
+    return "jsp/daily";
   }
 
   /**
@@ -89,8 +92,16 @@ public class PlanningCtrl
    *
    * @param model
    */
-  @RequestMapping(method = RequestMethod.GET, value = "/index.html")
-  void loadEstablishment(Model model) {
-    model.addAttribute("estabList", service.getEstablishments(estabFilter));
+  @RequestMapping(method = RequestMethod.GET, value={ "/", "index.html"})
+  String loadEstablishment(Model model) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
+    model.addAttribute("now", dateFormat.format(new Date()));
+    List<Person> estabTest = new ArrayList<Person>();
+    estabTest.add(new Person(3501,"Malakoff"));
+    estabTest.add(new Person(87,"Lyon"));
+    estabTest.add(new Person(52,"Paris"));
+    model.addAttribute("estabList", estabTest);
+//    model.addAttribute("estabList", service.getEstablishments(estabFilter));
+    return "tpl/index";
   }
 }

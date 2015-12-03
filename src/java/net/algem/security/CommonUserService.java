@@ -36,7 +36,7 @@ public class CommonUserService
   implements UserService {
 
   private EncryptionService encryptionService;
-  
+
   @Autowired
   private UserDao dao;
 
@@ -75,8 +75,13 @@ public class CommonUserService
   }
 
   @Override
-  public User findId(int id) {
+  public User findUserById(int id) {
     return dao.findById(id);
+  }
+
+  @Override
+  public User findUserByLogin(String login) {
+    return dao.find(login);
   }
 
   private byte[] findAuthInfo(String login, String colName) {
@@ -90,4 +95,6 @@ public class CommonUserService
     return Base64.decodeBase64(dao.findAuthInfo(login, colName));
 
   }
+
+
 }

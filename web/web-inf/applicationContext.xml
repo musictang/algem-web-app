@@ -40,23 +40,28 @@
         </list>
     </property>
   </bean>
-  
+
 <!--<security:http pattern="/resources/**" security="none"/>
   <security:http pattern="/index.htm*" security="none"/>
   <security:http pattern="/login.htm*" security="none"/>-->
-  
+
   <!--The <http> element is responsible for creating a FilterChainProxy and the filter beans which it uses.-->
   <security:http auto-config="true" use-expressions="true">
     <security:intercept-url pattern="/perso/**" access="hasRole('4')" />
-    <security:form-login login-page="/login.html"  default-target-url="/perso/home.html" always-use-default-target="true" />
+    <security:form-login login-page="/login.html"
+                         default-target-url="/perso/home.html"
+                         always-use-default-target="true"
+
+    />
+     <!-- attribut optionnel : authentication-failure-url = "/login.html?login_error=1"-->
   </security:http>
-  
+
   <bean id="myUserDetailsService" class="net.algem.security.CustomJdbcUserService">
     <property name="dataSource" ref="dataSource"/>
   </bean>
 
   <bean id="customPasswordEncoder" class="net.algem.security.CustomPasswordEncoder" />
-  
+
   <security:authentication-manager>
     <security:authentication-provider user-service-ref="myUserDetailsService">
       <security:password-encoder ref="customPasswordEncoder">

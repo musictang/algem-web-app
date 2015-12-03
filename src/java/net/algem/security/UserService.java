@@ -40,6 +40,8 @@ public interface UserService
 
   public void update(User u) throws SQLException;
 
-  public User findId(int id);
+  public User findUserById(int id);
+
+  public User findUserByLogin(String login);
 }
 

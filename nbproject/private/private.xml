@@ -3,12 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/jm/algem/src/git/algem-web-app/web/web-inf/jsp/daily.jsp</file>
-            <file>file:/home/jm/algem/src/git/algem-web-app/src/java/net/algem/security/UserValidator.java</file>
-            <file>file:/home/jm/algem/src/git/algem-web-app/web/web-inf/jsp/index.jsp</file>
-            <file>file:/home/jm/algem/src/git/algem-web-app/src/java/net/algem/security/User.java</file>
-            <file>file:/home/jm/algem/src/git/algem-web-app/src/java/net/algem/security/LoginCtrl.java</file>
-            <file>file:/home/jm/algem/src/git/algem-web-app/web/web-inf/jsp/welcome.jsp</file>
+            <file>file:/home/jm/dev/algem-web-app/src/java/net/algem/planning/PlanningCtrl.java</file>
+            <file>file:/home/jm/dev/algem-web-app/web/web-inf/jsp/redirect.jsp</file>
+            <file>file:/home/jm/dev/algem-web-app/web/web-inf/dispatcher-servlet.xml</file>
+            <file>file:/home/jm/dev/algem-web-app/web/web-inf/applicationContext.xml</file>
+            <file>file:/home/jm/dev/algem-web-app/src/java/net/algem/security/User.java</file>
+            <file>file:/home/jm/dev/algem-web-app/web/redirect.html</file>
+            <file>file:/home/jm/dev/algem-web-app/web/web-inf/web.xml</file>
         </group>
     </open-files>
 </project-private>

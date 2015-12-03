@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <meta charset="utf-8" />
+    <title id="Connexion"></title>
+     <meta name="viewport" content="width=device-width" /> <!-- important -->
+    <link rel="stylesheet" th:href="@{/resources/themes/default/css/common.css}" />
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+  </head>
+  <body>
+    <div class="centered">
+      <!--<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">-->
+      <!--<p class="error" th:text="${SPRING_SECURITY_LAST_EXCEPTION.message}"></p>-->
+        <p class="error" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}" ></p>
+    <!--</c:if>-->
+      <form   th:action="@{j_spring_security_check}" method="post" class="hpadded pure-form pure-form-stacked">
+        <fieldset><legend>Saisissez vos identifiants</legend>
+          <label for="login" th:text="#{form.username.label}">Login</label>
+          <!--<%-- Les messages d'erreur doivent être affichés à l'intérieur du formulaire --%>-->
+          <input id="login" required="required" name="j_username"/>
+          <label for="password" th:text="#{form.password.label}" >Password</label>
+          <input type="password" id="password" required="required" name="j_password"/>
+          <input type="submit" th:value="#{login.submit.label}" class="button-xlarge pure-button pure-button-primary"/>
+        </fieldset>
+      </form>
+  </body>
+</html>

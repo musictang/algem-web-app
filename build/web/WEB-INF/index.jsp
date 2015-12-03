@@ -102,7 +102,8 @@
           <a href="${todayUrl}">
             <img src="${img_dir}/Algem0_trans.png" alt="agenda"/>
           </a><br />
-          <a href="${todayUrl}">${estab.name}</a>
+          <a href="${todayUrl}">${estab.name}</a><br />
+          <a href="tuto.html">Tuto</a>
         </div>
       </c:forEach>
 

@@ -97,14 +97,12 @@ public class UserDao
   }
 
   public User find(String login) {
-    int id = getIdFromLogin(login);
-    String query = "SELECT l.*,p.prenom,p.nom,p.pseudo FROM login l INNER JOIN " + PersonIO.TABLE
-      + " p ON (l.idper = p.id) WHERE l.idper = ? OR l.login = ?";
+    String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom FROM " + TABLE + " l INNER JOIN " + PersonIO.TABLE + " p ON (l.idper = p.id) WHERE l.login = ?";
     return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         return getFromRS(rs);
       }
-    }, id, login);
+    }, login);
 
   }
 

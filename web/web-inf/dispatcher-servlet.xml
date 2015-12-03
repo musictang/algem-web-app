@@ -16,17 +16,18 @@
   <!--SUPPORT DES ANNOTATIONS pour MVC-->
   <mvc:annotation-driven/>
   <context:component-scan base-package="net.algem" />
-  
+
   <!--Emplacement des resources statiques-->
-  
+
   <!--<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />-->
   <mvc:resources mapping="/resources/themes/**" location="/resources/themes/default/"/>
+  <!--<mvc:view-controller path="/" view-name="tpl/index"/>-->
   <!--  Explicit index controller. -->
-  <bean 
-    name="indexController" 
-    class="org.springframework.web.servlet.mvc.ParameterizableViewController" 
-    p:viewName="index" />
-				
+<!--  <bean
+    name="indexController"
+    class="org.springframework.web.servlet.mvc.ParameterizableViewController"
+    p:viewName="index" />-->
+
   <!--	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>-->
 
   <!--Pour faire cohabiter le support des annotations avec les mappings explicites-->
@@ -35,29 +36,49 @@
   <!--	support des annotations de controlleur première approche-->
   <!--	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
   <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />-->
-	
+
   <!--
   Most controllers will use the ControllerClassNameHandlerMapping above, but
   for the index controller we are using ParameterizableViewController, so we must
   define an explicit mapping for it.
   -->
-  <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+<!--  <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="mappings">
       <props>
         <prop key="index.html">indexController</prop>
       </props>
     </property>
-  </bean>
-
-  <!--	VIEW RESOLVER-->
+  </bean>-->
+<!--
+  JSP VIEW RESOLVER
   <bean id="viewResolver"
-          class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-          p:prefix="/WEB-INF/jsp/"
-          p:suffix=".jsp"
-          p:viewClass="org.springframework.web.servlet.view.JstlView"
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+        p:prefix="/WEB-INF/"
+        p:suffix=".jsp"
+        p:order="1"
+        p:viewNames="index,jsp/*"
+        p:viewClass="org.springframework.web.servlet.view.JstlView"
+  />-->
+
+  <!--THYMELEAF-->
+  <bean id="templateResolver" class="org.thymeleaf.spring3.templateresolver.SpringResourceTemplateResolver"
+    p:prefix="/"
+    p:suffix=".html"
+    p:templateMode="HTML"
+    p:cacheable="false"
   />
 
-  <bean id="userValidator" class="net.algem.security.UserValidator"/>
+  <bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
+    <property name="templateResolver" ref="templateResolver" />
+  </bean>
+
+  <bean class="org.thymeleaf.spring3.view.ThymeleafViewResolver">
+  <property name="templateEngine" ref="templateEngine" />
+  <property name="order" value="1" />
+  <property name="viewNames" value="tpl/*" />
+</bean>
+
+  <!--<bean id="userValidator" class="net.algem.security.UserValidator"/>-->
 
 
 </beans>
