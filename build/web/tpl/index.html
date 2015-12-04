@@ -6,19 +6,25 @@ and open the template in the editor.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
   <head th:include="/tpl/layout :: head">
-    <title></title>
+    <title th:text="${org['nom']}"></title>
   </head>
   <body>
-    <header th:replace="/tpl/layout :: header"></header>
-    <div th:with="now2=${#dates.createNow()}">
-      <h2 th:text="${now}"></h2>
-      <ul>
-        <li th:each="estab: ${estabList}"><a  th:href="@{tuto.html(d=${now},e=${estab.id})}" th:text="${estab.name}"></a></li>
-      </ul>
-      <!--<h2 th:text="${#dates.format(now2, 'dd/MM/YYYY')}"></h2>-->
-    </div>
-    <a href="perso/home.html">home</a><br />
-    <a href="perso/tuto.html">Tuto</a>
+    <header>
+      <h1 th:utext="'<span>planning&nbsp;</span>' + ${@organisation.nom}"></h1>
+    </header>
+    <div class="global">
+    <section th:with="now2=${#dates.createNow()}" class="centered">
+<!--      <h2 th:text="${now}"></h2>
+      <h3 th:text="${now2}"></h3>
+      <h4 th:text="${now}"></h4>-->
+      <div class="thumbnails" th:each="estab: ${estabList}">
+        <a  th:href="@{tuto.html(d=${now},e=${estab.id})}">
+            <img th:src="@{/resources/themes/img/Algem0_trans.png}" alt="agenda"/>
+          </a><br />
+          <a  th:href="@{tuto.html(d=${now},e=${estab.id})}" th:text="${estab.name}"></a>
+        </div>
+    </section>
   <footer th:replace="/tpl/layout :: footer"></footer>
+    </div>
   </body>
 </html>

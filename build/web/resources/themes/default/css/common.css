@@ -3,7 +3,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
-/* 
+/*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
 */
@@ -11,17 +11,19 @@ body {
   height:100%;
   font-family: Arial, Helvetica, sans-serif;
   color: #111;
+
   background-color: #ffab11;
+  /*background-color: #fff8dc;*/
   /*Personnalisation*/
-/*  background-image:url('../img/personas-header-1280x1024.png');
-  background-position: right 710px;
-  background-repeat: no-repeat;*/
+  /*  background-image:url('../img/personas-header-1280x1024.png');
+    background-position: right 710px;
+    background-repeat: no-repeat;*/
 }
 
 header {
   position: relative;
   height: 50px;
-  background-color: #ffab11;
+
 }
 
 header > nav {
@@ -29,17 +31,46 @@ header > nav {
   padding:0.5em 0 0.5em 2.2em;
 }
 
-h1, h2, h3 {
+.global {
+  background-color: #fff8dc;
+  height: 660px;
+}
+
+h1 {
+        font-family: Verdana,Arial,sans-serif;
+        font-size: 2.5em;
+        padding: 0.4em;
+        /*color: #b66000;*/
+        color: ivory;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+      }
+
+      h1 > span {
+        font-family: "Times new roman",serif;
+        font-size:smaller;
+        font-style:italic
+      }
+
+h2, h3, h4 {
   padding: 1em;
   font-family: Arial,sans-serif;
-  color: white;
-  background-color: dodgerblue;
-  border-radius: 10px;
+  /*color: white;*/
+  /*background-color: dodgerblue;*/
+  border-width: 0 0 3px 0;
+  border-style : solid;
+  border-color: gray;
+  /*border-radius: 10px;*/
 }
 
 table.vertical-header th, table.vertical-header td {
   text-align: left;
   padding: 0.5em 0 0 1em;
+}
+
+.thumbnails {
+  display: inline-block;
+  margin:2em;
+  text-align: center;
 }
 
 .error {
@@ -111,9 +142,12 @@ a:hover {
 
 footer {
   position: absolute;
-  left: 2.2em;
+  /*left: 2.2em;*/
+  /*background-color: #ffab11;*/
   top: 710px; /*660+50*/
-  height: 2em;
+  width: 100%;
+  /*height: 100%;*/
+  /*height: 2em;*/
 }
 
 footer > address {
@@ -148,15 +182,15 @@ and (min-device-width : 320px)
 and (max-device-width : 480px)
 and (orientation : landscape) {
   /* STYLES GO HERE */
-   header > nav {
+  header > nav {
     padding:0.5em 0;
   }
 }
 
 @media (max-width: 800px) {
   .centered {
-  width: 100%;
-  margin: 1em 0;
+    width: 100%;
+    margin: 1em 0;
   }
 }
 

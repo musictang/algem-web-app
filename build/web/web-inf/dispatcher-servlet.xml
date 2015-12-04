@@ -17,16 +17,18 @@
   <mvc:annotation-driven/>
   <context:component-scan base-package="net.algem" />
 
-  <!--Emplacement des resources statiques-->
-
-  <!--<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />-->
+  <!--  Mapping des ressources statiques (css, img, etc.)
+  le paramètre location permet de définir un répertoire implicite
+  On utilisera @{/resources/themes/css/common.css} et non @{/resources/themes/css/default/common.css}
+  L'interface est ainsi facilement thémable : il suffit de remplacer default par le nouveau thème.
+  Ce comportement ne semble pas fonctionner avec spring 3.0.6-->
   <mvc:resources mapping="/resources/themes/**" location="/resources/themes/default/"/>
+
+  <!--Definition de l'index par défaut-->
   <!--<mvc:view-controller path="/" view-name="tpl/index"/>-->
   <!--  Explicit index controller. -->
-<!--  <bean
-    name="indexController"
-    class="org.springframework.web.servlet.mvc.ParameterizableViewController"
-    p:viewName="index" />-->
+  <!--  <bean  name="indexController" class="org.springframework.web.servlet.mvc.ParameterizableViewController"
+                p:viewName="index" />-->
 
   <!--	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>-->
 
@@ -42,14 +44,14 @@
   for the index controller we are using ParameterizableViewController, so we must
   define an explicit mapping for it.
   -->
-<!--  <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+  <!--  <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="mappings">
       <props>
         <prop key="index.html">indexController</prop>
       </props>
     </property>
   </bean>-->
-<!--
+  <!--
   JSP VIEW RESOLVER
   <bean id="viewResolver"
         class="org.springframework.web.servlet.view.InternalResourceViewResolver"
@@ -62,10 +64,10 @@
 
   <!--THYMELEAF-->
   <bean id="templateResolver" class="org.thymeleaf.spring3.templateresolver.SpringResourceTemplateResolver"
-    p:prefix="/"
-    p:suffix=".html"
-    p:templateMode="HTML"
-    p:cacheable="false"
+        p:prefix="/"
+        p:suffix=".html"
+        p:templateMode="HTML"
+        p:cacheable="false"
   />
 
   <bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
@@ -73,12 +75,9 @@
   </bean>
 
   <bean class="org.thymeleaf.spring3.view.ThymeleafViewResolver">
-  <property name="templateEngine" ref="templateEngine" />
-  <property name="order" value="1" />
-  <property name="viewNames" value="tpl/*" />
-</bean>
-
-  <!--<bean id="userValidator" class="net.algem.security.UserValidator"/>-->
-
+    <property name="templateEngine" ref="templateEngine" />
+    <property name="order" value="1" />
+    <property name="viewNames" value="tpl/*" />
+  </bean>
 
 </beans>
