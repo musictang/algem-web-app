@@ -4,8 +4,9 @@
   <!--    Chargement du contexte de l’application Web-->
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/applicationContext.xml</param-value>
+    <param-value>/WEB-INF/applicationContext.xml /WEB-INF/client.xml</param-value>
   </context-param>
+
   <!--		Le framework Spring fournit une implémentation de la classe ServletContextListener de
   la spécification servlet permettant de configurer et d’initialiser le contexte d'application au démarrage
   et de le finaliser à l’arrêt de l’application Web.-->

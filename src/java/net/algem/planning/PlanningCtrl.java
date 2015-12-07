@@ -100,6 +100,11 @@ public class PlanningCtrl
     estabTest.add(new Person(3501,"Malakoff"));
     estabTest.add(new Person(87,"Lyon"));
     estabTest.add(new Person(52,"Paris"));
+    estabTest.add(new Person(52,"Toulouse"));
+    estabTest.add(new Person(52,"Rennes"));
+    estabTest.add(new Person(52,"Strasbourg"));
+    estabTest.add(new Person(52,"Marseille"));
+    estabTest.add(new Person(52,"Bordeaux"));
     model.addAttribute("estabList", estabTest);
 //    model.addAttribute("estabList", service.getEstablishments(estabFilter));
     return "tpl/index";

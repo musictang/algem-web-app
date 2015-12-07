@@ -5,7 +5,7 @@
         <group>
             <file>file:/home/jm/dev/algem-web-app/web/tpl/index.html</file>
             <file>file:/home/jm/dev/algem-web-app/web/web-inf/dispatcher-servlet.xml</file>
-            <file>file:/home/jm/dev/algem-web-app/web/web-inf/index.jsp</file>
+            <file>file:/home/jm/dev/algem-web-app/web/web-inf/client.xml</file>
             <file>file:/home/jm/dev/algem-web-app/web/web-inf/applicationContext.xml</file>
             <file>file:/home/jm/dev/algem-web-app/web/resources/themes/default/css/common.css</file>
         </group>

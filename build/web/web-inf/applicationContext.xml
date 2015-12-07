@@ -15,33 +15,45 @@
        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
-
-  <!--	tells Spring that you intend to use annotation-based wiring in Spring. -->
+  <!--==================-->
+  <!--ANNOTATION SUPPORT-->
+  <!--==================-->
+  <!--	Tells Spring that you intend to use annotation-based wiring in Spring. -->
   <context:annotation-config />
-
   <context:component-scan base-package="net.algem" />
+
+  <!--========================-->
+  <!--DATASOURCE CONFIGURATION-->
+  <!--========================-->
+  <jee:jndi-lookup id="dataSource" jndi-name="jdbc/algem"/>
   <!--bean id="propertyConfigurer"
   class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
   p:location="/WEB-INF/jdbc.properties" />-->
 
-  <jee:jndi-lookup id="dataSource" jndi-name="jdbc/algem"/>
-
+  <!--=============-->
+  <!--JDBC TEMPLATE-->
+  <!--=============-->
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
     <constructor-arg ref="dataSource"/>
   </bean>
-  <!--<bean id="validator" class="net.algem.security.UserValidator" />-->
 
+  <!--===========================-->
+  <!--MESSAGES RESOURCES LOCATION-->
+  <!--===========================-->
   <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
     <!--<property name="basename" value="/WEB-INF/resources/messages" />-->
     <property name="basenames">
-        <list>
-            <value>/WEB-INF/resources/messages</value>
-            <value>/WEB-INF/resources/security</value>
-        </list>
+      <list>
+        <value>/WEB-INF/resources/messages</value>
+        <value>/WEB-INF/resources/security</value>
+      </list>
     </property>
   </bean>
 
-<!--<security:http pattern="/resources/**" security="none"/>
+<!--======================-->
+<!--SECURITY CONFIGURATION-->
+<!--======================-->
+  <!--<security:http pattern="/resources/**" security="none"/>
   <security:http pattern="/index.htm*" security="none"/>
   <security:http pattern="/login.htm*" security="none"/>-->
 
@@ -53,7 +65,7 @@
                          always-use-default-target="true"
 
     />
-     <!-- attribut optionnel : authentication-failure-url = "/login.html?login_error=1"-->
+    <!-- attribut optionnel : authentication-failure-url = "/login.html?login_error=1"-->
   </security:http>
 
   <bean id="myUserDetailsService" class="net.algem.security.CustomJdbcUserService">
@@ -70,27 +82,9 @@
     </security:authentication-provider>
   </security:authentication-manager>
 
-  <util:map id="horaires" key-type="java.lang.String" >
-    <entry key="Etablissement 1">
-      <util:list>
-        <value>01 02 03 04 05</value>
-        <value>info@musiques-tangentes.asso.fr</value>
-        <value>lundi-jeudi : 10h-22h</value>
-        <value>samedi 11h-18h</value>
-      </util:list>
-    </entry>
-    <entry key="Etablissement 2">
-      <util:list>
-        <value>01 02 03 04 05</value>
-        <value>(mercredi au jeudi 14h-20h)</value>
-      </util:list>
-    </entry>
-  </util:map>
-
-  <util:map id="organisation" key-type="java.lang.String" >
-    <entry key="nom" value="Mon organisation" />
-  </util:map>
-
+  <!--====================-->
+  <!--LOCALE CONFIGURATION-->
+  <!--====================-->
   <bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
 
 </beans>
