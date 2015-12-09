@@ -1,30 +1,86 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+ * @(#) index.html Algem Web App 1.0.6 05/12/2015
+ *
+ * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
   <head th:include="/tpl/layout :: head">
     <title th:text="${org['nom']}"></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
   </head>
   <body>
+    <div id="menu">
+      <ul style="list-style-type: none">
+        <li><i class="fa fa-bars"></i></li>
+        <li>deux</li>
+        <li>trois</li>
+      </ul>
+    </div>
+<!--                <div class="pure-menu custom-restricted-width">
+                  <span class="pure-menu-heading">Menu</span>
+                  <ul class="pure-menu-list">
+                    <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover"></li>
+                      <ul class="pure-menu-children">
+                        <li class="pure-menu-item"><a class="pure-menu-link" th:href="'#' + #{contact.label}" th:text="#{contact.label}">Contact</a></li>
+                        <li class="pure-menu-item"><a class="pure-menu-link" th:href="'#' + #{hotline.label}" th:text="#{hotline.label}">Hotline</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>-->
     <header>
-      <h1 th:utext="'<span>planning&nbsp;</span>' + ${@organisation.nom}"></h1>
+      <div style="position:absolute;top:0;right: 0">
+
+      </div>
+
+      <h1 th:utext="${@organization['name.label']}"></h1>
     </header>
     <div class="global">
-    <section th:with="now2=${#dates.createNow()}" class="centered">
-<!--      <h2 th:text="${now}"></h2>
-      <h3 th:text="${now2}"></h3>
-      <h4 th:text="${now}"></h4>-->
-      <div class="thumbnails" th:each="estab: ${estabList}">
-        <a  th:href="@{tuto.html(d=${now},e=${estab.id})}">
-            <img th:src="@{/resources/themes/img/Algem0_trans.png}" alt="agenda"/>
-          </a><br />
-          <a  th:href="@{tuto.html(d=${now},e=${estab.id})}" th:text="${estab.name}"></a>
-        </div>
-    </section>
-  <footer th:replace="/tpl/layout :: footer"></footer>
+      <div class="centered">
+        <h2>Planning</h2>
+        <section th:with="now2=${#dates.createNow()}" class="gallery">
+          <div class="thumbnails thumbnails-out" th:each="estab: ${estabList}">
+            <a class="img-link" th:href="@{tuto.html(d=${now},e=${estab.id})}">
+              <img th:src="@{/resources/themes/img/logo.png}" alt="Planning"/>
+            </a><br />
+            <a class="thumb-legend" th:href="@{tuto.html(d=${now},e=${estab.id})}" th:text="${estab.name}"></a>
+          </div>
+        </section>
+      </div>
+      <section class="centered">
+        <h2 th:id="#{contact.label}" th:text="#{contact.label}">Tel</h2>
+        <table class="pure-table pure-table-horizontal" th:with="org=${@organization}">
+          <tr><th th:text="#{email.label}"></th><td><a th:text="${org['email.label']}" th:href="${'mailto:' + org['email.label']}"></a></td></tr>
+          <tr><th th:text="#{address.label}"></th><td><a th:text="${org['address.label']}" th:href="${org['address.map']}"></a></td></tr>
+          <tr th:each="entry,status:${org}" th:if="${status.index} > 3"><th th:text="#{${entry.key}}"></th><td >
+              <a th:text="${entry.value}" th:href="${entry.value}"></a></td></tr>
+          <!--<tr th:each="entry:${org['tel.label']}"><th th:text="${entry.key}"></th><td th:text="${entry.value}"></td></tr>-->
+        </table>
+        <h2 th:id="#{hotline.label}" th:text="#{hotline.label}">Hot</h2>
+        <table class="pure-table pure-table-horizontal">
+          <tr th:each="estab:${@hotline}"><th th:text="${estab.key}"></th>
+            <td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a></td>
+            <td><ul><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul></td>
+          </tr>
+        </table>
+        <div class="last-block">&nbsp;</div>
+      </section>
     </div>
+    <footer th:replace="/tpl/layout :: footer"></footer>
   </body>
 </html>

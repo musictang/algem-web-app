@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+  <!--
+   xmlns:beans="http://www.springframework.org/schema/beans"
+  "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+   * @(#) client.xml Algem Web App 1.0.6 06/12/2015
+   *
+   * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+   *
+   * This file is part of Algem Web App.
+   * Algem Web App is free software: you can redistribute it and/or modify it
+   * under the terms of the GNU Affero General Public License as published by
+   * the Free Software Foundation, either version 3 of the License, or
+   * (at your option) any later version.
+   *
+   * Algem Web App is distributed in the hope that it will be useful,
+   * but WITHOUT ANY WARRANTY; without even the implied warranty of
+   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   * GNU Affero General Public License for more details.
+   *
+   * You should have received a copy of the GNU Affero General Public License
+   * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+  -->
+  <!--===============================-->
+  <!--CLIENT PROPERTIES CONFIGURATION-->
+  <!--===============================-->
+  <util:map id="organization" key-type="java.lang.String" >
+    <!--NAME VALUE IN UPPERCASE PREFERABLY-->
+    <entry key="name.label" value="MUSIQUES TANGENTES" />
+    <entry key="email.label" value="info@musiques-tangentes.asso.fr" />
+    <entry key="address.label" value="15 rue Salvador Allende 92240 MALAKOFF" />
+    <!--GOOGLE MAP ADDRESS-->
+    <entry key="address.map" value="https://goo.gl/maps/sx4HeE4JLj52" />
+    <entry key="website.label" value="http://www.musiques-tangentes.asso.fr" />
+    <entry key="facebook.label" value="https://fr-fr.facebook.com/MusiquesTangentes92" />
+    <entry key="twitter.label" value="https://twitter.com/mustang_asso" />
+  </util:map>
+
+  <util:map id="hotline" key-type="java.lang.String" >
+    <!--FIRST ENTRY : MANDATORY-->
+    <entry key="Paris">
+      <util:list>
+        <!--PHONE NUMBER-->
+        <value>01 02 03 04 05</value>
+        <!--TIMES-->
+        <value>lundi-jeudi : 9h-19h</value>
+        <value>vendredi : 12h30-19h</value>
+      </util:list>
+    </entry>
+    <!--OTPIONAL ENTRIES-->
+    <entry key="Lyon">
+      <util:list>
+        <value>01 40 80 04 05</value>
+        <value>lundi-jeudi : 8h-20h</value>
+        <value>vendredi : 12h30-19h</value>
+        <value>samedi : 14h00-19h</value>
+      </util:list>
+    </entry>
+  </util:map>
+</beans>
