@@ -19,20 +19,27 @@
  *
  */
 
-/* 
- * Global script for algem agenda web module. 
+/*
+ * Global script for algem agenda web module.
 	@author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
 	@version 1.0.0
 	@since 1.0.0 11/02/13
  */
 function init() {
-	$("img").hover(
-		function(){
-			$(this).fadeTo("fast", 0.6);
-		}, 
-		function(){
-			$(this).fadeTo("fast", 1.0);
-		}
-		);
+//	$("img").hover(
+//		function(){
+//			$(this).fadeTo("fast", 0.6);
+//		},
+//		function(){
+//			$(this).fadeTo("fast", 1.0);
+//		}
+//		);
+}
+
+function menu() {
+  $('#bars').click(function() {
+    $('#menu').toggle();
+  });
+
 }
 

@@ -21,15 +21,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
   <head th:include="/tpl/layout :: head">
     <title th:text="${org['nom']}"></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
   </head>
   <body>
+    <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
     <div id="menu">
-      <ul style="list-style-type: none">
-        <li><i class="fa fa-bars"></i></li>
-        <li>deux</li>
-        <li>trois</li>
+      <ul>
+        <li><a href="login.html" title="Connexion"><i class="fa fa-sign-in"></i></a></li>
+        <li><a href="daily.html" title="Planning"><i class="fa fa-calendar"></a></i></li>
       </ul>
     </div>
 <!--                <div class="pure-menu custom-restricted-width">

@@ -26,7 +26,16 @@
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/common.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <script type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/algem.js}"></script>
+    <script type="text/javascript">
+//      var estabId = ${estab};
+//      var currentDate = '${now}';
+      $(function() {
+        menu();
+      });
+    </script>
   </head>
   <body>
     <header th:fragment="header"></header>
