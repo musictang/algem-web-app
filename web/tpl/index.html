@@ -19,66 +19,52 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-  <head th:include="/tpl/layout :: head">
-    <title th:text="${org['nom']}"></title>
+  <!--<head th:with="title=${@organization['name.label']}" th:include="/tpl/fragments/layout :: common-head">-->
+  <head>
+    <meta charset="UTF-8" />
+    <title th:text="${@organization['name.label']}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link th:replace="fragments/styles :: common" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/mediaqueries.css}" />
+    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
+    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/common.js}"></script>
   </head>
   <body>
     <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
     <div id="menu">
       <ul>
-        <li><a href="login.html" title="Connexion"><i class="fa fa-sign-in"></i></a></li>
-        <li><a href="daily.html" title="Planning"><i class="fa fa-calendar"></a></i></li>
+        <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
+        <li th:replace="fragments/menu :: cnx"></li>
       </ul>
     </div>
-<!--                <div class="pure-menu custom-restricted-width">
-                  <span class="pure-menu-heading">Menu</span>
-                  <ul class="pure-menu-list">
-                    <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover"></li>
-                      <ul class="pure-menu-children">
-                        <li class="pure-menu-item"><a class="pure-menu-link" th:href="'#' + #{contact.label}" th:text="#{contact.label}">Contact</a></li>
-                        <li class="pure-menu-item"><a class="pure-menu-link" th:href="'#' + #{hotline.label}" th:text="#{hotline.label}">Hotline</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>-->
+    <section id="login-panel" class="closeable" th:include="fragments/user :: login"></section>
     <header>
-      <div style="position:absolute;top:0;right: 0">
-
-      </div>
-
       <h1 th:utext="${@organization['name.label']}"></h1>
     </header>
     <div class="global">
       <div class="centered">
         <h2>Planning</h2>
-        <section th:with="now2=${#dates.createNow()}" class="gallery">
+        <section class="gallery">
           <div class="thumbnails thumbnails-out" th:each="estab: ${estabList}">
-            <a class="img-link" th:href="@{tuto.html(d=${now},e=${estab.id})}">
+            <a class="img-link" th:href="@{daily.html(d=${now},e=${estab.id})}">
               <img th:src="@{/resources/themes/img/logo.png}" alt="Planning"/>
             </a><br />
-            <a class="thumb-legend" th:href="@{tuto.html(d=${now},e=${estab.id})}" th:text="${estab.name}"></a>
+            <a class="thumb-legend" th:href="@{daily.html(d=${now},e=${estab.id})}" th:text="${estab.name}"></a>
           </div>
         </section>
       </div>
       <section class="centered">
-        <h2 th:id="#{contact.label}" th:text="#{contact.label}">Tel</h2>
-        <table class="pure-table pure-table-horizontal" th:with="org=${@organization}">
-          <tr><th th:text="#{email.label}"></th><td><a th:text="${org['email.label']}" th:href="${'mailto:' + org['email.label']}"></a></td></tr>
-          <tr><th th:text="#{address.label}"></th><td><a th:text="${org['address.label']}" th:href="${org['address.map']}"></a></td></tr>
-          <tr th:each="entry,status:${org}" th:if="${status.index} > 3"><th th:text="#{${entry.key}}"></th><td >
-              <a th:text="${entry.value}" th:href="${entry.value}"></a></td></tr>
-          <!--<tr th:each="entry:${org['tel.label']}"><th th:text="${entry.key}"></th><td th:text="${entry.value}"></td></tr>-->
-        </table>
-        <h2 th:id="#{hotline.label}" th:text="#{hotline.label}">Hot</h2>
-        <table class="pure-table pure-table-horizontal">
-          <tr th:each="estab:${@hotline}"><th th:text="${estab.key}"></th>
-            <td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a></td>
-            <td><ul><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul></td>
-          </tr>
-        </table>
+        <aside th:replace="fragments/layout :: info"></aside>
         <div class="last-block">&nbsp;</div>
       </section>
     </div>
-    <footer th:replace="/tpl/layout :: footer"></footer>
+    <footer th:replace="fragments/layout :: footer"></footer>
   </body>
+   <script type="text/javascript">
+      $(function () {
+        setCommonEvents();
+        $("#info-bar").hide()
+      });
+  </script>
 </html>

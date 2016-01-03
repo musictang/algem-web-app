@@ -14,7 +14,8 @@
           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
   <!--SUPPORT DES ANNOTATIONS pour MVC-->
-  <mvc:annotation-driven/>
+  <!--<mvc:annotation-driven/>-->
+  <mvc:annotation-driven validator="validator" />
   <context:component-scan base-package="net.algem" />
 
   <!--  Mapping des ressources statiques (css, img, etc.)
@@ -65,20 +66,30 @@
 
   <!--THYMELEAF-->
   <bean id="templateResolver" class="org.thymeleaf.spring3.templateresolver.SpringResourceTemplateResolver"
-        p:prefix="/"
+        p:prefix="/tpl/"
         p:suffix=".html"
         p:templateMode="HTML"
+        p:characterEncoding="UTF-8"
         p:cacheable="false"
   />
 
   <bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
     <property name="templateResolver" ref="templateResolver" />
+    <property name="additionalDialects">
+    <set>
+      <!--<bean class="nz.net.ultraq.thymeleaf.LayoutDialect" />-->
+      <bean class="org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect"/>
+    </set>
+  </property>
   </bean>
 
   <bean class="org.thymeleaf.spring3.view.ThymeleafViewResolver">
     <property name="templateEngine" ref="templateEngine" />
     <property name="order" value="1" />
-    <property name="viewNames" value="tpl/*" />
+<!--    <property name="viewNames" value="tpl/*,redirect:tpl/*" />-->
+<property name="viewNames" value="*" />
+    <property name="characterEncoding" value="UTF-8" />
+<!--    <property name="contentType" value="text/html;charset=UTF-8" />-->
   </bean>
 
 </beans>

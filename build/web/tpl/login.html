@@ -1,27 +1,60 @@
 <!DOCTYPE html>
-<html>
-  <head xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <meta charset="utf-8" />
-    <title id="Connexion"></title>
-     <meta name="viewport" content="width=device-width" /> <!-- important -->
-    <link rel="stylesheet" th:href="@{/resources/themes/default/css/common.css}" />
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+<!--
+ * @(#) login.html Algem Web App 1.0.6 30/12/2015
+ *
+ * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head th:with="title=${@organization['name.label']}" th:include="fragments/layout :: common-head">
+    <title></title>
   </head>
   <body>
-    <div class="centered">
-      <!--<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">-->
-      <!--<p class="error" th:text="${SPRING_SECURITY_LAST_EXCEPTION.message}"></p>-->
-        <p class="error" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}" ></p>
-    <!--</c:if>-->
-      <form   th:action="@{j_spring_security_check}" method="post" class="hpadded pure-form pure-form-stacked">
-        <fieldset><legend>Saisissez vos identifiants</legend>
-          <label for="login" th:text="#{form.username.label}">Login</label>
-          <!--<%-- Les messages d'erreur doivent être affichés à l'intérieur du formulaire --%>-->
-          <input id="login" required="required" name="j_username"/>
-          <label for="password" th:text="#{form.password.label}" >Password</label>
-          <input type="password" id="password" required="required" name="j_password"/>
-          <input type="submit" th:value="#{login.submit.label}" class="button-xlarge pure-button pure-button-primary"/>
-        </fieldset>
-      </form>
+    <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
+    <div id="menu">
+      <ul>
+        <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
+        <li><a href="index.html" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
+        <!--<li><a th:href="@{daily.html(d=${now},e=${estab.id})}" th:title="planning"><i class="fa fa-user"></i></a></li>-->
+      </ul>
+    </div>
+    <header>
+      <h1 th:utext="${@organization['name.label']}"></h1>
+    </header>
+    <div class="global">
+      <div class="centered">
+        <div id="login-panel" style="display: block;position: static;padding: 1em;">
+          <form id="login-form" th:action="@{j_spring_security_check}" method="post" class="">
+            <fieldset><legend th:text="#{login.form.title}"></legend>
+              <label for="login" th:text="#{form.username.label}">Login</label>
+              <!--<%-- Les messages d'erreur doivent être affichés à l'intérieur du formulaire --%>-->
+              <input type="text" id="login" required="required" name="j_username"/>
+              <label for="password" th:text="#{form.password.label}" >Password</label>
+              <input type="password" id="password" required="required" name="j_password"/>
+              <!--<input type="button" id="login-submit-button" th:value="#{login.submit.label}" />-->
+              <input type="submit" th:value="#{login.submit.label}" class="button-xlarge pure-button pure-button-primary"/>
+            </fieldset>
+            <p class="error" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}" ></p>
+            <div th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}">
+              <p><span th:text="#{sign-up.warning}"></span> <a href="signup.html" th:text="#{sign-up.label}"></a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <footer th:replace="fragments/layout :: footer"></footer>
   </body>
 </html>

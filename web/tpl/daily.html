@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--
+ * @(#) daily.html Algem Web App 1.0.6 05/12/2015
+ *
+ * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title th:text="${@organization['name.label']}"></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link th:replace="fragments/styles :: common" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/planning.css}" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/mediaqueries.css}" />
+
+    <script type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/jquery-ui-1.11.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/planning.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/jquery-ui.datepicker-fr.js}"></script>
+
+    <script type="text/javascript" th:inline="javascript">
+      /*<![CDATA[*/
+      var estabId = /*[[${param.e[0]}]]*/ 3501;
+      console.log(estabId);
+      var currentDate = /*[[${param.d[0]}]]*/ '29-12-2015';
+      console.log(currentDate);
+      /*]]>*/
+      $(document).ready(function () {
+        setCommonEvents();
+        setDatePicker(estabId, currentDate);
+        setUI();
+      });
+
+    </script>
+  </head>
+  <body>
+    <div id="dialog">Texte du dialogue</div>
+    <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
+    <div class="closeable" id="menu">
+      <ul>
+        <li><a href="#" class="close-link" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
+        <li th:replace="fragments/menu :: cnx"></li>
+        <li><a id="help" href="#help-panel" th:title="#{help.label}"><i class="fa fa-question"></a></i></li>
+        <li><a id="info" href="#info-panel" th:title="#{informations.label}"><i class="fa fa-info"></a></i></li>
+      </ul>
+    </div>
+    <section id="login-panel" class="closeable" th:include="fragments/user :: login"></section>
+    <header>
+      <nav>
+        <select id="estabSelection" name="estabId" tabindex="4">
+          <option th:each="estab :${estabList}" th:value="${estab.id}" th:text="${estab.name}"></option>
+        </select>
+        <div id="date-panel">
+        <label id="dow" for="datepicker" th:text="${dayName}"></label><a href="" th:title="#{prev.day.label}" id="previous" tabindex="2"><i class="fa fa-chevron-left"></i></a>&nbsp;&nbsp;<input type="text" id="datepicker" style="font-size:small" tabindex="3"/>&nbsp;&nbsp;<a href="" th:title="#{next.day.label}" id="next" tabindex="1"><i class="fa fa-chevron-right"></i></a>
+        </div>
+      </nav>
+    </header>
+    <table id="grid"><!-- important : loop on one line -->
+      <tr th:each="half,dv : ${#numbers.sequence(timeOffset, 1410, 30)}" ><th><p th:utext="(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')"></p></th><td></td></tr>
+    </table>
+    <section id="canvas" th:with="totalTime=${1440-timeOffset}">
+      <div th:each="entry : ${planning}" class="schedule_col">
+        <!--Column header : room names-->
+        <p class="title_col" th:text="${entry.value[0].roomName}"></p>
+        <!--Schedules-->
+        <div th:each="p : ${entry.value}" class="schedule"
+             th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime}"
+             th:style="'top:'+${pos}+'%;height:'+${h}+'%;background-color:'+${p.htmlColor}+${p.minutes >= 720 ? ';-webkit-transform: translate(0, -3px)':''}"
+             ></div>
+        <!--Labels-->
+        <div th:each="p : ${entry.value}" class="labels"
+             th:if="${p.label} != null"
+             th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime}"
+             th:style="'top:'+${pos}+'%;height:'+${h}+'%'+${p.minutes >= 720 ? ';-webkit-transform: translate(0,-3px)':''}"
+             th:utext="${p.label}"></div>
+        <!--Range : external div is only a loop container -->
+        <div th:each="p : ${entry.value}" th:remove="tag">
+          <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
+               th:with="pos=${(r.minutes - timeOffset) * 100.0 / totalTime},h=${(r.length - 1) * 100.0 / totalTime}"
+               class="schedule range" th:style="'top:'+${pos}+'%;height:'+${h}+'%'+${p.minutes >= 720 ? ';-webkit-transform: translate(0,-3px)':''}"></div>
+        </div>
+      </div>
+      <!--Free rooms-->
+      <div th:each="entry: ${freeplace}" class="schedule_col">
+          <p class="title_col" th:text="${entry.key}" ></p>
+            <div th:each="p : ${entry.value}" class="schedule"
+                 th:with="pos=${(p.minutes - timeOffset) * 100F / totalTime},h=${(p.length) * 100F / totalTime}"
+                 th:style="'top:'+${pos}+'%;height:'+${h}+'%;background-color:'+${p.htmlColor}"></div>
+        </div>
+    </section>
+    <aside id="help-panel" class="closeable" th:include="fragments/layout :: help"></aside>
+    <aside id="info-panel" class="closeable" th:include="fragments/layout :: info"></aside>
+    <footer th:replace="fragments/layout :: footer"></footer>
+  </body>
+</html>

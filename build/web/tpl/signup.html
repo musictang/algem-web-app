@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!--
+ * @(#) signup.html Algem Web App 1.0.6 31/12/2015
+ *
+ * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head th:with="title=${@organization['name.label']}" th:include="fragments/layout :: common-head">
+    <title>TODO supply a title</title>
+  </head>
+  <body>
+    <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
+    <div id="menu">
+      <ul>
+        <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
+        <li><a href="index.html" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
+      </ul>
+    </div>
+    <header>
+      <h1 th:utext="${@organization['name.label']}"></h1>
+    </header>
+    <div class="global">
+      <div class="centered">
+        <form action="#" id="signup-form" th:object="${user}" th:action="@{signup.html}" method="post" accept-charset="UTF-8">
+          <fieldset><legend th:text="#{sign-up.label}"></legend>
+            <label for="id" th:text="#{member.id.label} + ' *'">Number *</label>
+            <input type="text" required="required" th:field="*{id}" />
+            <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}" th:errorclass="error">Id Error</span>
+            <label for="login" th:text="#{form.username.label} + ' *'" >Login *</label>
+            <!--<%-- Les messages d'erreur doivent être affichés à l'intérieur du formulaire --%>-->
+            <input type="text"  required="required" th:field="*{login}" />
+            <span th:if="${#fields.hasErrors('login')}" th:errors="*{login}" th:errorclass="error">Login Error</span>
+            <label for="password" th:text="#{form.password.label}  + ' *'" >Password *</label>
+            <input type="password" required="required" th:field="*{password}" />
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="error">Password Error</span>
+            <input type="submit" th:value="#{submit.label}" class="pure-button pure-button-primary"/>
+<!--            <div th:if="${#fields.hasAnyErrors()}">
+              <p th:each="err : ${#fields.allErrors()}" th:text="${err}">...</p>
+            </div>-->
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <footer th:replace="fragments/layout :: footer"></footer>
+  </body>
+</html>

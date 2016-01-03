@@ -75,16 +75,16 @@ public class PlanningCtrl
     int estab = Integer.parseInt(request.getParameter("e"));
 
     HashMap<Integer, Collection<ScheduleElement>> schedules = service.getDaySchedule(date, estab);
-
-    model.addAttribute("now", dateParam);
-    model.addAttribute("estab", estab);
+//
+//    model.addAttribute("now", dateParam);
+//    model.addAttribute("estab", estab);
     model.addAttribute("dayName", dayName);
     model.addAttribute("planning", schedules);
     model.addAttribute("estabList", service.getEstablishments(estabFilter));
     model.addAttribute("freeplace", service.getFreePlace(date, estab));
     model.addAttribute("timeOffset", service.getTimeOffset());
 
-    return "jsp/daily";
+    return "daily";
   }
 
   /**
@@ -97,16 +97,16 @@ public class PlanningCtrl
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
     model.addAttribute("now", dateFormat.format(new Date()));
     List<Person> estabTest = new ArrayList<Person>();
-    estabTest.add(new Person(3501,"Malakoff"));
-    estabTest.add(new Person(87,"Lyon"));
-    estabTest.add(new Person(52,"Paris"));
-    estabTest.add(new Person(52,"Toulouse"));
-    estabTest.add(new Person(52,"Rennes"));
-    estabTest.add(new Person(52,"Strasbourg"));
-    estabTest.add(new Person(52,"Marseille"));
-    estabTest.add(new Person(52,"Bordeaux"));
-    model.addAttribute("estabList", estabTest);
-//    model.addAttribute("estabList", service.getEstablishments(estabFilter));
-    return "tpl/index";
+//    estabTest.add(new Person(3501,"Malakoff"));
+//    estabTest.add(new Person(87,"Lyon"));
+//    estabTest.add(new Person(52,"Paris"));
+//    estabTest.add(new Person(52,"Toulouse"));
+//    estabTest.add(new Person(52,"Rennes"));
+//    estabTest.add(new Person(52,"Strasbourg"));
+//    estabTest.add(new Person(52,"Marseille"));
+//    estabTest.add(new Person(52,"Bordeaux"));
+//    model.addAttribute("estabList", estabTest);
+    model.addAttribute("estabList", service.getEstablishments(estabFilter));
+    return "index";
   }
 }

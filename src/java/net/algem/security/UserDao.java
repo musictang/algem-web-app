@@ -1,5 +1,5 @@
 /*
- * @(#)UserDao.java	1.0.6 30/11/15
+ * @(#)UserDao.java	1.0.6 02/01/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.algem.contact.Person;
 import net.algem.contact.PersonIO;
 import net.algem.util.AbstractGemDao;
 import org.apache.commons.codec.binary.Base64;
@@ -50,6 +51,7 @@ public class UserDao
     String query = "SELECT * FROM login";
     return jdbcTemplate.query(query, new RowMapper<User>() {
 
+      @Override
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         return getFromRS(rs);
       }
@@ -99,6 +101,7 @@ public class UserDao
   public User find(String login) {
     String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom FROM " + TABLE + " l INNER JOIN " + PersonIO.TABLE + " p ON (l.idper = p.id) WHERE l.login = ?";
     return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
+      @Override
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         return getFromRS(rs);
       }
@@ -121,10 +124,32 @@ public class UserDao
     return Base64.decodeBase64(result);
   }
 
+  public boolean isPerson(User u) {
+    String query = "SELECT id FROM " + PersonIO.TABLE
+      + " WHERE id = ? AND (ptype = " + Person.PERSON + " OR ptype = " + Person.ROOM + ")";
+    return jdbcTemplate.queryForObject(query, Integer.class, u.getId()) > 0;
+  }
+
+  public List<User> exist(int id, String login) {
+    String query = "SELECT idper,login FROM " + TABLE + " WHERE idper = ? OR login = ?";
+    return jdbcTemplate.query(query, new RowMapper<User>() {
+
+      @Override
+      public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+        User u = new User();
+        u.setId(rs.getInt(1));
+        u.setLogin(rs.getString(2));
+        return u;
+      }
+    }, id, login);
+  }
+
   public User findById(int id) {
-    String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom FROM login l INNER JOIN personne p ON (l.idper = p.id) WHERE l.idper = ?";
+    String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom FROM login l INNER JOIN personne p ON (l.idper = p.id) "
+      + "WHERE l.idper = ? AND (p.ptype = " + Person.PERSON + " OR p.ptype = " + Person.ROOM + ")";
     return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
 
+      @Override
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         return getFromRS(rs);
       }
@@ -135,6 +160,7 @@ public class UserDao
     String query = "SELECT m.label, a.autorisation FROM  menu2 m JOIN menuaccess a ON m.id = a.idmenu WHERE a.idper = ?";
     return jdbcTemplate.query(query, new RowMapper<Map<String, Boolean>>() {
 
+      @Override
       public Map<String, Boolean> mapRow(ResultSet rs, int rowNum) throws SQLException {
         Map<String, Boolean> map = new HashMap<String, Boolean>();
         map.put(rs.getString(1), rs.getBoolean(2));

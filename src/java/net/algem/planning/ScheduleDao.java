@@ -139,7 +139,7 @@ public class ScheduleDao
             + " WHERE s.public = true"
             + " AND s.etablissement = " + estab
             + " AND s.id NOT IN ("
-            + " SELECT lieux FROM " + TABLE + " WHERE jour = '" + date + "') ORDER BY id";
+            + " SELECT DISTINCT lieux FROM " + TABLE + " WHERE jour = '" + date + "') ORDER BY id";
     return jdbcTemplate.query(query, new RowMapper<Room>()
     {
 

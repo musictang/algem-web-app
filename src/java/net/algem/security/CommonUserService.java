@@ -21,8 +21,11 @@
 package net.algem.security;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -40,9 +43,9 @@ public class CommonUserService
   @Autowired
   private UserDao dao;
 
-  public UserDao getDao() {
-    return dao;
-  }
+//  public UserDao getDao() {
+//    return dao;
+//  }
 
   public void setDao(UserDao dao) {
     this.dao = dao;
@@ -84,7 +87,8 @@ public class CommonUserService
     return dao.find(login);
   }
 
-  private byte[] findAuthInfo(String login, String colName) {
+  @Override
+  public byte[] findAuthInfo(String login, String colName) {
 //    byte[] info = null;
 //      int id = 0;
 //      try {
@@ -94,6 +98,25 @@ public class CommonUserService
 //      }
     return Base64.decodeBase64(dao.findAuthInfo(login, colName));
 
+  }
+
+  @Override
+  public boolean isPerson(User u) {
+    try {
+    return dao.isPerson(u);
+    } catch(DataAccessException ex) {
+      return false;
+    }
+  }
+
+  @Override
+  public List<User> exist(User u) {
+    return dao.exist(u.getId(), u.getLogin());
+  }
+
+  @Override
+  public List<Map<String, Boolean>> getAcl(int userId) {
+    return dao.listMenuAccess(userId);
   }
 
 

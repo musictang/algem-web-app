@@ -1,16 +1,13 @@
 /*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
+    Last: 1.0.6 29/12/15
 */
+@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);
 @import url(https://fonts.googleapis.com/css?family=PT+Sans+Narrow);
-@import url(https://fonts.googleapis.com/css?family=Catamaran:400,900,700);
-@import url(https://fonts.googleapis.com/css?family=Martel+Sans:400,900,700);
-@import url(https://fonts.googleapis.com/css?family=Poller+One);
+/*@import url(https://fonts.googleapis.com/css?family=Catamaran:400,900,700);*/
+/*@import url(https://fonts.googleapis.com/css?family=Martel+Sans:400,900,700);*/
+/*@import url(https://fonts.googleapis.com/css?family=Poller+One);*/
 @font-face {
   font-family: 'droid_sans_monoregular';
   src: url('../fonts/DroidSansMono-webfont.eot');
@@ -20,7 +17,6 @@ and open the template in the editor.
     url('../fonts/DroidSansMono-webfont.svg#droid_sans_monoregular') format('svg');
   font-weight: normal;
   font-style: normal;
-
 }
 /*
  CSS Reset by Eric Meyer - Released under Public Domain
@@ -68,41 +64,55 @@ ul li {
   /* width: 10em; */
 }
 
+html {
+  height: 100%;
+}
+
+.busy {
+  cursor: wait !important;
+}
+
 body {
   height:100%;
   font-family: Verdana, Helvetica, sans-serif;
   color: #444;
-  background-color: #ffab11;
+  /*background-color: #ffab11;*/
+  background-color: #ffe899;
 }
 
 header {
   position: relative;
-  height: 3em;
-  background-image: url('../img/bg-thumb.png');
+  height: 5%;
+  /*background-image: url('../img/bg-thumb.png');*/
   background-position: bottom;
+  background-repeat: repeat-x;
 }
 
 header > nav {
   float: left;
-  padding:0.5em 0 0.5em 2.2em;
+  padding:0.25em 0 0.25em 2.2em;
 }
 
 .global {
   background-color: #fff8dc;
-  /*min-height: 660px;*/
-  /*hauteur de page*/
-  min-height: 100%;
+  padding: 2em 0;
+  /*hauteur minimale de page*/
+  min-height: 80%;
 }
 
 footer {
   position: relative;
-  background-color: #ffab11;
-  background-image: url('../img/bg-thumb.png');
+  /*background-color: #ffab11;*/
+  /*background-image: url('../img/bg-thumb.png');*/
   background-position: bottom;
+  background-repeat: repeat-x;
   width: 100%;
+  z-index: 2000;
 }
 
 footer > address {
+  position: absolute;
+  top:0;
   font-style: normal;
   font-size: smaller;
 }
@@ -110,7 +120,7 @@ footer > address {
 /*Emplacement du logo*/
 footer a.logo {
   position: relative;
-  top: -53px;
+  top: -37px;
   left: 75%;
   border: none;
   opacity: 0.8;
@@ -121,7 +131,7 @@ footer a:hover.logo {
 }
 
 /*Force la taille du logo en bas de page*/
-footer a.logo img{
+footer a.logo img {
   width: 64px;
   height: 64px;
   border: 5px solid #fff8dc;
@@ -129,10 +139,10 @@ footer a.logo img{
 }
 
 h1 {
-  font-family: 'Poller One',Catamaran,Arial,sans-serif;
+  font-family:'Exo 2',Arial,sans-serif;
   font-size: 2.5em;
-  padding: 0.2em;
-  /*font-weight: 700;*/
+  padding: 0;
+  font-weight: 800;
   text-align: center;
   text-transform: uppercase;
   line-height: 1em;
@@ -151,7 +161,7 @@ h2, h3, h4, h5, h6 {
   padding: 0.5em 0 0.25em 0;
 }
 
-h2, h3, h4 {
+h2, h3, h4, fieldset > legend {
   font-family: 'Catamaran',sans-serif;
   font-weight: bold;
   color: #ffab11;
@@ -168,10 +178,9 @@ h3 {
 h4 {
   font-size: 1.5em;
 }
-
-/*.fa {
-  font-size: 3em;
-}*/
+table tr > th {
+  padding: 0 1em;
+}
 
 table.vertical-header th, table.vertical-header td {
   text-align: left;
@@ -222,8 +231,13 @@ span.error {
   display: block;
 }
 
+.success {
+  color: green;
+}
+
 fieldset legend {
-  font-weight: bold;
+  font-size: 1.3em;
+  margin-bottom: 1em;
 }
 
 input[type=submit] {
@@ -257,10 +271,19 @@ input[type=submit] {
 
 .button-large {
   font-size: 110%;
+  background-color: orange;
 }
 
 .button-xlarge {
   font-size: 125%;
+  background-color: orange;
+}
+
+.bt-close {
+  position:relative;
+  top:0;
+  right: 0;
+  padding: 0 1em;
 }
 
 .bordered {
@@ -290,6 +313,10 @@ a.img-link {
   border: none;
 }
 
+select {
+  font-size: small;
+}
+
 .pure-menu-list a {
   border: none;
 }
@@ -310,12 +337,14 @@ a.img-link {
 
 #menu {
   position: fixed;
-  top: 3em;
+  display: none;
+  /*top: 5%;*/
+  top:0;
   right:0;
   background: #a24500;
   height: auto;
   text-align: center;
-  z-index: 1000;
+  z-index: 3000;
   border-radius: 0 0 0 10px ;
 }
 #bars {
@@ -325,7 +354,7 @@ a.img-link {
   font-size: 2em;
   z-index: 2000;
   text-align: center;
-  padding: 0.25em 0.5em;
+  padding: 0.15em 0.5em;
   cursor: pointer;
 }
 
@@ -344,6 +373,79 @@ a.img-link {
   border: none;
 }
 
+#help-panel, #info-panel, #login-panel {
+  position: absolute;
+  top:5%;
+  right:0;
+  display: none;
+  background-color: #fff4cc; /* #ffe899 #fff3dd;*/
+  border: 1px dotted gray;
+  /*padding: 1em;*/
+  font-family: Verdana, sans-serif;
+  line-height: 1.5em;
+  height:auto;
+  z-index:3001;
+}
+
+#login-panel {
+  width: 20em;
+}
+
+#help-panel ul {
+  list-style-type: none;
+}
+
+.colorHelp {
+  text-align: center;
+  font-size: larger;
+  font-weight: bold
+}
+
+.panel, #xlogin-panel {
+  padding: 1em;
+}
+
+.ui-datepicker-title {
+  color: #444;
+}
+
+.closing-bar {
+  position: relative;
+  width: 100%;
+  height: 1.5em;
+  background-color: #a24500;
+  color: #fff8dc;
+  text-align: right;
+}
+
+.closing-bar a.close-link {
+  display: inline-block;
+  padding: 0 1em;
+  color: white;
+  text-decoration: none;
+  border: none;
+}
+
+.closeable{}
+
+form input[type='text'], input[type='password'], form input[type='button'], form input[type='submit'] {
+  display: block;
+  /*margin: 0 0 1em 0;*/
+}
+
+form input[type='button'], form input[type='submit'] {
+  margin-top: 1em
+}
+
+form label {
+  display: inline-block;
+  margin-top: 1em;
+}
+
+form input + span {
+  display: inline;
+  /*background-color: blue;*/
+}
 
 .pure-menu-heading {
   height: 3em;
@@ -381,7 +483,7 @@ ul.disc{
 /*Media queries*/
 @media only screen and (max-width : 520px) {
   header > nav {
-    padding:0.5em 0;
+    padding:0.25em 0;
   }
 }
 

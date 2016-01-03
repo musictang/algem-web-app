@@ -21,6 +21,8 @@
 package net.algem.security;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,6 +36,8 @@ public interface UserService
 {
   public boolean authenticate(String login, String pass);
 
+  public byte[] findAuthInfo(String login, String col);
+
   public boolean authorize(String item, int user);
 
   public void create(User u) throws SQLException;
@@ -43,5 +47,11 @@ public interface UserService
   public User findUserById(int id);
 
   public User findUserByLogin(String login);
+
+  public List<User> exist(User u);
+
+  public boolean isPerson(User u);
+
+  public List<Map<String, Boolean>> getAcl(int userId);
 }
 

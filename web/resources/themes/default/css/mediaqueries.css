@@ -1,0 +1,81 @@
+/*
+ * @(#) mediaqueries.css Algem Web App 1.0.6 29/12/2015
+ *
+ * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+*/
+/*
+    Created on : 29/12/2015, 15:34:39
+    Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
+    Version    : 1.0.6
+*/
+/*@media only screen and (max-device-width:480px),
+only screen and (-webkit-min-device-pixel-ratio: 2)*/
+
+@media only screen and (max-width : 520px) {
+  header {height: 10%}
+  #grid, #canvas, #menu {top: 10%}
+  .schedule_col {
+    width: 50px;
+  }
+  .schedule {
+    font-size: xx-small;
+    line-height: 1em;
+  }
+}
+
+@media only screen and (min-width:521px) and (max-width: 1024px) {
+  .schedule_col {
+    width: 75px;
+  }
+  .schedule {
+    font-size: xx-small;
+    line-height: 1em;
+  }
+}
+
+@media only screen and (min-height:320px) and (max-height: 639px) {
+   header {height: 14%}
+  #grid, #canvas, #menu {top: 14%}
+}
+
+/*iPhone 2G, 3G, 4, 4S Media Queries : Portrait*/
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  #grid, #canvas{top: 7%}
+  .schedule_col {
+    width: 40px;
+  }
+  .schedule {
+    font-size: xx-small;
+    line-height: 1em;
+  }
+}
+/*iPhone 2G, 3G, 4, 4S Media Queries : landscape*/
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px)
+and (orientation : landscape) {
+  /* STYLES GO HERE */
+  .schedule_col {
+    width: 60px;
+  }
+  .schedule {
+    font-size: xx-small;
+    line-height: 1em;
+  }
+}

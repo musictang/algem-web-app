@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title id="pageTitle"></title>
+    <meta name="viewport" content="width=device-width"> <!-- important -->
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/custom.css" />
+    <link rel="stylesheet" href="css/planning.css" />
+     <link rel="stylesheet" href="css/jquery-ui.css" />
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+    <script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.11.4.min.js"></script>
+    <script type="text/javascript" src="js/algem.js"></script>
+    <script type="text/javascript" src="js/planning.js"></script>
+    <script type="text/javascript" src="js/menu.js"></script>
+
+    <script type="text/javascript">
+        var estabId = 3501;
+        var currentDate = '17-12-2015';
+        $(document).ready(function() {
+            menu();
+            setMenuEvents();
+            setDatePicker();
+            setWidth();
+            setHoverStyle();
+            setDialog();
+        })
+    </script>
+
+  </head>
+  <body>
+      <div id="dialog">Texte du dialogue</div>
+      <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
+    <div id="menu">
+      <ul>
+        <li><a href="login.html" title="Connexion"><i class="fa fa-sign-in"></i></a></li>
+        <li><a id="help" href="#help-content" title="Aide"><i class="fa fa-question"></i></a></li>
+        <li><a id="tel" href="#tel-content" title="Contact"><i class="fa fa-info"></i></a></li>
+      </ul>
+    </div>
+    <header>
+      <nav>
+        <select id="estabSelection" name="estabId" tabindex="4">
+            <option value="3501">Malakoff</option>
+        </select>
+        <label id="dow" for="datepicker">jeu.</label><a href="" title="Jour précédent" id="previous" tabindex="2"><i class="fa fa-chevron-left"></i></a>&nbsp;<input type="text" id="datepicker" style="font-size:small" tabindex="3"/>&nbsp;<a href="" title="Jour suivant" id="next" tabindex="1"><i class="fa fa-chevron-right"></i></a>
+      </nav>
+    </header>
+
+<!--
+    <aside id="info-bar">
+      <img src="img/help-contents.png" id="help" alt="Aide"/>
+      <img src="img/tel.png" id="tel" alt="Tel."/>
+    </aside>
+-->
+    <aside id="help-content">
+      <ul style="margin-bottom: 1em">
+        <li><span class="colorSquare" title="Cours collectif" style="background-color:#FF3333"></span>&nbsp;Cours collectif</li>
+        <li><span class="colorSquare colorHelp" style="background-color:#00D059;"></span>&nbsp;Cours disponible
+          <span style="font-size: smaller">(Place momentanément disponible pour les répétitions)</span></li>
+        <li><span class="colorSquare" title="Cours occupé" style="background-color:#80e82c"></span>&nbsp;Cours occupé</li>
+        <li><span class="colorSquare" title="Atelier découverte, master-class" style="background-color:#F7F7AC"></span>&nbsp;Atelier découverte, master-class</li>
+        <li><span class="colorSquare" title="Stage" style="background-color:#F7F77C"></span>&nbsp;Stage</li>
+        <li><span class="colorSquare" title="Répétition groupe" style="background-color:#2158FF"></span>&nbsp;Répétition groupe</li>
+        <li><span class="colorSquare" title="Répétition adhérent" style="background-color:#3399FF"></span>&nbsp;Répétition adhérent</li>
+        <li><span class="colorSquare" title="Salle fermée" style="background-color:#ccc"></span>&nbsp;Salle fermée</li>
+      </ul>
+      <img id="help-close" class="bt-close" alt="Fermer" src="img/close.png"/>
+    </aside>
+    <aside id="tel-content">
+      <ul>
+          <li>Malakoff
+            &nbsp;:&nbsp;<a href="tel:+33140848009">01 40 84 80 09</a>
+            <ul class="disc" style="margin-bottom: 1em">
+              <li>lundi au vendredi : 10h-22h</li>
+              <li>samedi : 11h-18h)</li>
+            </ul>
+          </li>
+      </ul>
+      <img id="tel-close" class="bt-close" alt="Fermer" src="img/close.png"/>
+    </aside>
+    <div id="colorInfo">
+      <div id="contact">
+        <span class="colorSquare" title="Horaires" style="background-color:white;font-size:larger">&#9742;</span>
+        &nbsp;Horaires&nbsp;|&nbsp;
+        <ul id="timetable" class="tip" style="width:460px;">
+            <li>Malakoff&nbsp;:&nbsp;[01 40 84 80 09, lundi au vendredi : 10h-22h, samedi : 11h-18h)]</li>
+        </ul>
+      </div>
+    </div>
+    <table id="grid">
+      <tr><th><p>09:00</p></th></tr>
+      <tr><th><p>09:30</p></th></tr>
+      <tr><th><p>10:00</p></th></tr>
+      <tr><th><p>10:30</p></th></tr>
+      <tr><th><p>11:00</p></th></tr>
+      <tr><th><p>11:30</p></th></tr>
+      <tr><th><p>12:00</p></th></tr>
+      <tr><th><p>12:30</p></th></tr>
+      <tr><th><p>13:00</p></th></tr>
+      <tr><th><p>13:30</p></th></tr>
+      <tr><th><p>14:00</p></th></tr>
+      <tr><th><p>14:30</p></th></tr>
+      <tr><th><p>15:00</p></th></tr>
+      <tr><th><p>15:30</p></th></tr>
+      <tr><th><p>16:00</p></th></tr>
+      <tr><th><p>16:30</p></th></tr>
+      <tr><th><p>17:00</p></th></tr>
+      <tr><th><p>17:30</p></th></tr>
+      <tr><th><p>18:00</p></th></tr>
+      <tr><th><p>18:30</p></th></tr>
+      <tr><th><p>19:00</p></th></tr>
+      <tr><th><p>19:30</p></th></tr>
+      <tr><th><p>20:00</p></th></tr>
+      <tr><th><p>20:30</p></th></tr>
+      <tr><th><p>21:00</p></th></tr>
+      <tr><th><p>21:30</p></th></tr>
+      <tr><th><p>22:00</p></th></tr>
+      <tr><th><p>22:30</p></th></tr>
+      <tr><th><p>23:00</p></th></tr>
+      <tr><th><p>23:30</p></th></tr>
+    </table>
+    <section id="canvas">
+
+        <div class="schedule_col">
+          <p class="title_col">BLEUE</p>
+            <div class="schedule" style="top:61.111111111111114%;height:5.333333333333333%;background-color:#FF5252"><p></p>CLARINETTE CO<br />18:10-19:00</p></div>
+            <div class="schedule" style="top:0;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+        </div>
+
+        <div class="schedule_col">
+          <p class="title_col">VERTE</p>
+            <div class="schedule" style="top:23.333333333333332%;height:6.444444444444445%;background-color:#3399FF">REPET ADHÉRENT<br />12:30-13:30</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:33.333333333333336%;height:6.444444444444445%;background-color:#00D059">PIANO<br />14:00-15:00</div>
+            <div class="schedule" style="top:40.0%;height:6.444444444444445%;background-color:#FF5252">SOLFEGE PRO 2<br />15:00-16:00</div>
+            <div class="schedule" style="top:46.666666666666664%;height:6.444444444444445%;background-color:#00D059"></div>
+            <div class="labels" style="top:46.666666666666664%;height:6.444444444444445%;">Piano<br />16:00-17:00</div>
+            <div class="schedule" style="top:53.333333333333336%;height:5.333333333333333%;background-color:#FF5252"></div>
+            <div class="labels" style="top:53.333333333333336%;height:5.333333333333333%">PIANO CO<br />17:00-17:50</div>
+            <div class="schedule" style="top:58.888888888888886%;height:3.111111111111111%;background-color:#00D059"></div>
+            <div class="labels" style="top:58.888888888888886%;height:3.111111111111111%">PIANO<br />17:50-18:20</div>
+              <div class="schedule range" style="top:46.666666666666664%;height:3.111111111111111%;"></div>
+              <div class="schedule range" style="top:50.0%;height:3.111111111111111%;"></div>
+              <div class="schedule range" style="top:58.888888888888886%;height:3.111111111111111%;"></div>
+        </div>
+        <!--
+        <div class="schedule_col">
+          <p class="title_col">ROUGE</p>
+            <div class="schedule" style="top:36.666666666666664%;height:6.444444444444445%;background-color:#3399FF">REPET ADHÉRENT<br />14:30-15:30</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:46.666666666666664%;height:39.77777777777778%;background-color:#00D059">CHANT<br />16:00-22:00</div>
+              <div class="schedule range" style="top:58.333333333333336%;height:4.777777777777778%;"></div>
+              <div class="schedule range" style="top:53.333333333333336%;height:4.777777777777778%;"></div>
+              <div class="schedule range" style="top:66.66666666666667%;height:3.111111111111111%;"></div>
+              <div class="schedule range" style="top:63.333333333333336%;height:3.111111111111111%;"></div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">JAUNE</p>
+            <div class="schedule" style="top:40.0%;height:6.444444444444445%;background-color:#FF5252">M.A.O. VARIABLE<br />15:00-16:00</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:46.666666666666664%;height:6.444444444444445%;background-color:#FF5252">M.A.O. VARIABLE<br />16:00-17:00</div>
+            <div class="schedule" style="top:55.0%;height:8.11111111111111%;background-color:#FF5252">GUITARE CO<br />17:15-18:30</div>
+            <div class="schedule" style="top:70.0%;height:16.444444444444443%;background-color:#00D059">GUITARE<br />19:30-22:00</div>
+              <div class="schedule range" style="top:76.66666666666667%;height:4.777777777777778%;"></div>
+              <div class="schedule range" style="top:73.33333333333333%;height:3.111111111111111%;"></div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">RASTA</p>
+            <div class="schedule" style="top:6.666666666666667%;height:13.11111111111111%;background-color:#3399FF">REPET ADHÉRENT<br />10:00-12:00</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:46.666666666666664%;height:9.777777777777779%;background-color:#00D059">BATTERIE<br />16:00-17:30</div>
+            <div class="schedule" style="top:63.333333333333336%;height:23.11111111111111%;background-color:#00D059">BATTERIE<br />18:30-22:00</div>
+              <div class="schedule range" style="top:53.333333333333336%;height:3.111111111111111%;"></div>
+              <div class="schedule range" style="top:50.0%;height:3.111111111111111%;"></div>
+              <div class="schedule range" style="top:80.0%;height:3.111111111111111%;"></div>
+              <div class="schedule range" style="top:73.33333333333333%;height:3.111111111111111%;"></div>
+              <div class="schedule range" style="top:68.33333333333333%;height:4.777777777777778%;"></div>
+              <div class="schedule range" style="top:63.333333333333336%;height:4.777777777777778%;"></div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">ORCHESTRA</p>
+            <div class="schedule" style="top:56.666666666666664%;height:6.444444444444445%;background-color:#FF5252">EVEIL RYTHMIQUE<br />17:30-18:30</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:63.333333333333336%;height:6.444444444444445%;background-color:#FF5252">ATELIER BLUES ROCK<br />18:30-19:30</div>
+            <div class="schedule" style="top:70.0%;height:6.444444444444445%;background-color:#FF5252">ATELIER POP ROCK<br />19:30-20:30</div>
+            <div class="schedule" style="top:76.66666666666667%;height:6.444444444444445%;background-color:#FF5252">AT. MUSTANG 2<br />20:30-21:30</div>
+            <div class="schedule" style="top:83.33333333333333%;height:13.11111111111111%;background-color:#FF5252">BATUCADA 1<br />21:30-23:30</div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">ORCHESTRA</p>
+            <div class="schedule" style="top:56.666666666666664%;height:6.444444444444445%;background-color:#FF5252">EVEIL RYTHMIQUE<br />17:30-18:30</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:63.333333333333336%;height:6.444444444444445%;background-color:#FF5252">ATELIER BLUES ROCK<br />18:30-19:30</div>
+            <div class="schedule" style="top:70.0%;height:6.444444444444445%;background-color:#FF5252">ATELIER POP ROCK<br />19:30-20:30</div>
+            <div class="schedule" style="top:76.66666666666667%;height:6.444444444444445%;background-color:#FF5252">AT. MUSTANG 2<br />20:30-21:30</div>
+            <div class="schedule" style="top:83.33333333333333%;height:13.11111111111111%;background-color:#FF5252">BATUCADA 1<br />21:30-23:30</div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">ORCHESTRA</p>
+            <div class="schedule" style="top:56.666666666666664%;height:6.444444444444445%;background-color:#FF5252">EVEIL RYTHMIQUE<br />17:30-18:30</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:63.333333333333336%;height:6.444444444444445%;background-color:#FF5252">ATELIER BLUES ROCK<br />18:30-19:30</div>
+            <div class="schedule" style="top:70.0%;height:6.444444444444445%;background-color:#FF5252">ATELIER POP ROCK<br />19:30-20:30</div>
+            <div class="schedule" style="top:76.66666666666667%;height:6.444444444444445%;background-color:#FF5252">AT. MUSTANG 2<br />20:30-21:30</div>
+            <div class="schedule" style="top:83.33333333333333%;height:13.11111111111111%;background-color:#FF5252">BATUCADA 1<br />21:30-23:30</div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">ORCHESTRA</p>
+            <div class="schedule" style="top:56.666666666666664%;height:6.444444444444445%;background-color:#FF5252">EVEIL RYTHMIQUE<br />17:30-18:30</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:63.333333333333336%;height:6.444444444444445%;background-color:#FF5252">ATELIER BLUES ROCK<br />18:30-19:30</div>
+            <div class="schedule" style="top:70.0%;height:6.444444444444445%;background-color:#FF5252">ATELIER POP ROCK<br />19:30-20:30</div>
+            <div class="schedule" style="top:76.66666666666667%;height:6.444444444444445%;background-color:#FF5252">AT. MUSTANG 2<br />20:30-21:30</div>
+            <div class="schedule" style="top:83.33333333333333%;height:13.11111111111111%;background-color:#FF5252">BATUCADA 1<br />21:30-23:30</div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">ORCHESTRA</p>
+            <div class="schedule" style="top:56.666666666666664%;height:6.444444444444445%;background-color:#FF5252">EVEIL RYTHMIQUE<br />17:30-18:30</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:63.333333333333336%;height:6.444444444444445%;background-color:#FF5252">ATELIER BLUES ROCK<br />18:30-19:30</div>
+            <div class="schedule" style="top:70.0%;height:6.444444444444445%;background-color:#FF5252">ATELIER POP ROCK<br />19:30-20:30</div>
+            <div class="schedule" style="top:76.66666666666667%;height:6.444444444444445%;background-color:#FF5252">AT. MUSTANG 2<br />20:30-21:30</div>
+            <div class="schedule" style="top:83.33333333333333%;height:13.11111111111111%;background-color:#FF5252">BATUCADA 1<br />21:30-23:30</div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">ORCHESTRA</p>
+            <div class="schedule" style="top:56.666666666666664%;height:6.444444444444445%;background-color:#FF5252">EVEIL RYTHMIQUE<br />17:30-18:30</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:63.333333333333336%;height:6.444444444444445%;background-color:#FF5252">ATELIER BLUES ROCK<br />18:30-19:30</div>
+            <div class="schedule" style="top:70.0%;height:6.444444444444445%;background-color:#FF5252">ATELIER POP ROCK<br />19:30-20:30</div>
+            <div class="schedule" style="top:76.66666666666667%;height:6.444444444444445%;background-color:#FF5252">AT. MUSTANG 2<br />20:30-21:30</div>
+            <div class="schedule" style="top:83.33333333333333%;height:13.11111111111111%;background-color:#FF5252">BATUCADA 1<br />21:30-23:30</div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">ROUGE</p>
+            <div class="schedule" style="top:36.666666666666664%;height:6.444444444444445%;background-color:#3399FF">REPET ADHÉRENT<br />14:30-15:30</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:46.666666666666664%;height:39.77777777777778%;background-color:#00D059">CHANT<br />16:00-22:00</div>
+              <div class="schedule range" style="top:58.333333333333336%;height:4.777777777777778%;"></div>
+              <div class="schedule range" style="top:53.333333333333336%;height:4.777777777777778%;"></div>
+              <div class="schedule range" style="top:66.66666666666667%;height:3.111111111111111%;"></div>
+              <div class="schedule range" style="top:63.333333333333336%;height:3.111111111111111%;"></div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">JAUNE</p>
+            <div class="schedule" style="top:40.0%;height:6.444444444444445%;background-color:#FF5252">M.A.O. VARIABLE<br />15:00-16:00</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:46.666666666666664%;height:6.444444444444445%;background-color:#FF5252">M.A.O. VARIABLE<br />16:00-17:00</div>
+            <div class="schedule" style="top:55.0%;height:8.11111111111111%;background-color:#FF5252">GUITARE CO<br />17:15-18:30</div>
+            <div class="schedule" style="top:70.0%;height:16.444444444444443%;background-color:#00D059">GUITARE<br />19:30-22:00</div>
+              <div class="schedule range" style="top:76.66666666666667%;height:4.777777777777778%;"></div>
+              <div class="schedule range" style="top:73.33333333333333%;height:3.111111111111111%;"></div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">ROUGE</p>
+            <div class="schedule" style="top:36.666666666666664%;height:6.444444444444445%;background-color:#3399FF">REPET ADHÉRENT<br />14:30-15:30</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:46.666666666666664%;height:39.77777777777778%;background-color:#00D059">CHANT<br />16:00-22:00</div>
+              <div class="schedule range" style="top:58.333333333333336%;height:4.777777777777778%;"></div>
+              <div class="schedule range" style="top:53.333333333333336%;height:4.777777777777778%;"></div>
+              <div class="schedule range" style="top:66.66666666666667%;height:3.111111111111111%;"></div>
+              <div class="schedule range" style="top:63.333333333333336%;height:3.111111111111111%;"></div>
+        </div>
+        <div class="schedule_col">
+          <p class="title_col">JAUNE</p>
+            <div class="schedule" style="top:40.0%;height:6.444444444444445%;background-color:#FF5252">M.A.O. VARIABLE<br />15:00-16:00</div>
+            <div class="schedule" style="top:0.0%;height:6.444444444444445%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:86.66666666666667%;height:13.11111111111111%;background-color:#CCCCCC"></div>
+            <div class="schedule" style="top:46.666666666666664%;height:6.444444444444445%;background-color:#FF5252">M.A.O. VARIABLE<br />16:00-17:00</div>
+            <div class="schedule" style="top:55.0%;height:8.11111111111111%;background-color:#FF5252">GUITARE CO<br />17:15-18:30</div>
+            <div class="schedule" style="top:70.0%;height:16.444444444444443%;background-color:#00D059">GUITARE<br />19:30-22:00</div>
+              <div class="schedule range" style="top:76.66666666666667%;height:4.777777777777778%;"></div>
+              <div class="schedule range" style="top:73.33333333333333%;height:3.111111111111111%;"></div>
+        </div>
+-->
+<footer>
+      <address>
+        ©&nbsp;2015&nbsp;Musiques&nbsp;Tangentes&nbsp;AGPL&nbsp;v.3&nbsp;| <a href="http://www.algem.net" target="_blank">http://www.algem.net</a>
+      </address>
+    </footer>
+    </section>
+
+  </body>
+</html>
