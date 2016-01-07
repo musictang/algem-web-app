@@ -40,6 +40,9 @@
             <label for="id" th:text="#{member.id.label} + ' *'">Number *</label>
             <input type="text" required="required" th:field="*{id}" />
             <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}" th:errorclass="error">Id Error</span>
+            <label for="email" th:text="#{email.label} + ' *'">Email *</label>
+            <input type="text" required="required" th:field="*{email}" />
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorclass="error">Id Error</span>
             <label for="login" th:text="#{form.username.label} + ' *'" >Login *</label>
             <!--<%-- Les messages d'erreur doivent être affichés à l'intérieur du formulaire --%>-->
             <input type="text"  required="required" th:field="*{login}" />
@@ -53,6 +56,9 @@
             </div>-->
           </fieldset>
         </form>
+        <h4>Note</h4>
+        <p>La création d'un compte n'est possible que si vous êtes déjà enregistré
+          en tant que contact ou adhérent auprès de votre structure : <span th:text="${@organization['name.label']}"></span>.</p>
       </div>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>

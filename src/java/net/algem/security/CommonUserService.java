@@ -23,6 +23,9 @@ package net.algem.security;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.algem.contact.Person;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -69,7 +72,16 @@ public class CommonUserService
 
   @Override
   public void create(User u) throws SQLException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    if (encryptionService == null) {
+      encryptionService = new PasswordEncryptionService();
+    }
+    try {
+      UserPass pass = encryptionService.createPassword(u.getPassword());
+      u.setPass(pass);
+      dao.createAccount(u);
+    } catch (UserException ex) {
+      Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
 
   @Override
@@ -107,6 +119,15 @@ public class CommonUserService
     } catch(DataAccessException ex) {
       return false;
     }
+  }
+
+  @Override
+  public Person getPersonFromUser(int u) {
+    Person p = dao.getPersonFromUser(u);
+    if (p != null) {
+      p.setEmail(dao.getEmailsFromContact(u));
+    }
+    return p;
   }
 
   @Override

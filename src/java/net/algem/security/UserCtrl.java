@@ -21,12 +21,18 @@
 package net.algem.security;
 
 import java.security.Principal;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import net.algem.contact.Email;
+import net.algem.contact.Person;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -164,9 +170,6 @@ public class UserCtrl
       return "signup";
     }
     try {
-      if (!service.isPerson(user)) {
-        bindingResult.rejectValue("id", "id.not.found");
-      }
       List<User> others = service.exist(user);
       if (others != null) {
         for (User o : others) {
@@ -179,8 +182,35 @@ public class UserCtrl
           }
         }
       }
+      if (!service.isPerson(user)) {
+        bindingResult.rejectValue("id", "member.not.found");
+        return "signup";
+      }
+
+      Person p = service.getPersonFromUser(user.getId());
+      if (p == null) {
+        bindingResult.rejectValue("id", "user.person.error", new Object[]{user.getId()}, "");
+        return "signup";
+      }
+
+      boolean emailFound = false;
+      for (Email e : p.getEmail()) {
+        if (e.getEmail().equals(user.getEmail())) {
+          emailFound = true;
+          break;
+        }
+      }
+      if (!emailFound) {
+        bindingResult.rejectValue("email", "user.email.error", new Object[]{user.getEmail()}, "");
+        return "signup";
+      }
+
+      service.create(user);
     } catch(DataAccessException ex) {
-      bindingResult.rejectValue("id", "empty.result", ex.getMessage());
+      bindingResult.rejectValue("id", "data.exception", new Object[] {ex.getLocalizedMessage()}, ex.getMessage());
+      return "signup";
+    } catch (SQLException ex) {
+      bindingResult.rejectValue("id", "data.exception", new Object[] {ex.getLocalizedMessage()}, ex.getMessage());
       return "signup";
     }
 

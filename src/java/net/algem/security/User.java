@@ -20,9 +20,13 @@
  */
 package net.algem.security;
 
+import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import net.algem.group.Group;
+import org.hibernate.validator.constraints.Email;
 
 /**
  *
@@ -36,15 +40,31 @@ public class User {
   @Max(value=Integer.MAX_VALUE, message="{id.required}")
 	private int id;
 
+  /** Login user name. */
   @Size(min=2, max=16, message="{login.required}")
 	private String login;
 
-  @Size(min=6, max=16, message="{password.required}")
+  /** Login password. */
+  @Size(min=8, max=16, message="{password.required}")
 	private String password;
 
+  /** User role. */
 	private Profile profile;
 
+  private String firstName;
+
+//  @NotNull
 	private String name;
+
+  /** Login email. */
+  @Email(message="{email.required}")
+  private String email;
+
+  /** Groups the user belongs to. */
+  private List<Group> groups;
+
+  /** Teacher status. */
+  private boolean teacher;
 
   private UserPass passInfo;
 
@@ -53,86 +73,81 @@ public class User {
 		return login;
 	}
 
-  /**
-   * @return the id
-   */
   public int getId() {
     return id;
   }
 
-  /**
-   * @param id the id to set
-   */
   public void setId(int id) {
     this.id = id;
   }
 
-  /**
-   * @return the login
-   */
   public String getLogin() {
     return login;
   }
 
-  /**
-   * @param login the login to set
-   */
   public void setLogin(String login) {
     this.login = login;
   }
 
-  /**
-   * @return the password
-   */
   public String getPassword() {
     return password;
   }
 
-  /**
-   * @param password the password to set
-   */
   public void setPassword(String password) {
     this.password = password;
   }
 
-  /**
-   * @return the profile
-   */
   public Profile getProfile() {
     return profile;
   }
 
-  /**
-   * @param profile the profile to set
-   */
   public void setProfile(Profile profile) {
     this.profile = profile;
   }
 
-  /**
-   * @return the name
-   */
   public String getName() {
     return name;
   }
 
-  /**
-   * @param name the name to set
-   */
   public void setName(String name) {
     this.name = name;
   }
 
-  /**
-   * @return the passInfo
-   */
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public List<Group> getGroups() {
+    return groups;
+  }
+
+  public void setGroups(List<Group> groups) {
+    this.groups = groups;
+  }
+
+   public boolean isTeacher() {
+    return teacher;
+  }
+  public void setTeacher(boolean teacher) {
+    this.teacher = teacher;
+  }
+
   public UserPass getPass() {
     return passInfo;
   }
 
-  /**
-   * @param passInfo the passInfo to set
-   */
   public void setPass(UserPass passInfo) {
     this.passInfo = passInfo;
   }

@@ -23,6 +23,7 @@ package net.algem.security;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import net.algem.contact.Person;
 import org.springframework.stereotype.Component;
 
 /**
@@ -51,6 +52,8 @@ public interface UserService
   public List<User> exist(User u);
 
   public boolean isPerson(User u);
+
+  public Person getPersonFromUser(int u);
 
   public List<Map<String, Boolean>> getAcl(int userId);
 }

@@ -38,8 +38,9 @@
       <div class="centered">
       <h2>Mes Informations</h2>
       <table class="vertical-header">
-        <tr><th th:text="#{name.label}"></th><td th:text="${user.name}">un</td></tr>
+        <tr><th th:text="#{name.label}"></th><td th:text="|${user.firstName} ${user.name}|">un</td></tr>
         <tr><th th:text="#{login.label}"></th><td th:text="${user.login}">deux</td></tr>
+        <tr><th th:text="#{email.label}"></th><td th:text="${user.email}">deux</td></tr>
         <tr><th th:text="#{profile.label}"></th><td th:text="#{${user.profile.label}}">trois</td></tr>
       </table>
     </div>

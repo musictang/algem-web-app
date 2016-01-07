@@ -20,15 +20,24 @@
  */
 package net.algem.security;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.algem.contact.Email;
 import net.algem.contact.Person;
 import net.algem.contact.PersonIO;
+import net.algem.contact.TeacherIO;
+import net.algem.group.Group;
+import net.algem.group.GroupIO;
 import net.algem.util.AbstractGemDao;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -130,6 +139,58 @@ public class UserDao
     return jdbcTemplate.queryForObject(query, Integer.class, u.getId()) > 0;
   }
 
+  public Person getPersonFromUser(final int userId) {
+    String query = "SELECT nom,prenom FROM " + PersonIO.TABLE + " WHERE id = ?";
+    return jdbcTemplate.queryForObject(query, new RowMapper<Person>() {
+
+      @Override
+      public Person mapRow(ResultSet rs, int i) throws SQLException {
+        Person p = new Person();
+        p.setId(userId);
+        p.setName(rs.getString(1));
+        p.setFirstName(rs.getString(2));
+        return p;
+      }
+    }, userId);
+  }
+
+  public List<Email> getEmailsFromContact(final int id) {
+    String query = "SELECT email,archive,idx FROM email WHERE idper = ?";
+    return jdbcTemplate.query(query, new RowMapper<Email>() {
+      @Override
+      public Email mapRow(ResultSet rs, int i) throws SQLException {
+        Email e = new Email();
+        e.setIdper(id);
+        e.setEmail(rs.getString(1));
+        e.setArchive(rs.getBoolean(2));
+        e.setIndex(rs.getShort(3));
+        return e;
+      }
+    }, id);
+  }
+
+  public List<Group> getGroups(int userId) {
+    String query = "SELECT id,name FROM "
+      + GroupIO.TABLE + " g, " + GroupIO.TABLE_DET
+      + " gd WHERE gd.musicien = ? AND gd.id = g.id";
+    return jdbcTemplate.query(query, new RowMapper<Group>() {
+
+      @Override
+      public Group mapRow(ResultSet rs, int i) throws SQLException {
+        Group g = new Group();
+        g.setId(rs.getInt(1));
+        g.setName(rs.getString(2));
+        return g;
+      }
+
+    }, userId);
+  }
+
+  public int getTeacher(int userId) {
+    String query = "SELECT idper FROM " + TeacherIO.TABLE + " WHERE idper = ? AND actif = TRUE";
+    return jdbcTemplate.queryForObject(query, Integer.class, userId);
+  }
+
   public List<User> exist(int id, String login) {
     String query = "SELECT idper,login FROM " + TABLE + " WHERE idper = ? OR login = ?";
     return jdbcTemplate.query(query, new RowMapper<User>() {
@@ -168,5 +229,22 @@ public class UserDao
       }
     }, userId);
 
+  }
+
+  void createAccount(final User user) {
+    jdbcTemplate.update(new PreparedStatementCreator() {
+
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement("INSERT INTO " + TABLE + " VALUES(?,?,?,?,?)");
+        ps.setInt(1, user.getId());
+        ps.setString(2, user.getLogin());
+        ps.setInt(3, Profile.Member.getId());
+        ps.setString(4, Base64.encodeBase64String(user.getPass().getPass()));
+        ps.setString(5, Base64.encodeBase64String(user.getPass().getKey()));
+
+        return ps;
+      }
+    });
   }
 }

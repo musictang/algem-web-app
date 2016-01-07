@@ -21,6 +21,8 @@
 
 package net.algem.contact;
 
+import java.util.List;
+
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
@@ -33,11 +35,12 @@ public class Person {
   public static final short ROOM = 4;
   public static final short ESTABLISHMENT = 5;
   public static final short BANK = 6;
-	
+
 	private int id;
 	private String name;
 	private String firstName;
-	
+  private List<Email> emails;
+
 	public Person() {
   }
 
@@ -77,7 +80,14 @@ public class Person {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+
+  public List<Email> getEmail() {
+    return emails;
+  }
+
+  public void setEmail(List<Email> email) {
+    this.emails = email;
+  }
+
 
 }
