@@ -47,10 +47,10 @@
               <!--<input type="button" id="login-submit-button" th:value="#{login.submit.label}" />-->
               <input type="submit" th:value="#{login.submit.label}" class="button-xlarge pure-button pure-button-primary"/>
             </fieldset>
+            <p class="error" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}" ></p>
             <div th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}">
               <a href="recover.html" th:text="#{password.forgotten}"></a>
             </div>
-            <p class="error" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}" ></p>
             <p><span th:text="#{sign-up.warning}"></span> <a href="signup.html" th:text="#{sign-up.label}"></a></p>
           </form>
         </div>

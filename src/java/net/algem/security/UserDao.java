@@ -72,9 +72,8 @@ public class UserDao
     u.setId(rs.getInt(1));
     u.setLogin(rs.getString(2));
     u.setProfile(getProfileFromId(rs.getShort(3)));
-    String firstname = rs.getString(5);
-//    u.setPass(getUserPass(rs.getString(4), rs.getString((5))));
-    u.setName(firstname == null ? "" : firstname + " " + rs.getString(4));
+    u.setName(rs.getString(4));
+    u.setFirstName(rs.getString(5));
 
     return u;
   }
@@ -151,14 +150,20 @@ public class UserDao
     }, id);
   }
 
-  public User findByEmail(String email) {
+  public User findByEmail(final String email) {
     String query = "SELECT l.idper,l.login,l.profil FROM "
-      + TABLE + " l INNER JOIN email e ON (l.idper = e.idper)"
-      + " WHERE e.email = ?";
-    return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
+            + TABLE + " l INNER JOIN email e ON (l.idper = e.idper)"
+            + " WHERE e.email = ?";
+    return jdbcTemplate.queryForObject(query, new RowMapper<User>()
+    {
       @Override
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return getFromRS(rs);
+        User u = new User();
+        u.setId(rs.getInt(1));
+        u.setLogin(rs.getString(2));
+        u.setProfile(getProfileFromId(rs.getShort(3)));
+        u.setEmail(email);
+        return u;
       }
     }, email);
   }

@@ -35,18 +35,15 @@
     </header>
     <div class="global">
       <div class="centered">
-        <form action="#" id="recover-form" th:object="${user}" th:action="@{recover.html}" method="post" accept-charset="UTF-8">
-          <fieldset><legend th:text="#{password.forgotten}"></legend>
-            <label for="email" th:text="#{email.label} + ' *'">Email *</label>
-            <input id="email" type="text" required="required" th:field="*{email}" />
-            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorclass="error">Email Error</span>
+        <form action="#" id="recover-form" th:action="@{recover.html}" method="post" accept-charset="UTF-8">
+          <fieldset><legend th:text="#{recover.legend}"></legend>
+            <label for="email" th:text="#{email.label}">Email</label>
+            <input id="email" type="text" required="required" name="email" />
             <input type="submit" th:value="#{submit.label}" class="pure-button pure-button-primary"/>
-<!--            <div th:if="${#fields.hasAnyErrors()}">
-              <p th:each="err : ${#fields.allErrors()}" th:text="${err}">...</p>
-            </div>-->
           </fieldset>
         </form>
-        <p th:text="${message}"></p>
+        <p th:if="${errorMessage} != null" th:class="error" th:text="${errorMessage}"></p>
+        <p th:if="${message} != null" th:text="${message}"></p>
       </div>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>

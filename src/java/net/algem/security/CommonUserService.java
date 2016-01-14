@@ -137,10 +137,12 @@ public class CommonUserService
     return dao.listMenuAccess(userId);
   }
 
+  @Override
   public void setToken(int userId, String token) {
     dao.setToken(userId, token);
   }
 
+  @Override
   public boolean hasToken(int userId, String token) {
     String t = null;
     try {

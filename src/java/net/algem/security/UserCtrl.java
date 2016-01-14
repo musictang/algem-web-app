@@ -83,8 +83,10 @@ public class UserCtrl {
   @Resource(name = "messageSource")
   private MessageSource messageSource;
 
+  @Autowired
   private MailSender mailSender;
 
+  @Autowired
   private SimpleMailMessage recoverMessage;
 
   public UserCtrl() {
@@ -129,6 +131,7 @@ public class UserCtrl {
    * @param password clear password
    * @param request httprequest
    * @param response httpresponse
+   * @param currentUser
    * @return JSON data as string
    */
   // IMPORTANT HERE : produces="text/html" !! AND NOT application/json or text/plain !
@@ -177,12 +180,12 @@ public class UserCtrl {
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "signup.html")
-  public String doSignUp(User u) {
+  public String signUp(User u) {
     return "signup";
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "signup.html")
-  public String signUp(@Valid User user, BindingResult bindingResult) {
+  public String doSignUp(@Valid User user, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       return "signup";
     }
@@ -229,47 +232,47 @@ public class UserCtrl {
 
   /**
    * Gets the page for recovery password request.
+   * @param user
    * @return a view
    */
   @RequestMapping(method = RequestMethod.GET, value = "recover.html")
-  public String doRecoverPassword(User user) {
+  public String recoverPassword(User user) {
     return "recover";
   }
 
 
   @RequestMapping(method = RequestMethod.POST, value = "recover.html")
-  public String recoverPassword(@Valid User user, BindingResult bindingResult, HttpServletRequest request, Model model) {
-    if (bindingResult.hasErrors()) {
+  public String doRecoverPassword(@RequestParam String email, HttpServletRequest request, Model model) {
+    User found = service.findUserByEmail(email);
+    if (found == null) {
+      model.addAttribute("errorMessage", messageSource.getMessage("unknown.user", null, LocaleContextHolder.getLocale()));
       return "recover";
     }
-    User found = service.findUserByEmail(user.getEmail());
-    if (found == null) {
-      model.addAttribute("message", messageSource.getMessage("recover.send.exception", null, LocaleContextHolder.getLocale()));
-    }
-    user.setId(found.getId());
+
     String token = UUID.randomUUID().toString();
     String url = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 
     try {
-      service.setToken(user.getId(), token);
-      sendRecoverMessage(url, token, user);
+      service.setToken(found.getId(), token);
+      sendRecoverMessage(url, token, found);
       model.addAttribute("message", messageSource.getMessage("recover.send.info", null, LocaleContextHolder.getLocale()));
-    } catch(MailException ex) {
-      model.addAttribute("message", messageSource.getMessage("recover.send.exception", new Object[]{ex.getMessage()}, LocaleContextHolder.getLocale()));
-    }
+    } catch(MailException | DataAccessException ex) {
+      model.addAttribute("errorMessage", messageSource.getMessage("recover.send.exception", new Object[]{ex.getMessage()}, LocaleContextHolder.getLocale()));
+    } 
 
     return "recover";
   }
 
   /**
    * Method called when the user clicked on the link sent by email.
+   * @param u
    * @param id
    * @param token
    * @param model
    * @return
    */
   @RequestMapping(method = RequestMethod.GET, value = "recover.html", params = {"id", "token"})
-  public String sendRecover(User u, @RequestParam("id") int id, @RequestParam("token") String token, Model model) {
+  public String recover(User u, @RequestParam("id") int id, @RequestParam("token") String token, Model model) {
     Locale locale = LocaleContextHolder.getLocale();
     PasswordResetToken resetToken = null;
     try {
@@ -279,11 +282,12 @@ public class UserCtrl {
     }
     if (resetToken == null) {
       model.addAttribute("message", messageSource.getMessage("recover.invalid.token", null, locale));
+      
     }
     Calendar cal = Calendar.getInstance();
     cal.setTime(resetToken.getCreation());
     cal.add(Calendar.DAY_OF_MONTH, 1);
-    if (cal.getTime().after(new Date())) {
+    if (new Date().after(cal.getTime())) {
       model.addAttribute("message", messageSource.getMessage("recover.expired.token", null, locale));
       return "index";
     }
@@ -298,13 +302,13 @@ public class UserCtrl {
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "reset.html")
-  public String doUpdatePassword(User u) {
+  public String updatePassword(User u) {
     return "reset";
   }
 
 
   @RequestMapping(method = RequestMethod.POST, value = "reset.html")
-  public String updatePassword(@Valid User user, BindingResult bindingResult) {
+  public String doUpdatePassword(@Valid User user, BindingResult bindingResult) {
     service.updatePassword(user.getId(), user.getPassword());
     return "login";
   }
