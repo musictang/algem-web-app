@@ -41,4 +41,24 @@
       </util:list>
     </entry>
   </util:map>
+
+  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="smtp.ouvaton.coop"/>
+    <property name="port" value="587"/>
+    <property name="username" value="info@algem.net"/>
+    <property name="password" value="ALebpt!"/>
+    <property name="javaMailProperties">
+        <props>
+            <prop key="mail.transport.protocol">smtp</prop>
+            <prop key="mail.smtp.auth">true</prop>
+            <prop key="mail.smtp.starttls.enable">true</prop>
+            <prop key="mail.debug">true</prop>
+        </props>
+    </property>
+</bean>
+<!-- this is a template message that we can pre-load with default state -->
+ <bean id="recoverMessage" class="org.springframework.mail.SimpleMailMessage">
+ <property name="from" value="accueil@musiques-tangentes.asso.fr"/>
+ <property name="subject" value="Récupération mot de passe"/>
+</bean>
 </beans>

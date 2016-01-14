@@ -46,10 +46,6 @@ public class CommonUserService
   @Autowired
   private UserDao dao;
 
-//  public UserDao getDao() {
-//    return dao;
-//  }
-
   public void setDao(UserDao dao) {
     this.dao = dao;
   }
@@ -100,16 +96,17 @@ public class CommonUserService
   }
 
   @Override
-  public byte[] findAuthInfo(String login, String colName) {
-//    byte[] info = null;
-//      int id = 0;
-//      try {
-//        Integer.parseInt(login);
-//      } catch (NumberFormatException ex) {
-//        id = -1;
-//      }
-    return Base64.decodeBase64(dao.findAuthInfo(login, colName));
+  public User findUserByEmail(String email) {
+    try {
+      return dao.findByEmail(email);
+    } catch(DataAccessException ex) {
+      return null;
+    }
+  }
 
+  @Override
+  public byte[] findAuthInfo(String login, String colName) {
+    return Base64.decodeBase64(dao.findAuthInfo(login, colName));
   }
 
   @Override
@@ -138,6 +135,39 @@ public class CommonUserService
   @Override
   public List<Map<String, Boolean>> getAcl(int userId) {
     return dao.listMenuAccess(userId);
+  }
+
+  public void setToken(int userId, String token) {
+    dao.setToken(userId, token);
+  }
+
+  public boolean hasToken(int userId, String token) {
+    String t = null;
+    try {
+      PasswordResetToken savedToken = dao.getToken(userId);
+//      Calendar cal = Calendar.getInstance();
+//    if ((passToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+//      if (tk.getCreation())
+    } catch(DataAccessException ex) {
+      Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    if (t == null) return false;
+    return t.equals(token);
+  }
+
+  @Override
+  public PasswordResetToken getToken(int userId) {
+    return dao.getToken(userId);
+  }
+
+  @Override
+  public void updatePassword(int userId, String password) {
+    try {
+      UserPass pass = encryptionService.createPassword(password);
+      dao.updatePassword(userId, pass);
+    } catch (UserException ex) {
+      Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
 
 

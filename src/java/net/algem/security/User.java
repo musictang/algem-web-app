@@ -68,11 +68,6 @@ public class User {
 
   private UserPass passInfo;
 
-	@Override
-	public String toString() {
-		return login;
-	}
-
   public int getId() {
     return id;
   }
@@ -150,6 +145,12 @@ public class User {
 
   public void setPass(UserPass passInfo) {
     this.passInfo = passInfo;
+  }
+
+  @Override
+  public String toString() {
+    String n = (name == null || name.isEmpty() ? login : name);
+    return firstName == null || firstName.isEmpty() ? n : firstName + " " + n;
   }
 
 }

@@ -37,6 +37,7 @@ public class Person {
   public static final short BANK = 6;
 
 	private int id;
+  private int type;
 	private String name;
 	private String firstName;
   private List<Email> emails;
@@ -72,6 +73,14 @@ public class Person {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+  public int getType() {
+    return type;
+  }
+
+  public void setType(int type) {
+    this.type = type;
+  }
 
 	public String getName() {
 		return name;

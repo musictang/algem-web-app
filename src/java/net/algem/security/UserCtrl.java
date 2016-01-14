@@ -22,22 +22,27 @@ package net.algem.security;
 
 import java.security.Principal;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import net.algem.contact.Email;
 import net.algem.contact.Person;
-import org.apache.commons.codec.binary.Base64;
+import org.apache.jasper.compiler.JspUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -63,8 +68,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 //@Scope("session")
-public class UserCtrl
-{
+public class UserCtrl {
 
   @Autowired
   @Qualifier("authenticationManager")
@@ -79,6 +83,10 @@ public class UserCtrl
   @Resource(name = "messageSource")
   private MessageSource messageSource;
 
+  private MailSender mailSender;
+
+  private SimpleMailMessage recoverMessage;
+
   public UserCtrl() {
   }
 
@@ -86,12 +94,20 @@ public class UserCtrl
     this.service = service;
   }
 
+  public void setMailSender(MailSender mailSender) {
+    this.mailSender = mailSender;
+  }
+
+  public void setRecoverMessage(SimpleMailMessage recoverMessage) {
+    this.recoverMessage = recoverMessage;
+  }
+
   @RequestMapping(method = RequestMethod.GET, value = "login.html")
   public String logIn() {
     return "login";
   }
 
-   // Login form with error
+  // Login form with error
   @RequestMapping("/login-error.html")
   public String loginError(Model model) {
     model.addAttribute("loginError", true);
@@ -101,13 +117,14 @@ public class UserCtrl
   /**
    * Manage ajax GET request.
    */
-  @RequestMapping(value="/jxlogin.html",method = RequestMethod.GET)
+  @RequestMapping(value = "/jxlogin.html", method = RequestMethod.GET)
   public String login() {
     return "fragments/xlogin :: login";
   }
 
   /**
    * Manage ajax POST request.
+   *
    * @param username username transmitted
    * @param password clear password
    * @param request httprequest
@@ -115,7 +132,7 @@ public class UserCtrl
    * @return JSON data as string
    */
   // IMPORTANT HERE : produces="text/html" !! AND NOT application/json or text/plain !
-  @RequestMapping(value="/jxlogin.html", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+  @RequestMapping(value = "/jxlogin.html", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
   @ResponseBody
   public String performLogin(
     @RequestParam("j_username") String username,
@@ -135,9 +152,9 @@ public class UserCtrl
       auth = authenticationManager.authenticate(token);
       secuContext.setAuthentication(auth);
 //      repository.saveContext(secuContext, request, response);
-        String msg = messageSource.getMessage("login.success.label", new Object[]{username}, LocaleContextHolder.getLocale());
+      String msg = messageSource.getMessage("login.success.label", new Object[]{username}, LocaleContextHolder.getLocale());
 //			rememberMeServices.loginSuccess(request, response, auth);
-        return "{\"msg\":\"" + msg + "\"}";
+      return "{\"msg\":\"" + msg + "\"}";
     } catch (BadCredentialsException ex) {
 //      String err = messageSource.getMessage("login.error.label", new Object[]{username}, LocaleContextHolder.getLocale() );
       return "{\"status\": \"" + ex.getMessage() + "\"}";
@@ -177,14 +194,10 @@ public class UserCtrl
             bindingResult.rejectValue("id", "", messageSource.getMessage("user.exists", null, LocaleContextHolder.getLocale()));
             return "signup";
           } else if (o.getLogin() != null && o.getLogin().equals(user.getLogin())) {
-              bindingResult.rejectValue("login", "", messageSource.getMessage("login.used", null, LocaleContextHolder.getLocale()));
-              return "signup";
+            bindingResult.rejectValue("login", "", messageSource.getMessage("login.used", null, LocaleContextHolder.getLocale()));
+            return "signup";
           }
         }
-      }
-      if (!service.isPerson(user)) {
-        bindingResult.rejectValue("id", "member.not.found");
-        return "signup";
       }
 
       Person p = service.getPersonFromUser(user.getId());
@@ -192,29 +205,108 @@ public class UserCtrl
         bindingResult.rejectValue("id", "user.person.error", new Object[]{user.getId()}, "");
         return "signup";
       }
-
-      boolean emailFound = false;
-      for (Email e : p.getEmail()) {
-        if (e.getEmail().equals(user.getEmail())) {
-          emailFound = true;
-          break;
-        }
+      if (p.getType() != Person.PERSON && p.getType() != Person.ROOM) {
+        bindingResult.rejectValue("id", "user.type.error");
+        return "signup";
       }
-      if (!emailFound) {
+
+      if (!isEmailValid(p, user.getEmail())) {
         bindingResult.rejectValue("email", "user.email.error", new Object[]{user.getEmail()}, "");
         return "signup";
       }
 
       service.create(user);
-    } catch(DataAccessException ex) {
-      bindingResult.rejectValue("id", "data.exception", new Object[] {ex.getLocalizedMessage()}, ex.getMessage());
+    } catch (DataAccessException ex) {
+      bindingResult.rejectValue("id", "data.exception", new Object[]{ex.getLocalizedMessage()}, ex.getMessage());
       return "signup";
     } catch (SQLException ex) {
-      bindingResult.rejectValue("id", "data.exception", new Object[] {ex.getLocalizedMessage()}, ex.getMessage());
+      bindingResult.rejectValue("id", "data.exception", new Object[]{ex.getLocalizedMessage()}, ex.getMessage());
       return "signup";
     }
 
     return "redirect:perso/home.html";
+  }
+
+  /**
+   * Gets the page for recovery password request.
+   * @return a view
+   */
+  @RequestMapping(method = RequestMethod.GET, value = "recover.html")
+  public String doRecoverPassword(User user) {
+    return "recover";
+  }
+
+
+  @RequestMapping(method = RequestMethod.POST, value = "recover.html")
+  public String recoverPassword(@Valid User user, BindingResult bindingResult, HttpServletRequest request, Model model) {
+    if (bindingResult.hasErrors()) {
+      return "recover";
+    }
+    User found = service.findUserByEmail(user.getEmail());
+    if (found == null) {
+      model.addAttribute("message", messageSource.getMessage("recover.send.exception", null, LocaleContextHolder.getLocale()));
+    }
+    user.setId(found.getId());
+    String token = UUID.randomUUID().toString();
+    String url = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
+    try {
+      service.setToken(user.getId(), token);
+      sendRecoverMessage(url, token, user);
+      model.addAttribute("message", messageSource.getMessage("recover.send.info", null, LocaleContextHolder.getLocale()));
+    } catch(MailException ex) {
+      model.addAttribute("message", messageSource.getMessage("recover.send.exception", new Object[]{ex.getMessage()}, LocaleContextHolder.getLocale()));
+    }
+
+    return "recover";
+  }
+
+  /**
+   * Method called when the user clicked on the link sent by email.
+   * @param id
+   * @param token
+   * @param model
+   * @return
+   */
+  @RequestMapping(method = RequestMethod.GET, value = "recover.html", params = {"id", "token"})
+  public String sendRecover(User u, @RequestParam("id") int id, @RequestParam("token") String token, Model model) {
+    Locale locale = LocaleContextHolder.getLocale();
+    PasswordResetToken resetToken = null;
+    try {
+      resetToken = service.getToken(id);
+    } catch(DataAccessException ex) {
+      model.addAttribute("message", messageSource.getMessage("data.exception", new Object[]{ex.getMessage()}, locale));
+    }
+    if (resetToken == null) {
+      model.addAttribute("message", messageSource.getMessage("recover.invalid.token", null, locale));
+    }
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(resetToken.getCreation());
+    cal.add(Calendar.DAY_OF_MONTH, 1);
+    if (cal.getTime().after(new Date())) {
+      model.addAttribute("message", messageSource.getMessage("recover.expired.token", null, locale));
+      return "index";
+    }
+
+    u.setId(id);
+
+//    Authentication auth = new UsernamePasswordAuthenticationToken(
+//      user, null, userDetailsService.loadUserByUsername(user.getEmail()).getAuthorities());
+//    SecurityContextHolder.getContext().setAuthentication(auth);
+
+    return "reset";
+  }
+
+  @RequestMapping(method = RequestMethod.GET, value = "reset.html")
+  public String doUpdatePassword(User u) {
+    return "reset";
+  }
+
+
+  @RequestMapping(method = RequestMethod.POST, value = "reset.html")
+  public String updatePassword(@Valid User user, BindingResult bindingResult) {
+    service.updatePassword(user.getId(), user.getPassword());
+    return "login";
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/user.html")
@@ -226,5 +318,38 @@ public class UserCtrl
 
   public void testBefore() {
     System.out.println("test before");
+  }
+
+  private boolean isEmailValid(Person p, String email) {
+    for (Email e : p.getEmail()) {
+      if (e.getEmail().equals(email)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean isEmailValid(User user) {
+    Person p = service.getPersonFromUser(user.getId());
+    if (p == null) {
+      return false;
+    }
+    for (Email e : p.getEmail()) {
+      if (e.getEmail().equals(user.getEmail())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private void sendRecoverMessage(String path, String token, User user) throws MailException {
+    // Create a thread safe "copy" of the template message and customize it
+    SimpleMailMessage mail = new SimpleMailMessage(recoverMessage);
+    String args = "/recover.html?id="+user.getId()+"&token="+token;
+    String msg = messageSource.getMessage("recover.info", new Object[]{user.toString()}, LocaleContextHolder.getLocale());
+    String url = path + args;
+    mail.setTo(user.getEmail());
+    mail.setText(msg + url);
+    mailSender.send(mail);
   }
 }

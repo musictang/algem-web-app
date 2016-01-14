@@ -35,9 +35,8 @@ import net.algem.group.Group;
 import net.algem.group.GroupIO;
 import net.algem.util.AbstractGemDao;
 import org.apache.commons.codec.binary.Base64;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -52,6 +51,7 @@ public class UserDao
   extends AbstractGemDao {
 
   public static final String TABLE = "login";
+  public static final String TOKEN_TABLE = "jeton_login";
 
   public UserDao() {
   }
@@ -80,15 +80,22 @@ public class UserDao
   }
 
   private Profile getProfileFromId(int id) {
-    switch(id) {
+    switch (id) {
 
-      case 1: return Profile.User;
-      case 2: return Profile.Teacher;
-      case 3: return Profile.Public;
-      case 4: return Profile.Admin;
-      case 10: return Profile.Visitor;
-      case 11: return Profile.Member;
-      default: return Profile.Visitor;
+      case 1:
+        return Profile.User;
+      case 2:
+        return Profile.Teacher;
+      case 3:
+        return Profile.Public;
+      case 4:
+        return Profile.Admin;
+      case 10:
+        return Profile.Visitor;
+      case 11:
+        return Profile.Member;
+      default:
+        return Profile.Visitor;
     }
   }
 
@@ -118,13 +125,51 @@ public class UserDao
 
   }
 
-    private int getIdFromLogin(String login) {
-      try {
-        return Integer.parseInt(login);
-      } catch(NumberFormatException nfe) {
-        return -1;
+  public List<User> exist(int id, String login) {
+    String query = "SELECT idper,login FROM " + TABLE + " WHERE idper = ? OR login = ?";
+    return jdbcTemplate.query(query, new RowMapper<User>() {
+
+      @Override
+      public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+        User u = new User();
+        u.setId(rs.getInt(1));
+        u.setLogin(rs.getString(2));
+        return u;
       }
+    }, id, login);
+  }
+
+  public User findById(int id) {
+    String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom FROM login l INNER JOIN personne p ON (l.idper = p.id) "
+      + "WHERE l.idper = ? AND (p.ptype = " + Person.PERSON + " OR p.ptype = " + Person.ROOM + ")";
+    return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
+
+      @Override
+      public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return getFromRS(rs);
+      }
+    }, id);
+  }
+
+  public User findByEmail(String email) {
+    String query = "SELECT l.idper,l.login,l.profil FROM "
+      + TABLE + " l INNER JOIN email e ON (l.idper = e.idper)"
+      + " WHERE e.email = ?";
+    return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
+      @Override
+      public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return getFromRS(rs);
+      }
+    }, email);
+  }
+
+  private int getIdFromLogin(String login) {
+    try {
+      return Integer.parseInt(login);
+    } catch (NumberFormatException nfe) {
+      return -1;
     }
+  }
 
   byte[] findAuthInfo(String login, String col) {
     int id = getIdFromLogin(login);
@@ -140,7 +185,7 @@ public class UserDao
   }
 
   public Person getPersonFromUser(final int userId) {
-    String query = "SELECT nom,prenom FROM " + PersonIO.TABLE + " WHERE id = ?";
+    String query = "SELECT nom,prenom,ptype FROM " + PersonIO.TABLE + " WHERE id = ?";
     return jdbcTemplate.queryForObject(query, new RowMapper<Person>() {
 
       @Override
@@ -149,6 +194,7 @@ public class UserDao
         p.setId(userId);
         p.setName(rs.getString(1));
         p.setFirstName(rs.getString(2));
+        p.setType(rs.getInt(3));
         return p;
       }
     }, userId);
@@ -191,32 +237,6 @@ public class UserDao
     return jdbcTemplate.queryForObject(query, Integer.class, userId);
   }
 
-  public List<User> exist(int id, String login) {
-    String query = "SELECT idper,login FROM " + TABLE + " WHERE idper = ? OR login = ?";
-    return jdbcTemplate.query(query, new RowMapper<User>() {
-
-      @Override
-      public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        User u = new User();
-        u.setId(rs.getInt(1));
-        u.setLogin(rs.getString(2));
-        return u;
-      }
-    }, id, login);
-  }
-
-  public User findById(int id) {
-    String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom FROM login l INNER JOIN personne p ON (l.idper = p.id) "
-      + "WHERE l.idper = ? AND (p.ptype = " + Person.PERSON + " OR p.ptype = " + Person.ROOM + ")";
-    return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
-
-      @Override
-      public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return getFromRS(rs);
-      }
-    }, id);
-  }
-
   public List<Map<String, Boolean>> listMenuAccess(int userId) {
     String query = "SELECT m.label, a.autorisation FROM  menu2 m JOIN menuaccess a ON m.id = a.idmenu WHERE a.idper = ?";
     return jdbcTemplate.query(query, new RowMapper<Map<String, Boolean>>() {
@@ -247,4 +267,58 @@ public class UserDao
       }
     });
   }
+
+  void setToken(final int userId, final String token) {
+    String sql = "DELETE FROM " + TOKEN_TABLE + " WHERE idper = ?";
+    jdbcTemplate.update(sql, new PreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps) throws SQLException {
+        ps.setInt(1, userId);
+      }
+    });
+    createToken(userId, token);
+  }
+
+  private void createToken(final int userId, final String token) {
+    String query = "INSERT INTO " + TOKEN_TABLE + " VALUES(?,?,?)";
+    jdbcTemplate.update(query, new PreparedStatementSetter() {
+
+      @Override
+      public void setValues(PreparedStatement ps) throws SQLException {
+        ps.setInt(1, userId);
+        ps.setString(2, token);
+        ps.setDate(3, new java.sql.Date(new java.util.Date().getTime()));
+      }
+    });
+
+  }
+
+  PasswordResetToken getToken(final int userId) {
+    String query = "SELECT jeton,creation FROM " + TOKEN_TABLE + " WHERE idper = ?";
+
+    return jdbcTemplate.queryForObject(query, new RowMapper<PasswordResetToken>() {
+
+      @Override
+      public PasswordResetToken mapRow(ResultSet rs, int i) throws SQLException {
+        PasswordResetToken token = new PasswordResetToken(userId);
+        token.setToken(rs.getString(1));
+        token.setCreation(rs.getDate(2));
+        return token;
+      }
+    }, userId);
+  }
+
+  void updatePassword(final int userId, final UserPass pass) {
+    jdbcTemplate.update(new PreparedStatementCreator() {
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement("UPDATE login " + TABLE + " SET pass = ?, clef=? WHERE idper = ?");
+        ps.setString(1, Base64.encodeBase64String(pass.getPass()));
+        ps.setString(2, Base64.encodeBase64String(pass.getKey()));
+        ps.setInt(3, userId);
+        return ps;
+      }
+    });
+  }
+
 }

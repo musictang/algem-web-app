@@ -56,9 +56,8 @@
             </div>-->
           </fieldset>
         </form>
-        <h4>Note</h4>
-        <p>La création d'un compte n'est possible que si vous êtes déjà enregistré
-          en tant que contact ou adhérent auprès de votre structure : <span th:text="${@organization['name.label']}"></span>.</p>
+        <h4 th:text="#{note.label}">Note</h4>
+        <p th:text="#{sign-up.prerequisite(${@organization['name.label']})}"></p>
       </div>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>

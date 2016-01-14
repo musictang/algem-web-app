@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) signup.html Algem Web App 1.0.6 31/12/2015
+ * @(#) reset.html Algem Web App 1.0.6 13/01/2016
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -35,29 +35,17 @@
     </header>
     <div class="global">
       <div class="centered">
-        <form action="#" id="signup-form" th:object="${user}" th:action="@{signup.html}" method="post" accept-charset="UTF-8">
+        <<form action="#" id="reset-form" th:object="${user}" th:action="@{reset.html}" method="post" accept-charset="UTF-8">
           <fieldset><legend th:text="#{sign-up.label}"></legend>
             <label for="id" th:text="#{member.id.label} + ' *'">Number *</label>
-            <input type="text" required="required" th:field="*{id}" />
+            <input type="text"  th:field="${param.id}" />
             <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}" th:errorclass="error">Id Error</span>
-            <label for="email" th:text="#{email.label} + ' *'">Email *</label>
-            <input type="text" required="required" th:field="*{email}" />
-            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorclass="error">Id Error</span>
-            <label for="login" th:text="#{form.username.label} + ' *'" >Login *</label>
-            <!--<%-- Les messages d'erreur doivent être affichés à l'intérieur du formulaire --%>-->
-            <input type="text"  required="required" th:field="*{login}" />
-            <span th:if="${#fields.hasErrors('login')}" th:errors="*{login}" th:errorclass="error">Login Error</span>
             <label for="password" th:text="#{form.password.label}  + ' *'" >Password *</label>
             <input type="password" required="required" th:field="*{password}" />
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="error">Password Error</span>
             <input type="submit" th:value="#{submit.label}" class="pure-button pure-button-primary"/>
-<!--            <div th:if="${#fields.hasAnyErrors()}">
-              <p th:each="err : ${#fields.allErrors()}" th:text="${err}">...</p>
-            </div>-->
           </fieldset>
         </form>
-        <h4 th:text="#{note.label}">Note</h4>
-        <p th:text="#{sign-up.prerequisite(${@organization['name.label']})}"></p>
       </div>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>
