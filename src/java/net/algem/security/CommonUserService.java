@@ -49,13 +49,17 @@ public class CommonUserService
   public void setDao(UserDao dao) {
     this.dao = dao;
   }
+  
+  private EncryptionService getEncryptionService() {
+   return encryptionService == null ? new PasswordEncryptionService() : encryptionService;
+  }
 
   @Override
   public boolean authenticate(String login, String pass) {
     try {
       byte[] salt = findAuthInfo(login, "clef");// find salt in BD
       byte[] encryptedPassword = findAuthInfo(login, "pass");
-      return encryptionService.authenticate(pass, encryptedPassword, salt);
+      return getEncryptionService().authenticate(pass, encryptedPassword, salt);
     } catch (UserException ex) {
       return false;
     }
@@ -68,11 +72,8 @@ public class CommonUserService
 
   @Override
   public void create(User u) throws SQLException {
-    if (encryptionService == null) {
-      encryptionService = new PasswordEncryptionService();
-    }
     try {
-      UserPass pass = encryptionService.createPassword(u.getPassword());
+      UserPass pass = getEncryptionService().createPassword(u.getPassword());
       u.setPass(pass);
       dao.createAccount(u);
     } catch (UserException ex) {
@@ -165,7 +166,7 @@ public class CommonUserService
   @Override
   public void updatePassword(int userId, String password) {
     try {
-      UserPass pass = encryptionService.createPassword(password);
+      UserPass pass = getEncryptionService().createPassword(password);
       dao.updatePassword(userId, pass);
     } catch (UserException ex) {
       Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, null, ex);

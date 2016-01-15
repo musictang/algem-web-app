@@ -35,12 +35,12 @@
     </header>
     <div class="global">
       <div class="centered">
-        <<form action="#" id="reset-form" th:object="${user}" th:action="@{reset.html}" method="post" accept-charset="UTF-8">
-          <fieldset><legend th:text="#{sign-up.label}"></legend>
-            <label for="id" th:text="#{member.id.label} + ' *'">Number *</label>
-            <input type="text"  th:field="${param.id}" />
+        <form action="#" id="reset-form" th:object="${user}" th:action="@{reset.html}" method="post" accept-charset="UTF-8">
+          <fieldset><legend th:text="#{new.password.label}"></legend>
+            <label for="id" th:text="#{member.id.label}">Number</label>
+            <input type="text" th:field="*{id}" readonly="readonly" />
             <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}" th:errorclass="error">Id Error</span>
-            <label for="password" th:text="#{form.password.label}  + ' *'" >Password *</label>
+            <label for="password" th:text="#{form.password.label}">Password</label>
             <input type="password" required="required" th:field="*{password}" />
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="error">Password Error</span>
             <input type="submit" th:value="#{submit.label}" class="pure-button pure-button-primary"/>

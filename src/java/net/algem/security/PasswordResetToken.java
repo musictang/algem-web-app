@@ -19,8 +19,6 @@
  */
 package net.algem.security;
 
-import java.util.Date;
-
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
@@ -29,13 +27,11 @@ import java.util.Date;
  */
 public class PasswordResetToken {
 
-//  private static final int EXPIRATION = 60 * 60 * 24;
-
   private int id;
 
   private String token;
 
-  private Date creation;
+  private long creation;
 
   public PasswordResetToken() {
   }
@@ -60,16 +56,12 @@ public class PasswordResetToken {
     this.token = token;
   }
 
-  public Date getCreation() {
+  public long getCreation() {
     return creation;
   }
 
-  public void setCreation(Date creation) {
+  public void setCreation(long creation) {
     this.creation = creation;
   }
-
-//  public long getExpiryTime() {
-//    return creation.getTime() + EXPIRATION;
-//  }
 
 }

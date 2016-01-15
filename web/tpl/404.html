@@ -34,16 +34,15 @@
       <h1 th:utext="${@organization['name.label']}"></h1>
     </header>
     <div class="global">
-      <div class="centered" style="padding: 2em 0">
-
+      <div class="centered">
+        <h2 th:text="#{error.404.label}"></h2>
+        <p th:text="#{error.404.info}"></p>
         <div class="thumbnails thumbnails-out" style="float: left">
         <a class="img-link" th:href="@{index.html}">
               <img th:src="@{/resources/themes/img/logo.png}" alt="Index"/>
             </a><br />
         <a th:text="#{home.label}" th:href="@{index.html}">Index</a>
         </div>
-        <h2 th:text="#{error.404.label}"></h2>
-        <p th:text="#{error.404.info}"></p>
       </div>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>

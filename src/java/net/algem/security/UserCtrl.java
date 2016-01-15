@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +42,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -54,6 +57,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -277,21 +281,32 @@ public class UserCtrl {
     PasswordResetToken resetToken = null;
     try {
       resetToken = service.getToken(id);
+      if (!token.equals(resetToken.getToken())) {
+        model.addAttribute("message", messageSource.getMessage("recover.invalid.token", null, locale));
+        return "error";
+      }
+//      if (resetToken == null) {
+//        model.addAttribute("message", messageSource.getMessage("recover.invalid.token", null, locale));
+//        return "error";
+//      }
+    } catch(EmptyResultDataAccessException ex) {
+      model.addAttribute("message", messageSource.getMessage("recover.invalid.token", new Object[]{ex.getMessage()}, locale));
+      return "error";
     } catch(DataAccessException ex) {
+      Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, ex);
       model.addAttribute("message", messageSource.getMessage("data.exception", new Object[]{ex.getMessage()}, locale));
+      return "error";
     }
-    if (resetToken == null) {
-      model.addAttribute("message", messageSource.getMessage("recover.invalid.token", null, locale));
-      
-    }
+    
     Calendar cal = Calendar.getInstance();
-    cal.setTime(resetToken.getCreation());
-    cal.add(Calendar.DAY_OF_MONTH, 1);
+    cal.setTime(new Date(resetToken.getCreation()));
+    cal.add(Calendar.DAY_OF_MONTH, 1);// 24h delay
+    Logger.getLogger(UserCtrl.class.getName()).log(Level.INFO,"today" + new Date() + " token " + cal.getTime());
     if (new Date().after(cal.getTime())) {
       model.addAttribute("message", messageSource.getMessage("recover.expired.token", null, locale));
-      return "index";
+      return "error";
     }
-
+    
     u.setId(id);
 
 //    Authentication auth = new UsernamePasswordAuthenticationToken(
@@ -300,15 +315,17 @@ public class UserCtrl {
 
     return "reset";
   }
-
-  @RequestMapping(method = RequestMethod.GET, value = "reset.html")
-  public String updatePassword(User u) {
-    return "reset";
+  
+  @RequestMapping(method = RequestMethod.GET, value = "error.html")
+  public String errorPage() {
+    return "error";
   }
-
 
   @RequestMapping(method = RequestMethod.POST, value = "reset.html")
   public String doUpdatePassword(@Valid User user, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      return "reset";
+    }
     service.updatePassword(user.getId(), user.getPassword());
     return "login";
   }

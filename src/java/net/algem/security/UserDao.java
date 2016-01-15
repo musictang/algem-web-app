@@ -292,7 +292,7 @@ public class UserDao
       public void setValues(PreparedStatement ps) throws SQLException {
         ps.setInt(1, userId);
         ps.setString(2, token);
-        ps.setDate(3, new java.sql.Date(new java.util.Date().getTime()));
+        ps.setTimestamp(3, new java.sql.Timestamp(new java.util.Date().getTime()));
       }
     });
 
@@ -307,7 +307,7 @@ public class UserDao
       public PasswordResetToken mapRow(ResultSet rs, int i) throws SQLException {
         PasswordResetToken token = new PasswordResetToken(userId);
         token.setToken(rs.getString(1));
-        token.setCreation(rs.getDate(2));
+        token.setCreation(rs.getTimestamp(2).getTime());
         return token;
       }
     }, userId);

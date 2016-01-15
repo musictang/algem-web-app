@@ -31,10 +31,23 @@ body {
 footer {
   background-image:url('../img/personas-header-1280x1024.png');
   background-position: 98% center;
-  /*background-repeat: repeat;*/
+  background-repeat: no-repeat;
 }
 
 h1 {
   color: maroon;
+}
+
+h2, h3, h4, fieldset > legend {
+  color: #ffab11;
+}
+
+a:link,a:visited, a:active, a:hover,
+.pure-menu, .pure-menu-heading, #menu
+{
+  color: #a24500;
+}
+.closing-bar {
+  background-color: #a24500;
 }
 

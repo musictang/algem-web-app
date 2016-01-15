@@ -45,7 +45,7 @@
               <label for="password" th:text="#{form.password.label}" >Password</label>
               <input type="password" id="password" required="required" name="j_password"/>
               <!--<input type="button" id="login-submit-button" th:value="#{login.submit.label}" />-->
-              <input type="submit" th:value="#{login.submit.label}" class="button-xlarge pure-button pure-button-primary"/>
+              <input type="submit" th:value="#{submit.label}" class="pure-button pure-button-primary"/>
             </fieldset>
             <p class="error" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}" ></p>
             <div th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}">
