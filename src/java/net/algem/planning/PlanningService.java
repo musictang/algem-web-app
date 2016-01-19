@@ -99,12 +99,12 @@ public class PlanningService
     return scheduleIO.getFreeRoom(date, estab);
   }
 
-  public HashMap<String, Collection<ScheduleElement>> getFreePlace(Date date, int estab) {
-    HashMap<String, Collection<ScheduleElement>> map = new HashMap<String, Collection<ScheduleElement>>();
+  public HashMap<Room, Collection<ScheduleElement>> getFreePlace(Date date, int estab) {
+    HashMap<Room, Collection<ScheduleElement>> map = new HashMap<Room, Collection<ScheduleElement>>();
     List<Room> rooms = scheduleIO.getFreeRoom(date, estab);
     for (Room r : rooms) {
       List<ScheduleElement> closed = getClosed(r.getId(), date);
-      map.put(r.getName(), closed);
+      map.put(r, closed);
     }
     return map;
   }

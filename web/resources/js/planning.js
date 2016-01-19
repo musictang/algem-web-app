@@ -10,6 +10,7 @@ setUI = function () {
   setWidth();
   setHoverStyle();
   setDialog();
+//  clickToBook();
 };
 
 function setDatePicker(estabId, date) {
@@ -103,4 +104,21 @@ function setDialog() {
     $("#dialog").dialog("open");
   });
 
+}
+
+function clickToBook(auth) {
+  $(".schedule_col").click(function (e) {
+    //var posX = $(this).offset().left;
+    var posY = $(this).offset().top;
+    //console.log((e.pageX - posX) + ' , ' + (e.pageY - posY));
+    var target = e.target || e.srcElement;
+    if ("schedule_col" === target.className) {
+      var room = $(this).find(".title_col");
+      console.log(e.pageY - posY, $(this).attr("id"), room.text());
+      if (!auth) {
+        alert("Non connecté");
+      }
+    }
+
+  });
 }

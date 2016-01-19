@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import net.algem.contact.Email;
 import net.algem.contact.Person;
-import org.apache.jasper.compiler.JspUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -79,7 +78,7 @@ public class UserCtrl {
   AuthenticationManager authenticationManager;
 
   @Autowired
-  SecurityContextRepository repository;
+  SecurityContextRepository secCtxRepo;
 
   @Autowired
   private UserService service;
@@ -122,6 +121,7 @@ public class UserCtrl {
 
   /**
    * Manage ajax GET request.
+   * @return 
    */
   @RequestMapping(value = "/jxlogin.html", method = RequestMethod.GET)
   public String login() {
@@ -158,7 +158,7 @@ public class UserCtrl {
       UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
       auth = authenticationManager.authenticate(token);
       secuContext.setAuthentication(auth);
-//      repository.saveContext(secuContext, request, response);
+//      secCtxRepo.saveContext(secuContext, request, response);
       String msg = messageSource.getMessage("login.success.label", new Object[]{username}, LocaleContextHolder.getLocale());
 //			rememberMeServices.loginSuccess(request, response, auth);
       return "{\"msg\":\"" + msg + "\"}";
@@ -285,10 +285,6 @@ public class UserCtrl {
         model.addAttribute("message", messageSource.getMessage("recover.invalid.token", null, locale));
         return "error";
       }
-//      if (resetToken == null) {
-//        model.addAttribute("message", messageSource.getMessage("recover.invalid.token", null, locale));
-//        return "error";
-//      }
     } catch(EmptyResultDataAccessException ex) {
       model.addAttribute("message", messageSource.getMessage("recover.invalid.token", new Object[]{ex.getMessage()}, locale));
       return "error";
@@ -315,13 +311,8 @@ public class UserCtrl {
 
     return "reset";
   }
-  
-  @RequestMapping(method = RequestMethod.GET, value = "error.html")
-  public String errorPage() {
-    return "error";
-  }
 
-  @RequestMapping(method = RequestMethod.POST, value = "reset.html")
+  @RequestMapping(method = RequestMethod.POST, value = "passreset.html")
   public String doUpdatePassword(@Valid User user, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       return "reset";
@@ -337,26 +328,9 @@ public class UserCtrl {
     return "dossier";
   }
 
-  public void testBefore() {
-    System.out.println("test before");
-  }
-
   private boolean isEmailValid(Person p, String email) {
     for (Email e : p.getEmail()) {
       if (e.getEmail().equals(email)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private boolean isEmailValid(User user) {
-    Person p = service.getPersonFromUser(user.getId());
-    if (p == null) {
-      return false;
-    }
-    for (Email e : p.getEmail()) {
-      if (e.getEmail().equals(user.getEmail())) {
         return true;
       }
     }

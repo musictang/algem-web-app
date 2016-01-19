@@ -39,5 +39,11 @@ public class ErrorCtrl {
   public String pageNotFound() {
     return "404";
   }
+  
+    
+  @RequestMapping(method = RequestMethod.GET, value = "error.html")
+  public String genericErrorPage() {
+    return "error";
+  }
 
 }

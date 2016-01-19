@@ -158,8 +158,11 @@ h1 > span {
   /*font-style:italic*/
 }
 /*Padding par défaut des titres de niveau 2 à 5*/
-h2, h3, h4, h5, h6 {
-  padding: 0.5em 0;
+h2, h3, h4, h5, h6, fieldset > legend {
+  display: inline-block;
+  padding: 0.5em;
+  margin: 1em 0;
+  border-radius: 8px
 }
 
 h2, h3, h4, fieldset > legend {
@@ -238,7 +241,6 @@ span.error {
 
 fieldset legend {
   font-size: 1.3em;
-  margin-bottom: 1em;
 }
 
 input[type=submit] {
@@ -295,6 +297,26 @@ input[type=submit] {
 .centered {
   width: 50%;
   margin: 0 auto;
+}
+
+.indented {
+  padding: 0 1em;
+}
+
+.framed {
+  width: 85%;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 1em;
+}
+
+.note {
+  margin: 0 0 1em 0;
+  font-size: smaller;
+}
+
+.warning {
+  background-color: lightpink;
 }
 
 a:link,a:visited, a:active {

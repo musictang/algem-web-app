@@ -38,8 +38,10 @@ h1 {
   color: maroon;
 }
 
-h2, h3, h4, fieldset > legend {
-  color: #ffab11;
+h2, h3, h4, h5, h6, h7, fieldset > legend {
+  /*color: #ffab11;*/
+  background-color: orange;
+  color: maroon;
 }
 
 a:link,a:visited, a:active, a:hover,

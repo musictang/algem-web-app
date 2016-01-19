@@ -27,7 +27,7 @@
     <div id="menu">
       <ul>
         <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
-        <li><a href="index.html" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
+        <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
         <li th:replace="fragments/menu :: cnx"></li>
       </ul>
     </div>

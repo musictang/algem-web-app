@@ -27,17 +27,36 @@
     <div th:fragment="login">
       <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
       <form id="login-form" th:action="@{/jxlogin.html}" accept-charset="UTF-8" class="panel">
-         <fieldset><legend th:text="#{login.form.title}"></legend>
+         <fieldset><legend th:text="#{connect.label}"></legend>
           <label for="login" th:text="#{form.username.label}">Login</label>
           <input type="text" id="login" required="required" name="j_username"/>
           <label for="password" th:text="#{form.password.label}" >Password</label>
           <input type="password" id="password" required="required" name="j_password"/>
-          <input type="button" id="login-submit-button" th:value="#{login.submit.label}" class="button-small pure-button pure-button-primary"/>
-          <!--<input type="submit" th:value="#{login.submit.label}" class="button-xlarge pure-button pure-button-primary"/>-->
+          <input type="button" id="login-submit-button" th:value="#{connection.label}" class="button-small pure-button pure-button-primary"/>
         </fieldset>
         <p class="error" style="display: none;"></p>
         <p class="success" style="display: none;"></p>
       </form>
+      <p class="note indented"><a href="recover.html" th:text="#{password.forgotten}"></a></p>
+      <p class="note indented"><span th:text="#{sign-up.warning}"></span><br />
+        <a href="signup.html" th:text="#{sign-up.label}"></a></p>
+    </div>
+    <div th:fragment="booking">
+      <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
+      <form id="login-form" th:action="@{/jxbooking.html}" accept-charset="UTF-8" class="panel">
+         <fieldset><legend th:text="#{connect.label}"></legend>
+          <label for="login" th:text="#{form.username.label}">Login</label>
+          <input type="text" id="login" required="required" name="j_username"/>
+          <label for="password" th:text="#{form.password.label}" >Password</label>
+          <input type="password" id="password" required="required" name="j_password"/>
+          <input type="button" id="login-submit-button" th:value="#{connection.label}" class="button-small pure-button pure-button-primary"/>
+        </fieldset>
+        <p class="error" style="display: none;"></p>
+        <p class="success" style="display: none;"></p>
+      </form>
+      <p class="note indented"><a href="recover.html" th:text="#{password.forgotten}"></a></p>
+      <p class="note indented"><span th:text="#{sign-up.warning}"></span><br />
+        <a href="signup.html" th:text="#{sign-up.label}"></a></p>
     </div>
   </body>
 </html>

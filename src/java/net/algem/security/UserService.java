@@ -88,18 +88,24 @@ public interface UserService
    */
   public User findUserByLogin(String login);
 
+  /**
+   * Find a user by his email.
+   * 
+   * @param email the email of the user
+   * @return a user 
+   */
   public User findUserByEmail(String email);
 
   /**
    * Gets the list of users corresponding to this user id or this user login.
-   * @param u current user
+   * @param u the user to check
    * @return a list of users or null if no user was found
    */
   public List<User> exist(User u);
 
   /**
-   * Checks if this user is really of type person.
-   * @param u current user
+   * Checks if this user {@code u} is really of type person.
+   * @param u the user to check
    * @return true if this user is a person
    */
   public boolean isPerson(User u);
@@ -109,22 +115,20 @@ public interface UserService
   public List<Map<String, Boolean>> getAcl(int userId);
 
   /**
-   * Records a token in user table to recover password.
+   * Records a token in custom table to recover password.
    * @param userId current user id
    * @param token crypted string
    */
   public void setToken(int userId, String token);
 
+  /**
+   * Gets the token of the user {@code userId} if any.
+   * @param userId user id
+   * @return a token when result is not empty
+   */
   public PasswordResetToken getToken(int userId);
 
   public void updatePassword(int userId, String password);
 
-  /**
-   * Checks if the token transmitted belongs to this {@code userId}.
-   * @param userId user's id
-   * @param token temporary crypted string
-   * @return true if token exists
-   */
-  public boolean hasToken(int userId, String token);
 }
 

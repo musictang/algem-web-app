@@ -144,21 +144,6 @@ public class CommonUserService
   }
 
   @Override
-  public boolean hasToken(int userId, String token) {
-    String t = null;
-    try {
-      PasswordResetToken savedToken = dao.getToken(userId);
-//      Calendar cal = Calendar.getInstance();
-//    if ((passToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-//      if (tk.getCreation())
-    } catch(DataAccessException ex) {
-      Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    if (t == null) return false;
-    return t.equals(token);
-  }
-
-  @Override
   public PasswordResetToken getToken(int userId) {
     return dao.getToken(userId);
   }

@@ -30,7 +30,6 @@ import java.util.Arrays;
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @version 2.9.2
  * @since 2.8.p 30/10/13
- * @deprecated 
  */
 public class UserPass
 {

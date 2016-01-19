@@ -35,7 +35,7 @@
     </header>
     <div class="global">
       <div class="centered">
-        <form action="#" id="reset-form" th:object="${user}" th:action="@{reset.html}" method="post" accept-charset="UTF-8">
+        <form action="#" id="reset-form" th:object="${user}" th:action="@{passreset.html}" method="post" accept-charset="UTF-8">
           <fieldset><legend th:text="#{new.password.label}"></legend>
             <label for="id" th:text="#{member.id.label}">Number</label>
             <input type="text" th:field="*{id}" readonly="readonly" />

@@ -39,6 +39,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -273,14 +274,9 @@ public class UserDao
     });
   }
 
+  @Transactional
   void setToken(final int userId, final String token) {
-    String sql = "DELETE FROM " + TOKEN_TABLE + " WHERE idper = ?";
-    jdbcTemplate.update(sql, new PreparedStatementSetter() {
-      @Override
-      public void setValues(PreparedStatement ps) throws SQLException {
-        ps.setInt(1, userId);
-      }
-    });
+    deleteToken(userId);
     createToken(userId, token);
   }
 
@@ -299,7 +295,7 @@ public class UserDao
   }
 
   PasswordResetToken getToken(final int userId) {
-    String query = "SELECT jeton,creation FROM " + TOKEN_TABLE + " WHERE idper = ?";
+    String query = "SELECT jeton,creadate FROM " + TOKEN_TABLE + " WHERE idper = ?";
 
     return jdbcTemplate.queryForObject(query, new RowMapper<PasswordResetToken>() {
 
@@ -312,7 +308,18 @@ public class UserDao
       }
     }, userId);
   }
+  
+  void deleteToken(final int userId) {
+    String sql = "DELETE FROM " + TOKEN_TABLE + " WHERE idper = ?";
+    jdbcTemplate.update(sql, new PreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps) throws SQLException {
+        ps.setInt(1, userId);
+      }
+    });
+  }
 
+  @Transactional
   void updatePassword(final int userId, final UserPass pass) {
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
@@ -324,6 +331,7 @@ public class UserDao
         return ps;
       }
     });
+    deleteToken(userId);
   }
 
 }

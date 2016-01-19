@@ -56,8 +56,8 @@
             </div>-->
           </fieldset>
         </form>
-        <h4 th:text="#{note.label}">Note</h4>
-        <p th:text="#{sign-up.prerequisite(${@organization['name.label']})}"></p>
+        <h5 th:text="#{note.label}">Note</h5>
+        <p class="note framed" th:text="#{sign-up.prerequisite(${@organization['name.label']})}"></p>
       </div>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>

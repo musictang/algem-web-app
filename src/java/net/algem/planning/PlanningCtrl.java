@@ -67,7 +67,7 @@ public class PlanningCtrl
   @RequestMapping(method = RequestMethod.GET, value = "/daily.html")
   String loadDaySchedule(HttpServletRequest request, Model model) throws ParseException {
 
-    String dateParam = request.getParameter("d");
+//    String dateParam = request.getParameter("d");
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
     SimpleDateFormat dayNameFormat = new SimpleDateFormat("EEE");
     Date date = dateFormat.parse(request.getParameter("d"));

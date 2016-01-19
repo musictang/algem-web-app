@@ -37,6 +37,8 @@
     <script type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
       var estabId = /*[[${param.e[0]}]]*/ 3501;
+      var logged = /*[[${#authorization.expression('isAuthenticated()')}]]*/
+      console.log(logged);
       console.log(estabId);
       var currentDate = /*[[${param.d[0]}]]*/ '29-12-2015';
       console.log(currentDate);
@@ -45,6 +47,7 @@
         setCommonEvents();
         setDatePicker(estabId, currentDate);
         setUI();
+        clickToBook(logged);
       });
 
     </script>
@@ -75,7 +78,7 @@
       <tr th:each="half,dv : ${#numbers.sequence(timeOffset, 1410, 30)}" ><th><p th:utext="(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')"></p></th><td></td></tr>
     </table>
     <section id="canvas" th:with="totalTime=${1440-timeOffset}">
-      <div th:each="entry : ${planning}" class="schedule_col">
+      <div th:id="${entry.key}" th:each="entry : ${planning}" class="schedule_col">
         <!--Column header : room names-->
         <p class="title_col" th:text="${entry.value[0].roomName}"></p>
         <!--Schedules-->
@@ -97,8 +100,8 @@
         </div>
       </div>
       <!--Free rooms-->
-      <div th:each="entry: ${freeplace}" class="schedule_col">
-          <p class="title_col" th:text="${entry.key}" ></p>
+      <div th:id="${entry.key.id}" th:each="entry: ${freeplace}" class="schedule_col">
+          <p class="title_col" th:text="${entry.key.name}" ></p>
             <div th:each="p : ${entry.value}" class="schedule"
                  th:with="pos=${(p.minutes - timeOffset) * 100F / totalTime},h=${(p.length) * 100F / totalTime}"
                  th:style="'top:'+${pos}+'%;height:'+${h}+'%;background-color:'+${p.htmlColor}"></div>
