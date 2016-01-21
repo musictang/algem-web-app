@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.algem.contact.Person;
+import net.algem.group.Group;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -49,7 +50,7 @@ public class CommonUserService
   public void setDao(UserDao dao) {
     this.dao = dao;
   }
-  
+
   private EncryptionService getEncryptionService() {
    return encryptionService == null ? new PasswordEncryptionService() : encryptionService;
   }
@@ -126,6 +127,11 @@ public class CommonUserService
       p.setEmail(dao.getEmailsFromContact(u));
     }
     return p;
+  }
+
+  @Override
+  public List<Group> getGroups(String login) {
+    return dao.getGroups(login);
   }
 
   @Override

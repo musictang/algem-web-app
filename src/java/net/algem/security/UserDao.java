@@ -221,10 +221,11 @@ public class UserDao
     }, id);
   }
 
-  public List<Group> getGroups(int userId) {
-    String query = "SELECT id,name FROM "
-      + GroupIO.TABLE + " g, " + GroupIO.TABLE_DET
-      + " gd WHERE gd.musicien = ? AND gd.id = g.id";
+  public List<Group> getGroups(String login) {
+    String query = "SELECT g.id,g.nom FROM " + GroupIO.TABLE + " g WHERE g.id IN ("
+      + "SELECT gd.id FROM " + GroupIO.TABLE_DET + " gd JOIN " + TABLE + " l on l.idper = gd.musicien"
+      + " AND l.login = ?)";
+
     return jdbcTemplate.query(query, new RowMapper<Group>() {
 
       @Override
@@ -235,7 +236,7 @@ public class UserDao
         return g;
       }
 
-    }, userId);
+    }, login);
   }
 
   public int getTeacher(int userId) {
@@ -308,7 +309,7 @@ public class UserDao
       }
     }, userId);
   }
-  
+
   void deleteToken(final int userId) {
     String sql = "DELETE FROM " + TOKEN_TABLE + " WHERE idper = ?";
     jdbcTemplate.update(sql, new PreparedStatementSetter() {

@@ -46,6 +46,7 @@
       $(document).ready(function () {
         setCommonEvents();
         setDatePicker(estabId, currentDate);
+        initBookingDate(currentDate);
         setUI();
         clickToBook(logged);
       });
@@ -110,5 +111,12 @@
     <aside id="help-panel" class="closeable" th:include="fragments/layout :: help"></aside>
     <aside id="info-panel" class="closeable" th:include="fragments/layout :: info"></aside>
     <footer th:replace="fragments/layout :: footer"></footer>
+    <div id="booking" th:title="#{booking.label}">
+      <div sec:authorize="${!isAuthenticated()}">
+        <p>Vous devez être connecté pour pouvoir réserver.</p>
+        <p><a th:href="@{/login.html}" th:text="#{connect.label}"></a></p>
+      </div>
+      <div sec:authorize="${isAuthenticated()}" th:include="fragments/user :: booking" th:with="offset=${timeOffset}"></div>
+    </div>
   </body>
 </html>

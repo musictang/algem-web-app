@@ -42,21 +42,34 @@
         <a href="signup.html" th:text="#{sign-up.label}"></a></p>
     </div>
     <div th:fragment="booking">
-      <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
-      <form id="login-form" th:action="@{/jxbooking.html}" accept-charset="UTF-8" class="panel">
-         <fieldset><legend th:text="#{connect.label}"></legend>
-          <label for="login" th:text="#{form.username.label}">Login</label>
-          <input type="text" id="login" required="required" name="j_username"/>
-          <label for="password" th:text="#{form.password.label}" >Password</label>
-          <input type="password" id="password" required="required" name="j_password"/>
-          <input type="button" id="login-submit-button" th:value="#{connection.label}" class="button-small pure-button pure-button-primary"/>
+      <form id="booking-form" th:action="@{/book.html}" method="post" >
+        <fieldset>
+          <input id="ajax-url" type="hidden" th:value="@{/xbook.html}" />
+          <ul class="simple" id="bookingType" >
+            <li><input type="radio" name="type" th:value="${T(net.algem.planning.Schedule).MEMBER}" th:text="#{booking.type.individual}"/></li>
+            <li><input type="radio" name="type" th:value="${T(net.algem.planning.Schedule).GROUP}" th:text="#{booking.type.group}"/></li>
+          </ul>
+          <label for="bookdate" th:text="#{date.label}">Date</label>
+          <input type="text" id="bookdate" style="font-size:small" name="date"/>
+          <p>
+            <label for="time" th:text="#{hour.label}" >Heure</label>
+            <select style="display: inline-block">
+              <option th:each="half,dv : ${#numbers.sequence(offset, 1410, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
+            </select>
+          </p>
+          <p><label for="length" th:text="#{booking.length.label}">Durée</label>
+            <input id="spinner" name="length" value="1">
+          </p>
+          <p><label for="room" th:text="#{room.label}"></label>
+            <select id="room" name="room">
+              <option th:each="entry : ${planning}" th:value="${entry.key}" th:text="${entry.value[0].roomName}"></option>
+              <option th:each="entry : ${freeplace}" th:value="${entry.key.id}" th:text="${entry.key.name}"></option>
+            </select>
+          </p>
+          <div style="text-align: right"><input style="display: inline-block" type="submit" th:value="#{book.label}" class="pure-button pure-button-primary"/></div>
         </fieldset>
-        <p class="error" style="display: none;"></p>
-        <p class="success" style="display: none;"></p>
+        <p class="error"></p>
       </form>
-      <p class="note indented"><a href="recover.html" th:text="#{password.forgotten}"></a></p>
-      <p class="note indented"><span th:text="#{sign-up.warning}"></span><br />
-        <a href="signup.html" th:text="#{sign-up.label}"></a></p>
     </div>
   </body>
 </html>

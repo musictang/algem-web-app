@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import net.algem.contact.Person;
+import net.algem.group.Group;
 import org.springframework.stereotype.Component;
 
 /**
@@ -90,9 +91,9 @@ public interface UserService
 
   /**
    * Find a user by his email.
-   * 
+   *
    * @param email the email of the user
-   * @return a user 
+   * @return a user
    */
   public User findUserByEmail(String email);
 
@@ -111,6 +112,8 @@ public interface UserService
   public boolean isPerson(User u);
 
   public Person getPersonFromUser(int u);
+
+  public List<Group> getGroups(String login);
 
   public List<Map<String, Boolean>> getAcl(int userId);
 

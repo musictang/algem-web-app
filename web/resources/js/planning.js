@@ -10,6 +10,7 @@ setUI = function () {
   setWidth();
   setHoverStyle();
   setDialog();
+  setBookingDialog();
 //  clickToBook();
 };
 
@@ -106,6 +107,13 @@ function setDialog() {
 
 }
 
+function setBookingDialog() {
+  $("#booking").dialog({
+    modal: false,
+    autoOpen: false
+  });
+}
+
 function clickToBook(auth) {
   $(".schedule_col").click(function (e) {
     //var posX = $(this).offset().left;
@@ -114,11 +122,58 @@ function clickToBook(auth) {
     var target = e.target || e.srcElement;
     if ("schedule_col" === target.className) {
       var room = $(this).find(".title_col");
+      var roomId = $(this).attr("id");
       console.log(e.pageY - posY, $(this).attr("id"), room.text());
-      if (!auth) {
-        alert("Non connecté");
-      }
+      $("#booking").dialog("open");
+      $("#booking #room").val(roomId);
+      $("#booking #spinner").spinner({
+        min: 1,
+        max: 8,
+        step: 0.5,
+        numberFormat: "n"
+      });
+      $('#booking-form input[type=radio]').change(function() {
+          console.log(this.value);
+          getGroups($("#booking-form"));
+      });
+
     }
+    $("#booking-form input[type='submit']").click(function () {
+    console.log("click submit button");
 
   });
+
+  });
+}
+
+function getGroups(form) {
+//    form.find(".error").hide();
+    var urlPath = $("#booking-form #ajax-url").val();
+    console.log(urlPath);
+    var typeData = {};
+		typeData["type"] = $('#bookingType').val();
+    //jQuery.post( url [, data ] [, success ] [, dataType ] )
+    $.post(
+        urlPath,
+        JSON.stringify(typeData),
+        function (result) {
+//          var err = $("#login-panel p.error");
+//          var suc = $("#login-panel p.success");
+          if (result != null) {
+            console.log("ajax success");
+            console.log(result);
+          } else {
+            console.log("ajax error");
+
+          }
+        },
+        "json"
+    );
+  }
+
+function initBookingDate(date) {
+  var bookDatePicker = $("#bookdate");
+  bookDatePicker.datepicker({changeMonth: true, changeYear: true, showOn: "button"});
+  bookDatePicker.datepicker('setDate', date);
+  bookDatePicker.blur();
 }

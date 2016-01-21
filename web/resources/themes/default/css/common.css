@@ -432,6 +432,18 @@ select {
   color: #444;
 }
 
+.ui-spinner-input {
+  width: 3em;
+  font-size: x-small;
+}
+
+#bookdate {
+  display: inline-block;
+}
+.hasDatepicker, .ui-datepicker-trigger {
+  /*display: inline-block;*/
+}
+
 .closing-bar {
   position: relative;
   width: 100%;
@@ -451,7 +463,7 @@ select {
 
 .closeable{}
 
-form input[type='text'], input[type='password'], form input[type='button'], form input[type='submit'] {
+form input[type='text'], input[type='password'], form input[type='button'], form input[type='submit']{
   display: block;
   /*margin: 0 0 1em 0;*/
 }
@@ -463,6 +475,15 @@ form input[type='button'], form input[type='submit'] {
 form label {
   display: inline-block;
   margin-top: 1em;
+}
+
+#booking select {
+  font-size: small;
+}
+
+#booking label {
+  width: 3.5em;
+  display: inline-block;
 }
 
 form input + span {
@@ -503,6 +524,11 @@ ul.disc{
   list-style-position: inside
 }
 
+ul.simple {
+  list-style-type: none;
+  margin: 0;
+}
+
 /*Media queries*/
 /*@media only screen and (max-width : 520px) {
   header > nav {
@@ -523,7 +549,7 @@ iPhone 2G, 3G, 4, 4S Media Queries : landscape
 and (min-device-width : 320px)
 and (max-device-width : 480px)
 and (orientation : landscape) {
-   STYLES GO HERE 
+   STYLES GO HERE
   header > nav {
     padding:0.5em 0;
   }
