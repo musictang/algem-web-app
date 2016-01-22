@@ -26,9 +26,11 @@ import net.algem.group.Group;
 import net.algem.security.User;
 import net.algem.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,7 +60,7 @@ public class BookingCtrl {
   }
 
 
-  @RequestMapping(method = RequestMethod.POST, value = "/xbook.html")
+  @RequestMapping(method = RequestMethod.GET, value = "/xbook")
   public @ResponseBody  List<Group> doXPostBooking(Principal p) {
     List<Group> groups = service.getGroups(p.getName());
     return groups;

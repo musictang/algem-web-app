@@ -150,25 +150,14 @@ function getGroups(form) {
 //    form.find(".error").hide();
     var urlPath = $("#booking-form #ajax-url").val();
     console.log(urlPath);
-    var typeData = {};
-		typeData["type"] = $('#bookingType').val();
-    //jQuery.post( url [, data ] [, success ] [, dataType ] )
-    $.post(
-        urlPath,
-        JSON.stringify(typeData),
-        function (result) {
-//          var err = $("#login-panel p.error");
-//          var suc = $("#login-panel p.success");
-          if (result != null) {
-            console.log("ajax success");
-            console.log(result);
-          } else {
-            console.log("ajax error");
-
-          }
-        },
-        "json"
-    );
+//    var typeData = {};
+//		typeData["type"] = $('#bookingType input[type="radio"]:checked').val();
+//    console.log(typeData);
+//    var dataSend = JSON.stringify(typeData);
+//    console.log(dataSend);
+    $.get(urlPath, function(data) {
+        console.log( "Data Loaded: " + data );
+      }, "json");
   }
 
 function initBookingDate(date) {

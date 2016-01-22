@@ -44,7 +44,7 @@
     <div th:fragment="booking">
       <form id="booking-form" th:action="@{/book.html}" method="post" >
         <fieldset>
-          <input id="ajax-url" type="hidden" th:value="@{/xbook.html}" />
+          <input id="ajax-url" type="hidden" th:value="@{/xbook}" />
           <ul class="simple" id="bookingType" >
             <li><input type="radio" name="type" th:value="${T(net.algem.planning.Schedule).MEMBER}" th:text="#{booking.type.individual}"/></li>
             <li><input type="radio" name="type" th:value="${T(net.algem.planning.Schedule).GROUP}" th:text="#{booking.type.group}"/></li>
