@@ -77,7 +77,7 @@ function setCommonEvents() {
     return 'http://' + window.location.hostname + port;
 //    return ((secure) ? 'https://' : 'http://') + window.location.hostname + port;
   };
-  
+
   function performLogin(form, errorMsg, successMsg) {
     form.find(".error").hide();
     var urlPath = $("#login-panel form").attr('action');
@@ -96,6 +96,7 @@ function setCommonEvents() {
             }
             suc.html(data.msg);
             suc.show();
+            location.reload();
             //$("#login-panel").hide(2000);
           } else {
             console.log("ajax error" + data.status);

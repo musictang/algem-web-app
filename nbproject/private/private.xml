@@ -7,14 +7,10 @@
             <file>file:/home/jm/dev/algem-web-app/web/tpl/fragments/user.html</file>
             <file>file:/home/jm/dev/algem-web-app/web/tpl/daily.html</file>
             <file>file:/home/jm/dev/algem-web-app/web/resources/js/planning.js</file>
-            <file>file:/home/jm/dev/algem-web-app/web/web-inf/dispatcher-servlet.xml</file>
             <file>file:/home/jm/dev/algem-web-app/src/java/net/algem/security/CommonUserService.java</file>
             <file>file:/home/jm/dev/algem-web-app/src/java/net/algem/planning/BookingCtrl.java</file>
-            <file>file:/home/jm/dev/algem-web-app/web/web-inf/applicationContext.xml</file>
             <file>file:/home/jm/dev/algem-web-app/src/java/net/algem/security/UserCtrl.java</file>
             <file>file:/home/jm/dev/algem-web-app/src/java/net/algem/security/UserDao.java</file>
-            <file>file:/home/jm/dev/algem-web-app/web/web-inf/web.xml</file>
-            <file>file:/home/jm/dev/algem-web-app/web/resources/themes/default/css/common.css</file>
         </group>
     </open-files>
 </project-private>

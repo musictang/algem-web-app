@@ -42,15 +42,19 @@
       console.log(estabId);
       var currentDate = /*[[${param.d[0]}]]*/ '29-12-2015';
       console.log(currentDate);
-      /*]]>*/
+      var groupType = /*[[${T(net.algem.planning.Schedule).GROUP}]]*/ -1;
+      console.log("group type " + groupType);
+      var groupLabel = /*[[#{group.label}]]*/ 'group';
+      var bookingGroupWarning = /*[[#{booking.group.warning}]]*/ 'group';
+
       $(document).ready(function () {
         setCommonEvents();
         setDatePicker(estabId, currentDate);
         initBookingDate(currentDate);
         setUI();
-        clickToBook(logged);
+        setBooking(groupType, groupLabel, bookingGroupWarning);
       });
-
+      /*]]>*/
     </script>
   </head>
   <body>

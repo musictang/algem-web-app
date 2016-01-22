@@ -11,7 +11,6 @@ setUI = function () {
   setHoverStyle();
   setDialog();
   setBookingDialog();
-//  clickToBook();
 };
 
 function setDatePicker(estabId, date) {
@@ -110,11 +109,13 @@ function setDialog() {
 function setBookingDialog() {
   $("#booking").dialog({
     modal: false,
-    autoOpen: false
+    autoOpen: false,
+    "height": "auto",
+    autoResize: true
   });
 }
 
-function clickToBook(auth) {
+function setBooking(groupType, groupLabel, bookingGroupWarning) {
   $(".schedule_col").click(function (e) {
     //var posX = $(this).offset().left;
     var posY = $(this).offset().top;
@@ -123,42 +124,80 @@ function clickToBook(auth) {
     if ("schedule_col" === target.className) {
       var room = $(this).find(".title_col");
       var roomId = $(this).attr("id");
+      $("#booking-form #endTime option").eq($("#booking-form #startTime option:selected").index() + 2).prop("selected", true);
       console.log(e.pageY - posY, $(this).attr("id"), room.text());
+      $("#groupPanel #groupInfo").remove();
+      $("#booking-form #member").prop("checked", true);
       $("#booking").dialog("open");
       $("#booking #room").val(roomId);
       $("#booking #spinner").spinner({
         min: 1,
         max: 8,
         step: 0.5,
-        numberFormat: "n"
+        numberFormat: "n",
+        spin : function(event,ui){
+        //Gives Previous value
+        console.log($(this).val());
+        //Gives current value
+        console.log(ui.value);
+        var startIndex = $("#booking-form #startTime option:selected").index();
+        var endIndex = startIndex + (ui.value * 60 * 16 / 480);
+         $("#booking-form #endTime option").eq(endIndex).prop("selected", true);
+        }
       });
-      $('#booking-form input[type=radio]').change(function() {
-          console.log(this.value);
-          getGroups($("#booking-form"));
-      });
-
     }
-    $("#booking-form input[type='submit']").click(function () {
+  });
+
+  //synchronise start time and endtime on modification
+  $("#booking-form #startTime").change(function() {
+      var startIndex = $(this).find("option:selected").index();
+      var value = $("#booking #spinner").spinner("value");
+      var endIndex = startIndex + (value * 60 * 16 / 480);
+      $("#booking-form #endTime option").eq(endIndex).prop("selected", true);
+  });
+  // call ajax method
+  $('#booking-form input[type=radio]').change(function () {
+    $("#groupPanel #groupInfo").remove();
+    console.log(this.value);
+    getGroups(groupType, groupLabel, bookingGroupWarning);
+
+  });
+  $("#booking-form input[type='submit']").click(function () {
     console.log("click submit button");
-
   });
 
-  });
 }
 
-function getGroups(form) {
+function getGroups(groupType, groupLabel, bookingGroupWarning) {
 //    form.find(".error").hide();
-    var urlPath = $("#booking-form #ajax-url").val();
-    console.log(urlPath);
-//    var typeData = {};
-//		typeData["type"] = $('#bookingType input[type="radio"]:checked').val();
-//    console.log(typeData);
-//    var dataSend = JSON.stringify(typeData);
-//    console.log(dataSend);
-    $.get(urlPath, function(data) {
-        console.log( "Data Loaded: " + data );
-      }, "json");
+  var type = $('#bookingType input[type="radio"]:checked').val();
+  console.log("selected type " + type);
+  console.log("group type " + groupType);
+
+  if (type != groupType) {
+    return;
   }
+
+  var urlPath = $("#booking-form #ajax-url").val();
+  console.log(urlPath);
+  $.get(urlPath, function (data) {
+    console.log(data);
+    if (typeof data === 'undefined' || !data.length) {
+      console.log("Aucun résultat");
+      $("#booking-form #member").prop("checked", true);
+      $("<p id=\"groupInfo\" class=\"error\" style=\"font-size: smaller\">"+bookingGroupWarning+"</p>").appendTo("#groupPanel");
+    } else {
+      $("<p id=\"groupInfo\">").appendTo("#groupPanel");
+      $("<label for=\"bookingGroup\">"+(groupLabel === undefined ? "" : groupLabel)+"</label>").appendTo('#groupInfo');
+      $("<select id=\"bookingGroup\" name=\"group\">").appendTo('#groupInfo');
+      $.each(data, function (index, value) {
+        $("<option value=\""+value.id+"\">"+value.name+"</otpion>").appendTo('#bookingGroup');
+        console.log("Data Loaded: " + value.id + " " + value.name);
+      });
+    }
+
+  }, "json");
+}
 
 function initBookingDate(date) {
   var bookDatePicker = $("#bookdate");
