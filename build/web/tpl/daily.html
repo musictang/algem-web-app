@@ -36,23 +36,31 @@
 
     <script type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
+      var debug = true;
       var estabId = /*[[${param.e[0]}]]*/ 3501;
-      var logged = /*[[${#authorization.expression('isAuthenticated()')}]]*/
-      console.log(logged);
-      console.log(estabId);
+      var logged = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
       var currentDate = /*[[${param.d[0]}]]*/ '29-12-2015';
-      console.log(currentDate);
-      var groupType = /*[[${T(net.algem.planning.Schedule).GROUP}]]*/ -1;
-      console.log("group type " + groupType);
-      var groupLabel = /*[[#{group.label}]]*/ 'group';
-      var bookingGroupWarning = /*[[#{booking.group.warning}]]*/ 'group';
+      var commonParams = {
+        estab: /*[[${param.e[0]}]]*/ 3501,
+        auth: /*[[${#authorization.expression('isAuthenticated()')}]]*/ false,
+        date: /*[[${param.d[0]}]]*/ '29-12-2015'
+      };
+      var groupParams = {
+        type:/*[[${T(net.algem.planning.Schedule).GROUP}]]*/ -1,
+        label:/*[[#{group.label}]]*/ 'group',
+        warning:/*[[#{booking.group.warning}]]*/ 'group'
+      };
+      if (debug) console.log(logVars(commonParams, groupParams));
+//      var groupType = /*[[${T(net.algem.planning.Schedule).GROUP}]]*/ -1;
+//      var groupLabel = /*[[#{group.label}]]*/ 'group';
+//      var bookingGroupWarning = /*[[#{booking.group.warning}]]*/ 'group';
 
       $(document).ready(function () {
         setCommonEvents();
         setDatePicker(estabId, currentDate);
         initBookingDate(currentDate);
         setUI();
-        setBooking(groupType, groupLabel, bookingGroupWarning);
+        setBooking(groupParams);
       });
       /*]]>*/
     </script>
@@ -117,7 +125,7 @@
     <footer th:replace="fragments/layout :: footer"></footer>
     <div id="booking" th:title="#{booking.label}">
       <div sec:authorize="${!isAuthenticated()}">
-        <p>Vous devez être connecté pour pouvoir réserver.</p>
+        <p th:text="#{booking.auth.warning}"></p>
         <p><a th:href="@{/login.html}" th:text="#{connect.label}"></a></p>
       </div>
       <div sec:authorize="${isAuthenticated()}" th:include="fragments/user :: booking" th:with="offset=${timeOffset}"></div>

@@ -58,7 +58,7 @@
               <option th:each="half,dv : ${#numbers.sequence(offset, 1410, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
             </select>
             <select id="endTime" style="display: inline-block" disabled="disabled">
-              <option th:each="half,dv : ${#numbers.sequence(offset, 1410, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
+              <option th:each="half,dv : ${#numbers.sequence(offset, 1440, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
             </select>
           </p>
           <p><label for="length" th:text="#{booking.length.label}">Durée</label>

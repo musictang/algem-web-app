@@ -6,10 +6,12 @@
             <file>file:/home/jm/dev/algem-web-app/web/resources/js/common.js</file>
             <file>file:/home/jm/dev/algem-web-app/web/tpl/fragments/user.html</file>
             <file>file:/home/jm/dev/algem-web-app/web/tpl/daily.html</file>
+            <file>file:/home/jm/dev/algem-web-app/web/web-inf/resources/messages_fr_FR.properties</file>
             <file>file:/home/jm/dev/algem-web-app/web/resources/js/planning.js</file>
             <file>file:/home/jm/dev/algem-web-app/src/java/net/algem/security/CommonUserService.java</file>
             <file>file:/home/jm/dev/algem-web-app/src/java/net/algem/planning/BookingCtrl.java</file>
             <file>file:/home/jm/dev/algem-web-app/src/java/net/algem/security/UserCtrl.java</file>
+            <file>file:/home/jm/dev/algem-web-app/web/web-inf/resources/messages.properties</file>
             <file>file:/home/jm/dev/algem-web-app/src/java/net/algem/security/UserDao.java</file>
         </group>
     </open-files>

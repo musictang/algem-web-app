@@ -6,6 +6,26 @@
  * @returns {void}
  */
 
+/**
+ * Group constructor.
+ * @param {type} id group Id
+ * @param {type} name group name
+ * @returns {Group}
+ */
+function Group(id, name) {
+  this.id = id;
+  this.name = name;
+}
+
+function logVars(commonParams, groupParams) {
+  $.each(commonParams, function(key, value) {
+    console.log(key, value);
+  });
+  $.each(groupParams, function(key, value) {
+    console.log(key, value);
+  });
+}
+
 setUI = function () {
   setWidth();
   setHoverStyle();
@@ -13,6 +33,12 @@ setUI = function () {
   setBookingDialog();
 };
 
+/**
+ * Init navigation elements.
+ * @param {type} estabId establishment id
+ * @param {type} date request parameter date
+ * @returns {undefined}
+ */
 function setDatePicker(estabId, date) {
 
   var picker = $("#datepicker");
@@ -49,6 +75,10 @@ function setDatePicker(estabId, date) {
 
 }
 
+/**
+ * Auto-resize the canvas if its width is larger than window width.
+ * @returns {undefined}
+ */
 function setWidth() {
   var cols = $('.schedule_col').length;
   //var cols = 15;
@@ -72,6 +102,10 @@ function setWidth() {
   }
 }
 
+/**
+ * Set the style of hovered schedules.
+ * @returns {undefined}
+ */
 function setHoverStyle() {
   $('div.labels').hover(
     function () {
@@ -91,6 +125,10 @@ function setHoverStyle() {
   );
 }
 
+/**
+ * Init main dialog.
+ * @returns {undefined}
+ */
 function setDialog() {
   $("#dialog").dialog({
     modal: false,
@@ -106,16 +144,28 @@ function setDialog() {
 
 }
 
+/**
+ * Init booking dialog.
+ * @returns {undefined}
+ */
 function setBookingDialog() {
   $("#booking").dialog({
     modal: false,
     autoOpen: false,
-    "height": "auto",
+    width: 310,
+    height: 410,
     autoResize: true
   });
 }
 
-function setBooking(groupType, groupLabel, bookingGroupWarning) {
+/**
+ * Set booking actions.
+ * @param {type} groupParams
+ * @returns {undefined}
+ */
+function setBooking(groupParams) {
+  //TODO detect valid date current date >= now + delay;
+  //TODO set start time by click position
   $(".schedule_col").click(function (e) {
     //var posX = $(this).offset().left;
     var posY = $(this).offset().top;
@@ -124,7 +174,6 @@ function setBooking(groupType, groupLabel, bookingGroupWarning) {
     if ("schedule_col" === target.className) {
       var room = $(this).find(".title_col");
       var roomId = $(this).attr("id");
-      $("#booking-form #endTime option").eq($("#booking-form #startTime option:selected").index() + 2).prop("selected", true);
       console.log(e.pageY - posY, $(this).attr("id"), room.text());
       $("#groupPanel #groupInfo").remove();
       $("#booking-form #member").prop("checked", true);
@@ -145,22 +194,19 @@ function setBooking(groupType, groupLabel, bookingGroupWarning) {
          $("#booking-form #endTime option").eq(endIndex).prop("selected", true);
         }
       });
+      setEndIndex($("#booking-form #startTime"));
     }
   });
 
   //synchronise start time and endtime on modification
   $("#booking-form #startTime").change(function() {
-      var startIndex = $(this).find("option:selected").index();
-      var value = $("#booking #spinner").spinner("value");
-      var endIndex = startIndex + (value * 60 * 16 / 480);
-      $("#booking-form #endTime option").eq(endIndex).prop("selected", true);
+    setEndIndex($(this));
   });
   // call ajax method
   $('#booking-form input[type=radio]').change(function () {
     $("#groupPanel #groupInfo").remove();
     console.log(this.value);
-    getGroups(groupType, groupLabel, bookingGroupWarning);
-
+    getGroups(groupParams);
   });
   $("#booking-form input[type='submit']").click(function () {
     console.log("click submit button");
@@ -168,13 +214,34 @@ function setBooking(groupType, groupLabel, bookingGroupWarning) {
 
 }
 
-function getGroups(groupType, groupLabel, bookingGroupWarning) {
-//    form.find(".error").hide();
+/**
+ * Auto-select end time.
+ * @param {type} element start time element
+ * @returns {undefined}
+ */
+function setEndIndex(element) {
+  var maxIndex = $(element).children("option").length;
+  console.log("count :" + maxIndex);
+  var startIndex = $(element).children("option:selected").index();
+  var value = $("#booking #spinner").spinner("value");
+  var endIndex = startIndex + (value * 60 * 16 / 480);
+  if (endIndex > maxIndex) {
+    endIndex = maxIndex;
+  }
+  $("#booking-form #endTime option").eq(endIndex).prop("selected", true);
+}
+
+/**
+ * Ajax call to retrieve the list of groups the person belong to.
+ * @param {type} params group parameters object
+ * @returns {undefined}
+ */
+function getGroups(params) {
   var type = $('#bookingType input[type="radio"]:checked').val();
   console.log("selected type " + type);
-  console.log("group type " + groupType);
+  console.log("group type " + params.type);
 
-  if (type != groupType) {
+  if (type != params.type) {
     return;
   }
 
@@ -185,10 +252,10 @@ function getGroups(groupType, groupLabel, bookingGroupWarning) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("Aucun résultat");
       $("#booking-form #member").prop("checked", true);
-      $("<p id=\"groupInfo\" class=\"error\" style=\"font-size: smaller\">"+bookingGroupWarning+"</p>").appendTo("#groupPanel");
+      $("<p id=\"groupInfo\" class=\"error\" style=\"font-size: smaller\">"+params.warning+"</p>").appendTo("#groupPanel");
     } else {
       $("<p id=\"groupInfo\">").appendTo("#groupPanel");
-      $("<label for=\"bookingGroup\">"+(groupLabel === undefined ? "" : groupLabel)+"</label>").appendTo('#groupInfo');
+      $("<label for=\"bookingGroup\">"+(params.label === undefined ? "" : params.label)+"</label>").appendTo('#groupInfo');
       $("<select id=\"bookingGroup\" name=\"group\">").appendTo('#groupInfo');
       $.each(data, function (index, value) {
         $("<option value=\""+value.id+"\">"+value.name+"</otpion>").appendTo('#bookingGroup');
@@ -199,6 +266,11 @@ function getGroups(groupType, groupLabel, bookingGroupWarning) {
   }, "json");
 }
 
+/**
+ * Init booking date picker.
+ * @param {type} date the date to set
+ * @returns {undefined}
+ */
 function initBookingDate(date) {
   var bookDatePicker = $("#bookdate");
   bookDatePicker.datepicker({changeMonth: true, changeYear: true, showOn: "button"});
