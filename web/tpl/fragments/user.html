@@ -44,18 +44,23 @@
     <div th:fragment="booking">
       <form id="booking-form" th:action="@{/book.html}" method="post" >
         <fieldset>
-          <input id="ajax-url" type="hidden" th:value="@{/xbook.html}" />
+          <input id="ajax-url" type="hidden" th:value="@{/xbook}" />
           <ul class="simple" id="bookingType" >
-            <li><input type="radio" name="type" th:value="${T(net.algem.planning.Schedule).MEMBER}" th:text="#{booking.type.individual}"/></li>
+            <li><input id="member" type="radio" name="type" th:value="${T(net.algem.planning.Schedule).MEMBER}" th:text="#{booking.type.individual}"/></li>
             <li><input type="radio" name="type" th:value="${T(net.algem.planning.Schedule).GROUP}" th:text="#{booking.type.group}"/></li>
           </ul>
+          <div id="groupPanel"></div>
           <label for="bookdate" th:text="#{date.label}">Date</label>
           <input type="text" id="bookdate" style="font-size:small" name="date"/>
           <p>
-            <label for="time" th:text="#{hour.label}" >Heure</label>
-            <select style="display: inline-block">
+            <label for="startTime" th:text="#{hour.label}">Heure</label>
+            <select id="startTime" style="display: inline-block" name="startTime">
               <option th:each="half,dv : ${#numbers.sequence(offset, 1410, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
             </select>
+            <select id="endTime" style="display: inline-block" disabled="disabled" name="endTime">
+              <option th:each="half,dv : ${#numbers.sequence(offset, 1440, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
+            </select>
+            <span class="error"></span>
           </p>
           <p><label for="length" th:text="#{booking.length.label}">Durée</label>
             <input id="spinner" name="length" value="1">

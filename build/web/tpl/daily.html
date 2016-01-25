@@ -34,23 +34,38 @@
     <script type="text/javascript" th:src="@{/resources/js/planning.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/jquery-ui.datepicker-fr.js}"></script>
 
-    <script type="text/javascript" th:inline="javascript">
+    <script th:with="delay=24" type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
+      var debug = false;
       var estabId = /*[[${param.e[0]}]]*/ 3501;
-      var logged = /*[[${#authorization.expression('isAuthenticated()')}]]*/
-      console.log(logged);
-      console.log(estabId);
+      var logged = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
       var currentDate = /*[[${param.d[0]}]]*/ '29-12-2015';
-      console.log(currentDate);
-      /*]]>*/
+      var bookingDelay = /*[[${bookingDelay}]]*/ 0;
+      var commonParams = {
+        estab: /*[[${param.e[0]}]]*/ 3501,
+        auth: /*[[${#authorization.expression('isAuthenticated()')}]]*/ false,
+        date: /*[[${param.d[0]}]]*/ '29-12-2015'
+      };
+      var bookingParams = {
+        groupType:/*[[${T(net.algem.planning.Schedule).GROUP}]]*/ -1,
+        groupLabel:/*[[#{group.label}]]*/ 'group',
+        groupWarning:/*[[#{booking.group.warning}]]*/ 'group',
+        bookingDelayWarning:/*[[#{booking.delay.warning(${bookingDelay})}]]*/ 'Hors délai'
+      };
+      var steps = {
+        height: 720,//Canvas height
+        max: 8 //Max booking length (in hours)
+      };
+      console.log(steps);
+      if (debug) console.log(logVars(commonParams, bookingParams, steps));
       $(document).ready(function () {
         setCommonEvents();
         setDatePicker(estabId, currentDate);
         initBookingDate(currentDate);
         setUI();
-        clickToBook(logged);
+        setBooking(bookingParams, steps, bookingDelay);
       });
-
+      /*]]>*/
     </script>
   </head>
   <body>
@@ -113,7 +128,7 @@
     <footer th:replace="fragments/layout :: footer"></footer>
     <div id="booking" th:title="#{booking.label}">
       <div sec:authorize="${!isAuthenticated()}">
-        <p>Vous devez être connecté pour pouvoir réserver.</p>
+        <p th:text="#{booking.auth.warning}"></p>
         <p><a th:href="@{/login.html}" th:text="#{connect.label}"></a></p>
       </div>
       <div sec:authorize="${isAuthenticated()}" th:include="fragments/user :: booking" th:with="offset=${timeOffset}"></div>

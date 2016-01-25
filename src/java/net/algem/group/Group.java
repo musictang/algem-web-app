@@ -34,6 +34,9 @@ public class Group {
   private String name;
   private List<Integer> members;
 
+  public Group() {
+  }
+
   public int getId() {
     return id;
   }
