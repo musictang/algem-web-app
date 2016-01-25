@@ -159,7 +159,7 @@ function getGroups(form) {
         function (result) {
 //          var err = $("#login-panel p.error");
 //          var suc = $("#login-panel p.success");
-          if (result != null) {
+          if (result !== null) {
             console.log("ajax success");
             console.log(result);
           } else {
