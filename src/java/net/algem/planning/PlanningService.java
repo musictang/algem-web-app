@@ -114,6 +114,25 @@ public class PlanningService
     return new Hour(c.getValue()).toMinutes();
   }
 
+  public int getBookingDelay() {
+    try {
+      return Integer.parseInt(configIO.findId("Reservation.delai").getValue());
+    } catch (NumberFormatException nfe) {
+      System.err.println(nfe.getMessage());
+      return 24;
+    }
+  }
+
+  public int getCancelBookingDelay() {
+    try {
+      return Integer.parseInt(configIO.findId("Annulation.delai").getValue());
+    } catch (NumberFormatException nfe) {
+      System.err.println(nfe.getMessage());
+      return 24;
+    }
+  }
+
+
   private DailyTimes[] findDailyTimes(int roomId) {
     try {
       return scheduleIO.find(roomId);

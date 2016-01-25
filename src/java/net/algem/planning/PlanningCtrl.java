@@ -50,7 +50,7 @@ public class PlanningCtrl
   @Autowired
   private PlanningService service;
 
-  private String estabFilter = " AND id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)";
+  private final String estabFilter = " AND id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)";
 
   public void setService(PlanningService service) {
     this.service = service;
@@ -66,8 +66,6 @@ public class PlanningCtrl
    */
   @RequestMapping(method = RequestMethod.GET, value = "/daily.html")
   String loadDaySchedule(HttpServletRequest request, Model model) throws ParseException {
-
-//    String dateParam = request.getParameter("d");
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
     SimpleDateFormat dayNameFormat = new SimpleDateFormat("EEE");
     Date date = dateFormat.parse(request.getParameter("d"));
@@ -75,14 +73,13 @@ public class PlanningCtrl
     int estab = Integer.parseInt(request.getParameter("e"));
 
     HashMap<Integer, Collection<ScheduleElement>> schedules = service.getDaySchedule(date, estab);
-//
-//    model.addAttribute("now", dateParam);
-//    model.addAttribute("estab", estab);
+
     model.addAttribute("dayName", dayName);
     model.addAttribute("planning", schedules);
     model.addAttribute("estabList", service.getEstablishments(estabFilter));
     model.addAttribute("freeplace", service.getFreePlace(date, estab));
     model.addAttribute("timeOffset", service.getTimeOffset());
+    model.addAttribute("bookingDelay", service.getBookingDelay());
 
     return "daily";
   }
@@ -96,16 +93,6 @@ public class PlanningCtrl
   String loadEstablishment(Model model) {
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
     model.addAttribute("now", dateFormat.format(new Date()));
-    List<Person> estabTest = new ArrayList<Person>();
-//    estabTest.add(new Person(3501,"Malakoff"));
-//    estabTest.add(new Person(87,"Lyon"));
-//    estabTest.add(new Person(52,"Paris"));
-//    estabTest.add(new Person(52,"Toulouse"));
-//    estabTest.add(new Person(52,"Rennes"));
-//    estabTest.add(new Person(52,"Strasbourg"));
-//    estabTest.add(new Person(52,"Marseille"));
-//    estabTest.add(new Person(52,"Bordeaux"));
-//    model.addAttribute("estabList", estabTest);
     model.addAttribute("estabList", service.getEstablishments(estabFilter));
     return "index";
   }

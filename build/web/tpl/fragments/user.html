@@ -53,13 +53,14 @@
           <label for="bookdate" th:text="#{date.label}">Date</label>
           <input type="text" id="bookdate" style="font-size:small" name="date"/>
           <p>
-            <label for="startTime" th:text="#{hour.label}" >Heure</label>
-            <select id="startTime" style="display: inline-block">
+            <label for="startTime" th:text="#{hour.label}">Heure</label>
+            <select id="startTime" style="display: inline-block" name="startTime">
               <option th:each="half,dv : ${#numbers.sequence(offset, 1410, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
             </select>
-            <select id="endTime" style="display: inline-block" disabled="disabled">
+            <select id="endTime" style="display: inline-block" disabled="disabled" name="endTime">
               <option th:each="half,dv : ${#numbers.sequence(offset, 1440, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
             </select>
+            <span class="error"></span>
           </p>
           <p><label for="length" th:text="#{booking.length.label}">Durée</label>
             <input id="spinner" name="length" value="1">

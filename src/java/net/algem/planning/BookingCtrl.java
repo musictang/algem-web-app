@@ -21,18 +21,17 @@
 package net.algem.planning;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.algem.group.Group;
-import net.algem.security.User;
 import net.algem.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -46,19 +45,10 @@ public class BookingCtrl {
 
   @Autowired
   private UserService service;
-//
-//  @Autowired
-//private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
   public void setService(UserService service) {
     this.service = service;
   }
-
-  @RequestMapping(method = RequestMethod.GET, value = "/book.html")
-  public String doGetBooking(Schedule booking) {
-    return "daily";
-  }
-
 
   @RequestMapping(method = RequestMethod.GET, value = "/xbook")
   public @ResponseBody  List<Group> doXPostBooking(Principal p) {
@@ -67,8 +57,21 @@ public class BookingCtrl {
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "/book.html")
-  public void doPostBooking() {
-
+  public String doPostBooking(
+//    @RequestParam int type,
+//    @RequestParam int group,
+//    @RequestParam int room,
+//    @RequestParam Date date,
+    @RequestParam String startTime,
+    @RequestParam String endTime) {
+    Booking booking = new Booking();
+//    booking.setDate(date);
+//    booking.setType(type);
+//    booking.setRoom(room);
+    booking.setStartTime(new Hour(startTime));
+    booking.setEndTime(new Hour(endTime));
+     Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, null, booking);
+     return "daily";
   }
 
 }

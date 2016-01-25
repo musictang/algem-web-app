@@ -17,21 +17,22 @@ function Group(id, name) {
   this.name = name;
 }
 
-function logVars(commonParams, groupParams) {
-  $.each(commonParams, function(key, value) {
-    console.log(key, value);
-  });
-  $.each(groupParams, function(key, value) {
-    console.log(key, value);
-  });
+function logVars() {
+  var l = arguments.length;
+  if (l == 0) {return;}
+  for (var i = 0 ;i < l; i++) {
+    $.each(arguments[i], function (key, value) {
+      console.log(key, value);
+    });
+  }
 }
 
-setUI = function () {
+function setUI() {
   setWidth();
   setHoverStyle();
   setDialog();
   setBookingDialog();
-};
+}
 
 /**
  * Init navigation elements.
@@ -42,12 +43,13 @@ setUI = function () {
 function setDatePicker(estabId, date) {
 
   var picker = $("#datepicker");
+  var estabSelect = $("#estabSelection");
   //picker.datepicker({ appendText: "(jj-mm-yyyy)", changeMonth: true, changeYear: true, autoSize: true })
   picker.datepicker({changeMonth: true, changeYear: true});
   picker.datepicker('setDate', date);
   picker.datepicker("refresh");
-  $('#estabSelection').val(estabId);
-  document.title = 'Planning ' + $('#estabSelection option:selected').text();
+  $(estabSelect).val(estabId);
+  document.title = 'Planning ' + $(estabSelect).children("option:selected").text();
   picker.change(function () {
     console.log(this.value);
     window.location = 'daily.html?d=' + this.value + '&e=' + estabId;
@@ -68,9 +70,9 @@ function setDatePicker(estabId, date) {
     return false;
   });
 
-  $('#estabSelection').change(function () {
-    var eId = $('#estabSelection option:selected').val();
-    window.location = 'daily.html?d=' + $("#datepicker").val() + '&e=' + eId;
+  $(estabSelect).change(function () {
+    var eId = $(this).children("option:selected").val();
+    window.location = 'daily.html?d=' + $(picker).val() + '&e=' + eId;
   });
 
 }
@@ -81,9 +83,10 @@ function setDatePicker(estabId, date) {
  */
 function setWidth() {
   var cols = $('.schedule_col').length;
+  var canvas = $("#canvas");
   //var cols = 15;
   //console.log( "nombre de colonnes : " + cols );
-  var emSize = parseFloat($("#canvas").css("font-size"));
+  var emSize = parseFloat($(canvas).css("font-size"));
   var leftMarginGrid = (2.2 * emSize);
   var windowWidth = $(window).width();
   //console.log( "emsize : " + emSize );
@@ -96,7 +99,7 @@ function setWidth() {
     $("#grid").css({
       width: gridWidth + "px"
     });
-    $("#canvas").css({
+    $(canvas).css({
       width: canvasWidth + "px"
     });
   }
@@ -130,7 +133,8 @@ function setHoverStyle() {
  * @returns {undefined}
  */
 function setDialog() {
-  $("#dialog").dialog({
+  var mainDialog = $("#dialog");
+  $(mainDialog).dialog({
     modal: false,
     autoOpen: false
   });
@@ -138,8 +142,8 @@ function setDialog() {
   $('div.labels').click(function () {
     //var regex = /<br\s*[\/]?>/gi;
     //var text = $(this).html().replace(regex,'\n');
-    $("#dialog").html($(this).html());
-    $("#dialog").dialog("open");
+    $(mainDialog).html($(this).html());
+    $(mainDialog).dialog("open");
   });
 
 }
@@ -159,76 +163,125 @@ function setBookingDialog() {
 }
 
 /**
- * Set booking actions.
- * @param {type} groupParams
+ *
+ * @param {Object} params booking params
+ * @param {Object} height and step rules
+ * @param {Number} bookingDelay booking delay (in hours)
  * @returns {undefined}
  */
-function setBooking(groupParams) {
+function setBooking(params, steps, bookingDelay) {
   //TODO detect valid date current date >= now + delay;
-  //TODO set start time by click position
+
+  var date = new Date($("#datepicker").datepicker('getDate'));
   $(".schedule_col").click(function (e) {
     //var posX = $(this).offset().left;
-    var posY = $(this).offset().top;
     //console.log((e.pageX - posX) + ' , ' + (e.pageY - posY));
     var target = e.target || e.srcElement;
     if ("schedule_col" === target.className) {
-      var room = $(this).find(".title_col");
+      var room = $(this).children(".title_col");
       var roomId = $(this).attr("id");
+      var posY = $(this).offset().top;
+      var idx = getStartTimeIndex(steps.height, e.pageY - posY);
+      console.log("idx " + idx);
+      $("#startTime option").eq(idx).prop("selected", true);
+      if (!checkBookingDelay(date, bookingDelay)) {
+        console.log("Hors delai");
+        alert(params.bookingDelayWarning);
+        return;
+      }
+
       console.log(e.pageY - posY, $(this).attr("id"), room.text());
-      $("#groupPanel #groupInfo").remove();
-      $("#booking-form #member").prop("checked", true);
+      $("#groupInfo").remove();
+      $("#member").prop("checked", true);
       $("#booking").dialog("open");
-      $("#booking #room").val(roomId);
+      $("#room").val(roomId);
       $("#booking #spinner").spinner({
         min: 1,
-        max: 8,
+        max: steps.max,
         step: 0.5,
         numberFormat: "n",
-        spin : function(event,ui){
-        //Gives Previous value
-        console.log($(this).val());
-        //Gives current value
-        console.log(ui.value);
-        var startIndex = $("#booking-form #startTime option:selected").index();
-        var endIndex = startIndex + (ui.value * 60 * 16 / 480);
-         $("#booking-form #endTime option").eq(endIndex).prop("selected", true);
+        spin : function(event,ui) {
+          //Gives Previous value
+          console.log($(this).val());
+          //Gives current value
+          var startIndex = $("#startTime option:selected").index();
+          var endIndex = startIndex + (ui.value * 60 * (steps.max * 2) / (steps.max * 60));
+          $("#endTime option").eq(endIndex).prop("selected", true);
         }
       });
-      setEndIndex($("#booking-form #startTime"));
+      setEndIndex($("#startTime"), steps);
     }
   });
 
   //synchronise start time and endtime on modification
-  $("#booking-form #startTime").change(function() {
-    setEndIndex($(this));
+  $('#startTime').focus(function() {
+    //Store old value
+    $(this).data("lastValue",$(this).val());
+});
+  $("#startTime").change(function(event) {
+    if (checkBookingDelay(date, bookingDelay)) {
+      setEndIndex($(this), steps);
+    } else {
+      var last = $(this).data("lastValue");
+      $(this).val(last);
+      alert("Hors delai");
+      event.preventDefault();
+    }
+    // IMPORTANT!: Firefox will not act properly without this:
+//    $(this).blur();
   });
   // call ajax method
   $('#booking-form input[type=radio]').change(function () {
-    $("#groupPanel #groupInfo").remove();
-    console.log(this.value);
-    getGroups(groupParams);
+    $(this).addClass("buzy");
+    $("#groupInfo").remove();
+    getGroups(params);
+    $(this).removeClass("buzy");
   });
+
   $("#booking-form input[type='submit']").click(function () {
     console.log("click submit button");
   });
 
 }
 
+function checkBookingDelay(date, bookingDelay) {
+  var t = $("#startTime").val();
+  if (t === undefined) {
+    return false;
+  }
+  var now = new Date();
+  console.log("now = " + now);
+  console.log(t);
+  date.setHours(t.substr(0, 2));
+  date.setMinutes(t.substr(3, 2));
+  console.log(now.getTime() + (bookingDelay * 60 * 60 * 1000) + " || date.time : " + date.getTime());
+  if (now.getTime() + (bookingDelay * 60 * 60 * 1000) > date.getTime()) {
+    return false;
+  }
+  return true;
+}
+
 /**
  * Auto-select end time.
- * @param {type} element start time element
+ * @param {DOMelement} element start time element
+ * @param {Object} steps
  * @returns {undefined}
  */
-function setEndIndex(element) {
+function setEndIndex(element, steps) {
+  console.log(steps);
   var maxIndex = $(element).children("option").length;
-  console.log("count :" + maxIndex);
   var startIndex = $(element).children("option:selected").index();
   var value = $("#booking #spinner").spinner("value");
-  var endIndex = startIndex + (value * 60 * 16 / 480);
+  var endIndex = startIndex + (value * 60 * (steps.max * 2) / (steps.max * 60));
   if (endIndex > maxIndex) {
     endIndex = maxIndex;
   }
-  $("#booking-form #endTime option").eq(endIndex).prop("selected", true);
+  $("#endTime option").eq(endIndex).prop("selected", true);
+}
+
+function getStartTimeIndex(height, yPos) {
+  var rows = $("#endTime").children("option").length;
+  return Math.round(yPos * rows / height) -1;
 }
 
 /**
@@ -238,10 +291,8 @@ function setEndIndex(element) {
  */
 function getGroups(params) {
   var type = $('#bookingType input[type="radio"]:checked').val();
-  console.log("selected type " + type);
-  console.log("group type " + params.type);
 
-  if (type != params.type) {
+  if (type != params.groupType) {
     return;
   }
 
@@ -251,11 +302,11 @@ function getGroups(params) {
     console.log(data);
     if (typeof data === 'undefined' || !data.length) {
       console.log("Aucun résultat");
-      $("#booking-form #member").prop("checked", true);
-      $("<p id=\"groupInfo\" class=\"error\" style=\"font-size: smaller\">"+params.warning+"</p>").appendTo("#groupPanel");
+      $("#member").prop("checked", true);
+      $("<p id=\"groupInfo\" class=\"error\" style=\"font-size: smaller\">"+params.groupWarning+"</p>").appendTo("#groupPanel");
     } else {
       $("<p id=\"groupInfo\">").appendTo("#groupPanel");
-      $("<label for=\"bookingGroup\">"+(params.label === undefined ? "" : params.label)+"</label>").appendTo('#groupInfo');
+      $("<label for=\"bookingGroup\">"+(params.groupLabel === undefined ? "" : params.groupLabel)+"</label>").appendTo('#groupInfo');
       $("<select id=\"bookingGroup\" name=\"group\">").appendTo('#groupInfo');
       $.each(data, function (index, value) {
         $("<option value=\""+value.id+"\">"+value.name+"</otpion>").appendTo('#bookingGroup');
