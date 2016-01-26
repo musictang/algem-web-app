@@ -20,13 +20,20 @@
  */
 package net.algem.planning;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.algem.room.Room;
 import net.algem.util.AbstractGemDao;
+import net.algem.util.Constants;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -75,7 +82,6 @@ public class ScheduleDao
             + ",lieux = " + p.getPlace()
             + ",note = " + p.getNote()
             + " WHERE id = " + p.getId();
-
 
   }
 
@@ -130,6 +136,7 @@ public class ScheduleDao
   /**
    * Gets the list of free public rooms (whithout any schedule for this
    * {@code date} in {@code estab}.
+   *
    * @param date selected date
    * @param estab establishment number
    * @return a list of rooms
@@ -182,9 +189,10 @@ public class ScheduleDao
 
   public DailyTimes[] find(int roomId) throws SQLException {
     String query = "SELECT jour, ouverture, fermeture FROM " + ROOM_TIMES_TABLE
-      + " WHERE idsalle = ? ORDER BY jour";
+            + " WHERE idsalle = ? ORDER BY jour";
 
-    List<DailyTimes> times = jdbcTemplate.query(query, new RowMapper<DailyTimes>() {
+    List<DailyTimes> times = jdbcTemplate.query(query, new RowMapper<DailyTimes>()
+    {
       @Override
       public DailyTimes mapRow(ResultSet rs, int rowNum) throws SQLException {
         DailyTimes dt = new DailyTimes(rs.getInt(1));
@@ -206,6 +214,62 @@ public class ScheduleDao
       timesArray = times.toArray(timesArray);
     }
     return timesArray;
+  }
+
+  List<ScheduleConflict> getConflicts(final Booking booking) {
+    List<ScheduleConflict> conflicts = new ArrayList<>();
+    String query = "SELECT id,jour,debut,fin,ptype,idper,lieux FROM " + TABLE
+            + " WHERE jour = ?"
+            + " AND ((debut >= ? AND pg.debut < ?)" // start //end
+            + " OR (fin > ? AND fin <= ?)"
+            + " OR (debut <= ? AND pg.fin >= ?))";
+    try {
+      final Date d = Constants.DATE_FORMAT.parse(booking.getDate());
+      final PreparedStatementSetter setter = new PreparedStatementSetter()
+      {
+        @Override
+        public void setValues(PreparedStatement ps) throws SQLException {
+          ps.setDate(1, new java.sql.Date(d.getTime()));
+          ps.setString(2, booking.getStartTime().toString());
+          ps.setString(3, booking.getEndTime().toString());
+          ps.setString(4, booking.getStartTime().toString());
+          ps.setString(5, booking.getEndTime().toString());
+          ps.setString(6, booking.getStartTime().toString());
+          ps.setString(7, booking.getEndTime().toString());
+        }
+      };
+      List<Schedule> schedules = jdbcTemplate.query(query, setter, new RowMapper<Schedule>()
+    {
+
+      @Override
+      public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Schedule r = new Schedule();
+        r.setId(rs.getInt(1));
+        r.setDate(rs.getDate(2));
+        r.setStart(new Hour(rs.getString(3)));
+        r.setEnd(new Hour(rs.getString(4)));
+        r.setType(rs.getInt(5));
+        r.setIdPerson(rs.getInt(6));
+        r.setPlace(rs.getInt(7));
+
+        return r;
+      }
+    });
+       if (schedules.size() > 0) {
+         
+      for(Schedule s : schedules) {
+        
+        switch(s.getType()) {
+          case Schedule.COURSE : 
+        }
+      }
+    }
+    } catch (ParseException ex) {
+      Logger.getLogger(ScheduleDao.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+    
+    return null;
   }
 
 }

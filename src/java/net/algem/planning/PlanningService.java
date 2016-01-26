@@ -131,7 +131,25 @@ public class PlanningService
       return 24;
     }
   }
+  
+  public DailyTimes getDailyTimes(int room, int dow) {
+    DailyTimes[] dailyTimes = findDailyTimes(room);
+    return dailyTimes == null || dailyTimes.length == 0 ? null : dailyTimes[dow-1];
+  }
+  
+  public boolean isFree(Booking booking) {
+//    return scheduleIO.isFree(Booking booking);
+    return true;
+  }
 
+  /**
+   * Gets the list of establishments in the organization.
+   *
+   * @return a list of persons' instances
+   */
+  public List<Person> getEstablishments(String where) {
+    return personIO.findEstablishments(where);
+  }
 
   private DailyTimes[] findDailyTimes(int roomId) {
     try {
@@ -176,11 +194,6 @@ public class PlanningService
     return getClosed(room, dow);
   }
 
-  private DailyTimes getDailyTimes(int room, int dow) {
-    DailyTimes[] dailyTimes = findDailyTimes(room);
-    return dailyTimes == null || dailyTimes.length == 0 ? null : dailyTimes[dow-1];
-  }
-
   /**
    * Default opening times.
    * @return an array of daily times
@@ -195,15 +208,6 @@ public class PlanningService
       timesArray[i] = dt;
     }
     return timesArray;
-  }
-
-  /**
-   * Gets the list of establishments in the organization.
-   *
-   * @return a list of persons' instances
-   */
-  public List<Person> getEstablishments(String where) {
-    return personIO.findEstablishments(where);
   }
 
   /**

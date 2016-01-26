@@ -8,8 +8,8 @@
 
 /**
  * Group constructor.
- * @param {type} id group Id
- * @param {type} name group name
+ * @param {Number} id group Id
+ * @param {String} name group name
  * @returns {Group}
  */
 function Group(id, name) {
@@ -156,9 +156,8 @@ function setBookingDialog() {
   $("#booking").dialog({
     modal: false,
     autoOpen: false,
-    width: 310,
-    height: 410,
-    autoResize: true
+    maxWidth: 310,
+    maxHeight: 410
   });
 }
 
@@ -184,16 +183,17 @@ function setBooking(params, steps, bookingDelay) {
       var idx = getStartTimeIndex(steps.height, e.pageY - posY);
       console.log("idx " + idx);
       $("#startTime option").eq(idx).prop("selected", true);
-      if (!checkBookingDelay(date, bookingDelay)) {
-        console.log("Hors delai");
-        alert(params.bookingDelayWarning);
-        return;
-      }
-
+      
       console.log(e.pageY - posY, $(this).attr("id"), room.text());
       $("#groupInfo").remove();
       $("#member").prop("checked", true);
       $("#booking").dialog("open");
+      if (!checkBookingDelay(date, bookingDelay)) {
+        console.log("Hors delai");
+        $("#booking").html("<p>" +params.bookingDelayWarning +"</p>");
+//        alert(params.bookingDelayWarning);
+        return;
+      }
       $("#room").val(roomId);
       $("#booking #spinner").spinner({
         min: 1,
@@ -247,14 +247,14 @@ function setBooking(params, steps, bookingDelay) {
 function checkBookingDelay(date, bookingDelay) {
   var t = $("#startTime").val();
   if (t === undefined) {
-    return false;
+    return true; // important : true ! let open dialog
   }
   var now = new Date();
-  console.log("now = " + now);
-  console.log(t);
+//  console.log("now = " + now);
+//  console.log(t);
   date.setHours(t.substr(0, 2));
   date.setMinutes(t.substr(3, 2));
-  console.log(now.getTime() + (bookingDelay * 60 * 60 * 1000) + " || date.time : " + date.getTime());
+  //console.log(now.getTime() + (bookingDelay * 60 * 60 * 1000) + " || date.time : " + date.getTime());
   if (now.getTime() + (bookingDelay * 60 * 60 * 1000) > date.getTime()) {
     return false;
   }
@@ -307,7 +307,7 @@ function getGroups(params) {
     } else {
       $("<p id=\"groupInfo\">").appendTo("#groupPanel");
       $("<label for=\"bookingGroup\">"+(params.groupLabel === undefined ? "" : params.groupLabel)+"</label>").appendTo('#groupInfo');
-      $("<select id=\"bookingGroup\" name=\"group\">").appendTo('#groupInfo');
+      $("<select id=\"bookingGroup\" th:field=\"*{group}\">").appendTo('#groupInfo');
       $.each(data, function (index, value) {
         $("<option value=\""+value.id+"\">"+value.name+"</otpion>").appendTo('#bookingGroup');
         console.log("Data Loaded: " + value.id + " " + value.name);

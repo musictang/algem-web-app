@@ -33,6 +33,7 @@ import net.algem.contact.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -65,12 +66,13 @@ public class PlanningCtrl
    * @throws ParseException
    */
   @RequestMapping(method = RequestMethod.GET, value = "/daily.html")
-  String loadDaySchedule(HttpServletRequest request, Model model) throws ParseException {
+  String loadDaySchedule(HttpServletRequest request, Model model, Booking booking) throws ParseException {
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
     SimpleDateFormat dayNameFormat = new SimpleDateFormat("EEE");
     Date date = dateFormat.parse(request.getParameter("d"));
     String dayName = dayNameFormat.format(date);
     int estab = Integer.parseInt(request.getParameter("e"));
+    booking.setTimeLength(1);
 
     HashMap<Integer, Collection<ScheduleElement>> schedules = service.getDaySchedule(date, estab);
 

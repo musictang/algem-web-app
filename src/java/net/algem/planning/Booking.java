@@ -21,6 +21,7 @@
 package net.algem.planning;
 
 import java.util.Date;
+import javax.validation.constraints.Min;
 
 /**
  *
@@ -34,7 +35,8 @@ public class Booking {
   private int person;
   private int group;
   private int room;
-  private Date date;
+  private int timeLength;
+  private String date;
   private Hour startTime;
   private Hour endTime;
 
@@ -62,20 +64,29 @@ public class Booking {
     this.room = room;
   }
 
-  public Date getDate() {
+  public String getDate() {
     return date;
   }
 
-  public void setDate(Date date) {
+  public void setDate(String date) {
     this.date = date;
   }
 
+  
   public int getType() {
     return type;
   }
 
   public void setType(int type) {
     this.type = type;
+  }
+
+  public int getTimeLength() {
+    return timeLength;
+  }
+
+  public void setTimeLength(int timeLength) {
+    this.timeLength = timeLength;
   }
 
   public Hour getStartTime() {
@@ -95,7 +106,8 @@ public class Booking {
   }
 
   public boolean isValid() {
-    return endTime.after(startTime) && room > 0 && date.after(new Date());
+    return true;
+//    return endTime.after(startTime) && room > 0 && date.after(new Date());
   }
 
   @Override
