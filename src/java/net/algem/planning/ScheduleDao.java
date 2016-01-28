@@ -20,9 +20,11 @@
  */
 package net.algem.planning;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,9 +35,13 @@ import java.util.logging.Logger;
 import net.algem.room.Room;
 import net.algem.util.AbstractGemDao;
 import net.algem.util.Constants;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * IO methods for class {@link net.algem.planning.Schedule}.
@@ -50,6 +56,8 @@ public class ScheduleDao
 {
 
   public final static String TABLE = "planning";
+  /** Action table. */
+  public final static String ACTION = "action";
   public final static String ROOM_TIMES_TABLE = "horaires";
   public final static String SEQUENCE = "planning_id_seq";
   public final static String COLUMNS = "p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.action,p.lieux,p.note";
@@ -216,60 +224,87 @@ public class ScheduleDao
     return timesArray;
   }
 
-  List<ScheduleConflict> getConflicts(final Booking booking) {
-    List<ScheduleConflict> conflicts = new ArrayList<>();
+  List<Schedule> getConflicts(final Booking booking) {
+    List<Schedule> conflicts = new ArrayList<>();
     String query = "SELECT id,jour,debut,fin,ptype,idper,lieux FROM " + TABLE
-            + " WHERE jour = ?"
-            + " AND ((debut >= ? AND pg.debut < ?)" // start //end
-            + " OR (fin > ? AND fin <= ?)"
-            + " OR (debut <= ? AND pg.fin >= ?))";
+      + " WHERE jour = ?"
+      + " AND lieux = ?"
+      + " AND ((debut >= ? AND debut < ?)" // start //end
+      + " OR (fin > ? AND fin <= ?)"
+      + " OR (debut <= ? AND fin >= ?))";
     try {
       final Date d = Constants.DATE_FORMAT.parse(booking.getDate());
-      final PreparedStatementSetter setter = new PreparedStatementSetter()
-      {
+      final PreparedStatementSetter setter = new PreparedStatementSetter() {
         @Override
         public void setValues(PreparedStatement ps) throws SQLException {
           ps.setDate(1, new java.sql.Date(d.getTime()));
-          ps.setString(2, booking.getStartTime().toString());
-          ps.setString(3, booking.getEndTime().toString());
-          ps.setString(4, booking.getStartTime().toString());
-          ps.setString(5, booking.getEndTime().toString());
-          ps.setString(6, booking.getStartTime().toString());
-          ps.setString(7, booking.getEndTime().toString());
+          ps.setInt(2, booking.getRoom());
+          ps.setTime(3, Time.valueOf(booking.getStartTime().toString() + ":00"));
+          ps.setTime(4, Time.valueOf(booking.getEndTime().toString() + ":00"));
+          ps.setTime(5, Time.valueOf(booking.getStartTime().toString() + ":00"));
+          ps.setTime(6, Time.valueOf(booking.getEndTime().toString() + ":00"));
+          ps.setTime(7, Time.valueOf(booking.getStartTime().toString() + ":00"));
+          ps.setTime(8, Time.valueOf(booking.getEndTime().toString() + ":00"));
         }
       };
-      List<Schedule> schedules = jdbcTemplate.query(query, setter, new RowMapper<Schedule>()
-    {
+      conflicts = jdbcTemplate.query(query, setter, new RowMapper<Schedule>() {
 
-      @Override
-      public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Schedule r = new Schedule();
-        r.setId(rs.getInt(1));
-        r.setDate(rs.getDate(2));
-        r.setStart(new Hour(rs.getString(3)));
-        r.setEnd(new Hour(rs.getString(4)));
-        r.setType(rs.getInt(5));
-        r.setIdPerson(rs.getInt(6));
-        r.setPlace(rs.getInt(7));
+        @Override
+        public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+          Schedule r = new Schedule();
+          r.setId(rs.getInt(1));
+          r.setDate(rs.getDate(2));
+          r.setStart(new Hour(rs.getString(3)));
+          r.setEnd(new Hour(rs.getString(4)));
+          r.setType(rs.getInt(5));
+          r.setIdPerson(rs.getInt(6));
+          r.setPlace(rs.getInt(7));
 
-        return r;
-      }
-    });
-       if (schedules.size() > 0) {
-         
-      for(Schedule s : schedules) {
-        
-        switch(s.getType()) {
-          case Schedule.COURSE : 
+          return r;
         }
-      }
-    }
+      });
     } catch (ParseException ex) {
       Logger.getLogger(ScheduleDao.class.getName()).log(Level.SEVERE, null, ex);
     }
-   
-    
-    return null;
+
+    return conflicts;
+  }
+
+  @Transactional
+  public void book(final Booking booking) throws ParseException {
+    final Date date = Constants.DATE_FORMAT.parse(booking.getDate());
+    final int action = createEmptyAction();
+    final String sql = "INSERT INTO " + TABLE + " (jour,debut,fin,ptype,idper,action,lieux) VALUES(?,?,?,?,?,?,?)";
+    jdbcTemplate.update(new PreparedStatementCreator() {
+
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+          PreparedStatement ps = con.prepareStatement(sql);
+          ps.setDate(1, new java.sql.Date(date.getTime()));
+          ps.setTime(2, Time.valueOf(booking.getStartTime().toString() + ":00"));
+          ps.setTime(3, Time.valueOf(booking.getEndTime().toString() + ":00"));
+          ps.setInt(4, booking.getType());
+          ps.setInt(5, Schedule.BOOKING_GROUP == booking.getType() ? booking.getGroup() : booking.getPerson());
+          ps.setInt(6, action);
+          ps.setInt(7, booking.getRoom());
+          return ps;
+      }
+
+    });
+  }
+
+  private int createEmptyAction() {
+    final String sql = "INSERT INTO " + ACTION + " (cours) VALUES(?);";
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    jdbcTemplate.update(new PreparedStatementCreator() {
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement(sql, new String[]{"id"});
+        ps.setInt(1, 0);
+        return ps;
+      }
+    }, keyHolder);
+    return keyHolder.getKey().intValue();
   }
 
 }

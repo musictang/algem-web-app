@@ -46,9 +46,9 @@
         <fieldset>
           <input id="ajax-url" type="hidden" th:value="@{/xbook}" />
           <input name="estab" type="hidden" th:value="${param.e[0]}"/>
-          <ul class="simple" id="bookingType" >
-            <li><input id="member" type="radio" th:field="*{type}" th:value="${T(net.algem.planning.Schedule).MEMBER}" th:text="#{booking.type.individual}"/></li>
-            <li><input type="radio" th:field="*{type}" th:value="${T(net.algem.planning.Schedule).GROUP}" th:text="#{booking.type.group}"/></li>
+          <ul class="simple" id="bookingType">
+            <li><input id="member" type="radio" th:field="*{type}" th:value="${T(net.algem.planning.Schedule).BOOKING_MEMBER}" th:text="#{booking.member.label}"/></li>
+            <li><input type="radio" th:field="*{type}" th:value="${T(net.algem.planning.Schedule).BOOKING_GROUP}" th:text="#{booking.group.label}"/></li>
           </ul>
           <div id="groupPanel"></div>
           <label for="bookdate" th:text="#{date.label}">Date</label>

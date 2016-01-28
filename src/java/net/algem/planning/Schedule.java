@@ -42,6 +42,8 @@ public class Schedule
   public static final int TRAINING = 6;
   public static final int STUDIO = 7;
   public static final int TECH = 8;
+  public static final int BOOKING_GROUP = 13;
+  public static final int BOOKING_MEMBER = 14;
 
   protected int id;
   protected DateFr date;
@@ -52,7 +54,7 @@ public class Schedule
   protected int idAction;
   protected int place;
   protected int note;
-  protected List<ScheduleRange> items;
+//  protected List<ScheduleRange> ranges;
 
   @Override
   public boolean equals(Object obj) {
@@ -164,38 +166,38 @@ public class Schedule
   public int getNote() {
     return note;
   }
+//
+//	public List<ScheduleRange> getRanges() {
+//		return ranges;
+//	}
+//
+//	public void setRanges(List<ScheduleRange> ranges) {
+//		this.ranges = ranges;
+//	}
 
-	public List<ScheduleRange> getItems() {
-		return items;
-	}
-
-	public void setItems(List<ScheduleRange> items) {
-		this.items = items;
-	}
-
-  public boolean isValid() {
-    return true;
-  }
-
-  public static String attribFromLabel(String label) {
-    String attrib = label;
-    if (label.equals("prof")) {
-      attrib = "idper";
-    } else if (label.equals("d.prof")) {
-      attrib = "d.idper";
-    } else if (label.equals("salle")) {
-      attrib = "lieux";
-    } else if (label.equals("d.salle")) {
-      attrib = "d.lieux";
-    } else if (label.equals("cours")) {
-      attrib = "action";
-    } else if (label.equals("d.cours")) {
-      attrib = "d.action";
-    } else if (label.equals("atelier")) {
-      attrib = "atelier";
-    } else if (label.equals("d.atelier")) {
-      attrib = "d.atelier";
-    }
-    return attrib;
-  }
+//  public boolean isValid() {
+//    return true;
+//  }
+//
+//  public static String attribFromLabel(String label) {
+//    String attrib = label;
+//    if (label.equals("prof")) {
+//      attrib = "idper";
+//    } else if (label.equals("d.prof")) {
+//      attrib = "d.idper";
+//    } else if (label.equals("salle")) {
+//      attrib = "lieux";
+//    } else if (label.equals("d.salle")) {
+//      attrib = "d.lieux";
+//    } else if (label.equals("cours")) {
+//      attrib = "action";
+//    } else if (label.equals("d.cours")) {
+//      attrib = "d.action";
+//    } else if (label.equals("atelier")) {
+//      attrib = "atelier";
+//    } else if (label.equals("d.atelier")) {
+//      attrib = "d.atelier";
+//    }
+//    return attrib;
+//  }
 }

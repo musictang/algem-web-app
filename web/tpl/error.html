@@ -36,7 +36,13 @@
     <div class="global">
       <div class="centered">
         <h2 th:text="#{warning.label}"></h2>
-        <div style="clear: both" class="error" th:text="${message}"></div>
+        <div style="clear: both">
+          <p class="error" th:text="${message}"></p>
+          <ul class="error" th:if="${data != null}" >
+            <li th:each="d:${data}" th:text="${d}"></li>
+          </ul>
+        </div>
+
         <div class="thumbnails thumbnails-out" style="float: left">
         <a class="img-link" th:href="@{index.html}">
               <img th:src="@{/resources/themes/img/logo.png}" alt="Index"/>

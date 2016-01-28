@@ -35,7 +35,7 @@ public class Booking {
   private int person;
   private int group;
   private int room;
-  private int timeLength;
+  private float timeLength;
   private String date;
   private Hour startTime;
   private Hour endTime;
@@ -72,7 +72,7 @@ public class Booking {
     this.date = date;
   }
 
-  
+
   public int getType() {
     return type;
   }
@@ -81,11 +81,11 @@ public class Booking {
     this.type = type;
   }
 
-  public int getTimeLength() {
+  public float getTimeLength() {
     return timeLength;
   }
 
-  public void setTimeLength(int timeLength) {
+  public void setTimeLength(float timeLength) {
     this.timeLength = timeLength;
   }
 

@@ -191,6 +191,10 @@ public class ScheduleElement
         return prefix + "F7F7AC"; //#F7F7AC rgb(247,247,172)
       case Schedule.TRAINING:
         return prefix + "F7F77C"; //#F7F7AC rgb(247,247,172)
+      case Schedule.BOOKING_GROUP:
+        return prefix + "A27D51";
+      case Schedule.BOOKING_MEMBER:
+        return prefix + "A28661";
       default:
         return "#FFFFFF";
 

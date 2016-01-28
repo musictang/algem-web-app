@@ -47,7 +47,7 @@
         date: /*[[${param.d[0]}]]*/ '29-12-2015'
       };
       var bookingParams = {
-        groupType:/*[[${T(net.algem.planning.Schedule).GROUP}]]*/ -1,
+        groupType:/*[[${T(net.algem.planning.Schedule).BOOKING_GROUP}]]*/ -1,
         groupLabel:/*[[#{group.label}]]*/ 'group',
         groupWarning:/*[[#{booking.group.warning}]]*/ 'group',
         bookingDelayWarning:/*[[#{booking.delay.warning(${bookingDelay})}]]*/ 'Hors délai'
@@ -133,5 +133,6 @@
       </div>
       <div sec:authorize="${isAuthenticated()}" th:include="fragments/user :: booking" th:with="offset=${timeOffset}"></div>
     </div>
+    <div id="errorDialog"></div>
   </body>
 </html>
