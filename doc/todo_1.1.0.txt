@@ -1,0 +1,7 @@
+- Afficher les informations de salle dans l'aide (fonction de la salle et tarifs)
+- Afficher un message concernant l'annulation d'une réservation
+- Problème avec les plages non réservées des plannings individuels ?
+- Afficher le menu en permanence ?
+- Modifier les couleurs principales
+
+Dans Algem, n'enregistrer l'échéance qu'après confirmation de la réservation.

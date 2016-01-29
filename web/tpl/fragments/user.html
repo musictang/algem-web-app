@@ -27,7 +27,7 @@
     <div th:fragment="login">
       <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
       <!--<form id="login-form" th:action="@{/jxlogin.html}" accept-charset="UTF-8" class="panel">-->
-      <form id="login-form" th:action="@{/jxlogin}" class="panel">
+      <form id="ajax-login-form" th:action="@{/jxlogin}" class="panel">
          <fieldset><legend th:text="#{connect.label}"></legend>
           <label for="login" th:text="#{form.username.label}">Login</label>
           <input type="text" id="login" required="required" name="j_username"/>

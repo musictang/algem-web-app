@@ -123,10 +123,10 @@ public class UserCtrl {
    * Manage ajax GET request.
    * @return
    */
-  @RequestMapping(value = "/jxlogin.html", method = RequestMethod.GET)
-  public String login() {
-    return "fragments/xlogin :: login";
-  }
+//  @RequestMapping(value = "/jxlogin.html", method = RequestMethod.GET)
+//  public String login() {
+//    return "fragments/xlogin :: login";
+//  }
 
   /**
    * Manage ajax POST request.

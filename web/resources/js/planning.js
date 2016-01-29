@@ -143,7 +143,7 @@ function setDialog() {
   $("#errorDialog").dialog({
     modal: true,
     autoOpen: false,
-    position: { my: "left top", at: "center", of: window }
+    position: { my: "bottom", at: "top+50%", of: window }
   });
 }
 

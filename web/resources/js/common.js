@@ -65,7 +65,7 @@ function setCommonEvents() {
     $('#login-panel').show(delay);
   });
 
-  $("#login-form").submit(function (event) {
+  $("#ajax-login-form").submit(function (event) {
     console.log("click login button");
     ajaxLogin($("#login-panel form"));
     event.preventDefault();
