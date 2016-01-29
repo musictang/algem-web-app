@@ -150,11 +150,11 @@ public class ScheduleDao
    * @return a list of rooms
    */
   public List<Room> getFreeRoom(Date date, int estab) {
-    String query = "SELECT id, nom FROM salle s"
+    String query = "SELECT id,nom FROM salle s"
             + " WHERE s.public = true"
-            + " AND s.etablissement = " + estab
+            + " AND s.etablissement = ?"
             + " AND s.id NOT IN ("
-            + " SELECT DISTINCT lieux FROM " + TABLE + " WHERE jour = '" + date + "') ORDER BY id";
+            + " SELECT DISTINCT lieux FROM " + TABLE + " WHERE jour = ?) ORDER BY s.nom";
     return jdbcTemplate.query(query, new RowMapper<Room>()
     {
 
@@ -165,7 +165,7 @@ public class ScheduleDao
         r.setName(rs.getString(2));
         return r;
       }
-    });
+    }, estab, date);
   }
 
   /**

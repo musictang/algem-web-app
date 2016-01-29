@@ -143,6 +143,7 @@ function setDialog() {
   $("#errorDialog").dialog({
     modal: true,
     autoOpen: false,
+    position: { my: "left top", at: "center", of: window }
   });
 }
 
@@ -154,8 +155,9 @@ function setBookingDialog() {
   $("#booking").dialog({
     modal: false,
     autoOpen: false,
-    maxWidth: 310,
-    maxHeight: 410
+    maxWidth: 320,
+    maxHeight: 410,
+    position: { my: "top", at: "top+25%", of: window }
   });
 }
 

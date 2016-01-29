@@ -29,17 +29,17 @@ package net.algem.room;
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @version 1.0.1
  * @since 1.0.1 06/03/13
- * 
+ *
  */
 public class Room
+  implements Comparable<Room>
 {
 
   private int id;
-
   private String name;
   private int estab;
   private boolean active;
-  
+
   /** Public access and available for rehearsals. */
   private boolean available;
 
@@ -126,16 +126,21 @@ public class Room
   public String toString() {
     return name;
   }
-  
+
   /**
    * Checks if this room is used to catching up with lessons when a teacher is absent.
-   * 
+   *
    * @return true if catching up
    */
   public boolean isCatchingUp() {
     // TODO test should not apply to room's name
     String regex = "(?iu).*(RATTRAP|CATCHING).*";
     return name.matches(regex);
+  }
+
+  @Override
+  public int compareTo(Room o) {
+    return this.getName().compareTo(o.getName());
   }
 
 }

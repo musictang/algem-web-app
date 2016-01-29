@@ -1,5 +1,5 @@
 /*
- * @(#)common.js	1.0.6 28/12/15
+ * @(#)common.js	1.1.0 29/01/16
  *
  * Copyright (c) 2013 Musiques Tangentes. All Rights Reserved.
  *
@@ -19,18 +19,17 @@
  *
  */
 
-/*
- * Global script for algem agenda web module.
- @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- @version 1.0.6
- @since 1.0.6 28/12/15
+/**
+ * Global script for algem web module.
+ * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
+ * @version 1.1.0
+ * @since 1.0.6 28/12/15
  */
 
 function setCommonEvents() {
   var delay = 500;
   jQuery.ajaxSetup({
     beforeSend: function() {
-      console.log("beforeSend");
        $('body').addClass('busy');
     },
     complete: function() {
@@ -62,15 +61,14 @@ function setCommonEvents() {
   });
 
   $('#menu-login').click(function () {
-    console.log("menu-login")
+    console.log("menu-login");
     $('#login-panel').show(delay);
   });
 
-  $("#login-panel form input[type='button']").click(function (event) {
+  $("#login-form").submit(function (event) {
     console.log("click login button");
-//    event.preventDefault();
-    performLogin($("#login-panel form"));
-    
+    ajaxLogin($("#login-panel form"));
+    event.preventDefault();
   });
 
   var getHost = function () {
@@ -80,7 +78,7 @@ function setCommonEvents() {
 //    return ((secure) ? 'https://' : 'http://') + window.location.hostname + port;
   };
 
-  function performLogin(form, errorMsg, successMsg) {
+  function ajaxLogin(form, errorMsg, successMsg) {
     form.find(".error").hide();
     var urlPath = $("#login-panel form").attr('action');
     console.log(urlPath);
@@ -101,7 +99,7 @@ function setCommonEvents() {
             location.reload();
             //$("#login-panel").hide(2000);
           } else {
-            console.log("ajax error" + data.status);
+            console.log("ajax error : " + data.status);
             if (suc.is(':visible')) {
               suc.hide();
             }

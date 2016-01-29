@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import net.algem.contact.Person;
 import net.algem.room.Room;
 
@@ -56,7 +57,7 @@ public interface PlanningService {
    * @param estab establishment number
    * @return a map
    */
-  HashMap<Integer, Collection<ScheduleElement>> getDaySchedule(Date date, int estab);
+  Map<Integer, Collection<ScheduleElement>> getDaySchedule(Date date, int estab);
 
   /**
    * Gets the list of establishments in the organization.
@@ -66,7 +67,7 @@ public interface PlanningService {
    */
   List<Person> getEstablishments(String where);
 
-  HashMap<Room, Collection<ScheduleElement>> getFreePlace(Date date, int estab);
+  Map<Room, Collection<ScheduleElement>> getFreePlace(Date date, int estab);
 
   /**
    * Gets the list of free rooms at the date {@code date} in the establishment {@code estab}.

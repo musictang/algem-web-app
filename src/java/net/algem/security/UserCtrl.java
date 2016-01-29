@@ -121,7 +121,7 @@ public class UserCtrl {
 
   /**
    * Manage ajax GET request.
-   * @return 
+   * @return
    */
   @RequestMapping(value = "/jxlogin.html", method = RequestMethod.GET)
   public String login() {
@@ -139,7 +139,8 @@ public class UserCtrl {
    * @return JSON data as string
    */
   // IMPORTANT HERE : produces="text/html" !! AND NOT application/json or text/plain !
-  @RequestMapping(value = "/jxlogin.html", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+//  @RequestMapping(value = "/jxlogin.html", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+  @RequestMapping(value = "/jxlogin")
   @ResponseBody
   public String performLogin(
     @RequestParam("j_username") String username,
@@ -262,7 +263,7 @@ public class UserCtrl {
       model.addAttribute("message", messageSource.getMessage("recover.send.info", null, LocaleContextHolder.getLocale()));
     } catch(MailException | DataAccessException ex) {
       model.addAttribute("errorMessage", messageSource.getMessage("recover.send.exception", new Object[]{ex.getMessage()}, LocaleContextHolder.getLocale()));
-    } 
+    }
 
     return "recover";
   }
@@ -293,7 +294,7 @@ public class UserCtrl {
       model.addAttribute("message", messageSource.getMessage("data.exception", new Object[]{ex.getMessage()}, locale));
       return "error";
     }
-    
+
     Calendar cal = Calendar.getInstance();
     cal.setTime(new Date(resetToken.getCreation()));
     cal.add(Calendar.DAY_OF_MONTH, 1);// 24h delay
@@ -302,7 +303,7 @@ public class UserCtrl {
       model.addAttribute("message", messageSource.getMessage("recover.expired.token", null, locale));
       return "error";
     }
-    
+
     u.setId(id);
 
 //    Authentication auth = new UsernamePasswordAuthenticationToken(

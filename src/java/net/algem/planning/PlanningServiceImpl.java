@@ -69,8 +69,8 @@ public class PlanningServiceImpl implements PlanningService
    * @return a map
    */
   @Override
-  public HashMap<Integer, Collection<ScheduleElement>> getDaySchedule(Date date, int estab) {
-    HashMap<Integer, Collection<ScheduleElement>> map = new HashMap<Integer, Collection<ScheduleElement>>();
+  public Map<Integer, Collection<ScheduleElement>> getDaySchedule(Date date, int estab) {
+    Map<Integer, Collection<ScheduleElement>> map = new HashMap<Integer, Collection<ScheduleElement>>();
     int place = -1;
     for (ScheduleElement d : scheduleIO.find(date, estab)) {
       d.setLabel(getHtmlTitle(d));
@@ -103,8 +103,8 @@ public class PlanningServiceImpl implements PlanningService
   }
 
   @Override
-  public HashMap<Room, Collection<ScheduleElement>> getFreePlace(Date date, int estab) {
-    HashMap<Room, Collection<ScheduleElement>> map = new HashMap<Room, Collection<ScheduleElement>>();
+  public Map<Room, Collection<ScheduleElement>> getFreePlace(Date date, int estab) {
+    Map<Room, Collection<ScheduleElement>> map = new TreeMap<Room, Collection<ScheduleElement>>();
     List<Room> rooms = scheduleIO.getFreeRoom(date, estab);
     for (Room r : rooms) {
       List<ScheduleElement> closed = getClosed(r.getId(), date);
@@ -169,6 +169,7 @@ public class PlanningServiceImpl implements PlanningService
     return personIO.findEstablishments(where);
   }
 
+  @Override
   public void book(Booking booking) throws ParseException {
     scheduleIO.book(booking);
   }

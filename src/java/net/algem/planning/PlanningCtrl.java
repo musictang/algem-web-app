@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -70,7 +71,7 @@ public class PlanningCtrl
     int estab = Integer.parseInt(request.getParameter("e"));
     booking.setTimeLength(1);
 
-    HashMap<Integer, Collection<ScheduleElement>> schedules = service.getDaySchedule(date, estab);
+    Map<Integer, Collection<ScheduleElement>> schedules = service.getDaySchedule(date, estab);
 
     model.addAttribute("dayName", dayName);
     model.addAttribute("planning", schedules);
