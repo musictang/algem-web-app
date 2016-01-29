@@ -2,7 +2,7 @@
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @since 09/05/15 09:33
- * @version 1.0.6
+ * @version 1.1.0
  * @returns {void}
  */
 
@@ -84,16 +84,11 @@ function setDatePicker(estabId, date) {
 function setWidth() {
   var cols = $('.schedule_col').length;
   var canvas = $("#canvas");
-  //var cols = 15;
-  //console.log( "nombre de colonnes : " + cols );
   var emSize = parseFloat($(canvas).css("font-size"));
   var leftMarginGrid = (2.2 * emSize);
   var windowWidth = $(window).width();
-  //console.log( "emsize : " + emSize );
   var actualWidth = parseInt($('.schedule_col').css('width'));
-  //console.log( "actualWidth : " + actualWidth );
   var canvasWidth = (cols * actualWidth) + leftMarginGrid;
-  //console.log( "largeur grille : " + canvasWidth + " window.width : " + windowWidth);
   if (canvasWidth > windowWidth) {
     var gridWidth = canvasWidth + leftMarginGrid;
     $("#grid").css({
@@ -129,7 +124,7 @@ function setHoverStyle() {
 }
 
 /**
- * Init main dialog.
+ * Init main and error dialogs.
  * @returns {undefined}
  */
 function setDialog() {
@@ -176,7 +171,6 @@ function setBooking(params, steps, bookingDelay) {
 
   var date = new Date($("#datepicker").datepicker('getDate'));
   $(".schedule_col").click(function (e) {
-    console.log("Click planning");
     //var posX = $(this).offset().left;
     //console.log((e.pageX - posX) + ' , ' + (e.pageY - posY));
     var target = e.target || e.srcElement;
@@ -192,8 +186,6 @@ function setBooking(params, steps, bookingDelay) {
         console.log("Hors delai");
         $("#errorDialog").html("<p>" +params.bookingDelayWarning +"</p>");
         $("#errorDialog").dialog("open");
-//        alert(params.bookingDelayWarning);
-//        $("#booking").html("<p>" +params.bookingDelayWarning +"</p>");
         return;
       }
 
@@ -261,11 +253,9 @@ function checkBookingDelay(date, bookingDelay) {
     return true; // important : true ! let open dialog
   }
   var now = new Date();
-//  console.log("now = " + now);
   console.log(t);
   date.setHours(t.substr(0, 2));
   date.setMinutes(t.substr(3, 2));
-  //console.log(now.getTime() + (bookingDelay * 60 * 60 * 1000) + " || date.time : " + date.getTime());
   if (now.getTime() + (bookingDelay * 60 * 60 * 1000) > date.getTime()) {
     return false;
   }
@@ -275,11 +265,10 @@ function checkBookingDelay(date, bookingDelay) {
 /**
  * Auto-select end time.
  * @param {DOMelement} element start time element
- * @param {Object} steps
+ * @param {Object} steps dimensions rules
  * @returns {undefined}
  */
 function setEndIndex(element, steps) {
-  console.log(steps);
   var maxIndex = $(element).children("option").length;
   var startIndex = $(element).children("option:selected").index();
   var value = $("#booking #spinner").spinner("value");
@@ -297,7 +286,7 @@ function getStartTimeIndex(height, yPos) {
 
 /**
  * Ajax call to retrieve the list of groups the person belong to.
- * @param {type} params group parameters object
+ * @param {Object} params group parameters object
  * @returns {undefined}
  */
 function getGroups(params) {
@@ -308,9 +297,7 @@ function getGroups(params) {
   }
 
   var urlPath = $("#booking-form #ajax-url").val();
-  console.log(urlPath);
   $.get(urlPath, function (data) {
-    console.log(data);
     if (typeof data === 'undefined' || !data.length) {
       console.log("Aucun résultat");
       $("#member").prop("checked", true);
@@ -321,7 +308,6 @@ function getGroups(params) {
       $("<select id=\"bookingGroup\" name=\"group\">").appendTo('#groupInfo');
       $.each(data, function (index, value) {
         $("<option value=\""+value.id+"\">"+value.name+"</otpion>").appendTo('#bookingGroup');
-        console.log("Data Loaded: " + value.id + " " + value.name);
       });
     }
 

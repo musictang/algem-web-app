@@ -1,5 +1,5 @@
 /*
- * @(#) PlanningService.java Algem Web App 1.0.6 27/01/2016
+ * @(#) PlanningService.java Algem Web App 1.1.0 28/01/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -31,7 +31,7 @@ import net.algem.room.Room;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.6
+ * @version 1.1.0
  * @since 1.0.6 27/01/2016
  */
 public interface PlanningService {
@@ -61,6 +61,7 @@ public interface PlanningService {
   /**
    * Gets the list of establishments in the organization.
    *
+   * @param where
    * @return a list of persons' instances of type {@value Person#ESTABLISHMENT}
    */
   List<Person> getEstablishments(String where);

@@ -160,16 +160,19 @@ h1 > span {
 /*Padding par défaut des titres de niveau 2 à 5*/
 h2, h3, h4, h5, h6, fieldset > legend {
   display: inline-block;
-  padding: 0.5em;
-  margin: 1em 0;
-  border-radius: 8px
+  /*padding: 0.25em 0.5em;*/
+  margin: 0.5em 0;
+  padding: 0.40em 0;
+  /*border-radius: 8px*/
 }
 
 h2, h3, h4, fieldset > legend {
   font-family: 'Catamaran',sans-serif;
   font-weight: bold;
+  border-bottom: thin solid maroon;
   /*color: #ffab11;*/
 }
+
 
 h2 {
   font-size: 2.25em;
@@ -245,6 +248,10 @@ fieldset legend {
 
 input[type=submit] {
   margin: 1em 0;
+}
+
+.inline {
+  display: inline;
 }
 
 .button-success,
@@ -474,7 +481,7 @@ form input[type='button'], form input[type='submit'] {
 
 form label {
   display: inline-block;
-  margin-top: 1em;
+  margin-top: 0.5em;
 }
 
 #booking select {
@@ -484,6 +491,11 @@ form label {
 #booking label {
   width: 3.5em;
   display: inline-block;
+}
+
+#booking input[type='radio'] + label {
+  display: inline;
+  padding: 0 0.5em;
 }
 
 form input + span {

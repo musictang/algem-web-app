@@ -1,5 +1,5 @@
 /*
- * @(#)Schedule.java	1.0.4 25/05/15
+ * @(#)Schedule.java	1.1.0 28/01/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -20,13 +20,11 @@
  */
 package net.algem.planning;
 
-import java.util.List;
-
 /**
  * Schedule object model.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.4
+ * @version 1.1.0
  * @since 1.0.0 11/02/13
  */
 public class Schedule
@@ -44,6 +42,7 @@ public class Schedule
   public static final int TECH = 8;
   public static final int BOOKING_GROUP = 13;
   public static final int BOOKING_MEMBER = 14;
+  private static final long serialVersionUID = 1L;
 
   protected int id;
   protected DateFr date;
@@ -80,7 +79,8 @@ public class Schedule
 
   @Override
   public String toString() {
-    return "Planning:" + date + " " + start + " " + end + " " + idper + " " + idAction + " " + place;
+    //return "Planning:" + date + " " + start + " " + end + " " + idper + " " + idAction + " " + place;
+    return date + " : " + start + "-" + end;
   }
 
   public int getId() {
@@ -166,7 +166,7 @@ public class Schedule
   public int getNote() {
     return note;
   }
-//
+
 //	public List<ScheduleRange> getRanges() {
 //		return ranges;
 //	}

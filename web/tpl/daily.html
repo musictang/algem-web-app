@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.0.6 05/12/2015
+ * @(#) daily.html Algem Web App 1.1.0 28/01/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -133,6 +133,6 @@
       </div>
       <div sec:authorize="${isAuthenticated()}" th:include="fragments/user :: booking" th:with="offset=${timeOffset}"></div>
     </div>
-    <div id="errorDialog"></div>
+    <div id="errorDialog" th:title="#{warning.label}"></div>
   </body>
 </html>

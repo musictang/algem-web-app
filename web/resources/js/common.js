@@ -66,9 +66,11 @@ function setCommonEvents() {
     $('#login-panel').show(delay);
   });
 
-  $("#login-panel form input[type='button']").click(function () {
+  $("#login-panel form input[type='button']").click(function (event) {
     console.log("click login button");
+//    event.preventDefault();
     performLogin($("#login-panel form"));
+    
   });
 
   var getHost = function () {

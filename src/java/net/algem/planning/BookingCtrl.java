@@ -1,5 +1,5 @@
 /*
- * @(#) BookingCtrl.java Algem Web App 1.0.6 20/01/2016
+ * @(#) BookingCtrl.java Algem Web App 1.1.0 28/01/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -48,7 +48,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.6
+ * @version 1.1.0
  * @since 1.0.6 20/01/2016
  */
 @Controller
@@ -104,8 +104,6 @@ public class BookingCtrl {
       cal.setTime(date);
       int dow = cal.get(Calendar.DAY_OF_WEEK);
       DailyTimes dt = planningService.getDailyTimes(booking.getRoom(), dow);
-      Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, dt.getOpening().toString());
-      Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, dt.getClosing().toString());
       if (dt.getOpening().after(booking.getStartTime()) || dt.getClosing().before(booking.getEndTime())) {
         String msg = messageSource.getMessage("booking.room.closed.error",
             new Object[]{dt.getOpening().toString(), dt.getClosing().toString()},

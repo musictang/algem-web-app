@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) error.html Algem Web App 1.0.6 15/01/2016
+ * @(#) error.html Algem Web App 1.1.0 28/01/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -37,18 +37,19 @@
       <div class="centered">
         <h2 th:text="#{warning.label}"></h2>
         <div style="clear: both">
-          <p class="error" th:text="${message}"></p>
+          <p class="error" th:text="${message + ':'}"></p>
           <ul class="error" th:if="${data != null}" >
             <li th:each="d:${data}" th:text="${d}"></li>
           </ul>
         </div>
-
+        <p><a th:text="#{previous.page.label}" href="javascript:history.back();">Index</a></p>
         <div class="thumbnails thumbnails-out" style="float: left">
         <a class="img-link" th:href="@{index.html}">
               <img th:src="@{/resources/themes/img/logo.png}" alt="Index"/>
             </a><br />
-        <a th:text="#{home.label}" th:href="@{index.html}">Index</a>
+            <a th:text="#{home.label}" th:href="@{index.html}">Index</a>
         </div>
+        
       </div>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>

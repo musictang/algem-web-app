@@ -1,5 +1,5 @@
 /*
- * @(#)ScheduleElement.java	1.0.5 14/09/15
+ * @(#)ScheduleElement.java	1.1.0 28/01/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -27,7 +27,7 @@ import java.util.Collection;
  * This class is used in calendar to display a time slot with label, position and time.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.5
+ * @version 1.1.0
  * @since 1.0.0 11/02/13
  */
 public class ScheduleElement
@@ -192,9 +192,9 @@ public class ScheduleElement
       case Schedule.TRAINING:
         return prefix + "F7F77C"; //#F7F7AC rgb(247,247,172)
       case Schedule.BOOKING_GROUP:
-        return prefix + "A27D51";
+        return prefix + "4d79ff";
       case Schedule.BOOKING_MEMBER:
-        return prefix + "A28661";
+        return prefix + "809fff";
       default:
         return "#FFFFFF";
 

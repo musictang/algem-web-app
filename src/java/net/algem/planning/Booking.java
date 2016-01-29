@@ -20,9 +20,6 @@
 
 package net.algem.planning;
 
-import java.util.Date;
-import javax.validation.constraints.Min;
-
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
