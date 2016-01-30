@@ -121,6 +121,18 @@ function setHoverStyle() {
       });
     }
   );
+  $('div.schedule_col').hover(
+      function () {
+        $(this).css({
+          cursor: "cell"
+        });
+      },
+      function () {
+        $(this).css({
+          cursor: "default"
+        });
+      }
+  );
 }
 
 /**

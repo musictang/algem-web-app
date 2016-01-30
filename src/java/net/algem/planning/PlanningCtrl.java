@@ -79,6 +79,7 @@ public class PlanningCtrl
     model.addAttribute("freeplace", service.getFreePlace(date, estab));
     model.addAttribute("timeOffset", service.getTimeOffset());
     model.addAttribute("bookingDelay", service.getBookingDelay());
+    model.addAttribute("roomInfo", service.getRoomInfo(estab));
 
     return "daily";
   }

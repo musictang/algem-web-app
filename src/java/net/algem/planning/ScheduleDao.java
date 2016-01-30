@@ -224,6 +224,26 @@ public class ScheduleDao
     return timesArray;
   }
 
+  List<Room> findRoomInfo(int estab) {
+    String query = "SELECT s.id,s.nom,s.fonction,t.hc,t.hp FROM salle s JOIN tarifsalle t ON(s.idtarif = t.id)"
+            + " WHERE s.etablissement = ? AND s.active = TRUE AND s.public = TRUE ORDER BY s.nom";
+
+    List<Room> rooms = jdbcTemplate.query(query, new RowMapper<Room>() {
+      @Override
+      public Room mapRow(ResultSet rs, int i) throws SQLException {
+        Room r = new Room();
+        r.setId(rs.getInt(1));
+        r.setName(rs.getString(2));
+        r.setUsage(rs.getString(3));
+        r.setOffPeakPrice(rs.getDouble(4));
+        r.setFullPrice(rs.getDouble(5));
+        return r;
+      }
+
+    },estab);
+    return rooms;
+  }
+
   List<Schedule> getConflicts(final Booking booking) {
     List<Schedule> conflicts = new ArrayList<>();
     String query = "SELECT id,jour,debut,fin,ptype,idper,lieux FROM " + TABLE

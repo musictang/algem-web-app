@@ -77,6 +77,8 @@ public interface PlanningService {
    */
   List<Room> getFreeRoom(Date date, int estab);
 
+  List<Room> getRoomInfo(int estab);
+
   /**
    * Get the global opening time.
    * @return a time length in minutes

@@ -124,7 +124,10 @@
         </div>
     </section>
     <aside id="help-panel" class="closeable" th:include="fragments/layout :: help"></aside>
-    <aside id="info-panel" class="closeable" th:include="fragments/layout :: info"></aside>
+    <aside id="info-panel" class="closeable">
+      <div th:replace="fragments/layout :: info"></div>
+      <div th:replace="fragments/layout :: roomInfo"></div>
+    </aside>
     <footer th:replace="fragments/layout :: footer"></footer>
     <div id="booking" th:title="#{booking.label}">
       <div sec:authorize="${!isAuthenticated()}">

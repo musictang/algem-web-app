@@ -39,6 +39,10 @@ public class Room
   private String name;
   private int estab;
   private boolean active;
+  /** Main usage description. */
+  private String usage;
+  private double offPeakPrice;
+  private double fullPrice;
 
   /** Public access and available for rehearsals. */
   private boolean available;
@@ -120,6 +124,30 @@ public class Room
 
   public void setAvailable(boolean available) {
     this.available = available;
+  }
+
+  public String getUsage() {
+    return usage;
+  }
+
+  public void setUsage(String usage) {
+    this.usage = usage;
+  }
+
+  public double getOffPeakPrice() {
+    return offPeakPrice;
+  }
+
+  public void setOffPeakPrice(double offPeakPrice) {
+    this.offPeakPrice = offPeakPrice;
+  }
+
+  public double getFullPrice() {
+    return fullPrice;
+  }
+
+  public void setFullPrice(double fullPrice) {
+    this.fullPrice = fullPrice;
   }
 
   @Override

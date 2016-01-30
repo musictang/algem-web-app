@@ -113,6 +113,11 @@ public class PlanningServiceImpl implements PlanningService
     return map;
   }
 
+  @Override
+  public List<Room> getRoomInfo(int estab) {
+    return scheduleIO.findRoomInfo(estab);
+  }
+
   /**
    * Get the global opening time.
    * @return a time length in minutes

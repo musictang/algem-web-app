@@ -38,10 +38,10 @@
   </head>
   <body>
     <header th:fragment="header"></header>
-    <div th:fragment="help">
+    <div th:fragment="help" >
       <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
       <!--<p>Aide</p>-->
-      <div class="content">
+      <div class="indented">
         <h2>Couleurs par défaut</h2>
         <ul style="margin-bottom: 1em">
           <li><span class="colorSquare" title="Cours collectif" style="background-color:#FF3333"></span>&nbsp;Cours collectif</li>
@@ -55,28 +55,46 @@
           <li><span class="colorSquare" title="Salle fermée" style="background-color:#ccc"></span>&nbsp;Salle fermée</li>
         </ul>
       </div>
-      <!--<img id="help-close" class="bt-close" alt="Fermer" th:src="@{/resources/themes/img/close.png}"/>-->
     </div>
     <div th:fragment="info">
       <div id="info-bar" class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
-      <h2 th:id="#{contact.label}" th:text="#{contact.label}">Contact</h2>
-      <table class="pure-table pure-table-horizontal" th:with="org=${@organization}">
-        <tr><th th:text="#{email.label}"></th><td><a th:text="${org['email.label']}" th:href="${'mailto:' + org['email.label']}"></a></td></tr>
-        <tr><th th:text="#{address.label}"></th><td><a th:text="${org['address.label']}" th:href="${org['address.map']}"></a></td></tr>
-        <tr th:each="entry,status:${org}" th:if="${status.index} > 3">
-          <th th:text="#{${entry.key}}"></th>
-          <td><a th:text="${entry.value}" th:href="${entry.value}"></a></td>
-        </tr>
-        <!--<tr th:each="entry:${org['tel.label']}"><th th:text="${entry.key}"></th><td th:text="${entry.value}"></td></tr>-->
-      </table>
-      <h2 th:id="#{hotline.label}" th:text="#{hotline.label}">Hotline</h2>
-      <table class="pure-table pure-table-horizontal">
-        <tr th:each="estab:${@hotline}"><th th:text="${estab.key}"></th>
-          <td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a></td>
-          <td><ul><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul></td>
-        </tr>
-      </table>
+      <div class="indented">
+        <h2 th:id="#{contact.label}" th:text="#{contact.label}">Contact</h2>
+        <table class="pure-table pure-table-horizontal" th:with="org=${@organization}">
+          <tr><th th:text="#{email.label}"></th><td><a th:text="${org['email.label']}" th:href="${'mailto:' + org['email.label']}"></a></td></tr>
+          <tr><th th:text="#{address.label}"></th><td><a th:text="${org['address.label']}" th:href="${org['address.map']}"></a></td></tr>
+          <tr th:each="entry,status:${org}" th:if="${status.index} > 3">
+            <th th:text="#{${entry.key}}"></th>
+            <td><a th:text="${entry.value}" th:href="${entry.value}"></a></td>
+          </tr>
+          <!--<tr th:each="entry:${org['tel.label']}"><th th:text="${entry.key}"></th><td th:text="${entry.value}"></td></tr>-->
+        </table>
+        <h2 th:id="#{hotline.label}" th:text="#{hotline.label}">Hotline</h2>
+        <table class="pure-table pure-table-horizontal">
+          <tr th:each="estab:${@hotline}"><th th:text="${estab.key}"></th>
+            <td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a></td>
+            <td><ul><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul></td>
+          </tr>
+        </table>
+      </div>
     </div>
+    <div th:fragment="roomInfo">
+      <div class="indented">
+        <h2 th:text="#{room.info.label}"></h2>
+        <table class="pure-table pure-table-horizontal">
+          <thead><tr><th th:text="#{room.label}"</th><th th:text="#{usage.label}">Fonction</th><th th:text="#{offPeak.price.label}">Heures creuses</th><th th:text="#{full.price.label}">Plein tarif</th></tr></thead>
+          <tbody>
+            <tr th:each="room:${roomInfo}">
+              <th th:text="${room.name}"></th>
+              <td th:text="${room.usage}"></td>
+              <td th:text="${#numbers.formatDecimal(room.offPeakPrice,2,2)}"></td>
+              <td th:text="${#numbers.formatDecimal(room.fullPrice,2,2)}"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <footer th:fragment="footer">
       <a class="logo" th:href="${@organization['website.label']}"><img th:src="@{/resources/themes/img/logo.png}" /></a>
       <address>
