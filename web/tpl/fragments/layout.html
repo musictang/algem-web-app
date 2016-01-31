@@ -59,40 +59,45 @@
     <div th:fragment="info">
       <div id="info-bar" class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
       <div class="indented">
-        <h2 th:id="#{contact.label}" th:text="#{contact.label}">Contact</h2>
-        <table class="pure-table pure-table-horizontal" th:with="org=${@organization}">
-          <tr><th th:text="#{email.label}"></th><td><a th:text="${org['email.label']}" th:href="${'mailto:' + org['email.label']}"></a></td></tr>
-          <tr><th th:text="#{address.label}"></th><td><a th:text="${org['address.label']}" th:href="${org['address.map']}"></a></td></tr>
-          <tr th:each="entry,status:${org}" th:if="${status.index} > 3">
-            <th th:text="#{${entry.key}}"></th>
-            <td><a th:text="${entry.value}" th:href="${entry.value}"></a></td>
-          </tr>
-          <!--<tr th:each="entry:${org['tel.label']}"><th th:text="${entry.key}"></th><td th:text="${entry.value}"></td></tr>-->
-        </table>
-        <h2 th:id="#{hotline.label}" th:text="#{hotline.label}">Hotline</h2>
-        <table class="pure-table pure-table-horizontal">
-          <tr th:each="estab:${@hotline}"><th th:text="${estab.key}"></th>
-            <td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a></td>
-            <td><ul><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul></td>
-          </tr>
-        </table>
+      <h2 th:id="#{contact.label}" th:text="#{contact.label}">Contact</h2>
+      <table class="pure-table pure-table-horizontal" th:with="org=${@organization}">
+        <tr><th th:text="#{email.label}"></th><td><a th:text="${org['email.label']}" th:href="${'mailto:' + org['email.label']}"></a></td></tr>
+        <tr><th th:text="#{address.label}"></th><td><a th:text="${org['address.label']}" th:href="${org['address.map']}"></a></td></tr>
+        <tr th:each="entry,status:${org}" th:if="${status.index} > 3">
+          <th th:text="#{${entry.key}}"></th>
+          <td><a th:text="${entry.value}" th:href="${entry.value}"></a></td>
+        </tr>
+      </table>
+      <h2 th:id="#{hotline.label}" th:text="#{hotline.label}">Hotline</h2>
+      <table class="pure-table pure-table-horizontal">
+        <tr th:each="estab:${@hotline}"><th th:text="${estab.key}"></th>
+          <td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a></td>
+          <td><ul><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul></td>
+        </tr>
+      </table>
       </div>
     </div>
-    <div th:fragment="roomInfo">
-      <div class="indented">
-        <h2 th:text="#{room.info.label}"></h2>
-        <table class="pure-table pure-table-horizontal">
-          <thead><tr><th th:text="#{room.label}"</th><th th:text="#{usage.label}">Fonction</th><th th:text="#{offPeak.price.label}">Heures creuses</th><th th:text="#{full.price.label}">Plein tarif</th></tr></thead>
-          <tbody>
-            <tr th:each="room:${roomInfo}">
-              <th th:text="${room.name}"></th>
-              <td th:text="${room.usage}"></td>
-              <td th:text="${#numbers.formatDecimal(room.offPeakPrice,2,2)}"></td>
-              <td th:text="${#numbers.formatDecimal(room.fullPrice,2,2)}"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div th:fragment="roomInfo" th:with="offPeakTime=${conf['offPeakTime']}" class="indented">
+      <h2 th:text="#{room.info.label}"></h2>
+      <table class="pure-table pure-table-bordered pure-table-striped side-panel">
+        <thead>
+          <tr>
+            <th th:text="#{room.label}" style="width:20%"></th>
+            <th th:text="#{usage.label}">Fonction</th>
+            <th th:text="#{offPeak.price.label}" style="width:10%">Heures creuses</th>
+            <th th:text="#{full.price.label}" style="width:10%">Plein tarif</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="room:${roomInfo}">
+            <td th:text="${room.name}"></th>
+            <td th:text="${room.usage}"></td>
+            <td th:text="${#numbers.formatDecimal(room.offPeakPrice,2,2)}"></td>
+            <td th:text="${#numbers.formatDecimal(room.fullPrice,2,2)}"></td>
+          </tr>
+        </tbody>
+        <tfoot><tr><td colspan="4" style="font-weight: bold" th:text="#{offPeak.price.info(${offPeakTime})}"></td></tr></tfoot>
+      </table>
     </div>
 
     <footer th:fragment="footer">

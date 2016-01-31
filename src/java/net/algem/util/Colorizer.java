@@ -1,8 +1,5 @@
-<#assign projectVersion = "1.1.0">
-<#if licenseFirst??>
-${licenseFirst}
-</#if>
- * @(#) ${nameAndExt} Algem Web App ${projectVersion} ${date?date?string("dd/MM/yyyy")}
+/*
+ * @(#) Colorizer.java Algem Web App 1.1.0 30/01/2016
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -19,6 +16,35 @@ ${licenseFirst}
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
-<#if licenseLast??>
-${licenseLast}
-</#if>
+ */
+
+package net.algem.util;
+
+import java.awt.Color;
+
+/**
+ *
+ * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
+ * @version 1.1.0
+ * @since 1.1.0 30/01/2016
+ */
+public interface Colorizer<T extends Object> {
+
+  Color getDefaultColor(T o);
+
+  /**
+   * Gets the background color.
+   *
+   * @param p schedule
+   * @return a color
+   */
+  Color getColor(T o);
+
+  /**
+   * Gets the foreground color.
+   *
+   * @param p schedule
+   * @return a color
+   */
+  Color getTextColor(T o);
+}

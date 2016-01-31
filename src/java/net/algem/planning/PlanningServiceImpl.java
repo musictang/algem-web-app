@@ -20,11 +20,13 @@
  */
 package net.algem.planning;
 
+import net.algem.config.ColorPref;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.*;
 import net.algem.config.Config;
 import net.algem.config.ConfigIO;
+import net.algem.config.ConfigKey;
 import net.algem.contact.Person;
 import net.algem.contact.PersonIO;
 import net.algem.room.Room;
@@ -43,6 +45,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlanningServiceImpl implements PlanningService
 {
+
+  private static final ScheduleColorizer colorizer = new ScheduleColorizer(new ColorPref());
 
   @Autowired
   private ScheduleDao scheduleIO;
@@ -74,6 +78,7 @@ public class PlanningServiceImpl implements PlanningService
     int place = -1;
     for (ScheduleElement d : scheduleIO.find(date, estab)) {
       d.setLabel(getHtmlTitle(d));
+      d.setColor(ScheduleColorizer.colorToHex(colorizer.getColor(d)));
       if (d.getPlace() != place) {
         place = d.getPlace();
         List<ScheduleElement> elements = new ArrayList<ScheduleElement>();
@@ -89,17 +94,6 @@ public class PlanningServiceImpl implements PlanningService
       }
     }
     return map;
-  }
-
-	/**
-	 * Gets the list of free rooms at the date {@code date} in the establishment {@code estab}.
-	 * @param date date of search
-	 * @param estab establishment number
-	 * @return a list of rooms
-	 */
-  @Override
-  public List<Room> getFreeRoom(Date date, int estab) {
-    return scheduleIO.getFreeRoom(date, estab);
   }
 
   @Override
@@ -138,6 +132,27 @@ public class PlanningServiceImpl implements PlanningService
     }
   }
 
+  public Map<String,String> getConf() {
+    Map<String,String> confs = new HashMap<>();
+//    Config c1 = configIO.findId(ConfigKey.START_TIME.getKey());
+//    confs.put("startTime", c1.getValue());
+//
+//    Config c2 = configIO.findId(ConfigKey.BOOKING_DELAY.getKey());
+//    try {
+//      Integer.parseInt(c2.getValue());
+//    } catch (NumberFormatException nfe) {
+//      System.err.println(nfe.getMessage());
+//      c2.setValue("24");
+//    }
+//    confs.put("bookingDelay", c2.getValue());
+    Config c3 = configIO.findId(ConfigKey.OFFPEAK_HOUR.getKey());
+    confs.put("offPeakTime", c3.getValue());
+    Config c4 = configIO.findId(ConfigKey.END_YEAR.getKey());
+    confs.put("endDate", c4.getValue());
+
+    return confs;
+  }
+
   @Override
   public int getCancelBookingDelay() {
     try {
@@ -160,8 +175,13 @@ public class PlanningServiceImpl implements PlanningService
    * @return a list of schedules or an empty list if no conflict was detected
    */
   @Override
-  public List<Schedule> getConflicts(Booking booking) {
-    return scheduleIO.getConflicts(booking);
+  public List<ScheduleElement> getRoomConflicts(Booking booking) {
+    return scheduleIO.getRoomConflicts(booking);
+  }
+
+   @Override
+  public List<ScheduleElement> getPersonConflicts(Booking booking) {
+    return scheduleIO.getPersonConflicts(booking);
   }
 
   /**

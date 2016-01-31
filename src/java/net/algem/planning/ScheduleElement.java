@@ -40,6 +40,7 @@ public class ScheduleElement
   private boolean collective;
   private Collection<ScheduleRange> ranges;
   private String label;
+  private String color;
 
   public String getCourseName() {
     return courseName;
@@ -165,6 +166,19 @@ public class ScheduleElement
     return start.getLength(end);
   }
 
+  public String getColor() {
+    return color;
+  }
+
+  public void setColor(String color) {
+    this.color = color;
+  }
+
+  @Override
+  public String toString() {
+    return roomName + " " + super.toString();
+  }
+
   /**
    * Gets a color value corresponding to the schedule's type.
    *
@@ -172,33 +186,35 @@ public class ScheduleElement
    */
   public String getHtmlColor() {
     String prefix = "#";
+    if (type == Schedule.ROOM) return prefix + "CCC";
+    return color;
     //plage rgb(252,211,0)
     //instrument collectif	rgb(255,128,25)
-    switch (type) {
-      case Schedule.ROOM:
-        return prefix + "CCCCCC";
-      case Schedule.COURSE:
-        if (isCollective()) {
-          return prefix + "FF5252"; //#FF3333 rgb(255,51,51)
-        } else {
-          return prefix + "00D059"; //#00D059 rgb(0,208,89)
-        }
-      case Schedule.GROUP:
-        return prefix + "2158FF"; //#2158FF rgb(33,88,255)
-      case Schedule.MEMBER:
-        return prefix + "3399FF"; //#3399FF rgb(51,153,255)
-      case Schedule.WORKSHOP:
-        return prefix + "F7F7AC"; //#F7F7AC rgb(247,247,172)
-      case Schedule.TRAINING:
-        return prefix + "F7F77C"; //#F7F7AC rgb(247,247,172)
-      case Schedule.BOOKING_GROUP:
-        return prefix + "4d79ff";
-      case Schedule.BOOKING_MEMBER:
-        return prefix + "809fff";
-      default:
-        return "#FFFFFF";
+//    switch (type) {
+//      case Schedule.ROOM:
+//        return prefix + "CCCCCC";
+//      case Schedule.COURSE:
+//        if (isCollective()) {
+//          return prefix + "FF5252"; //#FF3333 rgb(255,51,51)
+//        } else {
+//          return prefix + "00D059"; //#00D059 rgb(0,208,89)
+//        }
+//      case Schedule.GROUP:
+//        return prefix + "2158FF"; //#2158FF rgb(33,88,255)
+//      case Schedule.MEMBER:
+//        return prefix + "3399FF"; //#3399FF rgb(51,153,255)
+//      case Schedule.WORKSHOP:
+//        return prefix + "F7F7AC"; //#F7F7AC rgb(247,247,172)
+//      case Schedule.TRAINING:
+//        return prefix + "F7F77C"; //#F7F7AC rgb(247,247,172)
+//      case Schedule.BOOKING_GROUP:
+//        return prefix + "8aa0e6"; // rgb(138,160,230)-7692058
+//      case Schedule.BOOKING_MEMBER:
+//        return prefix + "a1d8e6"; //rgb(161,216,230) -6170394
+//      default:
+//        return "#FFFFFF";
 
-    }
+//    }
   }
 
 }

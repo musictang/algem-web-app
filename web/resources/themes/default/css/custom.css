@@ -88,7 +88,7 @@ footer a:link,footer a:visited,footer a:active,footer a:hover {
   background-color: #D33900;
 }
 
-#help-panel, #info-panel, #login-panel {
+#help-panel, #info-panel, #login-panel, .side-panel {
   background-color: #FFEFDD;
   color: #444;
 }

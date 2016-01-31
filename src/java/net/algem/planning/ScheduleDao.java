@@ -52,8 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 public class ScheduleDao
-        extends AbstractGemDao
-{
+  extends AbstractGemDao {
 
   public final static String TABLE = "planning";
   /** Action table. */
@@ -67,29 +66,29 @@ public class ScheduleDao
     int id = nextId(SEQUENCE);
 
     String query = "INSERT INTO " + TABLE + " VALUES("
-            + id
-            + ",'" + p.getDate().toString() + "'"
-            + ",'" + p.getStart() + "'"
-            + ",'" + p.getEnd() + "'"
-            + "," + p.getType()
-            + "," + p.getIdPerson()
-            + "," + p.getIdAction()
-            + "," + p.getPlace()
-            + "," + p.getNote()
-            + ")";
+      + id
+      + ",'" + p.getDate().toString() + "'"
+      + ",'" + p.getStart() + "'"
+      + ",'" + p.getEnd() + "'"
+      + "," + p.getType()
+      + "," + p.getIdPerson()
+      + "," + p.getIdAction()
+      + "," + p.getPlace()
+      + "," + p.getNote()
+      + ")";
   }
 
   public void update(Schedule p) throws SQLException {
     String query = "UPDATE " + TABLE + " SET "
-            + "jour = '" + p.getDate()
-            + "',debut = '" + p.getStart()
-            + "',fin = '" + p.getEnd()
-            + "',ptype = " + p.getType()
-            + ",idper = " + p.getIdPerson()
-            + ",action = " + p.getIdAction()
-            + ",lieux = " + p.getPlace()
-            + ",note = " + p.getNote()
-            + " WHERE id = " + p.getId();
+      + "jour = '" + p.getDate()
+      + "',debut = '" + p.getStart()
+      + "',fin = '" + p.getEnd()
+      + "',ptype = " + p.getType()
+      + ",idper = " + p.getIdPerson()
+      + ",action = " + p.getIdAction()
+      + ",lieux = " + p.getPlace()
+      + ",note = " + p.getNote()
+      + " WHERE id = " + p.getId();
 
   }
 
@@ -106,16 +105,15 @@ public class ScheduleDao
    */
   public List<ScheduleElement> find(Date date, int estab) {
     String query = " SELECT p.*, c.titre, c.collectif, s.nom, t.prenom, t.nom"
-            + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
-            + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper)"
-            + ", salle s"
-            + " where p.lieux = s.id"
-            + " AND s.public = true"
-            + " AND jour = ?"
-            + " AND s.etablissement = ?"
-            + " ORDER BY s.nom, p.debut";
-    return jdbcTemplate.query(query, new RowMapper<ScheduleElement>()
-    {
+      + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
+      + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper)"
+      + ", salle s"
+      + " where p.lieux = s.id"
+      + " AND s.public = true"
+      + " AND jour = ?"
+      + " AND s.etablissement = ?"
+      + " ORDER BY s.nom, p.debut";
+    return jdbcTemplate.query(query, new RowMapper<ScheduleElement>() {
 
       @Override
       public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -151,12 +149,11 @@ public class ScheduleDao
    */
   public List<Room> getFreeRoom(Date date, int estab) {
     String query = "SELECT id,nom FROM salle s"
-            + " WHERE s.public = true"
-            + " AND s.etablissement = ?"
-            + " AND s.id NOT IN ("
-            + " SELECT DISTINCT lieux FROM " + TABLE + " WHERE jour = ?) ORDER BY s.nom";
-    return jdbcTemplate.query(query, new RowMapper<Room>()
-    {
+      + " WHERE s.public = true"
+      + " AND s.etablissement = ?"
+      + " AND s.id NOT IN ("
+      + " SELECT DISTINCT lieux FROM " + TABLE + " WHERE jour = ?) ORDER BY s.nom";
+    return jdbcTemplate.query(query, new RowMapper<Room>() {
 
       @Override
       public Room mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -176,9 +173,8 @@ public class ScheduleDao
    */
   private Collection<ScheduleRange> getTimeSlots(int id) {
     String query = " SELECT pl.* FROM " + TABLE + " p," + ScheduleRangeIO.TABLE + " pl"
-            + " WHERE pl.idplanning = p.id AND p.id = ?";
-    return jdbcTemplate.query(query, new RowMapper<ScheduleRange>()
-    {
+      + " WHERE pl.idplanning = p.id AND p.id = ?";
+    return jdbcTemplate.query(query, new RowMapper<ScheduleRange>() {
 
       @Override
       public ScheduleRange mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -197,10 +193,9 @@ public class ScheduleDao
 
   public DailyTimes[] find(int roomId) throws SQLException {
     String query = "SELECT jour, ouverture, fermeture FROM " + ROOM_TIMES_TABLE
-            + " WHERE idsalle = ? ORDER BY jour";
+      + " WHERE idsalle = ? ORDER BY jour";
 
-    List<DailyTimes> times = jdbcTemplate.query(query, new RowMapper<DailyTimes>()
-    {
+    List<DailyTimes> times = jdbcTemplate.query(query, new RowMapper<DailyTimes>() {
       @Override
       public DailyTimes mapRow(ResultSet rs, int rowNum) throws SQLException {
         DailyTimes dt = new DailyTimes(rs.getInt(1));
@@ -226,7 +221,7 @@ public class ScheduleDao
 
   List<Room> findRoomInfo(int estab) {
     String query = "SELECT s.id,s.nom,s.fonction,t.hc,t.hp FROM salle s JOIN tarifsalle t ON(s.idtarif = t.id)"
-            + " WHERE s.etablissement = ? AND s.active = TRUE AND s.public = TRUE ORDER BY s.nom";
+      + " WHERE s.etablissement = ? AND s.active = TRUE AND s.public = TRUE ORDER BY s.nom";
 
     List<Room> rooms = jdbcTemplate.query(query, new RowMapper<Room>() {
       @Override
@@ -240,18 +235,18 @@ public class ScheduleDao
         return r;
       }
 
-    },estab);
+    }, estab);
     return rooms;
   }
 
-  List<Schedule> getConflicts(final Booking booking) {
-    List<Schedule> conflicts = new ArrayList<>();
-    String query = "SELECT id,jour,debut,fin,ptype,idper,lieux FROM " + TABLE
-      + " WHERE jour = ?"
-      + " AND lieux = ?"
-      + " AND ((debut >= ? AND debut < ?)" // start //end
-      + " OR (fin > ? AND fin <= ?)"
-      + " OR (debut <= ? AND fin >= ?))";
+  List<ScheduleElement> getRoomConflicts(final Booking booking) {
+    List<ScheduleElement> conflicts = new ArrayList<>();
+    String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,s.nom FROM " + TABLE + " p JOIN salle s ON(p.lieux = s.id)"
+      + " WHERE p.jour = ?"
+      + " AND p.lieux = ?"
+      + " AND ((p.debut >= ? AND p.debut < ?)" // start //end
+      + " OR (p.fin > ? AND p.fin <= ?)"
+      + " OR (p.debut <= ? AND p.fin >= ?))";
     try {
       final Date d = Constants.DATE_FORMAT.parse(booking.getDate());
       final PreparedStatementSetter setter = new PreparedStatementSetter() {
@@ -267,20 +262,11 @@ public class ScheduleDao
           ps.setTime(8, Time.valueOf(booking.getEndTime().toString() + ":00"));
         }
       };
-      conflicts = jdbcTemplate.query(query, setter, new RowMapper<Schedule>() {
+      conflicts = jdbcTemplate.query(query, setter, new RowMapper<ScheduleElement>() {
 
         @Override
-        public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
-          Schedule r = new Schedule();
-          r.setId(rs.getInt(1));
-          r.setDate(rs.getDate(2));
-          r.setStart(new Hour(rs.getString(3)));
-          r.setEnd(new Hour(rs.getString(4)));
-          r.setType(rs.getInt(5));
-          r.setIdPerson(rs.getInt(6));
-          r.setPlace(rs.getInt(7));
-
-          return r;
+        public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
+          return getConflictFromRS(rs);
         }
       });
     } catch (ParseException ex) {
@@ -288,6 +274,56 @@ public class ScheduleDao
     }
 
     return conflicts;
+  }
+
+  List<ScheduleElement> getPersonConflicts(final Booking booking) {
+    List<ScheduleElement> conflicts = new ArrayList<>();
+    String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,s.nom FROM " + TABLE + " p JOIN salle s ON(p.lieux = s.id)"
+      + " WHERE p.jour = ?"
+      + " AND p.idper = ?"
+      + " AND ((p.debut >= ? AND p.debut < ?)" // start //end
+      + " OR (p.fin > ? AND p.fin <= ?)"
+      + " OR (p.debut <= ? AND p.fin >= ?))";
+    try {
+      final Date d = Constants.DATE_FORMAT.parse(booking.getDate());
+      final PreparedStatementSetter setter = new PreparedStatementSetter() {
+        @Override
+        public void setValues(PreparedStatement ps) throws SQLException {
+          ps.setDate(1, new java.sql.Date(d.getTime()));
+          ps.setInt(2, booking.getType() == Schedule.BOOKING_GROUP ? booking.getGroup() : booking.getPerson());
+          ps.setTime(3, Time.valueOf(booking.getStartTime().toString() + ":00"));
+          ps.setTime(4, Time.valueOf(booking.getEndTime().toString() + ":00"));
+          ps.setTime(5, Time.valueOf(booking.getStartTime().toString() + ":00"));
+          ps.setTime(6, Time.valueOf(booking.getEndTime().toString() + ":00"));
+          ps.setTime(7, Time.valueOf(booking.getStartTime().toString() + ":00"));
+          ps.setTime(8, Time.valueOf(booking.getEndTime().toString() + ":00"));
+        }
+      };
+      conflicts = jdbcTemplate.query(query, setter, new RowMapper<ScheduleElement>() {
+
+        @Override
+        public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
+          return getConflictFromRS(rs);
+        }
+      });
+    } catch (ParseException ex) {
+      Logger.getLogger(ScheduleDao.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    return conflicts;
+  }
+
+  private ScheduleElement getConflictFromRS(ResultSet rs) throws SQLException {
+    ScheduleElement e = new ScheduleElement();
+    e.setId(rs.getInt(1));
+    e.setDate(rs.getDate(2));
+    e.setStart(new Hour(rs.getString(3)));
+    e.setEnd(new Hour(rs.getString(4)));
+    e.setType(rs.getInt(5));
+    e.setIdPerson(rs.getInt(6));
+    e.setRoomName(rs.getString(7));
+
+    return e;
   }
 
   @Transactional
@@ -299,15 +335,15 @@ public class ScheduleDao
 
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-          PreparedStatement ps = con.prepareStatement(sql);
-          ps.setDate(1, new java.sql.Date(date.getTime()));
-          ps.setTime(2, Time.valueOf(booking.getStartTime().toString() + ":00"));
-          ps.setTime(3, Time.valueOf(booking.getEndTime().toString() + ":00"));
-          ps.setInt(4, booking.getType());
-          ps.setInt(5, Schedule.BOOKING_GROUP == booking.getType() ? booking.getGroup() : booking.getPerson());
-          ps.setInt(6, action);
-          ps.setInt(7, booking.getRoom());
-          return ps;
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setDate(1, new java.sql.Date(date.getTime()));
+        ps.setTime(2, Time.valueOf(booking.getStartTime().toString() + ":00"));
+        ps.setTime(3, Time.valueOf(booking.getEndTime().toString() + ":00"));
+        ps.setInt(4, booking.getType());
+        ps.setInt(5, Schedule.BOOKING_GROUP == booking.getType() ? booking.getGroup() : booking.getPerson());
+        ps.setInt(6, action);
+        ps.setInt(7, booking.getRoom());
+        return ps;
       }
 
     });

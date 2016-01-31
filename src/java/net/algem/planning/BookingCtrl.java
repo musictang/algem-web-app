@@ -36,6 +36,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -62,6 +65,9 @@ public class BookingCtrl {
 
   @Resource(name = "messageSource")
   private MessageSource messageSource;
+//
+//  @Autowired
+//  SecurityContextRepository secuContext;
 
   public void setService(UserService service) {
     this.service = service;
@@ -88,6 +94,12 @@ public class BookingCtrl {
 
     redirectAttributes.addAttribute("e", estab);
     redirectAttributes.addAttribute("d", booking.getDate());
+    SecurityContext secuContext = SecurityContextHolder.getContext();
+    if (!secuContext.getAuthentication().isAuthenticated()) {
+      model.addAttribute("message", messageSource.getMessage("booking.auth.error", null, LocaleContextHolder.getLocale()));
+      return "error";
+    }
+
     User u = service.findUserByLogin(p.getName());
     if (u == null) {
       model.addAttribute("message", messageSource.getMessage("booking.user.error", null, LocaleContextHolder.getLocale()));
@@ -113,14 +125,21 @@ public class BookingCtrl {
         return "error";
       }
 
-      if (Schedule.MEMBER == booking.getType()) {
+      if (Schedule.BOOKING_MEMBER == booking.getType()) {
         booking.setPerson(u.getId());
       }
-      List<Schedule> conflicts = planningService.getConflicts(booking);
-      if (conflicts.size() > 0) {
-        model.addAttribute("message", messageSource.getMessage("booking.conflict.error", null, LocaleContextHolder.getLocale()));
-        model.addAttribute("data", conflicts);
-      return "error";
+      List<ScheduleElement> roomConflicts = planningService.getRoomConflicts(booking);
+      if (roomConflicts.size() > 0) {
+        model.addAttribute("message", messageSource.getMessage("booking.room.conflict.error", null, LocaleContextHolder.getLocale()));
+        model.addAttribute("data", roomConflicts);
+        return "error";
+      }
+
+      List<ScheduleElement> personConflicts = planningService.getPersonConflicts(booking);
+      if (personConflicts.size() > 0) {
+        model.addAttribute("message", messageSource.getMessage("booking.person.conflict.error", null, LocaleContextHolder.getLocale()));
+        model.addAttribute("data", personConflicts);
+        return "error";
       }
 
       Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, booking.toString());

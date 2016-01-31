@@ -46,7 +46,9 @@ public interface PlanningService {
    * @param booking desired booking
    * @return a list of schedules or an empty list if no conflict was detected
    */
-  List<Schedule> getConflicts(Booking booking);
+  List<ScheduleElement> getRoomConflicts(Booking booking);
+
+  List<ScheduleElement> getPersonConflicts(Booking booking);
 
   DailyTimes getDailyTimes(int room, int dow);
 
@@ -67,15 +69,13 @@ public interface PlanningService {
    */
   List<Person> getEstablishments(String where);
 
+  	/**
+	 * Gets the list of free rooms at the date {@code date} in the establishment {@code estab}.
+	 * @param date date of search
+	 * @param estab establishment number
+	 * @return a map
+	 */
   Map<Room, Collection<ScheduleElement>> getFreePlace(Date date, int estab);
-
-  /**
-   * Gets the list of free rooms at the date {@code date} in the establishment {@code estab}.
-   * @param date date of search
-   * @param estab establishment number
-   * @return a list of rooms
-   */
-  List<Room> getFreeRoom(Date date, int estab);
 
   List<Room> getRoomInfo(int estab);
 

@@ -68,51 +68,6 @@ public class UserDao
     });
   }
 
-  private User getFromRS(ResultSet rs) throws SQLException {
-    User u = new User();
-    u.setId(rs.getInt(1));
-    u.setLogin(rs.getString(2));
-    u.setProfile(getProfileFromId(rs.getShort(3)));
-    u.setName(rs.getString(4));
-    u.setFirstName(rs.getString(5));
-
-    return u;
-  }
-
-  private Profile getProfileFromId(int id) {
-    switch (id) {
-
-      case 1:
-        return Profile.User;
-      case 2:
-        return Profile.Teacher;
-      case 3:
-        return Profile.Public;
-      case 4:
-        return Profile.Admin;
-      case 10:
-        return Profile.Visitor;
-      case 11:
-        return Profile.Member;
-      default:
-        return Profile.Visitor;
-    }
-  }
-
-  /**
-   * Gets the encrypted password.
-   *
-   * @param salt base64-encoded salt
-   * @param pass base64-encoded pass
-   * @return user pass info
-   */
-  private UserPass getUserPass(String pass, String salt) {
-
-    byte[] b64pass = Base64.decodeBase64(pass);
-    byte[] b64salt = Base64.decodeBase64(salt);
-
-    return new UserPass(b64pass, b64salt);
-  }
 
   public User find(String login) {
     String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom FROM " + TABLE + " l INNER JOIN " + PersonIO.TABLE + " p ON (l.idper = p.id) WHERE l.login = ?";
@@ -169,20 +124,8 @@ public class UserDao
     }, email);
   }
 
-  private int getIdFromLogin(String login) {
-    try {
-      return Integer.parseInt(login);
-    } catch (NumberFormatException nfe) {
-      return -1;
-    }
-  }
 
-  byte[] findAuthInfo(String login, String col) {
-    int id = getIdFromLogin(login);
-    String query = "SELECT " + col + " FROM " + TABLE + " WHERE idper = ? OR login = ?";
-    String result = jdbcTemplate.queryForObject(query, String.class, new Object[]{id, login});
-    return Base64.decodeBase64(result);
-  }
+
 
   public boolean isPerson(User u) {
     String query = "SELECT id FROM " + PersonIO.TABLE
@@ -258,6 +201,14 @@ public class UserDao
 
   }
 
+
+  byte[] findAuthInfo(String login, String col) {
+    int id = getIdFromLogin(login);
+    String query = "SELECT " + col + " FROM " + TABLE + " WHERE idper = ? OR login = ?";
+    String result = jdbcTemplate.queryForObject(query, String.class, new Object[]{id, login});
+    return Base64.decodeBase64(result);
+  }
+
   void createAccount(final User user) {
     jdbcTemplate.update(new PreparedStatementCreator() {
 
@@ -281,19 +232,6 @@ public class UserDao
     createToken(userId, token);
   }
 
-  private void createToken(final int userId, final String token) {
-    String query = "INSERT INTO " + TOKEN_TABLE + " VALUES(?,?,?)";
-    jdbcTemplate.update(query, new PreparedStatementSetter() {
-
-      @Override
-      public void setValues(PreparedStatement ps) throws SQLException {
-        ps.setInt(1, userId);
-        ps.setString(2, token);
-        ps.setTimestamp(3, new java.sql.Timestamp(new java.util.Date().getTime()));
-      }
-    });
-
-  }
 
   PasswordResetToken getToken(final int userId) {
     String query = "SELECT jeton,creadate FROM " + TOKEN_TABLE + " WHERE idper = ?";
@@ -333,6 +271,74 @@ public class UserDao
       }
     });
     deleteToken(userId);
+  }
+
+  private User getFromRS(ResultSet rs) throws SQLException {
+    User u = new User();
+    u.setId(rs.getInt(1));
+    u.setLogin(rs.getString(2));
+    u.setProfile(getProfileFromId(rs.getShort(3)));
+    u.setName(rs.getString(4));
+    u.setFirstName(rs.getString(5));
+
+    return u;
+  }
+
+  private Profile getProfileFromId(int id) {
+    switch (id) {
+
+      case 1:
+        return Profile.User;
+      case 2:
+        return Profile.Teacher;
+      case 3:
+        return Profile.Public;
+      case 4:
+        return Profile.Admin;
+      case 10:
+        return Profile.Visitor;
+      case 11:
+        return Profile.Member;
+      default:
+        return Profile.Visitor;
+    }
+  }
+
+  /**
+   * Gets the encrypted password.
+   *
+   * @param salt base64-encoded salt
+   * @param pass base64-encoded pass
+   * @return user pass info
+   */
+  private UserPass getUserPass(String pass, String salt) {
+
+    byte[] b64pass = Base64.decodeBase64(pass);
+    byte[] b64salt = Base64.decodeBase64(salt);
+
+    return new UserPass(b64pass, b64salt);
+  }
+
+  private int getIdFromLogin(String login) {
+    try {
+      return Integer.parseInt(login);
+    } catch (NumberFormatException nfe) {
+      return -1;
+    }
+  }
+
+  private void createToken(final int userId, final String token) {
+    String query = "INSERT INTO " + TOKEN_TABLE + " VALUES(?,?,?)";
+    jdbcTemplate.update(query, new PreparedStatementSetter() {
+
+      @Override
+      public void setValues(PreparedStatement ps) throws SQLException {
+        ps.setInt(1, userId);
+        ps.setString(2, token);
+        ps.setTimestamp(3, new java.sql.Timestamp(new java.util.Date().getTime()));
+      }
+    });
+
   }
 
 }
