@@ -108,23 +108,36 @@ function setHoverStyle() {
   $('div.labels').hover(
     function () {
       $(this).css({
-        cursor: "pointer",
-        'box-shadow': 'inset 0px 0px 1px 1px rgba(0,0,0,1)',
-        opacity: "0.8"
+        cursor: "not-allowed",
+//        'box-shadow': 'inset 0px 0px 1px 1px rgba(0,0,0,1)',
+//        opacity: "0.8"
       });
     },
     function () {
       $(this).css({
         cursor: "default",
-        'box-shadow': 'none',
-        opacity: "1"
+//        'box-shadow': 'none',
+//        opacity: "1"
       });
     }
   );
   $('div.schedule_col').hover(
       function () {
         $(this).css({
-          cursor: "cell"
+          cursor: "pointer"
+//          cursor: "cell" 
+        });
+      },
+      function () {
+        $(this).css({
+          cursor: "default"
+        });
+      }
+  );
+  $('div.closed').hover(
+      function () {
+        $(this).css({
+          cursor: "not-allowed",
         });
       },
       function () {
@@ -146,12 +159,12 @@ function setDialog() {
     autoOpen: false
   });
 
-  $('div.labels').click(function () {
-    //var regex = /<br\s*[\/]?>/gi;
-    //var text = $(this).html().replace(regex,'\n');
-    $(mainDialog).html($(this).html());
-    $(mainDialog).dialog("open");
-  });
+//  $('div.labels').click(function () {
+//    ////var regex = /<br\s*[\/]?>/gi;
+//    ////var text = $(this).html().replace(regex,'\n');
+//    $(mainDialog).html($(this).html());
+//    $(mainDialog).dialog("open");
+//  });
   $("#errorDialog").dialog({
     modal: true,
     autoOpen: false,
@@ -167,10 +180,17 @@ function setBookingDialog() {
   $("#booking").dialog({
     modal: false,
     autoOpen: false,
-    maxWidth: 320,
-    maxHeight: 410,
+//    width: 380,
+    maxHeight: 440,
     position: { my: "top", at: "top+25%", of: window }
   });
+//  $("#pass").button({
+//    text: true
+//  }).change(function () {
+//    $(this).button("option", {
+//      icons: {primary: this.checked ? 'ui-icon-check' : ''}
+//    });
+//  });
 }
 
 /**

@@ -36,6 +36,7 @@ public class Booking {
   private String date;
   private Hour startTime;
   private Hour endTime;
+  private boolean pass;
 
   public int getPerson() {
     return person;
@@ -100,6 +101,14 @@ public class Booking {
 
   public void setEndTime(Hour endTime) {
     this.endTime = endTime;
+  }
+
+  public boolean isPass() {
+    return pass;
+  }
+
+  public void setPass(boolean pass) {
+    this.pass = pass;
   }
 
   public boolean isValid() {

@@ -28,7 +28,7 @@
       <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
       <!--<form id="login-form" th:action="@{/jxlogin.html}" accept-charset="UTF-8" class="panel">-->
       <form id="ajax-login-form" th:action="@{/jxlogin}" class="panel">
-         <fieldset><legend th:text="#{connect.label}"></legend>
+        <fieldset><legend th:text="#{connect.label}"></legend>
           <label for="login" th:text="#{form.username.label}">Login</label>
           <input type="text" id="login" required="required" name="j_username"/>
           <label for="password" th:text="#{form.password.label}" >Password</label>
@@ -53,10 +53,10 @@
           </ul>
           <div id="groupPanel"></div>
           <label for="bookdate" th:text="#{date.label}">Date</label>
-          <input type="text" id="bookdate" style="font-size:small" th:field="*{date}"/>
+          <input type="text" id="bookdate" th:field="*{date}" style="width: 6em"/>
           <p>
             <label for="startTime" th:text="#{hour.label}">Heure</label>
-            <select id="startTime" style="display: inline-block" th:field="*{startTime}">
+            <select id="startTime" style="display: inline-block;width:4em" th:field="*{startTime}">
               <option th:each="half,dv : ${#numbers.sequence(offset, 1410, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
             </select>
             <select id="endTime" style="display: inline-block" disabled="disabled" >
@@ -64,8 +64,9 @@
             </select>
             <span class="error"></span>
           </p>
-          <p><label for="spinner" th:text="#{booking.length.label}">Durée</label>
-            <input id="spinner" value="1" th:field="*{timeLength}">
+          <p>
+            <label class="inline" for="spinner" th:text="#{booking.length.label}">Durée</label>
+            <input style="width: 1.5em" id="spinner" value="1" th:field="*{timeLength}">
           </p>
           <p><label for="room" th:text="#{room.label}"></label>
             <select id="room" th:field="*{room}">
@@ -73,7 +74,12 @@
               <option th:each="entry : ${freeplace}" th:value="${entry.key.id}" th:text="${entry.key.name}"></option>
             </select>
           </p>
-          <div style="text-align: right"><input style="display: inline-block" type="submit" th:value="#{book.label}" class="pure-button pure-button-primary"/></div>
+          <p>
+            <input id="pass" type="checkbox" th:field="*{pass}" /><label class="inline" style="padding: 0.5em" for="pass" th:text="#{booking.pass.label}">Pass</label>
+          </p>
+          <div>
+            <input style="display: inline-block" type="submit" th:value="#{book.label}" class="pure-button pure-button-primary"/>
+          </div>
         </fieldset>
         <p class="error"></p>
       </form>

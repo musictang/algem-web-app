@@ -409,7 +409,7 @@ select {
   font-family: Verdana, sans-serif;
   line-height: 1.5em;
   height:auto;
-  width: 100%;
+  /*width: 100%;*/
   z-index:3001;
 }
 
@@ -436,8 +436,12 @@ select {
 }
 
 .ui-spinner-input {
-  width: 3em;
+  /*width: 3em;*/
   font-size: x-small;
+}
+
+.ui-button-text {
+  /*background: lightgray;*/
 }
 
 #bookdate {
@@ -487,17 +491,12 @@ form label {
   margin-top: 0.5em;
 }
 
-#booking select {
-  font-size: small;
-}
-
 #booking label {
-  width: 3.5em;
-  display: inline-block;
+  width: 3.4em;
 }
 
 #booking input[type='radio'] + label {
-  display: inline;
+  /*display: inline;*/
   padding: 0 0.5em;
 }
 
