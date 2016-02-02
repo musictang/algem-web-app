@@ -125,9 +125,9 @@ public class BookingCtrl {
         return "error";
       }
 
-      if (Schedule.BOOKING_MEMBER == booking.getType()) {
+//      if (Schedule.BOOKING_MEMBER == booking.getType()) {
         booking.setPerson(u.getId());
-      }
+//      }
       List<ScheduleElement> roomConflicts = planningService.getRoomConflicts(booking);
       if (roomConflicts.size() > 0) {
         model.addAttribute("message", messageSource.getMessage("booking.room.conflict.error", null, LocaleContextHolder.getLocale()));

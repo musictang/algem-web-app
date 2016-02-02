@@ -80,7 +80,7 @@ public class PlanningCtrl
 
     model.addAttribute("conf", service.getConf());
     model.addAttribute("timeOffset", service.getTimeOffset());
-    model.addAttribute("bookingDelay", service.getBookingDelay());
+    model.addAttribute("bookingConf", service.getBookingConf());
     model.addAttribute("roomInfo", service.getRoomInfo(estab));
 
     return "daily";

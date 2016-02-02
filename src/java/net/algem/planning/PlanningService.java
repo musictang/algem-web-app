@@ -37,10 +37,11 @@ import net.algem.room.Room;
  */
 public interface PlanningService {
 
-  int getBookingDelay();
+//  int getBookingDelay();
 
-  int getCancelBookingDelay();
+//  int getCancelBookingDelay();
 
+  BookingConf getBookingConf();
   /**
    * Gets the list of schedules conflicting with this {@code booking}.
    * @param booking desired booking

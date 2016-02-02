@@ -40,7 +40,6 @@
       var estabId = /*[[${param.e[0]}]]*/ 3501;
       var logged = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
       var currentDate = /*[[${param.d[0]}]]*/ '29-12-2015';
-      var bookingDelay = /*[[${bookingDelay}]]*/ 0;
       var offPeakTime = /*[[${conf['offPeakTime']}]]*/ '0';
       console.log("offPeakTime " + offPeakTime);
       var commonParams = {
@@ -49,10 +48,14 @@
         date: /*[[${param.d[0]}]]*/ '29-12-2015'
       };
       var bookingParams = {
+        minDelay: /*[[${bookingConf.minDelay}]]*/ 0,
+        cancelDelay: /*[[${bookingConf.cancelDelay}]]*/ 0,
+        maxDelay:/*[[${bookingConf.maxDelay}]]*/ 10,
         groupType:/*[[${T(net.algem.planning.Schedule).BOOKING_GROUP}]]*/ -1,
         groupLabel:/*[[#{group.label}]]*/ 'group',
         groupWarning:/*[[#{booking.group.warning}]]*/ 'group',
-        bookingDelayWarning:/*[[#{booking.delay.warning(${bookingDelay})}]]*/ 'Hors délai'
+        bookingMinDelayWarning:/*[[#{booking.min.delay.warning(${bookingConf.minDelay})}]]*/ 'Hors délai',
+        bookingMaxDelayWarning:/*[[#{booking.max.delay.warning(${bookingConf.maxDelay})}]]*/ 'Hors délai',
       };
       var steps = {
         height: 720,//Canvas height
@@ -65,7 +68,7 @@
         setDatePicker(estabId, currentDate);
         initBookingDate(currentDate);
         setUI();
-        setBooking(bookingParams, steps, bookingDelay);
+        setBooking(bookingParams, steps);
       });
       /*]]>*/
     </script>

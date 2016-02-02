@@ -330,7 +330,8 @@ public class ScheduleDao
   public void book(final Booking booking) throws ParseException {
     final Date date = Constants.DATE_FORMAT.parse(booking.getDate());
     final int action = createEmptyAction();
-    final String sql = "INSERT INTO " + TABLE + " (jour,debut,fin,ptype,idper,action,lieux) VALUES(?,?,?,?,?,?,?)";
+    final int booked = createBooking(booking);
+    final String sql = "INSERT INTO " + TABLE + " (jour,debut,fin,ptype,idper,action,lieux,note) VALUES(?,?,?,?,?,?,?,?)";
     jdbcTemplate.update(new PreparedStatementCreator() {
 
       @Override
@@ -343,10 +344,30 @@ public class ScheduleDao
         ps.setInt(5, Schedule.BOOKING_GROUP == booking.getType() ? booking.getGroup() : booking.getPerson());
         ps.setInt(6, action);
         ps.setInt(7, booking.getRoom());
+        ps.setInt(8, booked);
         return ps;
       }
 
     });
+  }
+  
+  private int createBooking(final Booking booking) throws ParseException {
+    final Date date = Constants.DATE_FORMAT.parse(booking.getDate());
+    final String sql = "INSERT INTO reservation(idper,typeres,dateres,pass) VALUES(?,?,?,?)";
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    jdbcTemplate.update(new PreparedStatementCreator() {
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement(sql, new String[]{"id"});
+        ps.setInt(1, booking.getPerson());
+        ps.setInt(2, booking.getType());
+        ps.setTimestamp(3, new java.sql.Timestamp(date.getTime()));
+        ps.setBoolean(4, booking.isPass());
+        return ps;
+      }
+    }, keyHolder);
+    return keyHolder.getKey().intValue();
+    
   }
 
   private int createEmptyAction() {

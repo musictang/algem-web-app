@@ -123,14 +123,15 @@ public class PlanningServiceImpl implements PlanningService
   }
 
   @Override
-  public int getBookingDelay() {
-    try {
-      return Integer.parseInt(configIO.findId("Reservation.delai").getValue());
-    } catch (NumberFormatException nfe) {
-      System.err.println(nfe.getMessage());
-      return 24;
-    }
+  public BookingConf getBookingConf() {
+    BookingConf conf = new BookingConf();
+    conf.setMinDelay(getBookingMinDelay());
+    conf.setCancelDelay(getCancelBookingDelay());
+    conf.setMaxDelay(getBookingMaxDelay());
+    
+    return conf;
   }
+  
 
   public Map<String,String> getConf() {
     Map<String,String> confs = new HashMap<>();
@@ -151,16 +152,6 @@ public class PlanningServiceImpl implements PlanningService
     confs.put("endDate", c4.getValue());
 
     return confs;
-  }
-
-  @Override
-  public int getCancelBookingDelay() {
-    try {
-      return Integer.parseInt(configIO.findId("Annulation.delai").getValue());
-    } catch (NumberFormatException nfe) {
-      System.err.println(nfe.getMessage());
-      return 24;
-    }
   }
 
   @Override
@@ -197,6 +188,33 @@ public class PlanningServiceImpl implements PlanningService
   @Override
   public void book(Booking booking) throws ParseException {
     scheduleIO.book(booking);
+  }
+  
+  private int getBookingMinDelay() {
+    try {
+      return Integer.parseInt(configIO.findId("Reservation.delai.min").getValue());
+    } catch (NumberFormatException nfe) {
+      System.err.println(nfe.getMessage());
+      return 24;
+    }
+  }
+  
+  private int getBookingMaxDelay() {
+    try {
+      return Integer.parseInt(configIO.findId("Reservation.delai.max").getValue());
+    } catch (NumberFormatException nfe) {
+      System.err.println(nfe.getMessage());
+      return 30;
+    }
+  }
+  
+  private int getCancelBookingDelay() {
+    try {
+      return Integer.parseInt(configIO.findId("Annulation.delai").getValue());
+    } catch (NumberFormatException nfe) {
+      System.err.println(nfe.getMessage());
+      return 24;
+    }
   }
 
   private DailyTimes[] findDailyTimes(int roomId) {
@@ -290,6 +308,5 @@ public class PlanningServiceImpl implements PlanningService
     }
     return t.toUpperCase() + "<br />" + e.getStart() + "-" + e.getEnd();
   }
-
 
 }

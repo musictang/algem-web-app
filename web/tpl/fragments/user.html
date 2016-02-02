@@ -74,7 +74,7 @@
               <option th:each="entry : ${freeplace}" th:value="${entry.key.id}" th:text="${entry.key.name}"></option>
             </select>
           </p>
-          <p>
+          <p id="passInfo">
             <input id="pass" type="checkbox" th:field="*{pass}" /><label class="inline" style="padding: 0.5em" for="pass" th:text="#{booking.pass.label}">Pass</label>
           </p>
           <div>

@@ -168,7 +168,12 @@ function setDialog() {
   $("#errorDialog").dialog({
     modal: true,
     autoOpen: false,
-    position: { my: "bottom", at: "top+50%", of: window }
+    position: {my: "bottom", at: "top+50%", of: window},
+    buttons: {
+      Ok: function () {
+        $(this).dialog("close");
+      }
+    }
   });
 }
 
@@ -200,7 +205,7 @@ function setBookingDialog() {
  * @param {Number} bookingDelay booking delay (in hours)
  * @returns {undefined}
  */
-function setBooking(params, steps, bookingDelay) {
+function setBooking(params, steps) {
   //TODO detect valid date current date >= now + delay;
 
   var date = new Date($("#datepicker").datepicker('getDate'));
@@ -216,9 +221,15 @@ function setBooking(params, steps, bookingDelay) {
       console.log("index start time" + idx);
       $("#startTime option").eq(idx).prop("selected", true);
       console.log("check booking");
-      if (!checkBookingDelay(date, bookingDelay)) {
+      if (!checkBookingDelay(date, params.minDelay)) {
         console.log("Hors delai");
-        $("#errorDialog").html("<p>" +params.bookingDelayWarning +"</p>");
+        $("#errorDialog").html("<p>" +params.bookingMinDelayWarning +"</p>");
+        $("#errorDialog").dialog("open");
+        return;
+      }
+       if (!checkBookingDate(date, params.maxDelay)) {
+        console.log("Hors limite");
+        $("#errorDialog").html("<p>" +params.bookingMaxDelayWarning +"</p>");
         $("#errorDialog").dialog("open");
         return;
       }
@@ -254,9 +265,9 @@ function setBooking(params, steps, bookingDelay) {
   $('#startTime').focus(function() {
     //Store old value
     $(this).data("lastValue",$(this).val());
-});
+  });
   $("#startTime").change(function(event) {
-    if (checkBookingDelay(date, bookingDelay)) {
+    if (checkBookingDelay(date, params.minDelay)) {
       setEndIndex($(this), steps);
     } else {
       var last = $(this).data("lastValue");
@@ -269,10 +280,8 @@ function setBooking(params, steps, bookingDelay) {
   });
   // call ajax method
   $('#booking-form input[type=radio]').change(function () {
-    $(this).addClass("buzy");
     $("#groupInfo").remove();
-    getGroups(params);
-    $(this).removeClass("buzy");
+    getGroups(params); 
   });
 
   $("#booking-form input[type='submit']").click(function () {
@@ -281,7 +290,7 @@ function setBooking(params, steps, bookingDelay) {
 
 }
 
-function checkBookingDelay(date, bookingDelay) {
+function checkBookingDelay(date, minDelay) {
   var t = $("#startTime").val();
   if (t === undefined) {
     return true; // important : true ! let open dialog
@@ -290,7 +299,23 @@ function checkBookingDelay(date, bookingDelay) {
   console.log(t);
   date.setHours(t.substr(0, 2));
   date.setMinutes(t.substr(3, 2));
-  if (now.getTime() + (bookingDelay * 60 * 60 * 1000) > date.getTime()) {
+  if (now.getTime() + (minDelay * 60 * 60 * 1000) > date.getTime()) {
+    return false;
+  }
+  return true;
+}
+
+function checkBookingDate(date, maxDelay) {
+  var t = $("#startTime").val();
+  if (t === undefined) {
+    return true; // important : true ! let open dialog
+  }
+  console.log(t);
+  var now = new Date();
+  date.setHours(t.substr(0, 2));
+  date.setMinutes(t.substr(3, 2));
+  var last = now.getTime() + maxDelay * 86400000;
+  if (date.getTime() > last) {
     return false;
   }
   return true;
@@ -327,6 +352,7 @@ function getGroups(params) {
   var type = $('#bookingType input[type="radio"]:checked').val();
 
   if (type != params.groupType) {
+    $("#passInfo").show();
     return;
   }
 
@@ -334,6 +360,7 @@ function getGroups(params) {
   $.get(urlPath, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("Aucun résultat");
+      $("#passInfo").show();
       $("#member").prop("checked", true);
       $("<p id=\"groupInfo\" class=\"error\" style=\"font-size: smaller\">"+params.groupWarning+"</p>").appendTo("#groupPanel");
     } else {
@@ -343,6 +370,7 @@ function getGroups(params) {
       $.each(data, function (index, value) {
         $("<option value=\""+value.id+"\">"+value.name+"</otpion>").appendTo('#bookingGroup');
       });
+      $("#passInfo").hide();
     }
 
   }, "json");
