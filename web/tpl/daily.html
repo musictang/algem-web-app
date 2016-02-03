@@ -101,7 +101,7 @@
     <section id="canvas" th:with="totalTime=${1440 - timeOffset}">
       <div th:id="${entry.key}" th:each="entry : ${planning}" class="schedule_col">
         <!--Column header : room names-->
-        <p class="title_col" th:text="${entry.value[0].roomName}"></p>
+        <p class="title_col" th:text="${entry.value[0].detail['room']}"></p>
         <!--Schedules-->
         <div th:each="p : ${entry.value}" th:class="'schedule' + ${p.label == null ? ' closed' :''}"
              th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime}"
@@ -129,7 +129,7 @@
         </div>
     </section>
     <aside id="help-panel" class="closeable" th:include="fragments/layout :: help"></aside>
-      
+
     <!--</aside>-->
     <aside id="info-panel" class="closeable">
       <div id="info-bar" class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>

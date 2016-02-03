@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 import net.algem.room.Room;
 import net.algem.util.AbstractGemDao;
 import net.algem.util.Constants;
+import net.algem.util.NamedModel;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
@@ -104,7 +105,7 @@ public class ScheduleDao
    * @return a list of schedule elements
    */
   public List<ScheduleElement> find(Date date, int estab) {
-    String query = " SELECT p.*, c.titre, c.collectif, s.nom, t.prenom, t.nom"
+    String query = " SELECT p.*, c.id, c.titre, c.collectif, s.nom, t.prenom, t.nom"
       + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
       + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper)"
       + ", salle s"
@@ -127,10 +128,15 @@ public class ScheduleDao
         d.setIdAction(rs.getInt(7));
         d.setPlace(rs.getInt(8));
         d.setNote(rs.getInt(9));
-        d.setCourseName(rs.getString(10));
-        d.setCollective(rs.getBoolean(11));
-        d.setRoomName(rs.getString(12));
-        d.setPersonName(rs.getString(13), rs.getString(14));
+        d.setDetail("course", new NamedModel(rs.getInt(10), rs.getString(11)));
+//        d.setCourseName(rs.getString(10));
+        d.setCollective(rs.getBoolean(12));
+        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(13)));
+        d.setDetail("estab", null);
+        String firstName = rs.getString(14);
+        String lastName = rs.getString(15);
+        String name = firstName == null ? (lastName == null ? "" : lastName) : firstName + " " + lastName;
+        d.setDetail("person",new NamedModel(d.getIdPerson(), name));
         if (d.type == Schedule.COURSE && !d.isCollective()) {
           d.setRanges(getTimeSlots(d.getId()));
         }
@@ -241,7 +247,7 @@ public class ScheduleDao
 
   List<ScheduleElement> getRoomConflicts(final Booking booking) {
     List<ScheduleElement> conflicts = new ArrayList<>();
-    String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,s.nom FROM " + TABLE + " p JOIN salle s ON(p.lieux = s.id)"
+    String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.lieux,s.nom FROM " + TABLE + " p JOIN salle s ON(p.lieux = s.id)"
       + " WHERE p.jour = ?"
       + " AND p.lieux = ?"
       + " AND ((p.debut >= ? AND p.debut < ?)" // start //end
@@ -278,7 +284,7 @@ public class ScheduleDao
 
   List<ScheduleElement> getPersonConflicts(final Booking booking) {
     List<ScheduleElement> conflicts = new ArrayList<>();
-    String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,s.nom FROM " + TABLE + " p JOIN salle s ON(p.lieux = s.id)"
+    String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.lieux,s.nom FROM " + TABLE + " p JOIN salle s ON(p.lieux = s.id)"
       + " WHERE p.jour = ?"
       + " AND p.idper = ?"
       + " AND ((p.debut >= ? AND p.debut < ?)" // start //end
@@ -313,6 +319,43 @@ public class ScheduleDao
     return conflicts;
   }
 
+  List<ScheduleElement> getBookings(int idper) {
+//    List<ScheduleElement> bookings = new ArrayList<ScheduleElement>();
+//    String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,s.nom,e.nom"
+//      + " FROM " + TABLE + " p JOIN salle s ON(p.lieux = s.id)"
+//      + " JOIN person e ON (e.id = s.etablissement)"
+//      + " WHERE p.jour >= 'now' "
+//      + " AND (p.ptype = " + Schedule.MEMBER + " AND p.idper = ?)"
+//      + " OR (p.ptype = " + Schedule.GROUP + " AND p.idper IN ("
+//      + "SELECT g.id FROM " + GroupIO.TABLE + " g JOIN " + GroupIO.TABLE_DET + " d ON (g.id = d.id)"
+//      + " WHERE d.musicien = ?";
+
+    String query = "SELECT p.id,p.idper,p.jour,p.debut,p.fin,p.ptype,p.lieux,s.nom,e.id,e.nom,"
+      + "CASE WHEN p.ptype = " + Schedule.BOOKING_GROUP + " THEN g.nom ELSE '' END"
+      + " FROM " + TABLE + " p JOIN reservation r ON (p.action = r.idaction) JOIN salle s ON(p.lieux = s.id)"
+      + " JOIN personne e ON (e.id = s.etablissement)"
+      + " LEFT JOIN groupe g ON (p.idper = g.id)"
+      + " WHERE r.idper = ? ORDER BY p.jour,p.debut";
+    return jdbcTemplate.query(query, new RowMapper<ScheduleElement>() {
+      @Override
+      public ScheduleElement mapRow(ResultSet rs, int i) throws SQLException {
+        ScheduleElement b = new ScheduleElement();
+        b.setId(rs.getInt(1));
+        b.setIdPerson(rs.getInt(2));
+        b.setDate(rs.getDate(3));
+        b.setStart(new Hour(rs.getString(4)));
+        b.setEnd(new Hour(rs.getString(5)));
+        b.setType(rs.getInt(6));
+        b.setDetail("room" , new NamedModel(rs.getInt(7) , rs.getString(8)));
+        b.setDetail("estab" , new NamedModel(rs.getInt(9) , rs.getString(10)));
+        NamedModel group = Schedule.BOOKING_GROUP == b.getType() ? new NamedModel(b.getIdPerson(), rs.getString(11)) : null;
+        b.setDetail("group" , group);
+        return b;
+      }
+
+    }, idper);
+  }
+
   private ScheduleElement getConflictFromRS(ResultSet rs) throws SQLException {
     ScheduleElement e = new ScheduleElement();
     e.setId(rs.getInt(1));
@@ -321,7 +364,7 @@ public class ScheduleDao
     e.setEnd(new Hour(rs.getString(4)));
     e.setType(rs.getInt(5));
     e.setIdPerson(rs.getInt(6));
-    e.setRoomName(rs.getString(7));
+    e.setDetail("room" , new NamedModel(rs.getInt(7) , rs.getString(8)));
 
     return e;
   }
@@ -330,6 +373,7 @@ public class ScheduleDao
   public void book(final Booking booking) throws ParseException {
     final Date date = Constants.DATE_FORMAT.parse(booking.getDate());
     final int action = createEmptyAction();
+    booking.setAction(action);
     final int booked = createBooking(booking);
     final String sql = "INSERT INTO " + TABLE + " (jour,debut,fin,ptype,idper,action,lieux,note) VALUES(?,?,?,?,?,?,?,?)";
     jdbcTemplate.update(new PreparedStatementCreator() {
@@ -344,30 +388,30 @@ public class ScheduleDao
         ps.setInt(5, Schedule.BOOKING_GROUP == booking.getType() ? booking.getGroup() : booking.getPerson());
         ps.setInt(6, action);
         ps.setInt(7, booking.getRoom());
-        ps.setInt(8, booked);
+        ps.setInt(8, 0);
         return ps;
       }
 
     });
   }
-  
+
   private int createBooking(final Booking booking) throws ParseException {
     final Date date = Constants.DATE_FORMAT.parse(booking.getDate());
-    final String sql = "INSERT INTO reservation(idper,typeres,dateres,pass) VALUES(?,?,?,?)";
+    final String sql = "INSERT INTO reservation(idper,idaction,dateres,pass) VALUES(?,?,?,?)";
     KeyHolder keyHolder = new GeneratedKeyHolder();
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
         PreparedStatement ps = con.prepareStatement(sql, new String[]{"id"});
         ps.setInt(1, booking.getPerson());
-        ps.setInt(2, booking.getType());
+        ps.setInt(2, booking.getAction());
         ps.setTimestamp(3, new java.sql.Timestamp(date.getTime()));
         ps.setBoolean(4, booking.isPass());
         return ps;
       }
     }, keyHolder);
     return keyHolder.getKey().intValue();
-    
+
   }
 
   private int createEmptyAction() {

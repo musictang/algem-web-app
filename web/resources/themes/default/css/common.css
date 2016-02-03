@@ -57,6 +57,10 @@ ul li {
   margin: 0.5em;
 }
 
+ol {
+  list-style-position: inside;
+}
+
 /*Pure css hack pour restreindre la largeur des menus*/
 .custom-restricted-width {
   /* To limit the menu width to the content of the menu: */
@@ -409,7 +413,7 @@ select {
   font-family: Verdana, sans-serif;
   line-height: 1.5em;
   height:auto;
-  /*width: 100%;*/
+  max-width: 100%;
   z-index:3001;
 }
 
@@ -447,6 +451,7 @@ select {
 #bookdate {
   display: inline-block;
 }
+
 .hasDatepicker, .ui-datepicker-trigger {
   /*display: inline-block;*/
 }
@@ -535,7 +540,7 @@ form input + span {
 }
 
 .pure-table-horizontal th {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 ul.disc{

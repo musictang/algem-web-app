@@ -128,10 +128,14 @@ public class PlanningServiceImpl implements PlanningService
     conf.setMinDelay(getBookingMinDelay());
     conf.setCancelDelay(getCancelBookingDelay());
     conf.setMaxDelay(getBookingMaxDelay());
-    
+
     return conf;
   }
-  
+
+  @Override
+  public List<ScheduleElement> getBookings(int idper) {
+    return scheduleIO.getBookings(idper);
+  }
 
   public Map<String,String> getConf() {
     Map<String,String> confs = new HashMap<>();
@@ -189,7 +193,7 @@ public class PlanningServiceImpl implements PlanningService
   public void book(Booking booking) throws ParseException {
     scheduleIO.book(booking);
   }
-  
+
   private int getBookingMinDelay() {
     try {
       return Integer.parseInt(configIO.findId("Reservation.delai.min").getValue());
@@ -198,7 +202,7 @@ public class PlanningServiceImpl implements PlanningService
       return 24;
     }
   }
-  
+
   private int getBookingMaxDelay() {
     try {
       return Integer.parseInt(configIO.findId("Reservation.delai.max").getValue());
@@ -207,7 +211,7 @@ public class PlanningServiceImpl implements PlanningService
       return 30;
     }
   }
-  
+
   private int getCancelBookingDelay() {
     try {
       return Integer.parseInt(configIO.findId("Annulation.delai").getValue());
@@ -289,7 +293,7 @@ public class PlanningServiceImpl implements PlanningService
       case Schedule.COURSE:
       case Schedule.WORKSHOP:
       case Schedule.TRAINING:
-        t = e.getCourseName();
+        t = e.getDetail().get("course").getName();
         break;
       case Schedule.GROUP:
         t = messageSource.getMessage("group.rehearsal.title", null, locale);

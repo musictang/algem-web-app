@@ -125,7 +125,7 @@ function setHoverStyle() {
       function () {
         $(this).css({
           cursor: "pointer"
-//          cursor: "cell" 
+//          cursor: "cell"
         });
       },
       function () {
@@ -281,7 +281,7 @@ function setBooking(params, steps) {
   // call ajax method
   $('#booking-form input[type=radio]').change(function () {
     $("#groupInfo").remove();
-    getGroups(params); 
+    getGroups(params);
   });
 
   $("#booking-form input[type='submit']").click(function () {
@@ -383,7 +383,15 @@ function getGroups(params) {
  */
 function initBookingDate(date) {
   var bookDatePicker = $("#bookdate");
-  bookDatePicker.datepicker({changeMonth: true, changeYear: true, showOn: "button"});
+  bookDatePicker.datepicker({
+    changeMonth: true,
+    changeYear: true,
+    showOn: "button",
+//    buttonImage: "images/calendar.gif",
+//    buttonImageOnly: true,
+//    buttonText: "Select date"
+  });
+
   bookDatePicker.datepicker('setDate', date);
   bookDatePicker.blur();
 }

@@ -21,6 +21,9 @@
 package net.algem.planning;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import net.algem.util.NamedModel;
 
 /**
  * Schedule element representation.
@@ -34,55 +37,18 @@ public class ScheduleElement
         extends Schedule
 {
 
-  private String courseName;
-  private String personName;
-  private String roomName;
+  private Map<String,NamedModel> detail = new HashMap<>();
   private boolean collective;
   private Collection<ScheduleRange> ranges;
   private String label;
   private String color;
 
-  public String getCourseName() {
-    return courseName;
+  public Map<String, NamedModel> getDetail() {
+    return detail;
   }
 
-  public void setCourseName(String course) {
-    this.courseName = course;
-  }
-
-  /**
-   * Gets the name of person in the schedule.
-   * This person may depend on the type of schedule : teacher's name if it's a course,
-   * group's name if it's a band rehearsal or member's name if it's a person rehearsal.
-   * @return a name
-   */
-  public String getPersonName() {
-    return personName;
-  }
-
-  /**
-   * Sets the name of person in the schedule.
-   * @param firstname
-   * @param name
-   */
-  public void setPersonName(String firstname, String name) {
-    this.personName = firstname == null ? (name == null ? "" : name) : firstname + " " + name;
-  }
-
-  /**
-   * Gets the name of the room.
-   * @return a string representing the name of the room
-   */
-  public String getRoomName() {
-    return roomName;
-  }
-
-  /**
-   * Sets the name of the room.
-   * @param roomName
-   */
-  public void setRoomName(String roomName) {
-    this.roomName = roomName;
+  public void setDetail(String key, NamedModel m) {
+    detail.put(key, m);
   }
 
   /**
@@ -176,7 +142,7 @@ public class ScheduleElement
 
   @Override
   public String toString() {
-    return roomName + " " + super.toString();
+    return (detail.get("estab") == null ? "" : detail.get("estab") + ", ") + (detail.get("room") == null ? "" : detail.get("room") + ", ") + super.toString();
   }
 
   /**

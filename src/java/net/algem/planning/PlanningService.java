@@ -51,6 +51,8 @@ public interface PlanningService {
 
   List<ScheduleElement> getPersonConflicts(Booking booking);
 
+  List<ScheduleElement> getBookings(int idper);
+
   DailyTimes getDailyTimes(int room, int dow);
 
   /**

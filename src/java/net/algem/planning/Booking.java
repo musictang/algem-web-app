@@ -32,6 +32,7 @@ public class Booking {
   private int person;
   private int group;
   private int room;
+  private int action;
   private float timeLength;
   private String date;
   private Hour startTime;
@@ -109,6 +110,14 @@ public class Booking {
 
   public void setPass(boolean pass) {
     this.pass = pass;
+  }
+
+  public int getAction() {
+    return action;
+  }
+
+  public void setAction(int action) {
+    this.action = action;
   }
 
   public boolean isValid() {

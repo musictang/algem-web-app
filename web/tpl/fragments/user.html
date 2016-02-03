@@ -53,13 +53,13 @@
           </ul>
           <div id="groupPanel"></div>
           <label for="bookdate" th:text="#{date.label}">Date</label>
-          <input type="text" id="bookdate" th:field="*{date}" style="width: 6em"/>
+          <input type="text" id="bookdate" th:field="*{date}" style="width: 9em;margin:0;padding:0 0.25em"/>
           <p>
             <label for="startTime" th:text="#{hour.label}">Heure</label>
-            <select id="startTime" style="display: inline-block;width:4em" th:field="*{startTime}">
+            <select id="startTime" style="display: inline-block;width:4.5em" th:field="*{startTime}">
               <option th:each="half,dv : ${#numbers.sequence(offset, 1410, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
             </select>
-            <select id="endTime" style="display: inline-block" disabled="disabled" >
+            <select id="endTime" style="display: inline-block;width:4.5em" disabled="disabled" >
               <option th:each="half,dv : ${#numbers.sequence(offset, 1440, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
             </select>
             <span class="error"></span>
@@ -70,7 +70,7 @@
           </p>
           <p><label for="room" th:text="#{room.label}"></label>
             <select id="room" th:field="*{room}">
-              <option th:each="entry : ${planning}" th:value="${entry.key}" th:text="${entry.value[0].roomName}"></option>
+              <option th:each="entry : ${planning}" th:value="${entry.key}" th:text="${entry.value[0].detail['room']}"></option>
               <option th:each="entry : ${freeplace}" th:value="${entry.key.id}" th:text="${entry.key.name}"></option>
             </select>
           </p>

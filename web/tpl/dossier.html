@@ -36,13 +36,44 @@
     </header>
     <div class="global">
       <div class="centered">
-      <h2>Mes Informations</h2>
-      <table class="vertical-header">
-        <tr><th th:text="#{name.label}"></th><td th:text="|${user.firstName} ${user.name}|">un</td></tr>
+      <!--<h2 ></h2>-->
+<!--      <p></p>-->
+      <h3 th:text="|${user.firstName} ${user.name}|">Mes informations</h3>
+      <table class="pure-table pure-table-horizontal">
         <tr><th th:text="#{login.label}"></th><td th:text="${user.login}">deux</td></tr>
-        <tr><th th:text="#{email.label}"></th><td th:text="${user.email}">deux</td></tr>
+        <tr>
+          <th th:text="#{email.label}"></th>
+          <td>
+            <ul class="simple">
+              <li th:each="em:${person.email}"><a th:href="@{'mailto:'+${em.email}}" th:text="${em.email}"></a></li>
+            </ul>
+          </td>
+        </tr>
         <tr><th th:text="#{profile.label}"></th><td th:text="#{${user.profile.label}}">trois</td></tr>
       </table>
+      <h3>Mes réservations</h3>
+      <table class="pure-table pure-table-vertical pure-table-bordered pure-table-striped">
+        <thead>
+          <tr><th th:text="#{group.label}"></th>
+            <th th:text="#{establishment.label}">Etablissement</th>
+            <th th:text="#{room.label}">Salle</th>
+            <th th:text="#{date.label}">Date</th>
+            <th th:text="#{hour.label}">Heure</th>
+          </tr>
+        </thead>
+        <tbody><tr th:each="b:${bookings}">
+          <td th:text="${b.detail['group']}"></td>
+          <td th:text="${b.detail['estab']}"></td>
+          <td th:text="${b.detail['room']}"></td>
+          <td><a th:href="@{/daily.html(d=${b.date},e=${b.detail['estab'].id})}" th:text="${b.date}"></a></td>
+          <td th:text="${b.start + '-' + b.end}"></td>
+        </tr>
+        </tbody>
+      </table>
+<!--      <ul>
+        <li th:each="b:${bookings}">
+          <a th:href="@{daily.html(e=${param.e[0]},d='01-01-2016')}" th:text="${b}"></a></li>
+      </ul>-->
     </div>
 <!--    <table>
       <c:forEach items="${acl}" var="map">

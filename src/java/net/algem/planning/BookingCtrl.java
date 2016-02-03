@@ -65,9 +65,6 @@ public class BookingCtrl {
 
   @Resource(name = "messageSource")
   private MessageSource messageSource;
-//
-//  @Autowired
-//  SecurityContextRepository secuContext;
 
   public void setService(UserService service) {
     this.service = service;
@@ -92,8 +89,8 @@ public class BookingCtrl {
     Principal p,
     Model model) {
 
-    redirectAttributes.addAttribute("e", estab);
     redirectAttributes.addAttribute("d", booking.getDate());
+    redirectAttributes.addAttribute("e", estab);
     SecurityContext secuContext = SecurityContextHolder.getContext();
     if (!secuContext.getAuthentication().isAuthenticated()) {
       model.addAttribute("message", messageSource.getMessage("booking.auth.error", null, LocaleContextHolder.getLocale()));
@@ -125,9 +122,8 @@ public class BookingCtrl {
         return "error";
       }
 
-//      if (Schedule.BOOKING_MEMBER == booking.getType()) {
-        booking.setPerson(u.getId());
-//      }
+      booking.setPerson(u.getId());
+
       List<ScheduleElement> roomConflicts = planningService.getRoomConflicts(booking);
       if (roomConflicts.size() > 0) {
         model.addAttribute("message", messageSource.getMessage("booking.room.conflict.error", null, LocaleContextHolder.getLocale()));
@@ -154,7 +150,7 @@ public class BookingCtrl {
       return "error";
     }
 
-    return "redirect:/daily.html";
+    return "redirect:/perso/home.html";
   }
 
   private void addMessageAttribute(Model m, String key, Object[] params) {
