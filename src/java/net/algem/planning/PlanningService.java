@@ -90,6 +90,8 @@ public interface PlanningService {
   int getTimeOffset();
 
   void book(Booking booking) throws ParseException;
+  
+  public boolean cancelBooking(int action);
 
   Map<Integer,Config> getDefaultColorCodes();
 

@@ -156,5 +156,32 @@ public class BookingCtrl {
   private void addMessageAttribute(Model m, String key, Object[] params) {
     m.addAttribute("message", messageSource.getMessage(key, params, LocaleContextHolder.getLocale()));
   }
+  
+  @RequestMapping(method = RequestMethod.GET, value = "/perso/book-cancel.html")
+  public String cancelBooking(Model model, @RequestParam int action, @RequestParam String date, @RequestParam String start) {
+    try {
+      Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, action + " " + date + " " + start);
+      Date d = Constants.DATE_FORMAT.parse(date);
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(d);
+      Date now = new Date();
+      BookingConf conf = planningService.getBookingConf();
+      long delay = conf.getMinDelay() * 60 * 60 * 1000;
+      if (now.getTime() > d.getTime()) {
+        model.addAttribute("message", messageSource.getMessage("booking.cancel.delay.warning", null, LocaleContextHolder.getLocale()));
+        return "error";
+      }
+      if (planningService.cancelBooking(action)) {
+        return "redirect:/perso/home.html";
+      } else {
+        model.addAttribute("message", "Erreur sql");
+        return "error";
+      }
+    } catch (ParseException ex) {
+      Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      return "error";
+    }
+    
+  }
 
 }

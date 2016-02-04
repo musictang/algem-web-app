@@ -330,7 +330,7 @@ public class ScheduleDao
 //      + "SELECT g.id FROM " + GroupIO.TABLE + " g JOIN " + GroupIO.TABLE_DET + " d ON (g.id = d.id)"
 //      + " WHERE d.musicien = ?";
 
-    String query = "SELECT p.id,p.idper,p.jour,p.debut,p.fin,p.ptype,p.lieux,s.nom,e.id,e.nom,"
+    String query = "SELECT p.id,p.action,p.idper,p.jour,p.debut,p.fin,p.ptype,p.lieux,s.nom,e.id,e.nom,"
       + "CASE WHEN p.ptype = " + Schedule.BOOKING_GROUP + " THEN g.nom ELSE '' END"
       + " FROM " + TABLE + " p JOIN reservation r ON (p.action = r.idaction) JOIN salle s ON(p.lieux = s.id)"
       + " JOIN personne e ON (e.id = s.etablissement)"
@@ -341,14 +341,15 @@ public class ScheduleDao
       public ScheduleElement mapRow(ResultSet rs, int i) throws SQLException {
         ScheduleElement b = new ScheduleElement();
         b.setId(rs.getInt(1));
-        b.setIdPerson(rs.getInt(2));
-        b.setDate(rs.getDate(3));
-        b.setStart(new Hour(rs.getString(4)));
-        b.setEnd(new Hour(rs.getString(5)));
-        b.setType(rs.getInt(6));
-        b.setDetail("room" , new NamedModel(rs.getInt(7) , rs.getString(8)));
-        b.setDetail("estab" , new NamedModel(rs.getInt(9) , rs.getString(10)));
-        NamedModel group = Schedule.BOOKING_GROUP == b.getType() ? new NamedModel(b.getIdPerson(), rs.getString(11)) : null;
+        b.setIdAction(rs.getInt(2));
+        b.setIdPerson(rs.getInt(3));
+        b.setDate(rs.getDate(4));
+        b.setStart(new Hour(rs.getString(5)));
+        b.setEnd(new Hour(rs.getString(6)));
+        b.setType(rs.getInt(7));
+        b.setDetail("room" , new NamedModel(rs.getInt(8) , rs.getString(9)));
+        b.setDetail("estab" , new NamedModel(rs.getInt(10) , rs.getString(11)));
+        NamedModel group = Schedule.BOOKING_GROUP == b.getType() ? new NamedModel(b.getIdPerson(), rs.getString(12)) : null;
         b.setDetail("group" , group);
         return b;
       }
@@ -393,6 +394,14 @@ public class ScheduleDao
       }
 
     });
+  }
+  
+  @Transactional
+  public void cancelBooking(final int action) {
+    String sql = "DELETE FROM " + TABLE + " WHERE action = ?"; 
+    jdbcTemplate.update(sql, action);
+    String sql2 = "DELETE FROM reservation WHERE action = ?";
+    jdbcTemplate.update(sql, action);
   }
 
   private int createBooking(final Booking booking) throws ParseException {

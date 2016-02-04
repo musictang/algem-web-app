@@ -33,6 +33,7 @@ import net.algem.room.Room;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -135,6 +136,15 @@ public class PlanningServiceImpl implements PlanningService
   @Override
   public List<ScheduleElement> getBookings(int idper) {
     return scheduleIO.getBookings(idper);
+  }
+  
+  public boolean cancelBooking(int action) {
+    try {
+      scheduleIO.cancelBooking(action);
+      return true;
+    } catch(DataAccessException e) {
+      return false;
+    }
   }
 
   public Map<String,String> getConf() {

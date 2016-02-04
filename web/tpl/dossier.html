@@ -59,6 +59,7 @@
             <th th:text="#{room.label}">Salle</th>
             <th th:text="#{date.label}">Date</th>
             <th th:text="#{hour.label}">Heure</th>
+            <th></th>
           </tr>
         </thead>
         <tbody><tr th:each="b:${bookings}">
@@ -67,6 +68,7 @@
           <td th:text="${b.detail['room']}"></td>
           <td><a th:href="@{/daily.html(d=${b.date},e=${b.detail['estab'].id})}" th:text="${b.date}"></a></td>
           <td th:text="${b.start + '-' + b.end}"></td>
+          <td><a th:href="@{/perso/book-cancel.html(action=${b.idAction},date=${b.date},start=${b.start})}">Annuler</a></td>
         </tr>
         </tbody>
       </table>
