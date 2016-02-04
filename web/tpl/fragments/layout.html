@@ -53,7 +53,10 @@
         </ol>
         <h2 th:text="#{help.color.label}">Couleurs</h2>
         <ul style="margin-bottom: 1em">
-          <li><span class="colorSquare" title="Cours collectif" style="background-color:#FF3333"></span>&nbsp;Cours collectif</li>
+          <li th:each="def:${colorDefs}"  >
+            <span class="color-square" th:title="#{${def.value.key}}" th:style="${'background-color:'+def.value.value}"></span>[[#{${def.value.key}}]]
+          </li>
+<!--          <li><span class="colorSquare" title="Cours collectif" style="background-color:#FF3333"></span>&nbsp;Cours collectif</li>
           <li><span class="colorSquare colorHelp" style="background-color:#00D059;"></span>&nbsp;Cours disponible
             <span style="font-size: smaller">(Place momentanément disponible pour les répétitions)</span></li>
           <li><span class="colorSquare" title="Cours occupé" style="background-color:#80e82c"></span>&nbsp;Cours occupé</li>
@@ -61,7 +64,7 @@
           <li><span class="colorSquare" title="Stage" style="background-color:#F7F77C"></span>&nbsp;Stage</li>
           <li><span class="colorSquare" title="Répétition groupe" style="background-color:#2158FF"></span>&nbsp;Répétition groupe</li>
           <li><span class="colorSquare" title="Répétition adhérent" style="background-color:#3399FF"></span>&nbsp;Répétition adhérent</li>
-          <li><span class="colorSquare" title="Salle fermée" style="background-color:#ccc"></span>&nbsp;Salle fermée</li>
+          <li><span class="colorSquare" title="Salle fermée" style="background-color:#ccc"></span>&nbsp;Salle fermée</li>-->
         </ul>
       </div>
     </div>

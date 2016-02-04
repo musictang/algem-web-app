@@ -151,7 +151,7 @@
   z-index: 1010;
 }
 
-.colorSquare {
+.color-square {
   width:16px;
   height:16px;
   display: inline-block;
@@ -159,7 +159,9 @@
   border-width: 1px;
   border-style: solid;
   border-color: black;
+  margin-right: 1em;
 }
+
 
 footer {
   top: 722px;

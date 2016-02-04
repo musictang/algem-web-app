@@ -82,6 +82,7 @@ public class PlanningCtrl
     model.addAttribute("timeOffset", service.getTimeOffset());
     model.addAttribute("bookingConf", service.getBookingConf());
     model.addAttribute("roomInfo", service.getRoomInfo(estab));
+    model.addAttribute("colorDefs", service.getDefaultColorCodes());
 
     return "daily";
   }

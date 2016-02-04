@@ -194,6 +194,11 @@ public class PlanningServiceImpl implements PlanningService
     scheduleIO.book(booking);
   }
 
+  @Override
+  public Map<Integer,Config> getDefaultColorCodes() {
+    return colorizer.getDefColorCodes();
+  }
+
   private int getBookingMinDelay() {
     try {
       return Integer.parseInt(configIO.findId("Reservation.delai.min").getValue());

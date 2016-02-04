@@ -22,6 +22,11 @@ package net.algem.planning;
 
 import net.algem.config.ColorPref;
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import net.algem.config.Config;
 import net.algem.util.Colorizer;
 
 /**
@@ -66,6 +71,24 @@ public class ScheduleColorizer implements Colorizer<ScheduleElement> {
         return colorPref.getColor(ScheduleColor.BOOKING_MEMBER);
     }
     return Color.WHITE;
+  }
+
+  public Map<Integer,Config> getDefColorCodes() {
+    Map<Integer,Config> codes = new TreeMap<>();
+    codes.put(1, new Config("help.color.course.collective", colorToHex(colorPref.getColor(ScheduleColor.COURSE_CO))));
+    codes.put(2,new Config("help.color.course.individual", colorToHex(colorPref.getColor(ScheduleColor.COURSE_INDIVIDUAL))));
+    codes.put(3,new Config("help.color.range", colorToHex(colorPref.getColor(ScheduleColor.RANGE))));
+    codes.put(4,new Config("help.color.workshop", colorToHex(colorPref.getColor(ScheduleColor.WORKSHOP))));
+    codes.put(5,new Config("help.color.training", colorToHex(colorPref.getColor(ScheduleColor.TRAINING))));
+    codes.put(6,new Config("help.color.studio", colorToHex(colorPref.getColor(ScheduleColor.STUDIO))));
+    codes.put(7,new Config("help.color.administrative", colorToHex(colorPref.getColor(ScheduleColor.ADMINISTRATIVE))));
+    codes.put(8,new Config("help.color.member.rehearsal", colorToHex(colorPref.getColor(ScheduleColor.MEMBER_REHEARSAL))));
+    codes.put(9,new Config("help.color.booking.member", colorToHex(colorPref.getColor(ScheduleColor.BOOKING_MEMBER))));
+    codes.put(10,new Config("help.color.group.rehearsal", colorToHex(colorPref.getColor(ScheduleColor.GROUP_REHEARSAL))));
+    codes.put(11,new Config("help.color.booking.group", colorToHex(colorPref.getColor(ScheduleColor.BOOKING_GROUP))));
+    codes.put(12,new Config("help.color.closed", "#CCC"));
+
+    return codes;
   }
 
   @Override

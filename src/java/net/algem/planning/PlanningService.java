@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.algem.config.Config;
 import net.algem.contact.Person;
 import net.algem.room.Room;
 
@@ -89,5 +90,7 @@ public interface PlanningService {
   int getTimeOffset();
 
   void book(Booking booking) throws ParseException;
+
+  Map<Integer,Config> getDefaultColorCodes();
 
 }
