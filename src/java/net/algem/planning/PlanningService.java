@@ -52,7 +52,7 @@ public interface PlanningService {
 
   List<ScheduleElement> getPersonConflicts(Booking booking);
 
-  List<ScheduleElement> getBookings(int idper);
+  List<BookingScheduleElement> getBookings(int idper);
 
   DailyTimes getDailyTimes(int room, int dow);
 
@@ -90,7 +90,7 @@ public interface PlanningService {
   int getTimeOffset();
 
   void book(Booking booking) throws ParseException;
-  
+
   public boolean cancelBooking(int action);
 
   Map<Integer,Config> getDefaultColorCodes();

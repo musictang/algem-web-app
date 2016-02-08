@@ -98,7 +98,8 @@ header > nav {
 
 .global {
   /*background-color: #fff8dc;*/
-  padding: 2em 0;
+  padding: 2em 1em;
+  width: auto;
   /*hauteur minimale de page*/
   min-height: 80%;
 }
@@ -503,6 +504,18 @@ form label {
 #booking input[type='radio'] + label {
   /*display: inline;*/
   padding: 0 0.5em;
+}
+
+.booking-list {
+  width: 100%;
+}
+
+.pending {
+  color: red;
+}
+
+.confirmed {
+  color: green;
 }
 
 form input + span {

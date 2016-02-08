@@ -134,10 +134,11 @@ public class PlanningServiceImpl implements PlanningService
   }
 
   @Override
-  public List<ScheduleElement> getBookings(int idper) {
+  public List<BookingScheduleElement> getBookings(int idper) {
     return scheduleIO.getBookings(idper);
   }
-  
+
+  @Override
   public boolean cancelBooking(int action) {
     try {
       scheduleIO.cancelBooking(action);

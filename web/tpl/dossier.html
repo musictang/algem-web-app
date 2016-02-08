@@ -20,7 +20,7 @@
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
   <head th:with="title=${@organization['name.label']}" th:include="fragments/layout :: common-head">
-    <title>TODO supply a title</title>
+    <title th:text="#{my.page.label}">TODO supply a title</title>
   </head>
   <body>
     <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
@@ -35,7 +35,7 @@
       <h1 th:utext="${@organization['name.label']}"></h1>
     </header>
     <div class="global">
-      <div class="centered">
+      <!--<div class="centered">-->
       <!--<h2 ></h2>-->
 <!--      <p></p>-->
       <h3 th:text="|${user.firstName} ${user.name}|">Mes informations</h3>
@@ -51,15 +51,17 @@
         </tr>
         <tr><th th:text="#{profile.label}"></th><td th:text="#{${user.profile.label}}">trois</td></tr>
       </table>
-      <h3>Mes réservations</h3>
-      <table class="pure-table pure-table-vertical pure-table-bordered pure-table-striped">
+      <h3 th:text="#{my.bookings.label}">Mes réservations</h3>
+      <table class="pure-table pure-table-vertical pure-table-bordered pure-table-striped booking-list">
         <thead>
-          <tr><th th:text="#{group.label}"></th>
-            <th th:text="#{establishment.label}">Etablissement</th>
-            <th th:text="#{room.label}">Salle</th>
-            <th th:text="#{date.label}">Date</th>
-            <th th:text="#{hour.label}">Heure</th>
-            <th></th>
+          <tr>
+            <th th:text="#{group.label}" style="width: 20%"></th>
+            <th th:text="#{establishment.label}" style="width: 15%">Etablissement</th>
+            <th th:text="#{room.label}" style="width: 15%">Salle</th>
+            <th th:text="#{date.label}" style="width: 10%">Date</th>
+            <th th:text="#{hour.label}" style="width: 10%">Heure</th>
+            <th th:text="#{status.label}" style="width: 20%">Statut</th>
+            <th style="width: 10%">&nbsp;</th>
           </tr>
         </thead>
         <tbody><tr th:each="b:${bookings}">
@@ -68,21 +70,11 @@
           <td th:text="${b.detail['room']}"></td>
           <td><a th:href="@{/daily.html(d=${b.date},e=${b.detail['estab'].id})}" th:text="${b.date}"></a></td>
           <td th:text="${b.start + '-' + b.end}"></td>
-          <td><a th:href="@{/perso/book-cancel.html(action=${b.idAction},date=${b.date},start=${b.start})}">Annuler</a></td>
+          <td th:class="${b.status == 0 ? 'pending' : 'confirmed'}" th:text="#{${b.status == 0} ? booking.pending.label : booking.confirmed.label}"></td>
+          <td><a th:if="${b.status == 0}" th:text="#{cancel.label}" th:href="@{/perso/book-cancel.html(action=${b.idAction},date=${b.date},start=${b.start})}">Annuler</a></td>
         </tr>
         </tbody>
       </table>
-<!--      <ul>
-        <li th:each="b:${bookings}">
-          <a th:href="@{daily.html(e=${param.e[0]},d='01-01-2016')}" th:text="${b}"></a></li>
-      </ul>-->
     </div>
-<!--    <table>
-      <c:forEach items="${acl}" var="map">
-        <c:forEach items="${map}" var="entry">
-          <tr><td>${entry.key}</td><td>${entry.value}</td></tr>
-        </c:forEach>
-      </c:forEach>
-    </table>-->
   </body>
 </html>

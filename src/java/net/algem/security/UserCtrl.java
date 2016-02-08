@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import net.algem.contact.Email;
 import net.algem.contact.Person;
+import net.algem.planning.BookingScheduleElement;
 import net.algem.planning.PlanningService;
 import net.algem.planning.ScheduleElement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,7 +187,7 @@ public class UserCtrl {
   public String showHome(Principal p, Model model) {
     User u = service.findUserByLogin(p.getName());
     model.addAttribute("user", u);
-    List<ScheduleElement> bookings = planningService.getBookings(u.getId());
+    List<BookingScheduleElement> bookings = planningService.getBookings(u.getId());
     model.addAttribute("bookings", bookings);
     model.addAttribute("person", service.getPersonFromUser(u.getId()));
     return "dossier";
