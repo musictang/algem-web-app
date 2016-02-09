@@ -44,8 +44,8 @@ public enum ScheduleColor {
   GROUP_REHEARSAL("plan.repet.groupe.color", -14591745),
   STUDIO("plan.studio.color", -5160193),//153,0,255 (alternative : 6711039 //102,102,255 | 10027263)
   ADMINISTRATIVE("plan.administratif.color", -6710785),//light purple 153,153,255 #9999FF
-  BOOKING_GROUP("plan.reservation.groupe.color", -7692058),
-  BOOKING_MEMBER("plan.reservation.individuelle.color", -6170394),
+  BOOKING_GROUP("plan.reservation.groupe.color", Color.MAGENTA.getRGB()), // old -7692058
+  BOOKING_MEMBER("plan.reservation.individuelle.color", Color.MAGENTA.brighter().getRGB()), // old -6170394
   // Foreground
   ACTION_LABEL("plan.action.label.color", Color.GREEN.getRGB()),
   MEMBER_LABEL("plan.adherent.label.color", -256),

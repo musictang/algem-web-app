@@ -22,9 +22,7 @@ package net.algem.planning;
 
 import net.algem.config.ColorPref;
 import java.awt.Color;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TreeMap;
 import net.algem.config.Config;
 import net.algem.util.Colorizer;

@@ -417,7 +417,7 @@ public class ScheduleDao
         PreparedStatement ps = con.prepareStatement(sql, new String[]{"id"});
         ps.setInt(1, booking.getPerson());
         ps.setInt(2, booking.getAction());
-        ps.setTimestamp(3, new java.sql.Timestamp(date.getTime()));
+        ps.setTimestamp(3, new java.sql.Timestamp(new Date().getTime()));
         ps.setBoolean(4, booking.isPass());
         ps.setByte(5, (byte) 0);
         return ps;
