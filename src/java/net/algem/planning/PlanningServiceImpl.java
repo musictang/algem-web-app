@@ -24,6 +24,8 @@ import net.algem.config.ColorPref;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.algem.config.Config;
 import net.algem.config.ConfigIO;
 import net.algem.config.ConfigKey;
@@ -35,6 +37,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class for schedule operations.
@@ -43,14 +47,14 @@ import org.springframework.stereotype.Component;
  * @version 1.0.5
  * @since 1.0.0 11/02/13
  */
-@Component
+@Service
 public class PlanningServiceImpl implements PlanningService
 {
 
   private static final ScheduleColorizer colorizer = new ScheduleColorizer(new ColorPref());
 
   @Autowired
-  private ScheduleDao scheduleIO;
+  private ScheduleDao scheduleDao;
   @Autowired
   private PersonIO personIO;
   @Autowired
@@ -58,13 +62,13 @@ public class PlanningServiceImpl implements PlanningService
   @Autowired
   private MessageSource messageSource;
 
-  public void setScheduleIO(ScheduleDao scheduleIO) {
-    this.scheduleIO = scheduleIO;
-  }
-
-  public void setPersonIO(PersonIO personIO) {
-    this.personIO = personIO;
-  }
+//  public void setScheduleDao(ScheduleDao scheduleDao) {
+//    this.scheduleDao = scheduleDao;
+//  }
+//
+//  public void setPersonIO(PersonIO personIO) {
+//    this.personIO = personIO;
+//  }
 
   /**
    * Returns a map associating room's id with the list of the date's schedules.
@@ -77,7 +81,7 @@ public class PlanningServiceImpl implements PlanningService
   public Map<Integer, Collection<ScheduleElement>> getDaySchedule(Date date, int estab) {
     Map<Integer, Collection<ScheduleElement>> map = new HashMap<Integer, Collection<ScheduleElement>>();
     int place = -1;
-    for (ScheduleElement d : scheduleIO.find(date, estab)) {
+    for (ScheduleElement d : scheduleDao.find(date, estab)) {
       d.setLabel(getHtmlTitle(d));
       d.setColor(ScheduleColorizer.colorToHex(colorizer.getColor(d)));
       if (d.getPlace() != place) {
@@ -100,7 +104,7 @@ public class PlanningServiceImpl implements PlanningService
   @Override
   public Map<Room, Collection<ScheduleElement>> getFreePlace(Date date, int estab) {
     Map<Room, Collection<ScheduleElement>> map = new TreeMap<Room, Collection<ScheduleElement>>();
-    List<Room> rooms = scheduleIO.getFreeRoom(date, estab);
+    List<Room> rooms = scheduleDao.getFreeRoom(date, estab);
     for (Room r : rooms) {
       List<ScheduleElement> closed = getClosed(r.getId(), date);
       map.put(r, closed);
@@ -110,7 +114,7 @@ public class PlanningServiceImpl implements PlanningService
 
   @Override
   public List<Room> getRoomInfo(int estab) {
-    return scheduleIO.findRoomInfo(estab);
+    return scheduleDao.findRoomInfo(estab);
   }
 
   /**
@@ -135,15 +139,16 @@ public class PlanningServiceImpl implements PlanningService
 
   @Override
   public List<BookingScheduleElement> getBookings(int idper) {
-    return scheduleIO.getBookings(idper);
+    return scheduleDao.getBookings(idper);
   }
 
   @Override
   public boolean cancelBooking(int action) {
     try {
-      scheduleIO.cancelBooking(action);
+      scheduleDao.cancelBooking(action);
       return true;
     } catch(DataAccessException e) {
+      Logger.getLogger(PlanningServiceImpl.class.getName()).log(Level.SEVERE, e.getMessage(),e);
       return false;
     }
   }
@@ -182,12 +187,12 @@ public class PlanningServiceImpl implements PlanningService
    */
   @Override
   public List<ScheduleElement> getRoomConflicts(Booking booking) {
-    return scheduleIO.getRoomConflicts(booking);
+    return scheduleDao.getRoomConflicts(booking);
   }
 
    @Override
   public List<ScheduleElement> getPersonConflicts(Booking booking) {
-    return scheduleIO.getPersonConflicts(booking);
+    return scheduleDao.getPersonConflicts(booking);
   }
 
   /**
@@ -202,7 +207,7 @@ public class PlanningServiceImpl implements PlanningService
 
   @Override
   public void book(Booking booking) throws ParseException {
-    scheduleIO.book(booking);
+    scheduleDao.book(booking);
   }
 
   @Override
@@ -239,7 +244,7 @@ public class PlanningServiceImpl implements PlanningService
 
   private DailyTimes[] findDailyTimes(int roomId) {
     try {
-      return scheduleIO.find(roomId);
+      return scheduleDao.find(roomId);
     } catch (SQLException ex) {
       return getDefaultDailyTimes();
     }

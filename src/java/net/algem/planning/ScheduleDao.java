@@ -36,6 +36,7 @@ import net.algem.room.Room;
 import net.algem.util.AbstractGemDao;
 import net.algem.util.Constants;
 import net.algem.util.NamedModel;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
@@ -57,8 +58,9 @@ public class ScheduleDao
 
   public final static String TABLE = "planning";
   /** Action table. */
-  public final static String ACTION = "action";
-  public final static String ROOM_TIMES_TABLE = "horaires";
+  public final static String T_ACTION = "action";
+  public final static String T_BOOKING = "reservation";
+  public final static String T_ROOM_TIMES = "horaires";
   public final static String SEQUENCE = "planning_id_seq";
   public final static String COLUMNS = "p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.action,p.lieux,p.note";
 
@@ -198,7 +200,7 @@ public class ScheduleDao
   }
 
   public DailyTimes[] find(int roomId) throws SQLException {
-    String query = "SELECT jour, ouverture, fermeture FROM " + ROOM_TIMES_TABLE
+    String query = "SELECT jour, ouverture, fermeture FROM " + T_ROOM_TIMES
       + " WHERE idsalle = ? ORDER BY jour";
 
     List<DailyTimes> times = jdbcTemplate.query(query, new RowMapper<DailyTimes>() {
@@ -320,20 +322,10 @@ public class ScheduleDao
   }
 
   List<BookingScheduleElement> getBookings(int idper) {
-//    List<ScheduleElement> bookings = new ArrayList<ScheduleElement>();
-//    String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,s.nom,e.nom"
-//      + " FROM " + TABLE + " p JOIN salle s ON(p.lieux = s.id)"
-//      + " JOIN person e ON (e.id = s.etablissement)"
-//      + " WHERE p.jour >= 'now' "
-//      + " AND (p.ptype = " + Schedule.MEMBER + " AND p.idper = ?)"
-//      + " OR (p.ptype = " + Schedule.GROUP + " AND p.idper IN ("
-//      + "SELECT g.id FROM " + GroupIO.TABLE + " g JOIN " + GroupIO.TABLE_DET + " d ON (g.id = d.id)"
-//      + " WHERE d.musicien = ?";
-
     String query = "SELECT p.id,p.action,p.idper,p.jour,p.debut,p.fin,p.ptype,p.lieux,s.nom,e.id,e.nom,"
       + " CASE WHEN (p.ptype = " + Schedule.BOOKING_GROUP + " OR p.ptype = " + Schedule.GROUP + ") THEN g.nom ELSE '' END"
       + ",r.statut"
-      + " FROM " + TABLE + " p JOIN reservation r ON (p.action = r.idaction) JOIN salle s ON(p.lieux = s.id)"
+      + " FROM " + TABLE + " p JOIN " + T_BOOKING + " r ON (p.action = r.idaction) JOIN salle s ON(p.lieux = s.id)"
       + " JOIN personne e ON (e.id = s.etablissement)"
       + " LEFT JOIN groupe g ON (p.idper = g.id)"
       + " WHERE r.idper = ? ORDER BY p.jour,p.debut";
@@ -373,7 +365,7 @@ public class ScheduleDao
     return e;
   }
 
-  @Transactional
+  @Transactional(rollbackFor=DataAccessException.class)
   public void book(final Booking booking) throws ParseException {
     final Date date = Constants.DATE_FORMAT.parse(booking.getDate());
     final int action = createEmptyAction();
@@ -403,7 +395,7 @@ public class ScheduleDao
   public void cancelBooking(final int action) {
     String sql = "DELETE FROM " + TABLE + " WHERE action = ?";
     jdbcTemplate.update(sql, action);
-    String sql2 = "DELETE FROM reservation WHERE action = ?";
+    String sql2 = "DELETE FROM " + T_BOOKING + " WHERE action = ?";
     jdbcTemplate.update(sql2, action);
   }
 
@@ -428,7 +420,7 @@ public class ScheduleDao
   }
 
   private int createEmptyAction() {
-    final String sql = "INSERT INTO " + ACTION + " (cours) VALUES(?);";
+    final String sql = "INSERT INTO " + T_ACTION + " (cours) VALUES(?);";
     KeyHolder keyHolder = new GeneratedKeyHolder();
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
