@@ -15,18 +15,6 @@
        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
-  <!--==================-->
-  <!--ANNOTATION SUPPORT-->
-  <!--==================-->
-  <!--	Tells Spring that you intend to use annotation-based wiring in Spring. -->
-  <!--<context:annotation-config transaction-manager="transactionManager"/>-->
-  <!--<context:annotation-config />-->
-
-  <!--<tx:annotation-driven />-->
-  <context:component-scan base-package="net.algem">
-    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-  </context:component-scan>
-
 
   <!--========================-->
   <!--DATASOURCE CONFIGURATION-->

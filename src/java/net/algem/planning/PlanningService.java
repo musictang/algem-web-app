@@ -38,9 +38,7 @@ import net.algem.room.Room;
  */
 public interface PlanningService {
 
-//  int getBookingDelay();
-
-//  int getCancelBookingDelay();
+  Map<String,String> getConf();
 
   BookingConf getBookingConf();
   /**

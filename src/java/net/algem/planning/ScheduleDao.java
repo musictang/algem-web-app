@@ -36,14 +36,12 @@ import net.algem.room.Room;
 import net.algem.util.AbstractGemDao;
 import net.algem.util.Constants;
 import net.algem.util.NamedModel;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * IO methods for class {@link net.algem.planning.Schedule}.
@@ -365,7 +363,6 @@ public class ScheduleDao
     return e;
   }
 
-  @Transactional(rollbackFor=DataAccessException.class)
   public void book(final Booking booking) throws ParseException {
     final Date date = Constants.DATE_FORMAT.parse(booking.getDate());
     final int action = createEmptyAction();
@@ -391,11 +388,10 @@ public class ScheduleDao
     });
   }
 
-  @Transactional
   public void cancelBooking(final int action) {
     String sql = "DELETE FROM " + TABLE + " WHERE action = ?";
     jdbcTemplate.update(sql, action);
-    String sql2 = "DELETE FROM " + T_BOOKING + " WHERE action = ?";
+    String sql2 = "DELETE FROM " + T_BOOKING + " WHERE idaction = ?";
     jdbcTemplate.update(sql2, action);
   }
 

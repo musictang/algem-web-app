@@ -143,6 +143,7 @@ public class PlanningServiceImpl implements PlanningService
   }
 
   @Override
+  @Transactional
   public boolean cancelBooking(int action) {
     try {
       scheduleDao.cancelBooking(action);
@@ -153,19 +154,9 @@ public class PlanningServiceImpl implements PlanningService
     }
   }
 
+  @Override
   public Map<String,String> getConf() {
     Map<String,String> confs = new HashMap<>();
-//    Config c1 = configIO.findId(ConfigKey.START_TIME.getKey());
-//    confs.put("startTime", c1.getValue());
-//
-//    Config c2 = configIO.findId(ConfigKey.BOOKING_DELAY.getKey());
-//    try {
-//      Integer.parseInt(c2.getValue());
-//    } catch (NumberFormatException nfe) {
-//      System.err.println(nfe.getMessage());
-//      c2.setValue("24");
-//    }
-//    confs.put("bookingDelay", c2.getValue());
     Config c3 = configIO.findId(ConfigKey.OFFPEAK_HOUR.getKey());
     confs.put("offPeakTime", c3.getValue());
     Config c4 = configIO.findId(ConfigKey.END_YEAR.getKey());
@@ -206,6 +197,7 @@ public class PlanningServiceImpl implements PlanningService
   }
 
   @Override
+  @Transactional
   public void book(Booking booking) throws ParseException {
     scheduleDao.book(booking);
   }

@@ -46,11 +46,11 @@ public class PlanningCtrl
 {
 
   @Autowired
-  private PlanningServiceImpl service;
+  private PlanningService service;
 
   private final String estabFilter = " AND id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)";
 
-  public void setService(PlanningServiceImpl service) {
+  public void setService(PlanningService service) {
     this.service = service;
   }
 
