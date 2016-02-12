@@ -37,6 +37,8 @@ public class ScheduleElement
         extends Schedule
 {
 
+  private static final long serialVersionUID = 1L;
+
   private Map<String,NamedModel> detail = new HashMap<>();
   private boolean collective;
   private Collection<ScheduleRange> ranges;
@@ -146,7 +148,7 @@ public class ScheduleElement
   }
 
   /**
-   * Gets a color value corresponding to the schedule's type.
+   * Gets the color value corresponding to the schedule's type.
    *
    * @return a string in hex format
    */
@@ -154,33 +156,6 @@ public class ScheduleElement
     String prefix = "#";
     if (type == Schedule.ROOM) return prefix + "CCC";
     return color;
-    //plage rgb(252,211,0)
-    //instrument collectif	rgb(255,128,25)
-//    switch (type) {
-//      case Schedule.ROOM:
-//        return prefix + "CCCCCC";
-//      case Schedule.COURSE:
-//        if (isCollective()) {
-//          return prefix + "FF5252"; //#FF3333 rgb(255,51,51)
-//        } else {
-//          return prefix + "00D059"; //#00D059 rgb(0,208,89)
-//        }
-//      case Schedule.GROUP:
-//        return prefix + "2158FF"; //#2158FF rgb(33,88,255)
-//      case Schedule.MEMBER:
-//        return prefix + "3399FF"; //#3399FF rgb(51,153,255)
-//      case Schedule.WORKSHOP:
-//        return prefix + "F7F7AC"; //#F7F7AC rgb(247,247,172)
-//      case Schedule.TRAINING:
-//        return prefix + "F7F77C"; //#F7F7AC rgb(247,247,172)
-//      case Schedule.BOOKING_GROUP:
-//        return prefix + "8aa0e6"; // rgb(138,160,230)-7692058
-//      case Schedule.BOOKING_MEMBER:
-//        return prefix + "a1d8e6"; //rgb(161,216,230) -6170394
-//      default:
-//        return "#FFFFFF";
-
-//    }
   }
 
 }

@@ -53,6 +53,7 @@ public class UserDao
 
   public static final String TABLE = "login";
   public static final String TOKEN_TABLE = "jeton_login";
+  public static final String SEASON_TABLE = "carteabopersonne";
 
   public UserDao() {
   }
@@ -124,13 +125,16 @@ public class UserDao
     }, email);
   }
 
-
-
-
   public boolean isPerson(User u) {
     String query = "SELECT id FROM " + PersonIO.TABLE
       + " WHERE id = ? AND (ptype = " + Person.PERSON + " OR ptype = " + Person.ROOM + ")";
     return jdbcTemplate.queryForObject(query, Integer.class, u.getId()) > 0;
+  }
+  
+  public int findPass(String userName) {
+    String query = "SELECT c.idper FROM " + SEASON_TABLE + " c JOIN " + TABLE + " l ON (c.idper = l.idper)"
+            + " WHERE l.login = ? AND c.restant > 0 ORDER BY c.id DESC LIMIT 1";
+    return jdbcTemplate.queryForObject(query, Integer.class, userName);
   }
 
   public Person getPersonFromUser(final int userId) {

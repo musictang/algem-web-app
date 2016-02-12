@@ -1,7 +1,7 @@
 /*
- * @(#)PlanningServiceImpl.java	1.0.5 14/09/15
+ * @(#)PlanningServiceImpl.java	1.1.0 12/02/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Agenda.
  * Algem Agenda is free software: you can redistribute it and/or modify it
@@ -36,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,14 +43,15 @@ import org.springframework.transaction.annotation.Transactional;
  * Service class for schedule operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.5
+ * @version 1.1.0
  * @since 1.0.0 11/02/13
  */
 @Service
-public class PlanningServiceImpl implements PlanningService
+public class PlanningServiceImpl
+        implements PlanningService
 {
 
-  private static final ScheduleColorizer colorizer = new ScheduleColorizer(new ColorPref());
+  private static final ScheduleColorizer COLORIZER = new ScheduleColorizer(new ColorPref());
 
   @Autowired
   private ScheduleDao scheduleDao;
@@ -62,13 +62,53 @@ public class PlanningServiceImpl implements PlanningService
   @Autowired
   private MessageSource messageSource;
 
-//  public void setScheduleDao(ScheduleDao scheduleDao) {
-//    this.scheduleDao = scheduleDao;
-//  }
-//
-//  public void setPersonIO(PersonIO personIO) {
-//    this.personIO = personIO;
-//  }
+  @Override
+  public Map<String, String> getConf() {
+    Map<String, String> confs = new HashMap<>();
+    Config c3 = configIO.findId(ConfigKey.OFFPEAK_HOUR.getKey());
+    confs.put("offPeakTime", c3.getValue());
+    Config c4 = configIO.findId(ConfigKey.END_YEAR.getKey());
+    confs.put("endDate", c4.getValue());
+
+    return confs;
+  }
+
+  @Override
+  public BookingConf getBookingConf() {
+    BookingConf conf = new BookingConf();
+    conf.setMinDelay(getBookingMinDelay());
+    conf.setCancelDelay(getCancelBookingDelay());
+    conf.setMaxDelay(getBookingMaxDelay());
+
+    return conf;
+  }
+
+  @Override
+  public int getTimeOffset() {
+    Config c = configIO.findId("Heure.ouverture");
+    return new Hour(c.getValue()).toMinutes();
+  }
+
+  @Override
+  public DailyTimes getDailyTimes(int room, int dow) {
+    DailyTimes[] dailyTimes = findDailyTimes(room);
+    return dailyTimes == null || dailyTimes.length == 0 ? null : dailyTimes[dow - 1];
+  }
+
+  @Override
+  public Map<Integer, Config> getDefaultColorCodes() {
+    return COLORIZER.getDefColorCodes();
+  }
+
+  @Override
+  public List<Room> getRoomInfo(int estab) {
+    return scheduleDao.findRoomInfo(estab);
+  }
+
+  @Override
+  public List<Person> getEstablishments(String where) {
+    return personIO.findEstablishments(where);
+  }
 
   /**
    * Returns a map associating room's id with the list of the date's schedules.
@@ -83,7 +123,7 @@ public class PlanningServiceImpl implements PlanningService
     int place = -1;
     for (ScheduleElement d : scheduleDao.find(date, estab)) {
       d.setLabel(getHtmlTitle(d));
-      d.setColor(ScheduleColorizer.colorToHex(colorizer.getColor(d)));
+      d.setColor(ScheduleColorizer.colorToHex(COLORIZER.getColor(d)));
       if (d.getPlace() != place) {
         place = d.getPlace();
         List<ScheduleElement> elements = new ArrayList<ScheduleElement>();
@@ -112,67 +152,9 @@ public class PlanningServiceImpl implements PlanningService
     return map;
   }
 
-  @Override
-  public List<Room> getRoomInfo(int estab) {
-    return scheduleDao.findRoomInfo(estab);
-  }
-
-  /**
-   * Get the global opening time.
-   * @return a time length in minutes
-   */
-  @Override
-  public int getTimeOffset() {
-    Config c = configIO.findId("Heure.ouverture");
-    return new Hour(c.getValue()).toMinutes();
-  }
-
-  @Override
-  public BookingConf getBookingConf() {
-    BookingConf conf = new BookingConf();
-    conf.setMinDelay(getBookingMinDelay());
-    conf.setCancelDelay(getCancelBookingDelay());
-    conf.setMaxDelay(getBookingMaxDelay());
-
-    return conf;
-  }
-
-  @Override
-  public List<BookingScheduleElement> getBookings(int idper) {
-    return scheduleDao.getBookings(idper);
-  }
-
-  @Override
-  @Transactional
-  public boolean cancelBooking(int action) {
-    try {
-      scheduleDao.cancelBooking(action);
-      return true;
-    } catch(DataAccessException e) {
-      Logger.getLogger(PlanningServiceImpl.class.getName()).log(Level.SEVERE, e.getMessage(),e);
-      return false;
-    }
-  }
-
-  @Override
-  public Map<String,String> getConf() {
-    Map<String,String> confs = new HashMap<>();
-    Config c3 = configIO.findId(ConfigKey.OFFPEAK_HOUR.getKey());
-    confs.put("offPeakTime", c3.getValue());
-    Config c4 = configIO.findId(ConfigKey.END_YEAR.getKey());
-    confs.put("endDate", c4.getValue());
-
-    return confs;
-  }
-
-  @Override
-  public DailyTimes getDailyTimes(int room, int dow) {
-    DailyTimes[] dailyTimes = findDailyTimes(room);
-    return dailyTimes == null || dailyTimes.length == 0 ? null : dailyTimes[dow-1];
-  }
-
   /**
    * Gets the list of schedules conflicting with this {@code booking}.
+   *
    * @param booking desired booking
    * @return a list of schedules or an empty list if no conflict was detected
    */
@@ -181,7 +163,7 @@ public class PlanningServiceImpl implements PlanningService
     return scheduleDao.getRoomConflicts(booking);
   }
 
-   @Override
+  @Override
   public List<ScheduleElement> getPersonConflicts(Booking booking) {
     return scheduleDao.getPersonConflicts(booking);
   }
@@ -192,8 +174,8 @@ public class PlanningServiceImpl implements PlanningService
    * @return a list of persons' instances of type {@value Person#ESTABLISHMENT}
    */
   @Override
-  public List<Person> getEstablishments(String where) {
-    return personIO.findEstablishments(where);
+  public List<BookingScheduleElement> getBookings(int idper) {
+    return scheduleDao.getBookings(idper);
   }
 
   @Override
@@ -203,8 +185,15 @@ public class PlanningServiceImpl implements PlanningService
   }
 
   @Override
-  public Map<Integer,Config> getDefaultColorCodes() {
-    return colorizer.getDefColorCodes();
+  @Transactional
+  public boolean cancelBooking(int action) {
+    try {
+      scheduleDao.cancelBooking(action);
+      return true;
+    } catch (DataAccessException e) {
+      Logger.getLogger(PlanningServiceImpl.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+      return false;
+    }
   }
 
   private int getBookingMinDelay() {
@@ -279,13 +268,14 @@ public class PlanningServiceImpl implements PlanningService
 
   /**
    * Default opening times.
+   *
    * @return an array of daily times
    */
   private DailyTimes[] getDefaultDailyTimes() {
     DailyTimes[] timesArray = new DailyTimes[7];
 
-    for (int i = 0 ; i < 7 ; i++) {
-      DailyTimes dt = new DailyTimes(i+1);
+    for (int i = 0; i < 7; i++) {
+      DailyTimes dt = new DailyTimes(i + 1);
       dt.setOpening(new Hour("00:00"));
       dt.setClosing(new Hour("24:00"));
       timesArray[i] = dt;
@@ -295,7 +285,7 @@ public class PlanningServiceImpl implements PlanningService
 
   /**
    * Gets the label of the schedule {@code e} corresponding to its type.
-	 * The label is html formatted.
+   * The label is html formatted.
    *
    * @return a html string representing the schedule element
    */
@@ -314,10 +304,10 @@ public class PlanningServiceImpl implements PlanningService
       case Schedule.MEMBER:
         t = messageSource.getMessage("member.rehearsal.title", null, locale);
         break;
-        case Schedule.BOOKING_GROUP:
+      case Schedule.BOOKING_GROUP:
         t = messageSource.getMessage("booking.group.title", null, locale);
         break;
-          case Schedule.BOOKING_MEMBER:
+      case Schedule.BOOKING_MEMBER:
         t = messageSource.getMessage("booking.member.title", null, locale);
         break;
       default:

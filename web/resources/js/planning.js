@@ -201,13 +201,10 @@ function setBookingDialog() {
 /**
  *
  * @param {Object} params booking params
- * @param {Object} height and step rules
- * @param {Number} bookingDelay booking delay (in hours)
+ * @param {Object} steps height and step rules
  * @returns {undefined}
  */
 function setBooking(params, steps) {
-  //TODO detect valid date current date >= now + delay;
-
   var date = new Date($("#datepicker").datepicker('getDate'));
   $(".schedule_col").click(function (e) {
     //var posX = $(this).offset().left;
@@ -258,6 +255,7 @@ function setBooking(params, steps) {
       });
 
       setEndIndex($("#startTime"), steps);
+      setPassChecked();
     }
   });
 
@@ -356,7 +354,7 @@ function getGroups(params) {
     return;
   }
 
-  var urlPath = $("#booking-form #ajax-url").val();
+  var urlPath = $("#booking-form #xgroups-url").val();
   $.get(urlPath, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("Aucun résultat");
@@ -373,6 +371,23 @@ function getGroups(params) {
       $("#passInfo").hide();
     }
 
+  }, "json");
+}
+
+/**
+ * Automatic selection of subscription pass.
+ * Ajax call to check if the person has a valid subscription card.
+ * @returns {undefined}
+ */
+function setPassChecked() {
+  var urlPath = $("#booking-form #xpass-url").val();
+   $.get(urlPath, function (data) {
+     console.log(data);
+    if (data) {
+      $("#pass").prop("checked","checked");
+    } else {
+      console.log("Aucun pass");
+    }
   }, "json");
 }
 

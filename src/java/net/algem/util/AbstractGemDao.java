@@ -1,7 +1,7 @@
 /*
- * @(#)AbstractGemDao.java	1.0.2 28/01/14
+ * @(#)AbstractGemDao.java	1.1.0 12/02/16
  *
- * Copyright (c) 2014 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Agenda.
  * Algem Agenda is free software: you can redistribute it and/or modify it
@@ -27,32 +27,29 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * Abstract Data Access Object class.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.2
+ * @version 1.1.0
  * @since 1.0.0 11/02/13
  */
 public abstract class AbstractGemDao
-	implements GemDao {
+        implements GemDao
+{
 
-	@Autowired
-	protected JdbcTemplate jdbcTemplate;
+  @Autowired
+  protected JdbcTemplate jdbcTemplate;
 
-	protected void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
+  protected void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
-	/**
-	 * Gets the last sequence number in sequence {@code sequenceName}.
-	 *
-	 * @param sequenceName
-	 * @return an integer
-	 */
+  /**
+   * Gets the last sequence number in sequence {@code sequenceName}.
+   *
+   * @param sequenceName
+   * @return an integer
+   */
   @Override
-	public int nextId(String sequenceName) {
-
-		int nextid = 0;
-		String query = "SELECT nextval('" + sequenceName + "')";
-//		nextid = jdbcTemplate.queryForInt(query);
-        nextid = jdbcTemplate.queryForObject(query, Integer.class, sequenceName);
-        return nextid;
-	}
+  public int nextId(String sequenceName) {
+    String query = "SELECT nextval(?)";
+    return jdbcTemplate.queryForObject(query, Integer.class, sequenceName);
+  }
 }

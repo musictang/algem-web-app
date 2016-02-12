@@ -114,6 +114,8 @@ public interface UserService
   public Person getPersonFromUser(int u);
 
   public List<Group> getGroups(String login);
+  
+  public boolean hasPass(String login);
 
   public List<Map<String, Boolean>> getAcl(int userId);
 

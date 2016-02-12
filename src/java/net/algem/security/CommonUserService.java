@@ -133,6 +133,12 @@ public class CommonUserService
   public List<Group> getGroups(String login) {
     return dao.getGroups(login);
   }
+  
+  @Override
+  public boolean hasPass(String login) {
+    int p = dao.findPass(login);
+    return dao.findPass(login) > 0;
+  }
 
   @Override
   public List<User> exist(User u) {

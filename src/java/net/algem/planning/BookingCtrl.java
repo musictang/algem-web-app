@@ -74,11 +74,15 @@ public class BookingCtrl {
     this.planningService = planningService;
   }
 
-  @RequestMapping(method = RequestMethod.GET, value = "/xbook")
-  public @ResponseBody
-  List<Group> doXPostBooking(Principal p) {
+  @RequestMapping(method = RequestMethod.GET, value = "/xgroups")
+  public @ResponseBody List<Group> getGroups(Principal p) {
     List<Group> groups = service.getGroups(p.getName());
     return groups;
+  }
+  
+  @RequestMapping(method = RequestMethod.GET, value = "/xpass")
+  public @ResponseBody boolean hasPass(Principal p) {
+    return service.hasPass(p.getName());
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "/book.html")
@@ -171,6 +175,7 @@ public class BookingCtrl {
         model.addAttribute("message", messageSource.getMessage("booking.cancel.delay.warning", null, LocaleContextHolder.getLocale()));
         return "error";
       }
+      // n'annuler que si confirmé
       if (planningService.cancelBooking(action)) {
         return "redirect:/perso/home.html";
       } else {

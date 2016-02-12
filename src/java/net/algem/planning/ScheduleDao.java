@@ -389,6 +389,7 @@ public class ScheduleDao
   }
 
   public void cancelBooking(final int action) {
+    // n'annuler que si la reservation n'a pas été confirmée
     String sql = "DELETE FROM " + TABLE + " WHERE action = ?";
     jdbcTemplate.update(sql, action);
     String sql2 = "DELETE FROM " + T_BOOKING + " WHERE idaction = ?";
