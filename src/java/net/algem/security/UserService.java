@@ -112,6 +112,8 @@ public interface UserService
   public boolean isPerson(User u);
 
   public Person getPersonFromUser(int u);
+  
+  public boolean isMember(String login, String startDate, String endDate);
 
   public List<Group> getGroups(String login);
   

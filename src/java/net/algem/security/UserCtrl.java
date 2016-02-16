@@ -337,6 +337,13 @@ public class UserCtrl {
     model.addAttribute("acl", acl);
     return "dossier";
   }
+  
+  @RequestMapping(value = "/xmember")
+  @ResponseBody
+  public boolean isMember(Principal p, @RequestParam String start,
+    @RequestParam String end) {
+    return service.isMember(p.getName(), start, end);
+  }
 
   private boolean isEmailValid(Person p, String email) {
     for (Email e : p.getEmail()) {

@@ -318,9 +318,33 @@ public class ScheduleDao
 
     return conflicts;
   }
+  
+  /**
+   * Gets the booking with id {@code id}.
+   * @param id booking's id
+   * @return a booking instance
+   */
+  Booking getBooking(int id) {
+    String query = "SELECT id,idper,idaction,dateres,pass,statut FROM " + T_BOOKING + " WHERE id = ?";
+    return jdbcTemplate.queryForObject(query, new RowMapper<Booking>() {
+      @Override
+      public Booking mapRow(ResultSet rs, int arg1) throws SQLException {
+        Booking b = new Booking();
+        b.setId(rs.getInt(1));
+        b.setPerson(rs.getInt(2));
+        b.setAction(rs.getInt(3));
+        java.sql.Timestamp t = rs.getTimestamp(4);
+        b.setDate(Constants.DATE_FORMAT.format(new java.util.Date(t.getTime())));
+        b.setPass(rs.getBoolean(5));
+        b.setStatus(rs.getByte(6));
+        return b;
+      }
+      
+    }, id);
+  }
 
   List<BookingScheduleElement> getBookings(int idper) {
-    String query = "SELECT p.id,p.action,p.idper,p.jour,p.debut,p.fin,p.ptype,p.lieux,s.nom,e.id,e.nom,"
+    String query = "SELECT r.id,p.action,p.idper,p.jour,p.debut,p.fin,p.ptype,p.lieux,s.nom,e.id,e.nom,"
       + " CASE WHEN (p.ptype = " + Schedule.BOOKING_GROUP + " OR p.ptype = " + Schedule.GROUP + ") THEN g.nom ELSE '' END"
       + ",r.statut"
       + " FROM " + TABLE + " p JOIN " + T_BOOKING + " r ON (p.action = r.idaction) JOIN salle s ON(p.lieux = s.id)"

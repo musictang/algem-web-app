@@ -218,13 +218,14 @@ function setBooking(params, steps) {
       console.log("index start time" + idx);
       $("#startTime option").eq(idx).prop("selected", true);
       console.log("check booking");
+      
       if (!checkBookingDelay(date, params.minDelay)) {
         console.log("Hors delai");
         $("#errorDialog").html("<p>" +params.bookingMinDelayWarning +"</p>");
         $("#errorDialog").dialog("open");
         return;
       }
-       if (!checkBookingDate(date, params.maxDelay)) {
+      if (!checkBookingDate(date, params.maxDelay)) {
         console.log("Hors limite");
         $("#errorDialog").html("<p>" +params.bookingMaxDelayWarning +"</p>");
         $("#errorDialog").dialog("open");
@@ -285,6 +286,13 @@ function setBooking(params, steps) {
   $("#booking-form input[type='submit']").click(function () {
     console.log("click submit button");
   });
+  $("#booking-form").bind("keypress", function (e) {
+    if (e.keyCode == 13 || e.keyCode == 169) {
+      e.preventDefault();
+      return false;
+    }
+});
+  
 
 }
 

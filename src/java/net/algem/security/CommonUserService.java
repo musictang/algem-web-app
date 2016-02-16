@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.algem.config.ConfigIO;
+import net.algem.config.ConfigKey;
 import net.algem.contact.Person;
 import net.algem.group.Group;
 import org.apache.commons.codec.binary.Base64;
@@ -46,6 +48,9 @@ public class CommonUserService
 
   @Autowired
   private UserDao dao;
+  
+  @Autowired
+  private ConfigIO configIO;
 
   public void setDao(UserDao dao) {
     this.dao = dao;
@@ -127,6 +132,11 @@ public class CommonUserService
       p.setEmail(dao.getEmailsFromContact(u));
     }
     return p;
+  }
+  
+  @Override
+  public boolean isMember(String login, String startDate, String endDate) {
+    return dao.isMemberOnYear(login, 0, startDate, endDate);
   }
 
   @Override

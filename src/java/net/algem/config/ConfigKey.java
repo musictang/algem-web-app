@@ -29,7 +29,7 @@ package net.algem.config;
  */
 public enum ConfigKey {
 
-  /** Organization name. */
+  /** Organization name. *//** Organization name. *//** Organization name. *//** Organization name. */
   ORGANIZATION_NAME("Organisation.Nom"),
 
   /** Organization first address. */
@@ -46,10 +46,10 @@ public enum ConfigKey {
 
 
   /** Start of school year. */
-  BEGINNING_YEAR("Date.DebutAnnee"),
+  START_OF_YEAR("Date.DebutAnnee"),
 
   /** End of school year. */
-  END_YEAR("Date.FinAnnee"),
+  END_OF_YEAR("Date.FinAnnee"),
 
   /** Start of period. */
   BEGINNING_PERIOD("Date.DebutPeriode"),
@@ -83,8 +83,12 @@ public enum ConfigKey {
 
   ADMINISTRATIVE_MANAGEMENT("Planification.administrative"),
 
-  BOOKING_DELAY("Reservation.delai");
-
+  BOOKING_MIN_DELAY("Reservation.delai.min"),
+  BOOKING_MAX_DELAY("Reservation.delai.max"),
+  BOOKING_CANCEL_DELAY("Reservation.annulation.delai"),
+  MEMBERSHIP_ACCOUNT("ADHÉSIONS"),
+  PRO_MEMBERSHIP_ACCOUNT("ADHÉSIONS PRO");
+  
   private final String key;
 
   ConfigKey(String key) {

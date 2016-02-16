@@ -71,7 +71,7 @@
           <td><a th:href="@{/daily.html(d=${b.date},e=${b.detail['estab'].id})}" th:text="${b.date}"></a></td>
           <td th:text="${b.start + '-' + b.end}"></td>
           <td th:class="${b.status == 0 ? 'pending' : 'confirmed'}" th:text="#{${b.status == 0} ? booking.pending.label : booking.confirmed.label}"></td>
-          <td><a th:if="${b.status == 0}" th:text="#{cancel.label}" th:href="@{/perso/book-cancel.html(action=${b.idAction},date=${b.date},start=${b.start})}">Annuler</a></td>
+          <td><a th:if="${b.status == 0}" th:text="#{cancel.label}" th:href="@{/perso/book-cancel.html(id=${b.id},action=${b.idAction},date=${b.date},start=${b.start})}">Annuler</a></td>
         </tr>
         </tbody>
       </table>

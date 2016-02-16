@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
@@ -162,15 +163,22 @@ public class BookingCtrl {
   }
   
   @RequestMapping(method = RequestMethod.GET, value = "/perso/book-cancel.html")
-  public String cancelBooking(Model model, @RequestParam int action, @RequestParam String date, @RequestParam String start) {
+  public String cancelBooking(Model model, @RequestParam int id, @RequestParam int action, @RequestParam String date, @RequestParam String start) {
     try {
-      Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, action + " " + date + " " + start);
+      String info = action + " " + date + " " + start;
+      Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, info);
       Date d = Constants.DATE_FORMAT.parse(date);
       Calendar cal = Calendar.getInstance();
       cal.setTime(d);
       Date now = new Date();
-      BookingConf conf = planningService.getBookingConf();
-      long delay = conf.getMinDelay() * 60 * 60 * 1000;
+//      BookingConf conf = planningService.getBookingConf();
+//      long delay = conf.getMinDelay() * 60 * 60 * 1000;
+      Booking b = planningService.getBooking(id);
+      if (b != null && b.getStatus() == 1) {
+        model.addAttribute("message", messageSource.getMessage("booking.confirmed.cancel.warning", null, LocaleContextHolder.getLocale()));
+        return "error";
+      }
+
       if (now.getTime() > d.getTime()) {
         model.addAttribute("message", messageSource.getMessage("booking.cancel.delay.warning", null, LocaleContextHolder.getLocale()));
         return "error";
@@ -184,6 +192,14 @@ public class BookingCtrl {
       }
     } catch (ParseException ex) {
       Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      return "error";
+    } catch (DataAccessException de) {
+      Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, de);
+      if (de instanceof EmptyResultDataAccessException) {
+        model.addAttribute("message", messageSource.getMessage("booking.not.found.warning", null, LocaleContextHolder.getLocale()));
+      } else {
+        model.addAttribute("message", de.getMessage());
+      }
       return "error";
     }
     

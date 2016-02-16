@@ -58,5 +58,10 @@ public class ConfigIO
       }
     }, key);
   }
+  
+  public int findAccount(String key) {
+    String query = "SELECT idcompte FROM comptepref WHERE id = ?";
+    return jdbcTemplate.queryForObject(query,Integer.class, key);
+  }
 
 }

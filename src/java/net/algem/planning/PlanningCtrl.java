@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningCtrl.java	1.0.5 14/09/15
+ * @(#)PlanningCtrl.java	1.1.0 15/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * MVC Controller for planning view.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.5
+ * @version 1.1.0
  * @since 1.0.0 11/02/13
  */
 @Controller

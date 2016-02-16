@@ -24,6 +24,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import net.algem.group.Group;
 import net.algem.group.GroupIO;
 import net.algem.util.AbstractGemDao;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
@@ -129,6 +131,17 @@ public class UserDao
     String query = "SELECT id FROM " + PersonIO.TABLE
       + " WHERE id = ? AND (ptype = " + Person.PERSON + " OR ptype = " + Person.ROOM + ")";
     return jdbcTemplate.queryForObject(query, Integer.class, u.getId()) > 0;
+  }
+  
+  public boolean isMemberOnYear(String login, int account, String start, String end) {
+    try {
+      String query = "SELECT count(e.paye) FROM echeancier2 e JOIN login l ON (e.adherent = l.idper)"
+              + " WHERE e.adherent = ? AND e.echeance BETWEEN ? AND ? AND e.compte = ?";
+      return jdbcTemplate.queryForObject(query, Integer.class,login,start,end,account) > 0; 
+    } catch(DataAccessException ex) {
+      return false;
+    }
+    
   }
   
   public int findPass(String userName) {

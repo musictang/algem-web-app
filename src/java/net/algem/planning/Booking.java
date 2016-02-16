@@ -1,5 +1,5 @@
 /*
- * @(#) Booking.java Algem Web App 1.0.6 24/01/2016
+ * @(#) Booking.java Algem Web App 1.1.0 15/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -17,17 +17,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.algem.planning;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.6
+ * @version 1.1.0
  * @since 1.0.6 24/01/2016
  */
-public class Booking {
+public class Booking
+{
 
+  private int id;
   private int type;
   private int person;
   private int group;
@@ -38,6 +39,15 @@ public class Booking {
   private Hour startTime;
   private Hour endTime;
   private boolean pass;
+  private byte status;
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
 
   public int getPerson() {
     return person;
@@ -45,6 +55,38 @@ public class Booking {
 
   public void setPerson(int person) {
     this.person = person;
+  }
+
+  public int getAction() {
+    return action;
+  }
+
+  public void setAction(int action) {
+    this.action = action;
+  }
+
+  public String getDate() {
+    return date;
+  }
+
+  public void setDate(String date) {
+    this.date = date;
+  }
+
+  public boolean isPass() {
+    return pass;
+  }
+
+  public void setPass(boolean pass) {
+    this.pass = pass;
+  }
+
+  public byte getStatus() {
+    return status;
+  }
+
+  public void setStatus(byte status) {
+    this.status = status;
   }
 
   public int getGroup() {
@@ -62,15 +104,6 @@ public class Booking {
   public void setRoom(int room) {
     this.room = room;
   }
-
-  public String getDate() {
-    return date;
-  }
-
-  public void setDate(String date) {
-    this.date = date;
-  }
-
 
   public int getType() {
     return type;
@@ -102,22 +135,6 @@ public class Booking {
 
   public void setEndTime(Hour endTime) {
     this.endTime = endTime;
-  }
-
-  public boolean isPass() {
-    return pass;
-  }
-
-  public void setPass(boolean pass) {
-    this.pass = pass;
-  }
-
-  public int getAction() {
-    return action;
-  }
-
-  public void setAction(int action) {
-    this.action = action;
   }
 
   public boolean isValid() {

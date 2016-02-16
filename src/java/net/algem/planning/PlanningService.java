@@ -1,5 +1,5 @@
 /*
- * @(#) PlanningService.java Algem Web App 1.1.0 12/02/16
+ * @(#) PlanningService.java Algem Web App 1.1.0 15/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -117,6 +117,8 @@ public interface PlanningService
    * @return a list of schedules or an empty list if no conflict was detected
    */
   List<ScheduleElement> getPersonConflicts(Booking booking);
+  
+  Booking getBooking(int id);
 
   /**
    * Gets all the bookings of the person with id {@code idper}.

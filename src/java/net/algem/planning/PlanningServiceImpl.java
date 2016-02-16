@@ -65,11 +65,16 @@ public class PlanningServiceImpl
   @Override
   public Map<String, String> getConf() {
     Map<String, String> confs = new HashMap<>();
-    Config c3 = configIO.findId(ConfigKey.OFFPEAK_HOUR.getKey());
-    confs.put("offPeakTime", c3.getValue());
-    Config c4 = configIO.findId(ConfigKey.END_YEAR.getKey());
-    confs.put("endDate", c4.getValue());
-
+    Config c1 = configIO.findId(ConfigKey.OFFPEAK_HOUR.getKey());
+    confs.put("offPeakTime", c1.getValue());
+    Config c2 = configIO.findId(ConfigKey.START_OF_YEAR.getKey());
+    confs.put("startDate", c2.getValue());
+    Config c3 = configIO.findId(ConfigKey.END_OF_YEAR.getKey());
+    confs.put("endDate", c3.getValue());
+    int a1 = configIO.findAccount(ConfigKey.MEMBERSHIP_ACCOUNT.getKey());
+    int a2 = configIO.findAccount(ConfigKey.PRO_MEMBERSHIP_ACCOUNT.getKey());
+    confs.put("membership_account", String.valueOf(a1));
+    confs.put("pro_membership_account", String.valueOf(a2));
     return confs;
   }
 
@@ -168,11 +173,11 @@ public class PlanningServiceImpl
     return scheduleDao.getPersonConflicts(booking);
   }
 
-  /**
-   * Gets the list of establishments in the organization.
-   *
-   * @return a list of persons' instances of type {@value Person#ESTABLISHMENT}
-   */
+  @Override
+  public Booking getBooking(int id) {
+    return scheduleDao.getBooking(id);
+  }
+
   @Override
   public List<BookingScheduleElement> getBookings(int idper) {
     return scheduleDao.getBookings(idper);
@@ -216,7 +221,7 @@ public class PlanningServiceImpl
 
   private int getCancelBookingDelay() {
     try {
-      return Integer.parseInt(configIO.findId("Annulation.delai").getValue());
+      return Integer.parseInt(configIO.findId("Reservation.annulation.delai").getValue());
     } catch (NumberFormatException nfe) {
       System.err.println(nfe.getMessage());
       return 24;
