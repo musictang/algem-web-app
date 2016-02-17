@@ -1,5 +1,5 @@
 /*
- * @(#)CommonUserService.java	1.0.6 30/11/15
+ * @(#)CommonUserService.java	1.1.0 17/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.algem.config.ConfigIO;
-import net.algem.config.ConfigKey;
 import net.algem.contact.Person;
 import net.algem.group.Group;
 import org.apache.commons.codec.binary.Base64;
@@ -37,7 +36,7 @@ import org.springframework.stereotype.Service;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.6
+ * @version 1.1.0
  * @since 1.0.6 18/11/15
  */
 @Service
@@ -48,7 +47,7 @@ public class CommonUserService
 
   @Autowired
   private UserDao dao;
-  
+
   @Autowired
   private ConfigIO configIO;
 
@@ -133,17 +132,17 @@ public class CommonUserService
     }
     return p;
   }
-  
+
   @Override
   public boolean isMember(String login, String startDate, String endDate) {
-    return dao.isMemberOnYear(login, 0, startDate, endDate);
+    return dao.isMemberOnYear(login, startDate, endDate);
   }
 
   @Override
   public List<Group> getGroups(String login) {
     return dao.getGroups(login);
   }
-  
+
   @Override
   public boolean hasPass(String login) {
     int p = dao.findPass(login);

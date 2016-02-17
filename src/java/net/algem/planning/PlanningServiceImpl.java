@@ -3,19 +3,19 @@
  *
  * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
- * This file is part of Algem Agenda.
- * Algem Agenda is free software: you can redistribute it and/or modify it
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Algem Agenda is distributed in the hope that it will be useful,
+ * Algem Web App is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with Algem Agenda. If not, see <http://www.gnu.org/licenses/>.
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 package net.algem.planning;
@@ -71,10 +71,7 @@ public class PlanningServiceImpl
     confs.put("startDate", c2.getValue());
     Config c3 = configIO.findId(ConfigKey.END_OF_YEAR.getKey());
     confs.put("endDate", c3.getValue());
-    int a1 = configIO.findAccount(ConfigKey.MEMBERSHIP_ACCOUNT.getKey());
-    int a2 = configIO.findAccount(ConfigKey.PRO_MEMBERSHIP_ACCOUNT.getKey());
-    confs.put("membership_account", String.valueOf(a1));
-    confs.put("pro_membership_account", String.valueOf(a2));
+
     return confs;
   }
 

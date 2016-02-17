@@ -16,3 +16,26 @@ JOIN personne e ON (e.id = s.etablissement)
 LEFT JOIN groupe g ON (p.idper = g.id)
 WHERE p.jour >= '28-01-2016'
 AND r.idper = 16094;
+
+SELECT e.paye FROM echeancier2 e JOIN login l ON (e.adherent = l.idper)
+WHERE l.login = 'duchatel' AND e.echeance BETWEEN '21-09-2015' AND ',30-06-2016' AND e.compte IN(17,14) LIMIT 1;
+
+oid        | 37597
+echeance   | 2015-09-07
+payeur     | 13857
+adherent   | 13857
+commande   | 0
+reglement  | ESP
+libelle    | p13857 a13858
+montant    | 1000
+piece      | L1526
+ecole      | 0
+compte     | 17
+paye       | t
+transfert  | t
+monnaie    | E
+analytique | MFORLOISIR
+facture    | [NULL]
+groupe     | 0
+
+insert into echeancier2 values(default,'2015-09-01',13857,13857,0,'ESP','p13857 a13858 test',1000,'',0,17,true,false,'E','MFORLOISIR',null,0);

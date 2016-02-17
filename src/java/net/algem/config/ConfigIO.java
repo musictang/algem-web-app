@@ -1,21 +1,21 @@
 /*
- * @(#)ConfigIO.java 1.0.5 14/09/15
+ * @(#)ConfigIO.java 1.1.0 17/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
- * This file is part of Algem Agenda.
- * Algem Agenda is free software: you can redistribute it and/or modify it
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Algem Agenda is distributed in the hope that it will be useful,
+ * Algem Web App is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with Algem Agenda. If not, see <http://www.gnu.org/licenses/>.
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 package net.algem.config;
@@ -58,7 +58,7 @@ public class ConfigIO
       }
     }, key);
   }
-  
+
   public int findAccount(String key) {
     String query = "SELECT idcompte FROM comptepref WHERE id = ?";
     return jdbcTemplate.queryForObject(query,Integer.class, key);

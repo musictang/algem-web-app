@@ -40,19 +40,19 @@ function setUI() {
  * @param {String} date request parameter date
  * @returns {undefined}
  */
-function setDatePicker(estabId, date) {
+function setDatePicker(commonParams) {
 
   var picker = $("#datepicker");
   var estabSelect = $("#estabSelection");
   //picker.datepicker({ appendText: "(jj-mm-yyyy)", changeMonth: true, changeYear: true, autoSize: true })
   picker.datepicker({changeMonth: true, changeYear: true});
-  picker.datepicker('setDate', date);
+  picker.datepicker('setDate', commonParams.date);
   picker.datepicker("refresh");
-  $(estabSelect).val(estabId);
+  $(estabSelect).val(commonParams.estab);
   document.title = 'Planning ' + $(estabSelect).children("option:selected").text();
   picker.change(function () {
     console.log(this.value);
-    window.location = 'daily.html?d=' + this.value + '&e=' + estabId;
+    window.location = 'daily.html?d=' + this.value + '&e=' + commonParams.estab;
   });
 
   //Next Day Link
@@ -218,7 +218,13 @@ function setBooking(params, steps) {
       console.log("index start time" + idx);
       $("#startTime option").eq(idx).prop("selected", true);
       console.log("check booking");
-      
+if (!checkMember(params)) {
+   console.log("Not an active member");
+        $("#errorDialog").html("<p>" +params.bookingMemberWarning +"</p>");
+        $("#errorDialog").dialog("open");
+        return;
+}
+
       if (!checkBookingDelay(date, params.minDelay)) {
         console.log("Hors delai");
         $("#errorDialog").html("<p>" +params.bookingMinDelayWarning +"</p>");
@@ -286,14 +292,35 @@ function setBooking(params, steps) {
   $("#booking-form input[type='submit']").click(function () {
     console.log("click submit button");
   });
+
+  //unactive ENTER key on booking dialog
   $("#booking-form").bind("keypress", function (e) {
     if (e.keyCode == 13 || e.keyCode == 169) {
       e.preventDefault();
       return false;
     }
 });
-  
 
+}
+
+function checkMember(params) {
+ if (isInactive()) {
+    return true;
+  }
+  var urlPath = $("#booking-form #xmember-url").val();
+  var result = false;
+  $.ajax({
+        url: urlPath,
+        type: 'get',
+        data:  {start: params.startOfYear, end: params.endOfYear},
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+          result = data;
+        }
+     });
+     console.log(result);
+     return result;
 }
 
 function checkBookingDelay(date, minDelay) {
@@ -325,6 +352,11 @@ function checkBookingDate(date, maxDelay) {
     return false;
   }
   return true;
+}
+
+function isInactive() {
+  // important : true ! let open dialog
+  return $("#startTime").val() === undefined;
 }
 
 /**

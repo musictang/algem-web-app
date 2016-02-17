@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java	1.0.6 30/11/15
+ * @(#)UserCtrl.java	1.1.0 17/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -38,7 +38,6 @@ import net.algem.contact.Email;
 import net.algem.contact.Person;
 import net.algem.planning.BookingScheduleElement;
 import net.algem.planning.PlanningService;
-import net.algem.planning.ScheduleElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -59,7 +58,6 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,7 +67,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Controller for login operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.6
+ * @version 1.1.0
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -337,11 +335,9 @@ public class UserCtrl {
     model.addAttribute("acl", acl);
     return "dossier";
   }
-  
+
   @RequestMapping(value = "/xmember")
-  @ResponseBody
-  public boolean isMember(Principal p, @RequestParam String start,
-    @RequestParam String end) {
+  public @ResponseBody boolean isMember(Principal p, @RequestParam String start, @RequestParam String end) {
     return service.isMember(p.getName(), start, end);
   }
 

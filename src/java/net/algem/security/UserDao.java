@@ -1,5 +1,5 @@
 /*
- * @(#)UserDao.java	1.0.6 02/01/16
+ * @(#)UserDao.java	1.1.0 17/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -24,10 +24,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.algem.config.ConfigIO;
+import net.algem.config.ConfigKey;
 import net.algem.contact.Email;
 import net.algem.contact.Person;
 import net.algem.contact.PersonIO;
@@ -35,18 +40,21 @@ import net.algem.contact.TeacherIO;
 import net.algem.group.Group;
 import net.algem.group.GroupIO;
 import net.algem.util.AbstractGemDao;
+import net.algem.util.Constants;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -54,8 +62,11 @@ public class UserDao
   extends AbstractGemDao {
 
   public static final String TABLE = "login";
-  public static final String TOKEN_TABLE = "jeton_login";
-  public static final String SEASON_TABLE = "carteabopersonne";
+  public static final String T_TOKEN = "jeton_login";
+  public static final String T_PASSCARD = "carteabopersonne";
+
+  @Autowired
+  private ConfigIO configIO;
 
   public UserDao() {
   }
@@ -98,7 +109,8 @@ public class UserDao
   }
 
   public User findById(int id) {
-    String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom FROM login l INNER JOIN personne p ON (l.idper = p.id) "
+    String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom FROM "
+      + TABLE + " l INNER JOIN " + PersonIO.TABLE + " p ON (l.idper = p.id) "
       + "WHERE l.idper = ? AND (p.ptype = " + Person.PERSON + " OR p.ptype = " + Person.ROOM + ")";
     return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
 
@@ -132,20 +144,40 @@ public class UserDao
       + " WHERE id = ? AND (ptype = " + Person.PERSON + " OR ptype = " + Person.ROOM + ")";
     return jdbcTemplate.queryForObject(query, Integer.class, u.getId()) > 0;
   }
-  
-  public boolean isMemberOnYear(String login, int account, String start, String end) {
+
+  public boolean isMemberOnYear(String login, String start, String end) {
     try {
-      String query = "SELECT count(e.paye) FROM echeancier2 e JOIN login l ON (e.adherent = l.idper)"
-              + " WHERE e.adherent = ? AND e.echeance BETWEEN ? AND ? AND e.compte = ?";
-      return jdbcTemplate.queryForObject(query, Integer.class,login,start,end,account) > 0; 
-    } catch(DataAccessException ex) {
+      MapSqlParameterSource params = new MapSqlParameterSource();
+      params.addValue("login", login);
+      params.addValue("start", new java.sql.Date(Constants.DATE_FORMAT.parse(start).getTime()));
+      params.addValue("end", new java.sql.Date(Constants.DATE_FORMAT.parse(end).getTime()));
+      params.addValue("accounts", getMemberShipAccounts());
+      String debug = login +","+start+","+end+","+getMemberShipAccounts();
+      Logger.getLogger(UserDao.class.getName()).log(Level.INFO, debug);
+      String query = "SELECT e.paye FROM echeancier2 e JOIN " + TABLE + " l ON (e.adherent = l.idper)"
+        + " WHERE l.login = :login AND e.echeance BETWEEN :start AND :end AND e.compte IN(:accounts)";
+      List<Boolean> result = namedJdbcTemplate.query(query, params, new RowMapper<Boolean>() {
+
+        @Override
+        public Boolean mapRow(ResultSet rs, int i) throws SQLException {
+          return rs.getBoolean(1);
+        }
+      });
+      for(Boolean b : result) {
+        if (b) {
+          return true;
+        }
+      }
+      return false;
+    } catch (ParseException | DataAccessException ex) {
+      Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
       return false;
     }
-    
+
   }
-  
+
   public int findPass(String userName) {
-    String query = "SELECT c.idper FROM " + SEASON_TABLE + " c JOIN " + TABLE + " l ON (c.idper = l.idper)"
+    String query = "SELECT c.idper FROM " + T_PASSCARD + " c JOIN " + TABLE + " l ON (c.idper = l.idper)"
             + " WHERE l.login = ? AND c.restant > 0 ORDER BY c.id DESC LIMIT 1";
     return jdbcTemplate.queryForObject(query, Integer.class, userName);
   }
@@ -251,7 +283,7 @@ public class UserDao
 
 
   PasswordResetToken getToken(final int userId) {
-    String query = "SELECT jeton,creadate FROM " + TOKEN_TABLE + " WHERE idper = ?";
+    String query = "SELECT jeton,creadate FROM " + T_TOKEN + " WHERE idper = ?";
 
     return jdbcTemplate.queryForObject(query, new RowMapper<PasswordResetToken>() {
 
@@ -266,7 +298,7 @@ public class UserDao
   }
 
   void deleteToken(final int userId) {
-    String sql = "DELETE FROM " + TOKEN_TABLE + " WHERE idper = ?";
+    String sql = "DELETE FROM " + T_TOKEN + " WHERE idper = ?";
     jdbcTemplate.update(sql, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
@@ -345,7 +377,7 @@ public class UserDao
   }
 
   private void createToken(final int userId, final String token) {
-    String query = "INSERT INTO " + TOKEN_TABLE + " VALUES(?,?,?)";
+    String query = "INSERT INTO " + T_TOKEN + " VALUES(?,?,?)";
     jdbcTemplate.update(query, new PreparedStatementSetter() {
 
       @Override
@@ -356,6 +388,18 @@ public class UserDao
       }
     });
 
+  }
+
+  private List<Integer> getMemberShipAccounts() {
+    List<Integer> accounts = new ArrayList<>();
+    int a1 = configIO.findAccount(ConfigKey.MEMBERSHIP_ACCOUNT.getKey());
+    int a2 = configIO.findAccount(ConfigKey.PRO_MEMBERSHIP_ACCOUNT.getKey());
+
+    accounts.add(a1);
+    if (a2 > 0) {
+      accounts.add(a2);
+    }
+    return accounts;
   }
 
 }

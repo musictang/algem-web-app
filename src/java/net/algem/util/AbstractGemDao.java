@@ -1,27 +1,28 @@
 /*
- * @(#)AbstractGemDao.java	1.1.0 12/02/16
+ * @(#)AbstractGemDao.java	1.1.0 17/02/16
  *
  * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
- * This file is part of Algem Agenda.
- * Algem Agenda is free software: you can redistribute it and/or modify it
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Algem Agenda is distributed in the hope that it will be useful,
+ * Algem Web App is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with Algem Agenda. If not, see <http://www.gnu.org/licenses/>.
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 package net.algem.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 /**
  * Abstract Data Access Object class.
@@ -37,8 +38,15 @@ public abstract class AbstractGemDao
   @Autowired
   protected JdbcTemplate jdbcTemplate;
 
+  @Autowired
+  protected NamedParameterJdbcTemplate namedJdbcTemplate;
+
   protected void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
+  }
+
+  public void setNamedJdbcTemplate(NamedParameterJdbcTemplate namedJdbcTemplate) {
+    this.namedJdbcTemplate = namedJdbcTemplate;
   }
 
   /**

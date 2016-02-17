@@ -47,6 +47,7 @@
         <fieldset>
           <input id="xgroups-url" type="hidden" th:value="@{/xgroups}" />
           <input id="xpass-url" type="hidden" th:value="@{/xpass}" />
+          <input id="xmember-url" type="hidden" th:value="@{/xmember}" />
           <input name="estab" type="hidden" th:value="${param.e[0]}"/>
           <ul class="simple" id="bookingType">
             <li><input id="member" type="radio" th:field="*{type}" th:value="${T(net.algem.planning.Schedule).BOOKING_MEMBER}" /><label class="inline" for="member" th:text="#{booking.member.label}"></label></li>

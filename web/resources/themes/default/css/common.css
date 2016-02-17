@@ -1,7 +1,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.0.6 29/12/15
+    Last: 1.1.0 17/02/16
 */
 @import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);
 @import url(https://fonts.googleapis.com/css?family=PT+Sans+Narrow);
@@ -363,12 +363,12 @@ input[type=submit] {
 
 a:link,a:visited, a:active {
   text-decoration: none;
-  border-bottom-style: inset;
+  border-bottom-style: solid;
   border-bottom-width: 2px;
 }
 a:hover {
   text-decoration: none;
-  border-bottom-style: outset;
+  border-bottom-style: solid;
   border-bottom-width:2px;
 }
 
@@ -526,7 +526,8 @@ form label {
   padding: 0 0.5em;
 }
 
-.booking-list {
+table.mobile {
+  display: table;
   width: 100%;
 }
 

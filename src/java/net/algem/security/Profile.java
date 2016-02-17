@@ -1,5 +1,5 @@
 /*
- * @(#)Profile.java	1.0.6 30/11/15
+ * @(#)Profile.java	1.1.0 17/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
