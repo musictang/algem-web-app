@@ -39,6 +39,8 @@ public class BookingConf {
   
   /** Max length of one session. */
   private float maxLength;
+  
+  private boolean memberShipRequired;
 
   public int getMinDelay() {
     return minDelay;
@@ -70,6 +72,14 @@ public class BookingConf {
 
   public void setMaxLength(float maxLength) {
     this.maxLength = maxLength;
+  }
+
+  public boolean isMemberShipRequired() {
+    return memberShipRequired;
+  }
+
+  public void setMemberShipRequired(boolean memberShipRequired) {
+    this.memberShipRequired = memberShipRequired;
   }
   
 }

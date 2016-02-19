@@ -86,6 +86,7 @@ public enum ConfigKey {
   BOOKING_MIN_DELAY("Reservation.delai.min"),
   BOOKING_MAX_DELAY("Reservation.delai.max"),
   BOOKING_CANCEL_DELAY("Reservation.annulation.delai"),
+  BOOKING_REQUIRED_MEMBERSHIP("Reservation.adhesion.requise"),
   MEMBERSHIP_ACCOUNT("ADHÉSIONS"),
   PRO_MEMBERSHIP_ACCOUNT("ADHÉSIONS PRO");
   

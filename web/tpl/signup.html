@@ -37,7 +37,7 @@
       <div class="centered">
         <form action="#" id="signup-form" th:object="${user}" th:action="@{signup.html}" method="post" accept-charset="UTF-8">
           <fieldset><legend th:text="#{sign-up.label}"></legend>
-            <label for="id" th:text="#{member.id.label} + ' *'">Number *</label>
+            <label for="id" th:text="#{member.id.label} + ' *'" style="display: block">Number *</label>
             <input type="text" required="required" th:field="*{id}" />
             <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}" th:errorclass="error">Id Error</span>
             <label for="email" th:text="#{email.label} + ' *'">Email *</label>

@@ -81,6 +81,7 @@ public class PlanningServiceImpl
     conf.setMinDelay(getBookingMinDelay());
     conf.setCancelDelay(getCancelBookingDelay());
     conf.setMaxDelay(getBookingMaxDelay());
+    conf.setMemberShipRequired(getMemberShipConf());
 
     return conf;
   }
@@ -223,6 +224,11 @@ public class PlanningServiceImpl
       System.err.println(nfe.getMessage());
       return 24;
     }
+  }
+  
+  private boolean getMemberShipConf() {
+    Config c = configIO.findId(ConfigKey.BOOKING_REQUIRED_MEMBERSHIP.getKey());
+    return c.getValue().toLowerCase().startsWith("t");
   }
 
   private DailyTimes[] findDailyTimes(int roomId) {

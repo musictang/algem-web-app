@@ -25,44 +25,15 @@
 /*@media only screen and (max-device-width:480px),
 only screen and (-webkit-min-device-pixel-ratio: 2)*/
 
-@media only screen and (max-width : 520px) {
-  header {height: 10%}
-  header > nav {
-    padding:0.25em 0;
-  }
-  #grid, #canvas {top: 10%}
-  .schedule_col {
-    width: 50px;
-  }
-  .schedule {
-    font-size: xx-small;
-    line-height: 1em;
-  }
-}
-
-@media only screen and (min-width:521px) and (max-width: 1024px) {
-  .schedule_col {
-    width: 75px;
-  }
-  .schedule {
-    font-size: xx-small;
-    line-height: 1em;
-  }
-}
-
-@media only screen and (min-height:320px) and (max-height: 639px) {
-   header {height: 14%}
-  #grid, #canvas {top: 14%}
-}
-
-/*iPhone 2G, 3G, 4, 4S Media Queries : Portrait*/
+/*iPhone 2G, 3G, 4, 4S, Moto E  Media Queries : Portrait*/
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
+  header {height: 10%}
   header > nav {
     padding:0.5em 0;
   }
-  #grid, #canvas{top: 7%}
+  #grid, #canvas{top: 10%}
   .schedule_col {
     width: 40px;
   }
@@ -70,15 +41,31 @@ and (max-device-width : 480px) {
     font-size: xx-small;
     line-height: 1em;
   }
+   .closing-bar {
+    height: 3em;
+  }
+  
+  #info-bar .close-link > .fa-close,
+  #help-panel .close-link > .fa-close,
+  #login-panel .close-link > .fa-close {
+    padding: 0;
+    font-size: 1.6em;
+  }
+  table.mobile {
+      overflow-x: auto;
+      display: block;
+  }
 }
-/*iPhone 2G, 3G, 4, 4S Media Queries : landscape*/
+/*iPhone 2G, 3G, 4, 4S, Moto E Media Queries : landscape*/
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px)
 and (orientation : landscape) {
+  header {height: 14%}
   header > nav {
     padding:0.5em 0;
   }
+  #grid, #canvas{top: 14%}
   /* STYLES GO HERE */
   .schedule_col {
     width: 60px;
@@ -89,14 +76,37 @@ and (orientation : landscape) {
   }
 }
 
-@media (max-width: 800px) {
+@media only screen and (min-width:481px) and (max-width: 800px) {
+  header {height: 14%}
+   #grid, #canvas {top: 14%}
   .centered {
     width: 100%;
     padding: 0 1em;
   }
-	table.mobile {
-		overflow-x: auto;
-		display: block;
-	}
-
+  
+  .schedule_col {
+    width: 60px;
+  }
+ 
+  table.mobile {
+      overflow-x: auto;
+      display: block;
+  }
 }
+
+@media only screen and (min-width:801px) and (max-width: 1024px) {
+  .schedule_col {
+    width: 75px;
+  }
+  header {height: 10%}
+   #grid, #canvas {top: 10%}
+  .schedule {
+    font-size: xx-small;
+    line-height: 1em;
+  }
+}
+
+
+
+
+

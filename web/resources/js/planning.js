@@ -51,7 +51,7 @@ function setDatePicker(commonParams) {
   $(estabSelect).val(commonParams.estab);
   document.title = 'Planning ' + $(estabSelect).children("option:selected").text();
   picker.change(function () {
-    console.log(this.value);
+    //console.log(this.value);
     window.location = 'daily.html?d=' + this.value + '&e=' + commonParams.estab;
   });
 
@@ -215,30 +215,30 @@ function setBooking(params, steps) {
       var roomId = $(this).attr("id");
       var posY = $(this).offset().top;
       var idx = getStartTimeIndex(steps.height, e.pageY - posY);
-      console.log("index start time" + idx);
+      //console.log("index start time" + idx);
       $("#startTime option").eq(idx).prop("selected", true);
-      console.log("check booking");
-if (!checkMember(params)) {
-   console.log("Not an active member");
-        $("#errorDialog").html("<p>" +params.bookingMemberWarning +"</p>");
+      //console.log("check booking");
+      if (params.memberShipRequired && !checkMember(params)) {
+        //console.log("Not an active member");
+        $("#errorDialog").html("<p>" + params.bookingMemberWarning + "</p>");
         $("#errorDialog").dialog("open");
         return;
-}
+      }
 
       if (!checkBookingDelay(date, params.minDelay)) {
-        console.log("Hors delai");
+        //console.log("Hors delai");
         $("#errorDialog").html("<p>" +params.bookingMinDelayWarning +"</p>");
         $("#errorDialog").dialog("open");
         return;
       }
       if (!checkBookingDate(date, params.maxDelay)) {
-        console.log("Hors limite");
+        //console.log("Hors limite");
         $("#errorDialog").html("<p>" +params.bookingMaxDelayWarning +"</p>");
         $("#errorDialog").dialog("open");
         return;
       }
 
-      console.log("position : " + (e.pageY - posY), $(this).attr("id"), room.text());
+      //console.log("position : " + (e.pageY - posY), $(this).attr("id"), room.text());
       $("#groupInfo").remove();
       $("#member").prop("checked", true);//SET MEMBER BY DEFAULT
       //*******OPEN DIALOG********
@@ -253,7 +253,7 @@ if (!checkMember(params)) {
         numberFormat: "n",
         spin : function(event,ui) {
           //Gives Previous value
-          console.log($(this).val());
+          //console.log($(this).val());
           //Gives current value
           var startIndex = $("#startTime option:selected").index();
           var endIndex = startIndex + (ui.value * 60 * (steps.max * 2) / (steps.max * 60));
@@ -290,7 +290,7 @@ if (!checkMember(params)) {
   });
 
   $("#booking-form input[type='submit']").click(function () {
-    console.log("click submit button");
+    console.log("booking submit button");
   });
 
   //unactive ENTER key on booking dialog
@@ -319,7 +319,7 @@ function checkMember(params) {
           result = data;
         }
      });
-     console.log(result);
+     //console.log(result);
      return result;
 }
 
@@ -329,7 +329,7 @@ function checkBookingDelay(date, minDelay) {
     return true; // important : true ! let open dialog
   }
   var now = new Date();
-  console.log(t);
+  //console.log(t);
   date.setHours(t.substr(0, 2));
   date.setMinutes(t.substr(3, 2));
   if (now.getTime() + (minDelay * 60 * 60 * 1000) > date.getTime()) {
@@ -343,7 +343,7 @@ function checkBookingDate(date, maxDelay) {
   if (t === undefined) {
     return true; // important : true ! let open dialog
   }
-  console.log(t);
+  //console.log(t);
   var now = new Date();
   date.setHours(t.substr(0, 2));
   date.setMinutes(t.substr(3, 2));
@@ -397,7 +397,7 @@ function getGroups(params) {
   var urlPath = $("#booking-form #xgroups-url").val();
   $.get(urlPath, function (data) {
     if (typeof data === 'undefined' || !data.length) {
-      console.log("Aucun résultat");
+      //console.log("Aucun résultat");
       $("#passInfo").show();
       $("#member").prop("checked", true);
       $("<p id=\"groupInfo\" class=\"error\" style=\"font-size: smaller\">"+params.groupWarning+"</p>").appendTo("#groupPanel");
@@ -426,7 +426,7 @@ function setPassChecked() {
     if (data) {
       $("#pass").prop("checked","checked");
     } else {
-      console.log("Aucun pass");
+      //console.log("Aucun pass");
     }
   }, "json");
 }

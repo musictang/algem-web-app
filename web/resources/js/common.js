@@ -61,12 +61,10 @@ function setCommonEvents() {
   });
 
   $('#menu-login').click(function () {
-    console.log("menu-login");
     $('#login-panel').show(delay);
   });
 
   $("#ajax-login-form").submit(function (event) {
-    console.log("click login button");
     ajaxLogin($("#login-panel form"));
     event.preventDefault();
   });
@@ -81,7 +79,7 @@ function setCommonEvents() {
   function ajaxLogin(form, errorMsg, successMsg) {
     form.find(".error").hide();
     var urlPath = $("#login-panel form").attr('action');
-    console.log(urlPath);
+    //console.log(urlPath);
     //jQuery.post( url [, data ] [, success ] [, dataType ] )
     $.post(
         urlPath,
@@ -90,7 +88,7 @@ function setCommonEvents() {
           var err = $("#login-panel p.error");
           var suc = $("#login-panel p.success");
           if (data.msg) {
-            console.log("ajax success");
+            //console.log("ajax success");
             if (err.is(':visible')) {
               err.hide();
             }
@@ -99,7 +97,7 @@ function setCommonEvents() {
             location.reload();
             //$("#login-panel").hide(2000);
           } else {
-            console.log("ajax error : " + data.status);
+            //console.log("ajax error : " + data.status);
             if (suc.is(':visible')) {
               suc.hide();
             }

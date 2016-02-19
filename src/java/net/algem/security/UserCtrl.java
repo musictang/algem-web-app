@@ -124,15 +124,6 @@ public class UserCtrl {
   }
 
   /**
-   * Manage ajax GET request.
-   * @return
-   */
-//  @RequestMapping(value = "/jxlogin.html", method = RequestMethod.GET)
-//  public String login() {
-//    return "fragments/xlogin :: login";
-//  }
-
-  /**
    * Manage ajax POST request.
    *
    * @param username username transmitted
@@ -269,6 +260,7 @@ public class UserCtrl {
       sendRecoverMessage(url, token, found);
       model.addAttribute("message", messageSource.getMessage("recover.send.info", null, LocaleContextHolder.getLocale()));
     } catch(MailException | DataAccessException ex) {
+      Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, ex);
       model.addAttribute("errorMessage", messageSource.getMessage("recover.send.exception", new Object[]{ex.getMessage()}, LocaleContextHolder.getLocale()));
     }
 
@@ -323,6 +315,7 @@ public class UserCtrl {
   @RequestMapping(method = RequestMethod.POST, value = "passreset.html")
   public String doUpdatePassword(@Valid User user, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
+      bindingResult.rejectValue("password", "user.password.error");
       return "reset";
     }
     service.updatePassword(user.getId(), user.getPassword());
