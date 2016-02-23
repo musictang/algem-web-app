@@ -1,5 +1,5 @@
 /*
- * @(#)User.java	1.0.6 18/11/15
+ * @(#)User.java	1.0.6 22/11/15
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -27,6 +27,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import net.algem.group.Group;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -34,30 +35,32 @@ import org.hibernate.validator.constraints.Email;
  * @version 1.0.6
  * @since 1.0.0 11/02/13
  */
-public class User {
+@Component
+public class User
+{
 
-  @Min(value=1, message="{id.required}")
-  @Max(value=Integer.MAX_VALUE, message="{id.required}")
-	private int id;
+  @Min(value = 1, message = "{id.required}")
+  @Max(value = Integer.MAX_VALUE, message = "{id.required}")
+  private int id;
 
   /** Login user name. */
-  @Size(min=2, max=16, message="{login.required}")
-	private String login;
+  @Size(min = 2, max = 16, message = "{login.required}")
+  private String login;
 
   /** Login password. */
-  @Size(min=8, max=16, message="{password.required}")
-	private String password;
+  @Size(min = 8, max = 16, message = "{password.required}")
+  private String password;
 
   /** User role. */
-	private Profile profile;
+  private Profile profile;
 
   private String firstName;
 
-//  @NotNull
-	private String name;
+  //@NotNull
+  private String name;
 
   /** Login email. */
-  @Email(message="{email.required}")
+  @Email(message = "{email.required}")
   private String email;
 
   /** Groups the user belongs to. */
@@ -132,9 +135,10 @@ public class User {
     this.groups = groups;
   }
 
-   public boolean isTeacher() {
+  public boolean isTeacher() {
     return teacher;
   }
+
   public void setTeacher(boolean teacher) {
     this.teacher = teacher;
   }

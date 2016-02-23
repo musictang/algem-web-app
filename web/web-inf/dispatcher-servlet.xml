@@ -14,7 +14,7 @@
           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
   <!--SUPPORT DES ANNOTATIONS -->
-   <mvc:annotation-driven />
+   <mvc:annotation-driven validator="validator" />
    <tx:annotation-driven />
    <context:component-scan base-package="net.algem" />
 
@@ -25,44 +25,16 @@
   Ce comportement ne semble pas fonctionner avec spring 3.0.6-->
   <mvc:resources mapping="/resources/themes/**" location="/resources/themes/default/"/>
   <mvc:resources mapping="/resources/js/**" location="/resources/js/"/>
+  <!-- Localization of hibernate messages during validation!-->
+ <bean id="validationMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basename" value="/WEB-INF/resources/validation" />
+ </bean>
 
-  <!--Definition de l'index par défaut-->
-  <!--<mvc:view-controller path="/" view-name="tpl/index"/>-->
-  <!--  Explicit index controller. -->
-  <!--  <bean  name="indexController" class="org.springframework.web.servlet.mvc.ParameterizableViewController"
-  p:viewName="index" />-->
-
-  <!--	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>-->
-
-  <!--Pour faire cohabiter le support des annotations avec les mappings explicites-->
-  <!--<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />-->
-
-  <!--	support des annotations de controlleur première approche-->
-  <!--	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
-  <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />-->
-
-  <!--
-  Most controllers will use the ControllerClassNameHandlerMapping above, but
-  for the index controller we are using ParameterizableViewController, so we must
-  define an explicit mapping for it.
-  -->
-  <!--  <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-    <property name="mappings">
-      <props>
-        <prop key="index.html">indexController</prop>
-      </props>
+ <bean name="validator"  class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+    <property name="validationMessageSource">
+        <ref bean="validationMessageSource"/>
     </property>
-  </bean>-->
-  <!--
-  JSP VIEW RESOLVER
-  <bean id="viewResolver"
-        class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-        p:prefix="/WEB-INF/"
-        p:suffix=".jsp"
-        p:order="1"
-        p:viewNames="index,jsp/*"
-        p:viewClass="org.springframework.web.servlet.view.JstlView"
-  />-->
+ </bean>
 
   <!--THYMELEAF-->
   <bean id="templateResolver" class="org.thymeleaf.spring3.templateresolver.SpringResourceTemplateResolver"
@@ -86,7 +58,7 @@
   <bean class="org.thymeleaf.spring3.view.ThymeleafViewResolver">
     <property name="templateEngine" ref="templateEngine" />
     <property name="order" value="1" />
-    <!--    <property name="viewNames" value="tpl/*,redirect:tpl/*" />-->
+    <!--    <property name="viewNames" value="tpl/*" />-->
     <property name="viewNames" value="*" />
     <property name="characterEncoding" value="UTF-8" />
     <!--    <property name="contentType" value="text/html;charset=UTF-8" />-->

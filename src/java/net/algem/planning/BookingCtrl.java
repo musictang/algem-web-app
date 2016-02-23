@@ -1,5 +1,5 @@
 /*
- * @(#) BookingCtrl.java Algem Web App 1.1.0 28/01/16
+ * @(#) BookingCtrl.java Algem Web App 1.1.0 23/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import net.algem.contact.Person;
 import net.algem.group.Group;
+import net.algem.room.Room;
 import net.algem.security.User;
 import net.algem.security.UserService;
 import net.algem.util.Constants;
@@ -37,6 +38,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
@@ -66,6 +69,12 @@ public class BookingCtrl {
 
   @Resource(name = "messageSource")
   private MessageSource messageSource;
+  
+  @Autowired
+  private MailSender mailSender;
+
+  @Autowired
+  private SimpleMailMessage bookingMessage;
 
   public void setService(UserService service) {
     this.service = service;
@@ -145,7 +154,7 @@ public class BookingCtrl {
 
       Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, booking.toString());
       planningService.book(booking);
-      // email organisation
+      sendBookingMessage(booking);
     } catch (ParseException ex) {
       Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);
       model.addAttribute("message", messageSource.getMessage("date.format.error", null, LocaleContextHolder.getLocale()));
@@ -156,6 +165,26 @@ public class BookingCtrl {
     }
 
     return "redirect:/perso/home.html";
+  }
+  
+  private void sendBookingMessage(Booking booking) {
+    SimpleMailMessage mail = new SimpleMailMessage(bookingMessage);
+    Person p = service.getPersonFromUser(booking.getPerson());
+    String from = "info@localhost";
+    try {
+      if (p != null && p.getEmail().size() > 0) {
+        from = p.getEmail().get(0).getEmail();
+      }
+    } catch (EmptyResultDataAccessException ex) {
+      Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);  
+    }
+    Room room = planningService.getRoom(booking.getRoom());
+    String now = Constants.DATE_FORMAT.format(new Date());
+    String msg = messageSource.getMessage("booking.send.info", new Object[]{room.getName(), p == null ? "Anonymous" : p.toString(), now, booking.getDate()}, LocaleContextHolder.getLocale());
+
+    mail.setFrom(from);
+    mail.setText(msg);
+    mailSender.send(mail);
   }
 
   private void addMessageAttribute(Model m, String key, Object[] params) {

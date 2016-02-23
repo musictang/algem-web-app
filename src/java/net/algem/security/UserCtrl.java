@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java	1.1.0 17/02/16
+ * @(#)UserCtrl.java	1.1.0 22/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -72,7 +72,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 //@Scope("session")
-public class UserCtrl {
+public class UserCtrl
+{
 
   @Autowired
   @Qualifier("authenticationManager")
@@ -133,15 +134,15 @@ public class UserCtrl {
    * @param currentUser
    * @return JSON data as string
    */
-  // IMPORTANT HERE : produces="text/html" !! AND NOT application/json or text/plain !
-//  @RequestMapping(value = "/jxlogin.html", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+// IMPORTANT HERE if mapping ends with html : produces="text/html" !! AND NOT application/json or text/plain !
+//@RequestMapping(value = "/jxlogin.html", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
   @RequestMapping(value = "/jxlogin")
   @ResponseBody
   public String performLogin(
-    @RequestParam("j_username") String username,
-    @RequestParam("j_password") String password,
-    HttpServletRequest request, HttpServletResponse response,
-    User currentUser) {
+          @RequestParam("j_username") String username,
+          @RequestParam("j_password") String password,
+          HttpServletRequest request, HttpServletResponse response,
+          User currentUser) {
     try {
       SecurityContext secuContext = SecurityContextHolder.getContext();
 //      UserDetails userDetails = (UserDetails) secuContext.getAuthentication().getPrincipal();
@@ -193,6 +194,14 @@ public class UserCtrl {
       return "signup";
     }
     try {
+      Person p = null;
+      try {
+        p = service.getPersonFromUser(user.getId());
+      } catch (EmptyResultDataAccessException e) {
+        Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, e);
+        bindingResult.rejectValue("id", "user.person.error", new Object[]{user.getId()}, "");
+        return "signup";
+      }
       List<User> others = service.exist(user);
       if (others != null) {
         for (User o : others) {
@@ -205,8 +214,6 @@ public class UserCtrl {
           }
         }
       }
-
-      Person p = service.getPersonFromUser(user.getId());
       if (p == null) {
         bindingResult.rejectValue("id", "user.person.error", new Object[]{user.getId()}, "");
         return "signup";
@@ -223,6 +230,7 @@ public class UserCtrl {
 
       service.create(user);
     } catch (DataAccessException ex) {
+      Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, ex);
       bindingResult.rejectValue("id", "data.exception", new Object[]{ex.getLocalizedMessage()}, ex.getMessage());
       return "signup";
     } catch (SQLException ex) {
@@ -235,6 +243,7 @@ public class UserCtrl {
 
   /**
    * Gets the page for recovery password request.
+   *
    * @param user
    * @return a view
    */
@@ -242,7 +251,6 @@ public class UserCtrl {
   public String recoverPassword(User user) {
     return "recover";
   }
-
 
   @RequestMapping(method = RequestMethod.POST, value = "recover.html")
   public String doRecoverPassword(@RequestParam String email, HttpServletRequest request, Model model) {
@@ -259,7 +267,7 @@ public class UserCtrl {
       service.setToken(found.getId(), token);
       sendRecoverMessage(url, token, found);
       model.addAttribute("message", messageSource.getMessage("recover.send.info", null, LocaleContextHolder.getLocale()));
-    } catch(MailException | DataAccessException ex) {
+    } catch (MailException | DataAccessException ex) {
       Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, ex);
       model.addAttribute("errorMessage", messageSource.getMessage("recover.send.exception", new Object[]{ex.getMessage()}, LocaleContextHolder.getLocale()));
     }
@@ -269,6 +277,7 @@ public class UserCtrl {
 
   /**
    * Method called when the user clicked on the link sent by email.
+   *
    * @param u
    * @param id
    * @param token
@@ -285,10 +294,10 @@ public class UserCtrl {
         model.addAttribute("message", messageSource.getMessage("recover.invalid.token", null, locale));
         return "error";
       }
-    } catch(EmptyResultDataAccessException ex) {
+    } catch (EmptyResultDataAccessException ex) {
       model.addAttribute("message", messageSource.getMessage("recover.invalid.token", new Object[]{ex.getMessage()}, locale));
       return "error";
-    } catch(DataAccessException ex) {
+    } catch (DataAccessException ex) {
       Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, ex);
       model.addAttribute("message", messageSource.getMessage("data.exception", new Object[]{ex.getMessage()}, locale));
       return "error";
@@ -297,7 +306,7 @@ public class UserCtrl {
     Calendar cal = Calendar.getInstance();
     cal.setTime(new Date(resetToken.getCreation()));
     cal.add(Calendar.DAY_OF_MONTH, 1);// 24h delay
-    Logger.getLogger(UserCtrl.class.getName()).log(Level.INFO,"today" + new Date() + " token " + cal.getTime());
+    Logger.getLogger(UserCtrl.class.getName()).log(Level.INFO, "today" + new Date() + " token " + cal.getTime());
     if (new Date().after(cal.getTime())) {
       model.addAttribute("message", messageSource.getMessage("recover.expired.token", null, locale));
       return "error";
@@ -308,14 +317,12 @@ public class UserCtrl {
 //    Authentication auth = new UsernamePasswordAuthenticationToken(
 //      user, null, userDetailsService.loadUserByUsername(user.getEmail()).getAuthorities());
 //    SecurityContextHolder.getContext().setAuthentication(auth);
-
     return "reset";
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "passreset.html")
   public String doUpdatePassword(@Valid User user, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
-      bindingResult.rejectValue("password", "user.password.error");
       return "reset";
     }
     service.updatePassword(user.getId(), user.getPassword());
@@ -330,7 +337,8 @@ public class UserCtrl {
   }
 
   @RequestMapping(value = "/xmember")
-  public @ResponseBody boolean isMember(Principal p, @RequestParam String start, @RequestParam String end) {
+  public @ResponseBody
+  boolean isMember(Principal p, @RequestParam String start, @RequestParam String end) {
     return service.isMember(p.getName(), start, end);
   }
 
@@ -346,7 +354,7 @@ public class UserCtrl {
   private void sendRecoverMessage(String path, String token, User user) throws MailException {
     // Create a thread safe "copy" of the template message and customize it
     SimpleMailMessage mail = new SimpleMailMessage(recoverMessage);
-    String args = "/recover.html?id="+user.getId()+"&token="+token;
+    String args = "/recover.html?id=" + user.getId() + "&token=" + token;
     String msg = messageSource.getMessage("recover.info", new Object[]{user.toString()}, LocaleContextHolder.getLocale());
     String url = path + args;
     mail.setTo(user.getEmail());

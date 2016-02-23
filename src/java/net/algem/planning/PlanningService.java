@@ -67,6 +67,13 @@ public interface PlanningService
    * @return a map
    */
   Map<Integer, Config> getDefaultColorCodes();
+  
+  /**
+   * Get details about this room {@code roomId}.
+   * @param roomId room id
+   * @return an instance of Room
+   */
+  public Room getRoom(int roomId);
 
   /**
    * Gets the list of public rooms in {@code estab}.

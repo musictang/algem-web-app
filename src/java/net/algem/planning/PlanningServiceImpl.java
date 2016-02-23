@@ -102,6 +102,11 @@ public class PlanningServiceImpl
   public Map<Integer, Config> getDefaultColorCodes() {
     return COLORIZER.getDefColorCodes();
   }
+  
+  @Override
+  public Room getRoom(int roomId) {
+    return scheduleDao.findRoom(roomId);
+  }
 
   @Override
   public List<Room> getRoomInfo(int estab) {

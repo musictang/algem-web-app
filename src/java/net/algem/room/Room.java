@@ -1,7 +1,7 @@
 /*
- * @(#)Room.java	1.0.1 06/03/13
+ * @(#)Room.java	1.1.0 23/02/16
  *
- * Copyright (c) 2013 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -27,7 +27,7 @@ package net.algem.room;
  * A room is a person of type {@link net.algem.contact.Person#ROOM}.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.1
+ * @version 1.1.0
  * @since 1.0.1 06/03/13
  *
  */
@@ -41,6 +41,8 @@ public class Room
   private boolean active;
   /** Main usage description. */
   private String usage;
+  /** Price index. */
+  private int priceIndex;
   private double offPeakPrice;
   private double fullPrice;
 
@@ -132,6 +134,20 @@ public class Room
 
   public void setUsage(String usage) {
     this.usage = usage;
+  }
+  
+  /**
+   * @return the priceIndex
+   */
+  public int getPriceIndex() {
+    return priceIndex;
+  }
+
+  /**
+   * @param idx the priceIndex to set
+   */
+  public void setPriceIndex(int idx) {
+    this.priceIndex = idx;
   }
 
   public double getOffPeakPrice() {

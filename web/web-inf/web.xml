@@ -52,7 +52,7 @@
   </filter-mapping>
 
   <!--SPRING SECURITY SERVLET FILTER PROXY-->
-  <!--SpringSecurity will automatically create a filter bean whose ID is springSecurityFilterChain -->-->
+  <!--SpringSecurity will automatically create a filter bean whose ID is springSecurityFilterChain -->
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>

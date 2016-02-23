@@ -1,5 +1,5 @@
 /*
- * @(#)Person.java	1.0.0 11/02/13
+ * @(#)Person.java	1.1.0 23/02/16
  *
  * Copyright (c) 2013 Musiques Tangentes. All Rights Reserved.
  *
@@ -18,7 +18,6 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 package net.algem.contact;
 
 import java.util.List;
@@ -26,23 +25,25 @@ import java.util.List;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0 11/02/13
  */
-public class Person {
+public class Person
+{
+
   public static final short PERSON = 1;
   public static final short GROUP = 3;
   public static final short ROOM = 4;
   public static final short ESTABLISHMENT = 5;
   public static final short BANK = 6;
 
-	private int id;
+  private int id;
   private int type;
-	private String name;
-	private String firstName;
+  private String name;
+  private String firstName;
   private List<Email> emails;
 
-	public Person() {
+  public Person() {
   }
 
   public Person(int id) {
@@ -55,24 +56,24 @@ public class Person {
 
   public Person(int id, String name) {
     this.id = id;
-		this.name = name;
+    this.name = name;
   }
 
-	public String getFirstName() {
-		return firstName;
-	}
+  public String getFirstName() {
+    return firstName;
+  }
 
-	public void setFirstName(String firstname) {
-		this.firstName = firstname;
-	}
+  public void setFirstName(String firstname) {
+    this.firstName = firstname;
+  }
 
-	public int getId() {
-		return id;
-	}
+  public int getId() {
+    return id;
+  }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+  public void setId(int id) {
+    this.id = id;
+  }
 
   public int getType() {
     return type;
@@ -82,13 +83,13 @@ public class Person {
     this.type = type;
   }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
   public List<Email> getEmail() {
     return emails;
@@ -98,5 +99,12 @@ public class Person {
     this.emails = email;
   }
 
+  @Override
+  public String toString() {
+    if (Person.PERSON == type || Person.ROOM == type) {
+      return firstName == null ? "" : firstName + " " + name;
+    }
+    return name;
+  }
 
 }

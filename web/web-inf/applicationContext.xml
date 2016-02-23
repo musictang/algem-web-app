@@ -55,7 +55,7 @@
   </bean>
 
  <!-- Localization of hibernate messages during validation!-->
- <bean id="validationMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+<!-- <bean id="validationMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
     <property name="basename" value="/WEB-INF/resources/validation" />
  </bean>
 
@@ -63,7 +63,7 @@
     <property name="validationMessageSource">
         <ref bean="validationMessageSource"/>
     </property>
-</bean>
+</bean>-->
 
   <!--===========================-->
   <!--MESSAGE CONVERTERS OPTIONAL-->

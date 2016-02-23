@@ -1,5 +1,5 @@
 /*
- * @(#)ScheduleDao.java	1.0.4 25/05/15
+ * @(#)ScheduleDao.java	1.1.0 23/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -47,7 +47,7 @@ import org.springframework.stereotype.Repository;
  * IO methods for class {@link net.algem.planning.Schedule}.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.4
+ * @version 1.1.0
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -223,6 +223,24 @@ public class ScheduleDao
       timesArray = times.toArray(timesArray);
     }
     return timesArray;
+  }
+  
+  Room findRoom(final int roomId) {
+     String query = "SELECT nom,fonction,etablissement,idtarif FROM salle WHERE id = ?";
+     return jdbcTemplate.queryForObject(query, new RowMapper<Room>()
+     {
+       @Override
+       public Room mapRow(ResultSet rs, int row) throws SQLException {
+        Room r = new Room();
+        r.setId(roomId);
+        r.setName(rs.getString(1));
+        r.setUsage(rs.getString(2));
+        r.setEstab(rs.getInt(3));
+        r.setPriceIndex(rs.getInt(3));
+        return r;
+       }
+     }, roomId);
+     
   }
 
   List<Room> findRoomInfo(int estab) {
