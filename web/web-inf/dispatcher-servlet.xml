@@ -14,9 +14,10 @@
           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
   <!--SUPPORT DES ANNOTATIONS -->
-   <mvc:annotation-driven validator="validator" />
-   <tx:annotation-driven />
-   <context:component-scan base-package="net.algem" />
+  <mvc:annotation-driven validator="validator" />
+  <!--SUPPORT DES ANNOTATIONS DE TRANSACTION -->
+  <tx:annotation-driven />
+  <context:component-scan base-package="net.algem" />
 
   <!--MAPPING DES RESSOURCES STATIQUES (css, img, etc.) -->
   <!-- Le paramètre location permet de définir un répertoire implicite
@@ -26,17 +27,18 @@
   <mvc:resources mapping="/resources/themes/**" location="/resources/themes/default/"/>
   <mvc:resources mapping="/resources/js/**" location="/resources/js/"/>
   <!-- Localization of hibernate messages during validation!-->
- <bean id="validationMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+  <bean id="validationMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
     <property name="basename" value="/WEB-INF/resources/validation" />
- </bean>
+  </bean>
 
- <bean name="validator"  class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+  <bean name="validator"  class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
     <property name="validationMessageSource">
-        <ref bean="validationMessageSource"/>
+      <ref bean="validationMessageSource"/>
     </property>
- </bean>
+  </bean>
 
   <!--THYMELEAF-->
+  <!--En dev p:cacheable="false"-->
   <bean id="templateResolver" class="org.thymeleaf.spring3.templateresolver.SpringResourceTemplateResolver"
         p:prefix="/tpl/"
         p:suffix=".html"

@@ -54,17 +54,6 @@
     </property>
   </bean>
 
- <!-- Localization of hibernate messages during validation!-->
-<!-- <bean id="validationMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-    <property name="basename" value="/WEB-INF/resources/validation" />
- </bean>
-
- <bean name="validator"  class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
-    <property name="validationMessageSource">
-        <ref bean="validationMessageSource"/>
-    </property>
-</bean>-->
-
   <!--===========================-->
   <!--MESSAGE CONVERTERS OPTIONAL-->
   <!--===========================-->
@@ -131,5 +120,23 @@
   <!--LOCALE CONFIGURATION-->
   <!--====================-->
   <bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
+
+  <!--=========================-->
+  <!--MAIL SENDER CONFIGURATION-->
+  <!--=========================-->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="smtp.ouvaton.coop"/>
+    <property name="port" value="587"/>
+    <property name="username" value="info@algem.net"/>
+    <property name="password" value="ALebpt!"/>
+    <property name="javaMailProperties">
+        <props>
+            <prop key="mail.transport.protocol">smtp</prop>
+            <prop key="mail.smtp.auth">true</prop>
+            <prop key="mail.smtp.starttls.enable">true</prop>
+            <prop key="mail.debug">true</prop>
+        </props>
+    </property>
+</bean>
 
 </beans>

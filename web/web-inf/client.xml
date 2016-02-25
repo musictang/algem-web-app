@@ -13,49 +13,49 @@
     <entry key="name.label" value="MUSIQUES TANGENTES" />
     <entry key="email.label" value="info@musiques-tangentes.asso.fr" />
     <entry key="address.label" value="15 rue Salvador Allende 92240 MALAKOFF" />
-    <!--GOOGLE MAP ADDRESS-->
+    <!--GOOGLE MAP ADDRESS : ALWAYS PRESENT ! (if none, set value to "")-->
     <entry key="address.map" value="https://goo.gl/maps/sx4HeE4JLj52" />
     <entry key="website.label" value="http://www.musiques-tangentes.asso.fr" />
     <entry key="facebook.label" value="https://fr-fr.facebook.com/MusiquesTangentes92" />
     <entry key="twitter.label" value="https://twitter.com/mustang_asso" />
+<!--    <entry key="name.label" value="CFPM" />
+    <entry key="email.label" value="contact@cfpmfrance.com" />
+    <entry key="address.label" value="425, Cours Emile Zola 69100 Villeurbanne" />
+    <entry key="address.map" value="https://goo.gl/maps/" />
+    <entry key="website.label" value="http://www.cfpmfrance.com" />
+    <entry key="facebook.label" value="https://fr-fr.facebook.com/pagecfpm" />-->
+<!--    <entry key="name.label" value="APEJS" />
+    <entry key="email.label" value="accueil@apejs.org" />
+    <entry key="address.label" value="Jardin du Verney Cité des Arts 73000 CHAMBERY" />
+    <entry key="address.map" value="https://goo.gl/maps/dMF39fsjtZJ2" />
+    <entry key="website.label" value="http://www.apejs.org/" />
+    <entry key="facebook.label" value="https://fr-fr.facebook.com/pagecfpm" />-->
   </util:map>
 
   <util:map id="hotline" key-type="java.lang.String" >
     <!--FIRST ENTRY : MANDATORY-->
-    <entry key="Paris">
+    <entry key="MALAKOFF">
       <util:list>
         <!--PHONE NUMBER-->
-        <value>01 02 03 04 05</value>
+        <value>01 40 84 80 09</value>
         <!--TIMES-->
-        <value>lundi-jeudi : 9h-19h</value>
-        <value>vendredi : 12h30-19h</value>
+        <value>lundi,mardi,jeudi : 10h-22h</value>
+        <value>mercredi,vendredi : 09h-22h</value>
+        <value>samedi : 11h-18h</value>
+        <!--<value>lundi-vendredi : 9h-12h, 13h30-17h</value>-->
       </util:list>
     </entry>
     <!--OTPIONAL ENTRIES-->
-    <entry key="Lyon">
+<!--    <entry key="Lyon">
       <util:list>
         <value>01 40 80 04 05</value>
         <value>lundi-jeudi : 8h-20h</value>
         <value>vendredi : 12h30-19h</value>
         <value>samedi : 14h00-19h</value>
       </util:list>
-    </entry>
+    </entry>-->
   </util:map>
 
-  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-    <property name="host" value="smtp.ouvaton.coop"/>
-    <property name="port" value="587"/>
-    <property name="username" value="info@algem.net"/>
-    <property name="password" value="ALebpt!"/>
-    <property name="javaMailProperties">
-        <props>
-            <prop key="mail.transport.protocol">smtp</prop>
-            <prop key="mail.smtp.auth">true</prop>
-            <prop key="mail.smtp.starttls.enable">true</prop>
-            <prop key="mail.debug">true</prop>
-        </props>
-    </property>
-</bean>
 <!-- this is a template message that we can pre-load with default state -->
  <bean id="recoverMessage" class="org.springframework.mail.SimpleMailMessage">
  <property name="from" value="accueil@musiques-tangentes.asso.fr"/>

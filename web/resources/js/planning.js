@@ -36,8 +36,7 @@ function setUI() {
 
 /**
  * Init navigation elements.
- * @param {Number} estabId establishment id
- * @param {String} date request parameter date
+ * @commonParams {Object} global parameters
  * @returns {undefined}
  */
 function setDatePicker(commonParams) {
@@ -88,7 +87,7 @@ function setWidth() {
   var leftMarginGrid = (2.2 * emSize);
   var windowWidth = $(window).width();
   var actualWidth = parseInt($('.schedule_col').css('width'));
-  var canvasWidth = (cols * actualWidth) + leftMarginGrid;
+  var canvasWidth = ((cols + 1) * actualWidth) + leftMarginGrid;
   if (canvasWidth > windowWidth) {
     var gridWidth = canvasWidth + leftMarginGrid;
     $("#grid").css({
@@ -211,7 +210,7 @@ function setBooking(params, steps) {
     //console.log((e.pageX - posX) + ' , ' + (e.pageY - posY));
     var target = e.target || e.srcElement;
     if ("schedule_col" === target.className) {
-      var room = $(this).children(".title_col");
+      //var room = $(this).children(".title_col");
       var roomId = $(this).attr("id");
       var posY = $(this).offset().top;
       var idx = getStartTimeIndex(steps.height, e.pageY - posY);
@@ -280,8 +279,6 @@ function setBooking(params, steps) {
       alert("Hors delai");
       event.preventDefault();
     }
-    // IMPORTANT!: Firefox will not act properly without this:
-//    $(this).blur();
   });
   // call ajax method
   $('#booking-form input[type=radio]').change(function () {
@@ -425,8 +422,6 @@ function setPassChecked() {
      console.log(data);
     if (data) {
       $("#pass").prop("checked","checked");
-    } else {
-      //console.log("Aucun pass");
     }
   }, "json");
 }
