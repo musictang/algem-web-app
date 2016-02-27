@@ -1,5 +1,5 @@
 /*
- * @(#) BookingCtrl.java Algem Web App 1.1.0 23/02/16
+ * @(#) BookingCtrl.java Algem Web App 1.1.0 26/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -59,7 +59,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @since 1.0.6 20/01/2016
  */
 @Controller
-public class BookingCtrl {
+public class BookingCtrl
+{
 
   @Autowired
   private UserService service;
@@ -69,12 +70,15 @@ public class BookingCtrl {
 
   @Resource(name = "messageSource")
   private MessageSource messageSource;
-  
+
   @Autowired
   private MailSender mailSender;
 
   @Autowired
   private SimpleMailMessage bookingMessage;
+
+  @Autowired
+  private SimpleMailMessage bookingCancelMessage;
 
   public void setService(UserService service) {
     this.service = service;
@@ -85,23 +89,25 @@ public class BookingCtrl {
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/xgroups")
-  public @ResponseBody List<Group> getGroups(Principal p) {
+  public @ResponseBody
+  List<Group> getGroups(Principal p) {
     List<Group> groups = service.getGroups(p.getName());
     return groups;
   }
-  
+
   @RequestMapping(method = RequestMethod.GET, value = "/xpass")
-  public @ResponseBody boolean hasPass(Principal p) {
+  public @ResponseBody
+  boolean hasPass(Principal p) {
     return service.hasPass(p.getName());
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "/book.html")
   public String doPostBooking(
-    @ModelAttribute Booking booking,
-    @RequestParam int estab,
-    RedirectAttributes redirectAttributes,
-    Principal p,
-    Model model) {
+          @ModelAttribute Booking booking,
+          @RequestParam int estab,
+          RedirectAttributes redirectAttributes,
+          Principal p,
+          Model model) {
 
     redirectAttributes.addAttribute("d", booking.getDate());
     redirectAttributes.addAttribute("e", estab);
@@ -129,8 +135,8 @@ public class BookingCtrl {
       DailyTimes dt = planningService.getDailyTimes(booking.getRoom(), dow);
       if (dt.getOpening().after(booking.getStartTime()) || dt.getClosing().before(booking.getEndTime())) {
         String msg = messageSource.getMessage("booking.room.closed.error",
-            new Object[]{dt.getOpening().toString(), dt.getClosing().toString()},
-            LocaleContextHolder.getLocale());
+                new Object[]{dt.getOpening().toString(), dt.getClosing().toString()},
+                LocaleContextHolder.getLocale());
         Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, msg);
         model.addAttribute("message", msg);
         return "error";
@@ -154,43 +160,19 @@ public class BookingCtrl {
 
       Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, booking.toString());
       planningService.book(booking);
-      sendBookingMessage(booking);
+      sendMessage(booking, "booking.send.info", bookingMessage);
     } catch (ParseException ex) {
       Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);
       model.addAttribute("message", messageSource.getMessage("date.format.error", null, LocaleContextHolder.getLocale()));
       return "error";
-    } catch(DataAccessException ex) {
+    } catch (DataAccessException ex) {
       model.addAttribute("message", messageSource.getMessage("data.exception", new Object[]{ex.getMessage()}, LocaleContextHolder.getLocale()));
       return "error";
     }
 
     return "redirect:/perso/home.html";
   }
-  
-  private void sendBookingMessage(Booking booking) {
-    SimpleMailMessage mail = new SimpleMailMessage(bookingMessage);
-    Person p = service.getPersonFromUser(booking.getPerson());
-    String from = "info@localhost";
-    try {
-      if (p != null && p.getEmail().size() > 0) {
-        from = p.getEmail().get(0).getEmail();
-      }
-    } catch (EmptyResultDataAccessException ex) {
-      Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);  
-    }
-    Room room = planningService.getRoom(booking.getRoom());
-    String now = Constants.DATE_FORMAT.format(new Date());
-    String msg = messageSource.getMessage("booking.send.info", new Object[]{room.getName(), p == null ? "Anonymous" : p.toString(), now, booking.getDate()}, LocaleContextHolder.getLocale());
 
-    mail.setFrom(from);
-    mail.setText(msg);
-    mailSender.send(mail);
-  }
-
-  private void addMessageAttribute(Model m, String key, Object[] params) {
-    m.addAttribute("message", messageSource.getMessage(key, params, LocaleContextHolder.getLocale()));
-  }
-  
   @RequestMapping(method = RequestMethod.GET, value = "/perso/book-cancel.html")
   public String cancelBooking(Model model, @RequestParam int id, @RequestParam int action, @RequestParam String date, @RequestParam String start) {
     try {
@@ -214,6 +196,7 @@ public class BookingCtrl {
       }
       // n'annuler que si confirmé
       if (planningService.cancelBooking(action)) {
+        sendMessage(b, "booking.cancel.info", bookingCancelMessage);
         return "redirect:/perso/home.html";
       } else {
         model.addAttribute("message", "Erreur sql");
@@ -231,7 +214,38 @@ public class BookingCtrl {
       }
       return "error";
     }
-    
+
+  }
+
+  /**
+   * Post mail info.
+   * @param booking booking instance
+   * @param msgKey property key
+   * @param template template message
+   */
+  private void sendMessage(Booking booking, String msgKey, SimpleMailMessage template) {
+    SimpleMailMessage mail = new SimpleMailMessage(template);
+    Person p = service.getPersonFromUser(booking.getPerson());
+    String from = "info@localhost";
+    try {
+      if (p != null && p.getEmail().size() > 0) {
+        from = p.getEmail().get(0).getEmail();
+      }
+    } catch (EmptyResultDataAccessException ex) {
+      Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    Room room = planningService.getRoom(booking.getRoom());
+    String now = Constants.DATE_FORMAT.format(new Date());
+    Object[] args = new Object[]{room.getName(), p == null ? "Anonymous" : p.toString(), now, booking.getDate()};
+    String msg = messageSource.getMessage(msgKey, args, LocaleContextHolder.getLocale());
+
+    mail.setFrom(from);
+    mail.setText(msg);
+    mailSender.send(mail);
+  }
+
+  private void addMessageAttribute(Model m, String key, Object[] params) {
+    m.addAttribute("message", messageSource.getMessage(key, params, LocaleContextHolder.getLocale()));
   }
 
 }

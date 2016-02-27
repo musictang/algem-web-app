@@ -65,4 +65,8 @@
  <property name="to" value="accueil@musiques-tangentes.asso.fr"/>
  <property name="subject" value="Réservation salle"/>
 </bean>
+<bean id="bookingCancelMessage" class="org.springframework.mail.SimpleMailMessage">
+ <property name="to" value="accueil@musiques-tangentes.asso.fr"/>
+ <property name="subject" value="Annulation réservation"/>
+</bean>
 </beans>
