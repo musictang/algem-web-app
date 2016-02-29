@@ -10,7 +10,7 @@
   <!--===============================-->
   <util:map id="organization" key-type="java.lang.String" >
     <!--NAME VALUE IN UPPERCASE PREFERABLY-->
-    <entry key="name.label" value="MUSIQUES TANGENTES" />
+    <entry key="name.label" value="JAZZ ACTION VALENCE" />
     <entry key="email.label" value="info@musiques-tangentes.asso.fr" />
     <entry key="address.label" value="15 rue Salvador Allende 92240 MALAKOFF" />
     <!--GOOGLE MAP ADDRESS : ALWAYS PRESENT ! (if none, set value to "")-->
@@ -37,7 +37,7 @@
     <entry key="MALAKOFF">
       <util:list>
         <!--PHONE NUMBER-->
-        <value>01 40 84 80 09</value>
+        <value>01&#160;40&#160;84&#160;80&#160;09</value>
         <!--TIMES-->
         <value>lundi,mardi,jeudi : 10h-22h</value>
         <value>mercredi,vendredi : 09h-22h</value>
