@@ -1,7 +1,7 @@
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @since 09/05/15 09:33
+ * @since 09/05/15
  * @version 1.1.0
  * @returns {void}
  */
@@ -309,7 +309,7 @@ function checkMember(params) {
   $.ajax({
         url: urlPath,
         type: 'get',
-        data:  {start: params.startOfYear, end: params.endOfYear},
+        data:  {start: params.preEnrolmentStart, end: params.endOfYear},
         dataType: 'json',
         async: false,
         success: function(data) {

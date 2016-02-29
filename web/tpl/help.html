@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) help.html Algem Web App 1.1.0 25/02/2016
+ * @(#) help.html Algem Web App 1.1.0 29/02/2016
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -29,8 +29,8 @@
         <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
         <li sec:authorize="isAnonymous()"><a th:href="@{/login.html}" id="menu-login" th:title="#{connect.label}"><i class="fa fa-user"></i></a></li>
-        <li sec:authorize="hasAnyRole('1','3','4','11')"><a th:href="@{/perso/home.html}" id="dossier" th:title="#{my.account.label}"><i class="fa fa-user-plus"></i></a></li>
-        <li sec:authorize="hasAnyRole('1','3','4','11')"><a th:href="@{/j_spring_security_logout}" id="menu-logout" th:title="#{logout.label}"><i class="fa fa-sign-out"></i></a></li>
+        <li sec:authorize="hasAnyRole('1','2','3','4','11')"><a th:href="@{/perso/home.html}" id="dossier" th:title="#{my.account.label}"><i class="fa fa-user-plus"></i></a></li>
+        <li sec:authorize="isAuthenticated()"><a th:href="@{/j_spring_security_logout}" id="menu-logout" th:title="#{logout.label}"><i class="fa fa-sign-out"></i></a></li>
       </ul>
     </div>
     <header>
@@ -38,19 +38,16 @@
     </header>
     <section class="global">
       <article class="centered">
-        <h2 style="display: block">RESERVATION</h2>
-        <h3>CRÉATION D'UN COMPTE UTILISATEUR</h3>
-        <p>Afin de pouvoir réserver une salle en tant que personne ou pour un groupe, les personnes extérieures à la structure doivent disposer d'un compte utilisateur. La création d'un compte n'est possible que si celles-ci sont déjà enregistrées auprès de la structure et qu'elles disposent d'un numéro de contact et d'une adresse email valides.</p>
-        <p>Cliquez sur le lien &laquo;&nbsp;Créez un compte&nbsp;&raquo; dans la fenêtre de connexion pour accéder au formulaire d'enregistrement. Le premier champ requis correspond à votre numéro d'adhérent (ou de contact). Par défaut, ce numéro est à 0 mais <strong>vous devez obligatoirement le compléter avec votre propre identifiant</strong>. Vous pouvez le trouver par exemple sur votre carte d'adhérent ou dans les documents qui vous ont été fournis lors de votre première inscription. L'adresse email qui suit nous permettra de vous identifier sans ambiguité, en comparant cette adresse avec l'une de celles que vous nous avez déjà fournies. Saisissez ensuite un login (nom d'utilisateur). Ce login sera refusé s'il existe déjà. <strong>Le mot de passe doit comporter au moins huit caractères</strong>. Si aucune erreur n'a été détectée après la validation du formulaire, vous serez redirigé vers la page de connexion . Indiquez votre login et votre mot de passe tels que vous les avez saisis à l'étape précédente.</p>
-        <p><strong>Note 1</strong> : si vous avez déjà un login et un mot de passe de connexion en tant qu'utilisateur d'Algem, la création de compte est inutile. Utilisez pour vous connecter vos identifiants habituels.</p>
-
-        <h3>RÉCUPÉRATION DU MOT DE PASSE</h3>
-        <p>Le mot de passe de connexion est propre à chaque utilisateur et personne d'autre ne le connaît ni ne peut le déduire. Il peut arriver que les visiteurs occasionnels oublient le leur. Dans ce cas, voici la procédure à suivre, en tant que simple visiteur :</p>
-        <ol>
-          <li>Ouvrez la fenêtre de connexion en cliquant sur l'icone en forme de silhouette dans le menu de gauche.</li><li>Cliquez sur le lien &laquo;&nbsp;Mot de passe oublié ?&nbsp;&raquo;.</li>
-          <li>Entrez votre email dans le formulaire dédié. Un lien de récupération vous sera envoyé à cette adresse, avec une validité de 24 heures.</li>
-          <li>Après réception, cliquez sur ce lien et saisissez votre nouveau mot de passe sur la page dédiée.</li></ol>
-        <h3>RÉSERVATION DE SALLE</h3>
+        <h2 id="chapter-booking" style="display: block">RESERVATION</h2>
+        <nav>
+          <ul>
+            <li><a href="#booking-help">Réservation de salle</a></li>
+            <li><a href="#account-help">Création d'un compte utilisateur</a></li>
+            <li><a href="#password-help">Récupération du mot de passe</a></li>
+          </ul>
+        </nav>
+        <h3 id="booking-help">RÉSERVATION DE SALLE</h3>
+        <p>Afin de pouvoir réserver une salle en tant que personne ou pour un groupe, les personnes extérieures à la structure doivent disposer d'un compte utilisateur. La <a href="#password-help">création d'un compte</a> n'est possible que si celles-ci sont déjà enregistrées auprès de la structure et qu'elles disposent d'un numéro de contact et d'une adresse email valides.</p>
         <p>DEUX TYPES DE RÉSERVATION vous sont proposés :</p>
         <ul>
           <li>réservation individuelle</li>
@@ -70,6 +67,17 @@
         <p>La rubrique &laquo;&nbsp;Mes réservations&nbsp;&raquo; vous présente une liste de vos réservations présentes et passées. Les plus récentes disposent d'un lien d'annulation à droite de chaque ligne. Il se peut en effet que vous ayez commis une erreur d'horaire ou de durée, ou que vous ayez validé par mégarde. Vous pouvez annuler dans ce cas cette réservation et en refaire une nouvelle. Si vous vous apercevez d'une erreur, vous avez tout intérêt à annuler rapidement votre réservation avant qu'elle soit confirmée par les personnes de l'accueil ayant reçu votre demande. <strong>Seules les réservations &laquo;&nbsp;En attente de confirmation&nbsp;&raquo; peuvent être annulées</strong>, les autres étant marquées comme &laquo;&nbsp;Confirmées&nbsp;&raquo; et par définition, non éditables.</p>
         <p><strong>Note</strong> : une fois connecté, vous pouvez également accéder à votre page personnelle en cliquant sur l'icone associée au signe + dans le menu de droite.</p>
         <p>Il se peut qu'après validation vous soyez redirigé vers une page d'erreur. Cela peut arriver si l'horaire que vous avez choisi entre en conflit avec un planning déjà existant, une zone non libre ou si vous êtes déjà présent sur une partie de cet horaire. Refaites dans ce cas votre réservation en tenant compte des avertissements qui vous ont été présentés.</p>
+        <h3 id="account-help">CRÉATION D'UN COMPTE UTILISATEUR</h3>
+        
+        <p>Cliquez sur le lien &laquo;&nbsp;Créez un compte&nbsp;&raquo; dans la fenêtre de connexion pour accéder au formulaire d'enregistrement. Le premier champ requis correspond à votre numéro d'adhérent (ou de contact). Par défaut, ce numéro est à 0 mais <strong>vous devez obligatoirement le compléter avec votre propre identifiant</strong>. Vous pouvez le trouver par exemple sur votre carte d'adhérent ou dans les documents qui vous ont été fournis lors de votre première inscription. L'adresse email qui suit nous permettra de vous identifier sans ambiguité, en comparant cette adresse avec l'une de celles que vous nous avez déjà fournies. Saisissez ensuite un login (nom d'utilisateur). Ce login sera refusé s'il existe déjà. <strong>Le mot de passe doit comporter au moins huit caractères</strong>. Si aucune erreur n'a été détectée après la validation du formulaire, vous serez redirigé vers la page de connexion . Indiquez votre login et votre mot de passe tels que vous les avez saisis à l'étape précédente.</p>
+        <p><strong>Note 1</strong> : si vous avez déjà un login et un mot de passe de connexion en tant qu'utilisateur d'Algem, la création de compte est inutile. Utilisez pour vous connecter vos identifiants habituels.</p>
+
+        <h3 id="password-help">RÉCUPÉRATION DU MOT DE PASSE</h3>
+        <p>Le mot de passe de connexion est propre à chaque utilisateur et personne d'autre ne le connaît ni ne peut le déduire. Il peut arriver que les visiteurs occasionnels oublient le leur. Dans ce cas, voici la procédure à suivre, en tant que simple visiteur :</p>
+        <ol>
+          <li>Ouvrez la fenêtre de connexion en cliquant sur l'icone en forme de silhouette dans le menu de gauche.</li><li>Cliquez sur le lien &laquo;&nbsp;Mot de passe oublié ?&nbsp;&raquo;.</li>
+          <li>Entrez votre email dans le formulaire dédié. Un lien de récupération vous sera envoyé à cette adresse, avec une validité de 24 heures.</li>
+          <li>Après réception, cliquez sur ce lien et saisissez votre nouveau mot de passe sur la page dédiée.</li></ol>
       </article>
     </section>
     <footer th:replace="fragments/layout :: footer"></footer>

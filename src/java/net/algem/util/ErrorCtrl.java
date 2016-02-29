@@ -35,6 +35,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ErrorCtrl {
 
   @ResponseStatus(HttpStatus.NOT_FOUND)
+  @RequestMapping(value = "/403", method = RequestMethod.GET)
+  public String accessDenied() {
+    return "403";
+  }
+  
+  @ResponseStatus(HttpStatus.NOT_FOUND)
   @RequestMapping(value = "/404", method = RequestMethod.GET)
   public String pageNotFound() {
     return "404";

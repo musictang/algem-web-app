@@ -42,7 +42,8 @@
       //console.log("offPeakTime " + offPeakTime);
       var commonParams = {
         estab: /*[[${param.e[0]}]]*/ 3501,
-        auth: /*[[${#authorization.expression('isAuthenticated()')}]]*/ false,
+//        auth: /*[[${#authorization.expression('isAuthenticated()')}]]*/ false,
+        auth: /*[[${#authorization.expression(\"hasAnyRole('1','2','3','4','11')\")}]]*/ false,
         date: /*[[${param.d[0]}]]*/ '29-12-2015'
       };
       var bookingParams = {
@@ -57,7 +58,8 @@
         bookingMemberWarning:/*[[#{booking.member.warning}]]*/ 'Non membre',
         startOfYear: /*[[${conf['startDate']}]]*/ '01-01-2016',
         endOfYear: /*[[${conf['endDate']}]]*/ '31-12-2016',
-        memberShipRequired: /*[[${bookingConf.memberShipRequired}]]*/ false
+        memberShipRequired: /*[[${bookingConf.memberShipRequired}]]*/ false,
+        preEnrolmentStart: /*[[${conf['preEnrolmentStart']}]]*/ '01-07-2016',
       };
       var steps = {
         height: 720,//Canvas height
@@ -142,8 +144,10 @@
         <p th:text="#{booking.auth.warning}"></p>
         <p><a th:href="@{/login.html}" th:text="#{connect.label}"></a></p>
       </div>
-      <div sec:authorize="${isAuthenticated()}" th:include="fragments/user :: booking" th:with="offset=${timeOffset}"></div>
-    </div>
+      <div sec:authorize="${hasAnyRole('1','2','3','4','11')}" th:include="fragments/user :: booking" th:with="offset=${timeOffset}"></div>
+      <div sec:authorize="${hasAnyRole('0','10')}">
+        <p th:text="#{booking.rights.warning}"></p>
+      </div>
     <div id="errorDialog" th:title="#{warning.label}"></div>
   </body>
 </html>

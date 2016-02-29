@@ -98,7 +98,11 @@ public class BookingCtrl
   @RequestMapping(method = RequestMethod.GET, value = "/xpass")
   public @ResponseBody
   boolean hasPass(Principal p) {
-    return service.hasPass(p.getName());
+    try {
+      return service.hasPass(p.getName());
+    } catch (DataAccessException de) {
+      return false;
+    }
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "/book.html")
@@ -185,9 +189,12 @@ public class BookingCtrl
 //      BookingConf conf = planningService.getBookingConf();
 //      long delay = conf.getMinDelay() * 60 * 60 * 1000;
       Booking b = planningService.getBooking(id);
-      if (b != null && b.getStatus() == 1) {
-        model.addAttribute("message", messageSource.getMessage("booking.confirmed.cancel.warning", null, LocaleContextHolder.getLocale()));
-        return "error";
+      if (b != null) {
+        b.setDate(date);
+        if (b.getStatus() == 1) {
+          model.addAttribute("message", messageSource.getMessage("booking.confirmed.cancel.warning", null, LocaleContextHolder.getLocale()));
+          return "error";
+        }
       }
 
       if (now.getTime() > d.getTime()) {

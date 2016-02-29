@@ -87,13 +87,12 @@
   <security:http pattern="/" security="none"/>
   <security:http pattern="/index.htm*" security="none"/>
   <security:http pattern="/login.htm*" security="none"/>
-  <security:http pattern="/jxlogin.htm*" security="none"/>
   <security:http pattern="/signup.htm*" security="none"/>-->
 
   <!--The <http> element is responsible for creating a FilterChainProxy and the filter beans which it uses.-->
   <security:http auto-config="true" use-expressions="true">
-    <security:intercept-url pattern="/book.htm*" access="hasAnyRole('1','3','4','11')" />
-    <security:intercept-url pattern="/perso/**" access="hasAnyRole('1','3','4','11')" />
+    <security:intercept-url pattern="/book.htm*" access="hasAnyRole('1','2','3','4','11')" />
+    <security:intercept-url pattern="/perso/**" access="hasAnyRole('1','2','3','4','11')" />
     <security:form-login login-page="/login.html"
                          default-target-url="/perso/home.html"
                          always-use-default-target="true"

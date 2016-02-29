@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningServiceImpl.java	1.1.0 12/02/16
+ * @(#)PlanningServiceImpl.java	1.1.0 29/02/16
  *
  * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -71,6 +71,8 @@ public class PlanningServiceImpl
     confs.put("startDate", c2.getValue());
     Config c3 = configIO.findId(ConfigKey.END_OF_YEAR.getKey());
     confs.put("endDate", c3.getValue());
+    Config c4 = configIO.findId(ConfigKey.PRE_ENROLMENT_START_DATE.getKey());
+    confs.put("preEnrolmentStart", c4.getValue());
 
     return confs;
   }

@@ -88,7 +88,8 @@ public enum ConfigKey {
   BOOKING_CANCEL_DELAY("Reservation.annulation.delai"),
   BOOKING_REQUIRED_MEMBERSHIP("Reservation.adhesion.requise"),
   MEMBERSHIP_ACCOUNT("ADHÉSIONS"),
-  PRO_MEMBERSHIP_ACCOUNT("ADHÉSIONS PRO");
+  PRO_MEMBERSHIP_ACCOUNT("ADHÉSIONS PRO"),
+  PRE_ENROLMENT_START_DATE("Date.debut.preinscription");
   
   private final String key;
 

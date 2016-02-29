@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/musiques-tangentes/planning">
+<Context antiJARLocking="true" path="/algem/planning">
 <Resource auth="Container"
 driverClassName="org.postgresql.Driver"
 maxActive="20" maxIdle="30" maxWait="10000"
 name="jdbc/algem" password="Pigfy!"
 type="javax.sql.DataSource"
-url="jdbc:postgresql://localhost:5432/mustang"
+url="jdbc:postgresql://localhost:5442/mustang"
 username="nobody"/>
 </Context>

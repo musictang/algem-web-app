@@ -145,7 +145,6 @@ public class CommonUserService
 
   @Override
   public boolean hasPass(String login) {
-    int p = dao.findPass(login);
     return dao.findPass(login) > 0;
   }
 

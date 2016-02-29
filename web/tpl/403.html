@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) 404.html Algem Web App 1.0.6 31/12/2015
+ * @(#) 403.html Algem Web App 1.0.6 31/12/2015
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -19,7 +19,7 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-  <head th:with="title=${@organization['name.label'] + ' 404'}" th:include="fragments/layout :: common-head">
+  <head th:with="title=${@organization['name.label'] + ' 403'}" th:include="fragments/layout :: common-head">
     <title>TODO supply a title</title>
   </head>
   <body>
@@ -35,8 +35,8 @@
     </header>
     <div class="global">
       <div class="centered">
-        <h2 th:text="#{error.404.label}"></h2>
-        <p th:text="#{error.404.info}"></p>
+        <h2 th:text="#{error.403.label}"></h2>
+        <p th:text="#{error.403.info}"></p>
         <div class="thumbnails thumbnails-out" style="float: left">
         <a class="img-link" th:href="@{/index.html}">
               <img th:src="@{/resources/themes/img/logo.png}" alt="Index"/>
