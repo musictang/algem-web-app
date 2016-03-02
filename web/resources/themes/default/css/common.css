@@ -1,15 +1,11 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.1.0 17/02/16
+    Last: 1.1.1 02/03/16
 */
 @import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);
-/*@import url(https://fonts.googleapis.com/css?family=PT+Sans+Narrow);*/
-/*@import url(https://fonts.googleapis.com/css?family=Catamaran:400,900,700);*/
-/*@import url(https://fonts.googleapis.com/css?family=Martel+Sans:400,900,700);*/
-/*@import url(https://fonts.googleapis.com/css?family=Poller+One);*/
 
-@font-face {
+/*@font-face {
     font-family: 'droid_sans_monoregular';
     src: url('../fonts/droidsansmono-webfont-webfont.eot');
     src: url('../fonts/droidsansmono-webfont-webfont.eot?#iefix') format('embedded-opentype'),
@@ -21,6 +17,7 @@
     font-style: normal;
 }
 
+*/
 @font-face {
     font-family: 'ubuntumedium';
     src: url('../fonts/ubuntu-m-webfont.eot');
@@ -33,7 +30,7 @@
     font-style: normal;
 }
 
-@font-face {
+/*@font-face {
     font-family: 'ubunturegular';
     src: url('../fonts/ubuntu-r-webfont.eot');
     src: url('../fonts/ubuntu-r-webfont.eot?#iefix') format('embedded-opentype'),
@@ -43,7 +40,7 @@
          url('../fonts/ubuntu-r-webfont.svg#ubunturegular') format('svg');
     font-weight: normal;
     font-style: normal;
-}
+}*/
 
 /*
  CSS Reset by Eric Meyer - Released under Public Domain
@@ -114,13 +111,13 @@ html {
 
 body {
   height:100%;
-  font-family: ubunturegular,Verdana,Helvetica,sans-serif;
+  font-family: Ubuntu,'Segoe UI',Verdana,Helvetica,sans-serif;
   color: #444;
 }
 
 header {
   position: relative;
-  height: 5%;
+  height: 6%;
   /*background-image: url('../img/bg-thumb.png');*/
   background-position: bottom;
   background-repeat: repeat-x;
@@ -179,8 +176,7 @@ footer a.logo img {
 
 h1 {
   font-family:'Exo 2',Arial,sans-serif;
-  /*font-size: 2.5em;*/
-  font-size: 2em;
+  font-size: 2.3em;
   padding: 0;
   font-weight: 800;
   text-align: center;
@@ -442,7 +438,7 @@ select {
 
 #help-panel, #info-panel, #login-panel {
   position: absolute;
-  top:5%;
+  top:6%;
   right:0;
   display: none;
   border: 1px dotted gray;
@@ -472,7 +468,7 @@ select {
   padding: 1em;
 }
 
-.ui-widget { font-family: Ubuntu,Verdana,Helvetica,sans-serif;}
+.ui-widget { font-family: Ubuntu,'Segoe UI',Verdana,Helvetica,sans-serif;}
 
 .ui-datepicker-title {
   color: #444;
@@ -526,7 +522,8 @@ form input[type='button'], form input[type='submit'] {
 form label {
   display: inline-block;
   margin-top: 0.5em;
-  font-family: ubuntumedium,verdana,sans-serif;
+  font-family: 'ubuntumedium','Segoe UI',Verdana,sans-serif;
+  /*font-weight: 600;*/
 }
 
 #booking label {

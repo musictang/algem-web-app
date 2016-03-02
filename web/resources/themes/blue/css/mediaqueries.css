@@ -1,5 +1,5 @@
 /*
- * @(#) mediaqueries.css Algem Web App 1.1.0 17/02/16
+ * @(#) mediaqueries.css Algem Web App 1.1.0 24/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -20,11 +20,11 @@
 /*
     Created on : 29/12/2015, 15:34:39
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Version    : 1.0.6
+    Last    : 1.1.1 02/03/16
 */
 /*@media only screen and (max-device-width:480px),
 only screen and (-webkit-min-device-pixel-ratio: 2)*/
-
+@import url(https://fonts.googleapis.com/css?family=PT+Sans+Narrow);
 /*iPhone 2G, 3G, 4, 4S, Moto E  Media Queries : Portrait*/
 @media only screen
 and (min-device-width : 320px)
@@ -33,6 +33,7 @@ and (max-device-width : 480px) {
   header > nav {
     padding:0.5em 0;
   }
+  h1 {font-size: 2em;}
   #grid, #canvas{top: 10%}
   .schedule_col {
     width: 40px;
@@ -41,7 +42,7 @@ and (max-device-width : 480px) {
     font-size: xx-small;
     line-height: 1em;
   }
-   .closing-bar {
+  .closing-bar {
     height: 3em;
   }
 
@@ -52,12 +53,16 @@ and (max-device-width : 480px) {
     font-size: 1.6em;
   }
   table.mobile {
-      overflow-x: auto;
-      display: block;
+    overflow-x: auto;
+    display: block;
   }
   .centered {
     width: 100%;
   }
+  #canvas, .title_col {
+    font-family: 'PT Sans Narrow';
+  }
+
 }
 /*iPhone 2G, 3G, 4, 4S, Moto E Media Queries : landscape*/
 @media only screen
@@ -68,6 +73,7 @@ and (orientation : landscape) {
   header > nav {
     padding:0.5em 0;
   }
+  h1 {font-size: 2em;}
   #grid, #canvas{top: 14%}
   /* STYLES GO HERE */
   .schedule_col {
@@ -80,11 +86,15 @@ and (orientation : landscape) {
   .centered {
     width: 80%;
   }
+  #canvas, .title_col {
+    font-family: 'PT Sans Narrow';
+  }
 }
 
 @media only screen and (min-width:481px) and (max-width: 800px) {
   header {height: 14%}
-   #grid, #canvas {top: 14%}
+  #grid, #canvas {top: 14%}
+  h1 {font-size: 2em;}
   .centered {
     width: 100%;
     padding: 0 1em;
@@ -95,11 +105,14 @@ and (orientation : landscape) {
   }
 
   table.mobile {
-      overflow-x: auto;
-      display: block;
+    overflow-x: auto;
+    display: block;
   }
   .centered {
     width: 90%;
+  }
+  #canvas, .title_col {
+    font-family: 'PT Sans Narrow';
   }
 }
 
@@ -108,7 +121,7 @@ and (orientation : landscape) {
     width: 75px;
   }
   header {height: 10%}
-   #grid, #canvas {top: 10%}
+  #grid, #canvas {top: 10%}
   .schedule {
     font-size: xx-small;
     line-height: 1em;
