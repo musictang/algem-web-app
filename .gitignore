@@ -2,3 +2,4 @@ build
 dist
 nbproject
 web/META-INF/context.xml
+web/web-inf/sender.xml

@@ -3,7 +3,7 @@
   <!--CHARGEMENT DU CONTEXTE DE L’APPLICATION WEB-->
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/applicationContext.xml /WEB-INF/client.xml</param-value>
+    <param-value>/WEB-INF/applicationContext.xml /WEB-INF/client.xml /WEB-INF/sender.xml</param-value>
   </context-param>
 
   <!--ServletContextListener SPRING IMPLEMENTATION-->

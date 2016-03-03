@@ -123,11 +123,12 @@
   <!--=========================-->
   <!--MAIL SENDER CONFIGURATION-->
   <!--=========================-->
+  <!--Create sender.xml file and include it context-param (web.xml)-->
 <!--    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-    <property name="host" value="smtp.ouvaton.coop"/>
+    <property name="host" value="smtp.xxxxx.xxx"/>
     <property name="port" value="587"/>
-    <property name="username" value="info@algem.net"/>
-    <property name="password" value="ALebpt!"/>
+    <property name="username" value="user@xxxx.xxx"/>
+    <property name="password" value="xxxxx"/>
     <property name="javaMailProperties">
         <props>
             <prop key="mail.transport.protocol">smtp</prop>
@@ -137,19 +138,4 @@
         </props>
     </property>
 </bean>-->
-<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-    <property name="host" value="smtp-relay.sendinblue.com"/>
-    <property name="port" value="587"/>
-    <property name="username" value="com@musiques-tangentes.asso.fr"/>
-    <property name="password" value="MYj04m7ZandLGrwx"/>
-    <property name="javaMailProperties">
-        <props>
-            <prop key="mail.transport.protocol">smtp</prop>
-            <prop key="mail.smtp.auth">true</prop>
-            <prop key="mail.smtp.starttls.enable">true</prop>
-            <prop key="mail.debug">true</prop>
-        </props>
-    </property>
-</bean>
-
 </beans>
