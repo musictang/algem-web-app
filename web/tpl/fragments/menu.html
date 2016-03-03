@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) menu.html Algem Web App 1.0.6 01/01/2016
+ * @(#) menu.html Algem Web App 1.1.1 03/03/2016
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -26,7 +26,7 @@
   <body>
     <ul th:fragment="cnx" th:remove="tag">
         <li sec:authorize="isAnonymous()"><a href="#login-panel" id="menu-login" th:title="#{connect.label}"><i class="fa fa-user"></i></a></li>
-        <li sec:authorize="hasAnyRole('1','2','3','4','11')"><a th:href="@{/perso/home.html}" id="dossier" th:title="#{my.account.label}"><i class="fa fa-user-plus"></i></a></li>
+        <li sec:authorize="hasAnyRole('1','2','3','4','11')"><a th:href="@{/perso/home.html}" id="dossier" th:title="#{my.account.label}"><i class="fa fa-user-plus"></i></a><span class="pseudo" sec:authorize="not isAnonymous()" sec:authentication="name"></span></li>
         <li sec:authorize="isAuthenticated()"><a th:href="@{/j_spring_security_logout}" id="menu-logout" th:title="#{logout.label}"><i class="fa fa-sign-out"></i></a></li>
     </ul>
   </body>

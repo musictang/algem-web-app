@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) help.html Algem Web App 1.1.0 29/02/2016
+ * @(#) help.html Algem Web App 1.1.1 03/03/2016
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -47,7 +47,7 @@
           </ul>
         </nav>
         <h3 id="booking-help">RÉSERVATION DE SALLE</h3>
-        <p>Afin de pouvoir réserver une salle en tant que personne ou pour un groupe, les personnes extérieures à la structure doivent disposer d'un compte utilisateur. La <a href="#password-help">création d'un compte</a> n'est possible que si celles-ci sont déjà enregistrées auprès de la structure et qu'elles disposent d'un numéro de contact et d'une adresse email valides.</p>
+        <p>Vous devez disposer d'un compte utilisateur afin de pouvoir réserver. La <a href="#password-help">création d'un compte</a> n'est possible que si vous êtes enregistré auprès de [[${@organization['name.label']}]] et que vous disposez d'un numéro de contact et d'une adresse email valides.</p>
         <p>DEUX TYPES DE RÉSERVATION vous sont proposés :</p>
         <ul>
           <li>réservation individuelle</li>
@@ -55,20 +55,21 @@
         </ul>
         <p>Cliquez sur une zone libre du planning à l'heure qui vous intéresse. Il se peut que la réservation vous soit interdite en-deça et au-delà d'un certain délai. Ces limites sont les suivantes :</p>
         <dl>
-          <dt>Délai minimum de réservation :</dt><dd>Nombre d'heures à respecter avant de pouvoir réserver. Par défaut, on ne peut pas réserver moins de 24 heures à l'avance.</dd>
-          <dt>Délai maximal de réservation :</dt><dd>Nombre de jours au-delà duquel la réservation est interdite. Par défaut, on ne peut pas réserver plus de 15 jours à l'avance.</dd>
-          <dt>Délai d'annulation :</dt><dd>Délai maximal en nombre d'heures à ne pas dépasser en cas d'annulation. Ce paramètre est pris en compte au moment d'une annulation afin de considérer la séance comme due si le délai est dépassé. Autrement dit, une réservation devra être payée si elle n'est pas annulée dans les temps et à condition bien sûr qu'elle fasse l'objet d'un paiement.</dd>
-          <dt>Adhésion (payée) exigée pour les réservations :</dt><dd>Si cette option est activée, vous ne pourrez réserver qu'à condition d'avoir payé votre adhésion (ou vos droits d'entrée) pour l'année scolaire en cours. Une erreur vous sera signalée dans le cas contraire.</dd>
+          <dt>Délai minimum de réservation :</dt><dd>Nombre d'heures à respecter avant de pouvoir réserver. Par défaut, on ne peut pas réserver moins de [[${conf.minDelay}]] heures à l'avance.</dd>
+          <dt>Délai maximal de réservation :</dt><dd>Nombre de jours au-delà duquel la réservation est interdite. Par défaut, on ne peut pas réserver plus de [[${conf.maxDelay}]] jours à l'avance.</dd>
+          <dt>Délai d'annulation :</dt><dd>Délai minimal à respecter en cas d'annulation. Par défaut, ce délai est de  [[${conf.cancelDelay}]]&nbsp;h. Une réservation devra être payée si elle est annulée en-dessous de ce délai (et à condition bien sûr qu'elle fasse l'objet d'un paiement).</dd>
+        </dl>
+        <dl th:if="${conf.memberShipRequired}">
+          <dt>Adhésion (payée) exigée pour les réservations :</dt><dd>Vous ne pourrez réserver qu'à condition d'avoir payé votre adhésion (ou vos droits d'entrée) pour l'année scolaire en cours. Une erreur vous sera signalée dans le cas contraire.</dd>
         </dl>
         <p>Si tout est en ordre, une fenêtre de dialogue vous permet de valider votre réservation en fonction de l'horaire et de la salle sélectionnés. Les champs <strong>Date</strong>, <strong>Heure de début</strong> et <strong>Salle</strong> sont automatiquement positionnés suivant l'endroit où vous avez cliqué. La durée minimale par défaut est de 1h. Cliquez sur les flèches de droite pour augmenter ou diminuer cette durée par pas de 1/2 heures. Quelle que soit votre sélection, <strong>une séance ne pourra pas durer plus de 8 heures et ne pourra se terminer au-delà de 24h</strong>. Une erreur vous sera également signalée si vous repositionnez l'heure de début sur une zone non libre.</p>
         <p>Si vous sélectionnez <strong>Réservation de groupe</strong>, une boîte de sélection vous permet de choisir celui qui vous concerne. <strong>Vous ne trouverez dans cette liste que les groupes dans lesquels vous vous êtes enregistré</strong>. Si vous n'appartenez à aucun groupe (enregistré dans Algem), ce type de réservation vous est interdit et Réservation individuelle reste le seul choix possible.</p>
         <p><strong>En cas de réservation individuelle</strong> (choix par défaut), un dernier paramètre vous permet de spécifier si vous voulez utiliser votre carte d'abonnement. Ce choix est coché par défaut dans le cas où vous en disposez déjà. Après confirmation, les heures de réservation seront décomptées de votre carte. Si vous n'avez pas coché ce paramètre, le paiement de la réservation dépendra, comme pour la réservation de groupe, du tarif associé à la salle, du type de tarification et de l'heure de réservation. Une différenciation peut avoir lieu dans ce cas entre les heures creuses et celles au plein tarif. Notez cependant qu'aucun paiement ne sera généré si la salle en question ne dispose d'aucun tarif.</p>
         <p>Après validation, un mail automatique est envoyé à l'adresse de l'établissement qui vous concerne. Vous êtes ensuite redirigé vers votre page personnelle.</p>
-        <p>La rubrique &laquo;&nbsp;Mes réservations&nbsp;&raquo; vous présente une liste de vos réservations présentes et passées. Les plus récentes disposent d'un lien d'annulation à droite de chaque ligne. Il se peut en effet que vous ayez commis une erreur d'horaire ou de durée, ou que vous ayez validé par mégarde. Vous pouvez annuler dans ce cas cette réservation et en refaire une nouvelle. Si vous vous apercevez d'une erreur, vous avez tout intérêt à annuler rapidement votre réservation avant qu'elle soit confirmée par les personnes de l'accueil ayant reçu votre demande. <strong>Seules les réservations &laquo;&nbsp;En attente de confirmation&nbsp;&raquo; peuvent être annulées</strong>, les autres étant marquées comme &laquo;&nbsp;Confirmées&nbsp;&raquo; et par définition, non éditables.</p>
+        <p>La rubrique &laquo;&nbsp;Mes réservations&nbsp;&raquo; vous présente une liste de vos réservations présentes et passées. Les plus récentes disposent d'un lien d'annulation à droite de chaque ligne. Si vous avez commis une erreur lors de la réservation, vous pouvez l'annuler tant que celle-ci n'est pas confirmée par les personnes de l'accueil ayant reçu votre demande. <strong>Seules les réservations &laquo;&nbsp;En attente de confirmation&nbsp;&raquo; peuvent être annulées</strong>, les autres étant marquées comme &laquo;&nbsp;Confirmées&nbsp;&raquo; et par définition, non éditables.</p>
         <p><strong>Note</strong> : une fois connecté, vous pouvez également accéder à votre page personnelle en cliquant sur l'icone associée au signe + dans le menu de droite.</p>
         <p>Il se peut qu'après validation vous soyez redirigé vers une page d'erreur. Cela peut arriver si l'horaire que vous avez choisi entre en conflit avec un planning déjà existant, une zone non libre ou si vous êtes déjà présent sur une partie de cet horaire. Refaites dans ce cas votre réservation en tenant compte des avertissements qui vous ont été présentés.</p>
         <h3 id="account-help">CRÉATION D'UN COMPTE UTILISATEUR</h3>
-        
         <p>Cliquez sur le lien &laquo;&nbsp;Créez un compte&nbsp;&raquo; dans la fenêtre de connexion pour accéder au formulaire d'enregistrement. Le premier champ requis correspond à votre numéro d'adhérent (ou de contact). Par défaut, ce numéro est à 0 mais <strong>vous devez obligatoirement le compléter avec votre propre identifiant</strong>. Vous pouvez le trouver par exemple sur votre carte d'adhérent ou dans les documents qui vous ont été fournis lors de votre première inscription. L'adresse email qui suit nous permettra de vous identifier sans ambiguité, en comparant cette adresse avec l'une de celles que vous nous avez déjà fournies. Saisissez ensuite un login (nom d'utilisateur). Ce login sera refusé s'il existe déjà. <strong>Le mot de passe doit comporter au moins huit caractères</strong>. Si aucune erreur n'a été détectée après la validation du formulaire, vous serez redirigé vers la page de connexion . Indiquez votre login et votre mot de passe tels que vous les avez saisis à l'étape précédente.</p>
         <p><strong>Note 1</strong> : si vous avez déjà un login et un mot de passe de connexion en tant qu'utilisateur d'Algem, la création de compte est inutile. Utilisez pour vous connecter vos identifiants habituels.</p>
 

@@ -1,5 +1,5 @@
 /*
- * @(#) HelpCtrl.java Algem Web App 1.1.0 25/02/2016
+ * @(#) HelpCtrl.java Algem Web App 1.1.1 03/03/2016
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -20,21 +20,32 @@
 
 package net.algem.util;
 
+import net.algem.planning.PlanningService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.1.1
  * @since 1.1.0 25/02/2016
  */
 @Controller
 public class HelpCtrl {
+  
+  @Autowired
+  private PlanningService planningService;
 
+  public void setPlanningService(PlanningService planningService) {
+    this.planningService = planningService;
+  }
+  
   @RequestMapping(method = RequestMethod.GET, value = "/help.html")
-  public String genericErrorPage() {
+  public String genericErrorPage(Model model) {
+    model.addAttribute("conf", planningService.getBookingConf());
     return "help";
   }
 
