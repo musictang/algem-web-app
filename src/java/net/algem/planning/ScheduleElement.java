@@ -1,7 +1,7 @@
 /*
- * @(#)ScheduleElement.java	1.1.0 28/01/16
+ * @(#)ScheduleElement.java	1.2.0 30/03/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -30,7 +30,7 @@ import net.algem.util.NamedModel;
  * This class is used in calendar to display a time slot with label, position and time.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0 11/02/13
  */
 public class ScheduleElement
@@ -44,6 +44,8 @@ public class ScheduleElement
   private Collection<ScheduleRange> ranges;
   private String label;
   private String color;
+  private String labelColor;
+  private int code;
 
   public Map<String, NamedModel> getDetail() {
     return detail;
@@ -67,6 +69,18 @@ public class ScheduleElement
    */
   public void setCollective(boolean collective) {
     this.collective = collective;
+  }
+
+  /**
+   * Gets the code of the course scheduled.
+   * @return an integer
+   */
+  public int getCode() {
+    return code;
+  }
+
+  public void setCode(int code) {
+    this.code = code;
   }
 
   /**
@@ -140,6 +154,14 @@ public class ScheduleElement
 
   public void setColor(String color) {
     this.color = color;
+  }
+
+  public String getLabelColor() {
+    return labelColor;
+  }
+
+  public void setLabelColor(String labelColor) {
+    this.labelColor = labelColor;
   }
 
   @Override

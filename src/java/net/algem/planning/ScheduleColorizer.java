@@ -1,7 +1,7 @@
 /*
- * @(#) ScheduleColorizer.java Algem Web App 1.1.0 30/01/2016
+ * @(#) ScheduleColorizer.java Algem Web App 1.2.0 30/03/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -30,12 +30,13 @@ import net.algem.util.Colorizer;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.1.0 30/01/2016
  */
 public class ScheduleColorizer implements Colorizer<ScheduleElement> {
 
   private ColorPref colorPref;
+  private static final int INST_CODE = 1;
 
   public ScheduleColorizer(ColorPref colorPref) {
     this.colorPref = colorPref;
@@ -46,10 +47,11 @@ public class ScheduleColorizer implements Colorizer<ScheduleElement> {
     switch (o.getType()) {
       case Schedule.COURSE:
         if (o.isCollective()) {
-          return colorPref.getColor(ScheduleColor.COURSE_CO);
-        } else {
-          return colorPref.getColor(ScheduleColor.COURSE_INDIVIDUAL);
+          return INST_CODE == o.getCode()
+            ? colorPref.getColor(ScheduleColor.INSTRUMENT_CO)
+            : colorPref.getColor(ScheduleColor.COURSE_CO);
         }
+        return colorPref.getColor(ScheduleColor.COURSE_INDIVIDUAL);
       case Schedule.ROOM:
         return Color.LIGHT_GRAY;
       case Schedule.TRAINING:
@@ -74,17 +76,19 @@ public class ScheduleColorizer implements Colorizer<ScheduleElement> {
   public Map<Integer,Config> getDefColorCodes() {
     Map<Integer,Config> codes = new TreeMap<>();
     codes.put(1, new Config("help.color.course.collective", colorToHex(colorPref.getColor(ScheduleColor.COURSE_CO))));
-    codes.put(2,new Config("help.color.course.individual", colorToHex(colorPref.getColor(ScheduleColor.COURSE_INDIVIDUAL))));
-    codes.put(3,new Config("help.color.range", colorToHex(colorPref.getColor(ScheduleColor.RANGE))));
-    codes.put(4,new Config("help.color.workshop", colorToHex(colorPref.getColor(ScheduleColor.WORKSHOP))));
-    codes.put(5,new Config("help.color.training", colorToHex(colorPref.getColor(ScheduleColor.TRAINING))));
-    codes.put(6,new Config("help.color.studio", colorToHex(colorPref.getColor(ScheduleColor.STUDIO))));
-    codes.put(7,new Config("help.color.administrative", colorToHex(colorPref.getColor(ScheduleColor.ADMINISTRATIVE))));
-    codes.put(8,new Config("help.color.member.rehearsal", colorToHex(colorPref.getColor(ScheduleColor.MEMBER_REHEARSAL))));
-    codes.put(9,new Config("help.color.booking.member", colorToHex(colorPref.getColor(ScheduleColor.BOOKING_MEMBER))));
-    codes.put(10,new Config("help.color.group.rehearsal", colorToHex(colorPref.getColor(ScheduleColor.GROUP_REHEARSAL))));
-    codes.put(11,new Config("help.color.booking.group", colorToHex(colorPref.getColor(ScheduleColor.BOOKING_GROUP))));
-    codes.put(12,new Config("help.color.closed", "#CCC"));
+    codes.put(2, new Config("help.color.course.variable", colorToHex(colorPref.getColor(ScheduleColor.INSTRUMENT_CO))));
+    codes.put(3,new Config("help.color.course.individual", colorToHex(colorPref.getColor(ScheduleColor.COURSE_INDIVIDUAL))));
+    codes.put(4,new Config("help.color.range", colorToHex(colorPref.getColor(ScheduleColor.RANGE))));
+    codes.put(5,new Config("help.color.workshop", colorToHex(colorPref.getColor(ScheduleColor.WORKSHOP))));
+    codes.put(6,new Config("help.color.training", colorToHex(colorPref.getColor(ScheduleColor.TRAINING))));
+    codes.put(7,new Config("help.color.studio", colorToHex(colorPref.getColor(ScheduleColor.STUDIO))));
+    codes.put(8,new Config("help.color.administrative", colorToHex(colorPref.getColor(ScheduleColor.ADMINISTRATIVE))));
+    codes.put(9,new Config("help.color.member.rehearsal", colorToHex(colorPref.getColor(ScheduleColor.MEMBER_REHEARSAL))));
+    codes.put(10,new Config("help.color.booking.member", colorToHex(colorPref.getColor(ScheduleColor.BOOKING_MEMBER))));
+    codes.put(11,new Config("help.color.group.rehearsal", colorToHex(colorPref.getColor(ScheduleColor.GROUP_REHEARSAL))));
+    codes.put(12,new Config("help.color.booking.group", colorToHex(colorPref.getColor(ScheduleColor.BOOKING_GROUP))));
+    codes.put(13,new Config("help.color.closed", "#CCC"));
+
 
     return codes;
   }

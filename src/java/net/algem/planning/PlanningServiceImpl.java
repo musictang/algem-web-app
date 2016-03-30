@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningServiceImpl.java	1.1.0 29/02/16
+ * @(#)PlanningServiceImpl.java	1.2.0 30/03/16
  *
  * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -43,7 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Service class for schedule operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0 11/02/13
  */
 @Service
@@ -104,7 +104,7 @@ public class PlanningServiceImpl
   public Map<Integer, Config> getDefaultColorCodes() {
     return COLORIZER.getDefColorCodes();
   }
-  
+
   @Override
   public Room getRoom(int roomId) {
     return scheduleDao.findRoom(roomId);
@@ -134,6 +134,7 @@ public class PlanningServiceImpl
     for (ScheduleElement d : scheduleDao.find(date, estab)) {
       d.setLabel(getHtmlTitle(d));
       d.setColor(ScheduleColorizer.colorToHex(COLORIZER.getColor(d)));
+      d.setLabelColor(ScheduleColorizer.colorToHex(COLORIZER.getTextColor(d)));
       if (d.getPlace() != place) {
         place = d.getPlace();
         List<ScheduleElement> elements = new ArrayList<ScheduleElement>();
@@ -150,6 +151,7 @@ public class PlanningServiceImpl
     }
     return map;
   }
+
 
   @Override
   public Map<Room, Collection<ScheduleElement>> getFreePlace(Date date, int estab) {
@@ -232,7 +234,7 @@ public class PlanningServiceImpl
       return 24;
     }
   }
-  
+
   private boolean getMemberShipConf() {
     Config c = configIO.findId(ConfigKey.BOOKING_REQUIRED_MEMBERSHIP.getKey());
     return c.getValue().toLowerCase().startsWith("t");

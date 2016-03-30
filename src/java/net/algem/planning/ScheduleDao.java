@@ -1,7 +1,7 @@
 /*
- * @(#)ScheduleDao.java	1.1.0 23/02/16
+ * @(#)ScheduleDao.java	1.2.0 30/03/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -47,7 +47,7 @@ import org.springframework.stereotype.Repository;
  * IO methods for class {@link net.algem.planning.Schedule}.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -105,7 +105,7 @@ public class ScheduleDao
    * @return a list of schedule elements
    */
   public List<ScheduleElement> find(Date date, int estab) {
-    String query = " SELECT p.*, c.id, c.titre, c.collectif, s.nom, t.prenom, t.nom"
+    String query = " SELECT p.*, c.id, c.titre, c.collectif, c.code, s.nom, t.prenom, t.nom"
       + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
       + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper)"
       + ", salle s"
@@ -129,12 +129,12 @@ public class ScheduleDao
         d.setPlace(rs.getInt(8));
         d.setNote(rs.getInt(9));
         d.setDetail("course", new NamedModel(rs.getInt(10), rs.getString(11)));
-//        d.setCourseName(rs.getString(10));
         d.setCollective(rs.getBoolean(12));
-        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(13)));
+        d.setCode(rs.getInt(13));
+        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(14)));
         d.setDetail("estab", null);
-        String firstName = rs.getString(14);
-        String lastName = rs.getString(15);
+        String firstName = rs.getString(15);
+        String lastName = rs.getString(16);
         String name = firstName == null ? (lastName == null ? "" : lastName) : firstName + " " + lastName;
         d.setDetail("person",new NamedModel(d.getIdPerson(), name));
         if (d.type == Schedule.COURSE && !d.isCollective()) {
@@ -224,7 +224,7 @@ public class ScheduleDao
     }
     return timesArray;
   }
-  
+
   Room findRoom(final int roomId) {
      String query = "SELECT nom,fonction,etablissement,idtarif FROM salle WHERE id = ?";
      return jdbcTemplate.queryForObject(query, new RowMapper<Room>()
@@ -240,7 +240,7 @@ public class ScheduleDao
         return r;
        }
      }, roomId);
-     
+
   }
 
   List<Room> findRoomInfo(int estab) {
@@ -336,7 +336,7 @@ public class ScheduleDao
 
     return conflicts;
   }
-  
+
   /**
    * Gets the booking with id {@code id}.
    * @param id booking's id
@@ -357,7 +357,7 @@ public class ScheduleDao
         b.setStatus(rs.getByte(6));
         return b;
       }
-      
+
     }, id);
   }
 
