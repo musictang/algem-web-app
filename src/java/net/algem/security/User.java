@@ -27,6 +27,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import net.algem.group.Group;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Component;
  * @since 1.0.0 11/02/13
  */
 @Component
+@Scope("session")
 public class User
 {
 

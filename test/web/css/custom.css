@@ -1,5 +1,5 @@
 /*
- * @(#) custom.css Algem Web App 1.0.6 05/12/2015
+ * @(#) custom.css Algem Web App 1.1.0 17/02/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -20,13 +20,81 @@
 /*
     Created on : 05/12/2015, 10:29:34
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Version    : 1.0.6
+    Version    : 1.1.1 02/03/16
 */
 /*Personnalisation*/
-footer {
-/*  background-image:url('../img/logo.png');
-  background-position: 98% center ;
-  background-repeat: no-repeat;
-  min-height: 150px;*/
+
+body {
+  background-color: #ff5719;
+  color: white;
 }
 
+.global {
+  color: #444;
+  background-color: white;
+}
+
+header nav select, #datepicker {
+  color: #444;
+}
+
+header nav #previous, header nav #next {
+  color: white;
+}
+
+footer {
+/*  background-image:url('../img/personas-header-1280x1024.png');
+  background-position: 98% center;
+  background-repeat: no-repeat;*/
+}
+
+h1 {
+  color: #FFC170;
+}
+
+h2, h3, h4, h5, h6, h7, fieldset > legend {
+  color: #FF9770;
+}
+h2, h3, h4, fieldset > legend {
+  border-color: #FF9770;
+}
+
+a:link,a:visited, a:active, a:hover,
+.pure-menu, .pure-menu-heading, #menu
+{
+  color: #D33900;
+}
+.closing-bar {
+  background-color: #D33900;
+}
+
+a:link,a:visited, a:active {
+  /*border-bottom-color: #ff5719;*/
+  border-bottom-color: #FFC170;
+  /*border-bottom-color:white;*/
+}
+a:hover {
+  /*border-bottom-color: #FFC170;*/
+  border-bottom-color: #666;
+}
+
+footer a:link,footer a:visited,footer a:active,footer a:hover {
+  color: #FFF;
+}
+
+#menu {
+  background: #D33900;
+}
+
+.pure-menu-link:hover {
+  color: #FFC170;
+  background-color: #D33900;
+}
+
+#help-panel, #info-panel, #login-panel, .side-panel {
+  background-color: #FFEFDD;
+  color: #444;
+}
+.title_col {
+  background-color: #ff5719;
+}

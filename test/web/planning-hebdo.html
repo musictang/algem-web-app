@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<!--
+ * @(#) daily.html Algem Web App 1.2.0 30/03/16
+ *
+ * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>MUSIQUES TANGENTES</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />-->
+    <!--<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" />-->
+    <link rel="stylesheet" href="css/jquery-ui.css" />
+    <link rel="stylesheet" href="css/common.css" />
+
+    <link rel="stylesheet" href="css/planning.css" />
+    <link rel="stylesheet" href="css/custom.css" />
+    <!--<link rel="stylesheet" href="css/mediaqueries.css" />-->
+
+    <script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.11.4.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/planning.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.datepicker-fr.js"></script>
+
+    <script type="text/javascript">
+      /*<![CDATA[*/
+      var debug = false;
+      var logged = false;
+      var offPeakTime = '17:00';
+      //console.log("offPeakTime " + offPeakTime);
+      var commonParams = {
+        estab: '3501',
+//        auth: false,
+        auth: false,
+        date: '31-03-2016'
+      };
+      var bookingParams = {
+        minDelay: 24,
+        cancelDelay: 72,
+        maxDelay:15,
+        groupType:13,
+        groupLabel:'Groupe',
+        groupWarning:'Vous n\'appartenez \xE0 aucun groupe enregistr\xE9. Vous devez faire partie d\'un groupe pour effectuer ce type de r\xE9servation.',
+        bookingMinDelayWarning:'Vous devez r\xE9server au moins 24 heures \xE0 l\'avance.\nCliquez sur un autre horaire ou essayez les jours suivants.',
+        bookingMaxDelayWarning:'Vous ne pouvez pas r\xE9server plus de 15 jours \xE0 l\'avance.',
+        bookingMemberWarning:'R\xE9servation impossible. Vous n\'avez pas pay\xE9 votre adh\xE9sion ou vos droits d\'entr\xE9e.',
+        startOfYear: '21-09-2015',
+        endOfYear: '30-06-2016',
+        memberShipRequired: true,
+        preEnrolmentStart: '01-07-2015',
+      };
+      var steps = {
+        height: 720,//Canvas height
+        max: 8 //Max booking length (in hours)
+      };
+      if (debug) console.log(logVars(commonParams, bookingParams, steps));
+      $(document).ready(function () {
+        setCommonEvents();
+        setDatePicker(commonParams);
+        initBookingDate(commonParams.date);
+        setUI();
+        setBooking(bookingParams, steps);
+      });
+      /*]]>*/
+    </script>
+  </head>
+  <body>
+    <!--<div id="dialog">Texte du dialogue</div>-->
+    <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
+    <div class="closeable" id="menu">
+      <ul>
+        <li><a href="#" class="close-link" title="Fermer"><i class="fa fa-close"></i></a></li>
+
+        <li><a href="#login-panel" id="menu-login" title="Se connecter"><i class="fa fa-user"></i></a></li>
+
+
+
+        <li><a id="help" href="#help-panel" title="Aide"><i class="fa fa-question-circle"></a></i></li>
+        <li><a id="info" href="#info-panel" title="Informations"><i class="fa fa-info-circle"></a></i></li>
+      </ul>
+    </div>
+    <section id="login-panel" class="closeable">
+      <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
+      <!--<form id="login-form" th:action="@{/jxlogin.html}" accept-charset="UTF-8" class="panel">-->
+      <form id="ajax-login-form" action="/algem/planning/jxlogin" class="panel">
+        <fieldset><legend>Se connecter</legend>
+          <label for="login">Nom d&#39;utilisateur (login)</label>
+          <input type="text" id="login" required="required" name="j_username"/>
+          <label for="password" >Mot de passe</label>
+          <input type="password" id="password" required="required" name="j_password"/>
+          <input type="submit" id="login-submit-button" value="Connexion" class="button-small pure-button pure-button-primary"/>
+        </fieldset>
+        <p class="error" style="display: none;"></p>
+        <p class="success" style="display: none;"></p>
+      </form>
+      <p class="note indented"><a href="recover.html">Mot de passe oublié ?</a></p>
+      <p class="note indented"><span>Vous n&#39;êtes pas encore enregistré ?</span><br />
+        <a href="signup.html">Créez un compte</a></p>
+    </section>
+    <header>
+      <nav>
+        <div id="date-panel">
+        <a href="" title="Semaine précédente" id="previous" tabindex="2"><i class="fa fa-chevron-left"></i></a>&nbsp;&nbsp;<input type="text" style="font-size:small" tabindex="3"/>&nbsp;&nbsp;<a href="" title="Semaine suivante" id="next" tabindex="1"><i class="fa fa-chevron-right"></i></a>
+        </div>
+      </nav>
+    </header>
+    <table id="grid"><!-- important : loop on one line -->
+<!--      <tr ><th><p>08:00</p></th><td></td></tr>
+      <tr ><th><p>08:30</p></th><td></td></tr>-->
+      <tr ><th><p>09:00</p></th><td></td></tr>
+      <tr ><th><p>09:30</p></th><td></td></tr>
+      <tr ><th><p>10:00</p></th><td></td></tr>
+      <tr ><th><p>10:30</p></th><td></td></tr>
+      <tr ><th><p>11:00</p></th><td></td></tr>
+      <tr ><th><p>11:30</p></th><td></td></tr>
+      <tr ><th><p>12:00</p></th><td></td></tr>
+      <tr ><th><p>12:30</p></th><td></td></tr>
+      <tr ><th><p>13:00</p></th><td></td></tr>
+      <tr ><th><p>13:30</p></th><td></td></tr>
+      <tr ><th><p>14:00</p></th><td></td></tr>
+      <tr ><th><p>14:30</p></th><td></td></tr>
+      <tr ><th><p>15:00</p></th><td></td></tr>
+      <tr ><th><p>15:30</p></th><td></td></tr>
+      <tr ><th><p>16:00</p></th><td></td></tr>
+      <tr ><th><p>16:30</p></th><td></td></tr>
+      <tr ><th><p>17:00</p></th><td></td></tr>
+      <tr ><th><p>17:30</p></th><td></td></tr>
+      <tr ><th><p>18:00</p></th><td></td></tr>
+      <tr ><th><p>18:30</p></th><td></td></tr>
+      <tr ><th><p>19:00</p></th><td></td></tr>
+      <tr ><th><p>19:30</p></th><td></td></tr>
+      <tr ><th><p>20:00</p></th><td></td></tr>
+      <tr ><th><p>20:30</p></th><td></td></tr>
+      <tr ><th><p>21:00</p></th><td></td></tr>
+      <tr ><th><p>21:30</p></th><td></td></tr>
+      <tr ><th><p>22:00</p></th><td></td></tr>
+      <tr ><th><p>22:30</p></th><td></td></tr>
+      <tr ><th><p>23:00</p></th><td></td></tr>
+      <tr ><th><p>23:30</p></th><td></td></tr>
+    </table>
+    <section id="canvas" style="width:98%">
+      <div id="1" class="schedule_col schedule_col_w">
+        <!--Column header : room names-->
+        <p class="title_col">LUNDI</p>
+        <!--Schedules-->
+        <div class="schedule"
+             style="top:61.111111111111114%;height:5.444444444444445%;background-color:#ff8019;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <div class="schedule closed"
+             style="top:0.0%;height:6.555555555555555%;background-color:#CCC"
+             ></div>
+        <div class="schedule closed"
+             style="top:86.66666666666667%;height:13.222222222222221%;background-color:#CCC;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <!--Labels-->
+        <div class="labels"
+             style="color:#000000;top:61.111111111111114%;height:5.444444444444445%;-webkit-transform: translate(0,-3px)">CLARINETTE CO 18:10-19:00<br />Salle acoustica<br />Pierrot de la Francesca</div>
+
+        <!--Range : external div is only a loop container -->
+      </div>
+      <div id="2" class="schedule_col schedule_col_w">
+        <!--Column header : room names-->
+        <p class="title_col">MARDI</p>
+        <!--Schedules-->
+        <div class="schedule closed"
+             style="top:0.0%;height:6.555555555555555%;background-color:#CCC"
+             ></div>
+        <div class="schedule closed"
+             style="top:86.66666666666667%;height:13.222222222222221%;background-color:#CCC;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <div class="schedule"
+             style="top:40.0%;height:6.555555555555555%;background-color:#ff5252;-webkit-transform: translate(0, -3px)"
+             ></div>
+<!--        <div class="schedule"
+             style="top:46.666666666666664%;height:6.555555555555555%;background-color:#00d059;-webkit-transform: translate(0, -3px)"
+             ></div>-->
+
+        <div class="schedule"
+             style="top:80.0%;height:6.555555555555555%;background-color:#ff00ff;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <!--Labels-->
+
+
+
+        <div class="labels"
+             style="color:#000000;top:40.0%;height:6.555555555555555%;-webkit-transform: translate(0,-3px)"><strong>SOLFEGE PRO 2</strong> 15:00-16:00<br />Salle <strong>Formation continue</strong><br />M. Lolobridgida</strong></div>
+        <div class="labels"
+             style="color:#000000;top:46.666666666666664%;height:6.555555555555555%;-webkit-transform: translate(0,-3px)"><strong>PIANO</strong> 16:00-16:30<br />Salle <strong>Jaune</strong><br />J. Kohler</strong></div>
+
+        <div class="labels"
+             style="color:#ffffff;top:80.0%;height:6.555555555555555%;-webkit-transform: translate(0,-3px)">RÉSERVATION INDIVIDUELLE<br />21:00-22:00</div>
+        <!--Range : external div is only a loop container -->
+
+          <div class="schedule range" style="top:46.666666666666664%;height:3.2222222222222223%;-webkit-transform: translate(0,-3px)"></div>
+
+      </div>
+      <div id="3" class="schedule_col schedule_col_w">
+        <!--Column header : room names-->
+        <p class="title_col">MERCREDI</p>
+        <!--Schedules-->
+        <div class="schedule"
+             style="top:53.333333333333336%;height:33.22222222222222%;background-color:#00d059;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <div class="schedule closed"
+             style="top:0.0%;height:6.555555555555555%;background-color:#CCC"
+             ></div>
+        <div class="schedule closed"
+             style="top:86.66666666666667%;height:13.222222222222221%;background-color:#CCC;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <!--Labels-->
+        <div class="labels"
+             style="color:#000000;top:53.333333333333336%;height:33.22222222222222%;-webkit-transform: translate(0,-3px)">CHANT<br />17:00-22:00</div>
+
+
+        <!--Range : external div is only a loop container -->
+
+          <div class="schedule range" style="top:58.333333333333336%;height:4.888888888888889%;-webkit-transform: translate(0,-3px)"></div>
+          <div class="schedule range" style="top:63.333333333333336%;height:3.2222222222222223%;-webkit-transform: translate(0,-3px)"></div>
+          <div class="schedule range" style="top:66.66666666666667%;height:4.888888888888889%;-webkit-transform: translate(0,-3px)"></div>
+
+
+
+
+
+
+
+      </div>
+      <div id="4" class="schedule_col schedule_col_w">
+        <!--Column header : room names-->
+        <p class="title_col">JEUDI</p>
+        <!--Schedules-->
+        <div class="schedule"
+             style="top:33.333333333333336%;height:4.888888888888889%;background-color:#00d059;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <div class="schedule closed"
+             style="top:0.0%;height:6.555555555555555%;background-color:#CCC"
+             ></div>
+        <div class="schedule closed"
+             style="top:86.66666666666667%;height:13.222222222222221%;background-color:#CCC;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <div class="schedule"
+             style="top:55.0%;height:8.222222222222221%;background-color:#ff8019;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <div class="schedule"
+             style="top:70.0%;height:16.555555555555557%;background-color:#00d059;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <!--Labels-->
+        <div class="labels"
+             style="color:#000000;top:33.333333333333336%;height:4.888888888888889%;-webkit-transform: translate(0,-3px)">M.A.O.<br />14:00-14:45</div>
+
+
+        <div class="labels"
+             style="color:#000000;top:55.0%;height:8.222222222222221%;-webkit-transform: translate(0,-3px)">GUITARE CO<br />17:15-18:30</div>
+        <div class="labels"
+             style="color:#000000;top:70.0%;height:16.555555555555557%;-webkit-transform: translate(0,-3px)">GUITARE<br />19:30-22:00</div>
+        <!--Range : external div is only a loop container -->
+
+          <div class="schedule range" style="top:33.333333333333336%;height:4.888888888888889%;-webkit-transform: translate(0,-3px)"></div>
+
+
+
+
+
+
+
+
+
+
+
+          <div class="schedule range" style="top:73.33333333333333%;height:3.2222222222222223%;-webkit-transform: translate(0,-3px)"></div>
+          <div class="schedule range" style="top:76.66666666666667%;height:4.888888888888889%;-webkit-transform: translate(0,-3px)"></div>
+
+      </div>
+      <div id="5" class="schedule_col schedule_col_w">
+        <!--Column header : room names-->
+        <p class="title_col">VENDREDI</p>
+        <!--Schedules-->
+
+        <div class="schedule closed"
+             style="top:0.0%;height:6.555555555555555%;background-color:#CCC"
+             ></div>
+        <div class="schedule closed"
+             style="top:86.66666666666667%;height:13.222222222222221%;background-color:#CCC;-webkit-transform: translate(0, -3px)"
+             ></div>
+
+        <!--Labels-->
+        <div class="labels"
+             style="color:#000000;top:50.0%;height:3.2222222222222223%;-webkit-transform: translate(0,-3px)"><strong>BATTERIE</strong> 16:00-16:30<br />Salle <strong>Orchestration</strong><br />H. de Citronelle</div>
+<div class="labels"
+     style="color:#000000;top:53.333333333333336%;height:3.2222222222222223%;-webkit-transform: translate(0,-3px)">BATTERIE 16:30-17:00<br />Salle Orchestration<br />H. de Citronelle</div>
+        <
+        <!--Range : external div is only a loop container -->
+
+          <div class="schedule range" style="top:50.0%;height:3.2222222222222223%;-webkit-transform: translate(0,-3px)"></div>
+          <div class="schedule range" style="top:53.333333333333336%;height:3.2222222222222223%;-webkit-transform: translate(0,-3px)"></div>
+
+
+
+
+      </div>
+      <div id="6" class="schedule_col schedule_col_w">
+        <!--Column header : room names-->
+        <p class="title_col">SAMEDI</p>
+        <!--Schedules-->
+        <div class="schedule"
+             style="top:56.666666666666664%;height:6.555555555555555%;background-color:#ff5252;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <div class="schedule closed"
+             style="top:0.0%;height:6.555555555555555%;background-color:#CCC"
+             ></div>
+        <div class="schedule closed"
+             style="top:86.66666666666667%;height:13.222222222222221%;background-color:#CCC;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <div class="schedule"
+             style="top:63.333333333333336%;height:6.555555555555555%;background-color:#ff5252;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <div class="schedule"
+             style="top:70.0%;height:6.555555555555555%;background-color:#ff5252;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <div class="schedule"
+             style="top:76.66666666666667%;height:6.555555555555555%;background-color:#ff5252;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <!--Labels-->
+        <div class="labels"
+             style="color:#000000;top:56.666666666666664%;height:6.555555555555555%;-webkit-transform: translate(0,-3px)">EVEIL RYTHMIQUE<br />17:30-18:30</div>
+
+
+        <div class="labels"
+             style="color:#000000;top:63.333333333333336%;height:6.555555555555555%;-webkit-transform: translate(0,-3px)">ATELIER BLUES ROCK<br />18:30-19:30</div>
+        <div class="labels"
+             style="color:#000000;top:70.0%;height:6.555555555555555%;-webkit-transform: translate(0,-3px)">ATELIER POP ROCK<br />19:30-20:30</div>
+        <div class="labels"
+             style="color:#000000;top:76.66666666666667%;height:6.555555555555555%;-webkit-transform: translate(0,-3px)">AT. MUSTANG 2<br />20:30-21:30</div>
+        <!--Range : external div is only a loop container -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+       <div id="6" class="schedule_col schedule_col_w">
+        <!--Column header : room names-->
+        <p class="title_col">DIMANCHE</p>
+        <!--Schedules-->
+        <div class="schedule"
+             style="top:56.666666666666664%;height:6.555555555555555%;background-color:#ff5252;-webkit-transform: translate(0, -3px)"
+             ></div>
+        <div class="schedule closed"
+             style="top:0.0%;height:6.555555555555555%;background-color:#CCC"
+             ></div>
+        <div class="schedule closed"
+             style="top:86.66666666666667%;height:13.222222222222221%;background-color:#CCC;-webkit-transform: translate(0, -3px)"
+             ></div>
+       </div>
+      <!--Free rooms-->
+
+    </section>
+    <aside id="help-panel" class="closeable">
+      <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
+      <!--<p>Aide</p>-->
+      <div class="indented">
+        <h2>Comment réserver</h2>
+        <p>Cliquez sur une zone libre dans le planning, proche de l&#39;heure de début désirée.</p>
+        <h5>Remarques</h5>
+        <ol style="width:80%;font-size:smaller">
+          <li>La réservation n&#39;est possible que si vous êtes déjà enregistré et connecté.</li>
+          <li>Vous devez réserver au moins 24 heures à l&#39;avance mais pas plus de 15 jours à l&#39;avance.</li>
+          <li>Les heures de répétition individuelle seront décomptées de votre carte d&#39;abonnement si vous avez coché ce choix dans la fenêtre de dialogue.</li>
+          <li>Votre réservation ne sera prise en compte qu&#39;après réception d&#39;un email de confirmation.</li>
+        </ol>
+        <p><a href="/algem/planning/help.html">Aide détaillée</a></p>
+        <h2>Codes couleurs</h2>
+        <ul style="margin-bottom: 1em">
+          <li  >
+            <span class="color-square" title="Cours collectif" style="background-color:#ff5252"></span>Cours collectif
+          </li>
+          <li  >
+            <span class="color-square" title="Cours à nombre de places variable" style="background-color:#ff8019"></span>Cours à nombre de places variable
+          </li>
+          <li  >
+            <span class="color-square" title="Cours disponible (Place éventuellement disponible pour les répétitions)" style="background-color:#00d059"></span>Cours disponible (Place éventuellement disponible pour les répétitions)
+          </li>
+          <li  >
+            <span class="color-square" title="Plage élève" style="background-color:#fcd300"></span>Plage élève
+          </li>
+          <li  >
+            <span class="color-square" title="Atelier ponctuel" style="background-color:#f7f7ac"></span>Atelier ponctuel
+          </li>
+          <li  >
+            <span class="color-square" title="Stage" style="background-color:#f7f77c"></span>Stage
+          </li>
+          <li  >
+            <span class="color-square" title="Studio" style="background-color:#a1d8e6"></span>Studio
+          </li>
+          <li  >
+            <span class="color-square" title="Planning administratif" style="background-color:#8aa0e6"></span>Planning administratif
+          </li>
+          <li  >
+            <span class="color-square" title="Répétition adhérent" style="background-color:#3399ff"></span>Répétition adhérent
+          </li>
+          <li  >
+            <span class="color-square" title="Réservation adhérent" style="background-color:#ff00ff"></span>Réservation adhérent
+          </li>
+          <li  >
+            <span class="color-square" title="Répétition groupe" style="background-color:#2158ff"></span>Répétition groupe
+          </li>
+          <li  >
+            <span class="color-square" title="Réservation groupe" style="background-color:#ff00ff"></span>Réservation groupe
+          </li>
+          <li  >
+            <span class="color-square" title="Salle fermée" style="background-color:#CCC"></span>Salle fermée
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <aside id="info-panel" class="closeable">
+      <div id="info-bar" class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
+      <div class="indented">
+      <h2>Informations salles</h2>
+      <table class="pure-table pure-table-bordered pure-table-striped mobile">
+        <thead>
+          <tr>
+            <th style="width:20%">Salle</th>
+            <th>Usage</th>
+            <th style="width:15%">Tarif heures creuses</th>
+            <th style="width:15%">Plein tarif</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>BLEUE<td>Cours et répétition individuelle (tout instrument sauf batterie)</td>
+              <td style="text-align: right">8.00 €</td>
+              <td style="text-align: right">10.00 €</td>
+          </tr>
+          <tr>
+            <td>JAUNE<td>Cours et répétition individuelle (tout instrument+MAO sauf batterie)</td>
+              <td style="text-align: right">8.00 €</td>
+              <td style="text-align: right">10.00 €</td>
+          </tr>
+          <tr>
+            <td>ORCHESTRA<td>Cours,enregistrement et répétition groupe</td>
+              <td style="text-align: right">12.00 €</td>
+              <td style="text-align: right">16.00 €</td>
+          </tr>
+          <tr>
+            <td>RASTA<td>Cours et répétition individuelle/groupe (tout instrument)</td>
+              <td style="text-align: right">8.00 €</td>
+              <td style="text-align: right">10.00 €</td>
+          </tr>
+          <tr>
+            <td>ROUGE<td>Cours et répétition individuelle (tout instrument sauf batterie)</td>
+              <td style="text-align: right">8.00 €</td>
+              <td style="text-align: right">10.00 €</td>
+          </tr>
+          <tr>
+            <td>VERTE<td>Cours et répétition individuelle (tout instrument sauf batterie)</td>
+              <td style="text-align: right">8.00 €</td>
+              <td style="text-align: right">10.00 €</td>
+          </tr>
+        </tbody>
+        <tfoot><tr><td colspan="4" style="font-weight: bold">Le tarif heures creuses est appliqué pour les heures de répétition prises avant 17:00.</td></tr></tfoot>
+      </table>
+    </div>
+      <div>
+      <div class="indented">
+        <h2 id="Permanences">Permanences</h2>
+        <table class="pure-table pure-table-horizontal mobile">
+          <tr><th>MALAKOFF</th>
+            <td><a href="tel:+3301 40 84 80 09">01 40 84 80 09</a></td>
+            <td><ul><li>lundi,vendredi : 10h-22h</li><li>samedi : 11h-18h</li></ul></td>
+          </tr>
+        </table>
+        <h2 id="Contact">Contact</h2>
+        <table class="pure-table pure-table-horizontal mobile">
+          <tr><th>Email</th><td><a href="mailto:info@musiques-tangentes.asso.fr">info@musiques-tangentes.asso.fr</a></td></tr>
+          <tr><th>Adresse</th><td><a target="_blank" href="https://goo.gl/maps/sx4HeE4JLj52">15 rue Salvador Allende 92240 MALAKOFF</a></td></tr>
+
+
+
+
+          <tr>
+            <th>Site web</th>
+            <td><a target="_blank" href="http://www.musiques-tangentes.asso.fr">http://www.musiques-tangentes.asso.fr</a></td>
+          </tr>
+          <tr>
+            <th>Facebook</th>
+            <td><a target="_blank" href="https://fr-fr.facebook.com/MusiquesTangentes92">https://fr-fr.facebook.com/MusiquesTangentes92</a></td>
+          </tr>
+          <tr>
+            <th>Twitter</th>
+            <td><a target="_blank" href="https://twitter.com/mustang_asso">https://twitter.com/mustang_asso</a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    </aside>
+    <footer>
+      <a class="logo" target="_blank" href="http://www.musiques-tangentes.asso.fr"><img src="img/logo.png" /></a>
+      <address>
+        &copy;&nbsp;2015&nbsp;Musiques&nbsp;Tangentes&nbsp;AGPL&nbsp;v.3&nbsp;| <a href="http://www.algem.net" target="_blank">http://www.algem.net</a>
+      </address>
+    </footer>
+    <div id="booking" title="Réservation">
+      <div>
+        <p>Vous devez être connecté pour pouvoir réserver.</p>
+        <p><a href="/algem/planning/login.html">Se connecter</a></p>
+      </div>
+
+
+    <div id="errorDialog" title="Avertissement"></div>
+  </body>
+</html>

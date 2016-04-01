@@ -160,7 +160,6 @@ public class UserCtrl
 //			rememberMeServices.loginSuccess(request, response, auth);
       return "{\"msg\":\"" + msg + "\"}";
     } catch (BadCredentialsException ex) {
-//      String err = messageSource.getMessage("login.error.label", new Object[]{username}, LocaleContextHolder.getLocale() );
       return "{\"status\": \"" + ex.getMessage() + "\"}";
     } catch (Exception other) {
       other.printStackTrace();
@@ -173,8 +172,15 @@ public class UserCtrl
     return "tuto";
   }
 
+  /**
+   * Show home page
+   * @param p
+   * @param model
+   * @return
+   */
   @RequestMapping(method = RequestMethod.GET, value = "perso/home.html")
   public String showHome(Principal p, Model model) {
+
     User u = service.findUserByLogin(p.getName());
     model.addAttribute("user", u);
     List<BookingScheduleElement> bookings = planningService.getBookings(u.getId());
