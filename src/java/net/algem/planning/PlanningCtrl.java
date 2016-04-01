@@ -98,4 +98,14 @@ public class PlanningCtrl
     model.addAttribute("estabList", service.getEstablishments(estabFilter));
     return "index";
   }
+  
+  @RequestMapping(method = RequestMethod.GET, value={ "perso/weekly.html"})
+  String loadWeekSchedule(Model model) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
+    Map<Integer, Collection<ScheduleElement>> schedules = service.getWeekSchedule(14, 21753);
+    model.addAttribute("now", dateFormat.format(new Date()));
+    model.addAttribute("planning", schedules);
+//    model.addAttribute("estabList", service.getEstablishments(estabFilter));
+    return "weekly";
+  }
 }

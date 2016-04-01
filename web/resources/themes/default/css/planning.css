@@ -78,6 +78,10 @@
   border-left:1px solid gray;
 }
 
+.schedule_col_w {
+  width: 14%;
+}
+
 .title_col {
   position: absolute;
   top:-1.4em;
@@ -113,7 +117,11 @@
   border-bottom: 1px solid gray;
   z-index: 1003;
 }
-
+.course_label {
+  background-color: #ccc;
+  color: black;
+  line-height: 1em;
+}
 .range {
   position: absolute;
   background-color: #FCD300;

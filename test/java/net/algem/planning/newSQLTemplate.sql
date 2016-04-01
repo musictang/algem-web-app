@@ -39,3 +39,13 @@ facture    | [NULL]
 groupe     | 0
 
 insert into echeancier2 values(default,'2015-09-01',13857,13857,0,'ESP','p13857 a13858 test',1000,'',0,17,true,false,'E','MFORLOISIR',null,0);
+
+-- recherche plages semaine
+SELECT p.id,p.jour,p.ptype,p.idper,p.action,p.lieux,p.note, c.id, c.titre, c.collectif, c.code, s.nom, t.prenom, t.nom, pl.debut,pl.fin
+FROM planning p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)
+ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper), salle s,plage pl
+where p.lieux = s.id
+and p.id = pl.idplanning
+AND pl.adherent = 21753
+AND jour BETWEEN '04-04-2016' AND '09-04-2016'
+ORDER BY p.jour, p.debut;

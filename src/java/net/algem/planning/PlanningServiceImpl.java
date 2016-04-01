@@ -151,7 +151,35 @@ public class PlanningServiceImpl
     }
     return map;
   }
-
+public Map<Integer, Collection<ScheduleElement>> getWeekSchedule(int week, int idper) {
+  Map<Integer, Collection<ScheduleElement>> map = new HashMap<Integer, Collection<ScheduleElement>>();
+  int p = -1;
+  Calendar cal = Calendar.getInstance();
+  map.put(Calendar.MONDAY, new ArrayList<ScheduleElement>());
+  map.put(Calendar.TUESDAY, new ArrayList<ScheduleElement>());
+  map.put(Calendar.WEDNESDAY, new ArrayList<ScheduleElement>());
+  map.put(Calendar.THURSDAY, new ArrayList<ScheduleElement>());
+  map.put(Calendar.FRIDAY, new ArrayList<ScheduleElement>());
+  map.put(Calendar.SATURDAY, new ArrayList<ScheduleElement>());
+  map.put(Calendar.SUNDAY, new ArrayList<ScheduleElement>());
+  for (ScheduleElement d : scheduleDao.findWeek(week, idper)) {
+      d.setLabel(getHtmlTitle(d));
+      d.setColor(ScheduleColorizer.colorToHex(COLORIZER.getColor(d)));
+      d.setLabelColor(ScheduleColorizer.colorToHex(COLORIZER.getTextColor(d)));
+      cal.setTime(d.getDate().getDate());
+      int dow = cal.get(Calendar.DAY_OF_WEEK);
+      map.get(dow).add(d);
+//      if (dow != p) {
+//        p = dow;
+////        List<ScheduleElement> elements = new ArrayList<ScheduleElement>();
+////        elements.add(d);
+//        map.get(p).add(d);
+//      } else {
+//        map.get(p).add(d);
+//      }
+    }
+    return map;
+}
 
   @Override
   public Map<Room, Collection<ScheduleElement>> getFreePlace(Date date, int estab) {

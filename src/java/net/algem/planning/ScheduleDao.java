@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -470,6 +471,55 @@ public class ScheduleDao
       }
     }, keyHolder);
     return keyHolder.getKey().intValue();
+  }
+  
+  public List<ScheduleElement> findWeek(int w, int idper) {
+    String query = "SELECT p.id,p.jour,pl.debut,pl.fin,p.ptype,p.idper,p.action,p.lieux,p.note, c.id, c.titre, c.collectif, c.code, s.nom, t.prenom, t.nom"
+            + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
+            + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper), salle s, plage pl"
+            + " WHERE p.lieux = s.id"
+            + " AND p.id = pl.idplanning"
+            + " AND pl.adherent = ?"
+            + " AND jour BETWEEN ? AND ?"
+            + " ORDER BY p.jour, p.debut";
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.WEEK_OF_YEAR, w);
+    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+    Date start = cal.getTime();
+    cal.add(Calendar.DATE, 6);
+    Date end = cal.getTime();
+    Logger.getLogger(ScheduleDao.class.getName()).log(Level.INFO, start.toString());
+    Logger.getLogger(ScheduleDao.class.getName()).log(Level.INFO, end.toString());
+
+    return jdbcTemplate.query(query, new RowMapper<ScheduleElement>() {
+
+      @Override
+      public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
+        ScheduleElement d = new ScheduleElement();
+        d.setId(rs.getInt(1));
+        d.setDate(new DateFr(rs.getString(2)));
+        d.setStart(new Hour(rs.getString(3)));
+        d.setEnd(new Hour(rs.getString(4)));
+        d.setType(rs.getInt(5));
+        d.setIdPerson(rs.getInt(6));
+        d.setIdAction(rs.getInt(7));
+        d.setPlace(rs.getInt(8));
+        d.setNote(rs.getInt(9));
+        d.setDetail("course", new NamedModel(rs.getInt(10), rs.getString(11)));
+        d.setCollective(rs.getBoolean(12));
+        d.setCode(rs.getInt(13));
+        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(14)));
+        d.setDetail("estab", null);
+        String firstName = rs.getString(15);
+        String lastName = rs.getString(16);
+        String name = firstName == null ? (lastName == null ? "" : lastName) : firstName + " " + lastName;
+        d.setDetail("person",new NamedModel(d.getIdPerson(), name));
+//        if (d.type == Schedule.COURSE && !d.isCollective()) {
+//          d.setRanges(getTimeSlots(d.getId()));
+//        }
+        return d;
+      }
+    }, idper, start, end);
   }
 
 }
