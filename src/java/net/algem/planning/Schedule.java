@@ -1,7 +1,7 @@
 /*
- * @(#)Schedule.java	1.1.0 28/01/16
+ * @(#)Schedule.java	1.2.0 02/04/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -20,11 +20,13 @@
  */
 package net.algem.planning;
 
+import java.util.Date;
+
 /**
  * Schedule object model.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0 11/02/13
  */
 public class Schedule
@@ -91,16 +93,20 @@ public class Schedule
     id = i;
   }
 
-  public void setDate(DateFr d) {
+  public void setDateFr(DateFr d) {
     date = d;
   }
 
-  public void setDate(java.util.Date d) {
+  public void setDateFr(java.util.Date d) {
     date = new DateFr(d);
   }
 
-  public DateFr getDate() {
+  public DateFr getDateFr() {
     return date;
+  }
+
+  public Date getDate() {
+    return date.getDate();
   }
 
   public void setStart(Hour h) {

@@ -60,14 +60,14 @@ public interface PlanningService
   int getTimeOffset();
 
   DailyTimes getDailyTimes(int room, int dow);
-  
+
   /**
    * Gets the default color codes.
    *
    * @return a map
    */
   Map<Integer, Config> getDefaultColorCodes();
-  
+
   /**
    * Get details about this room {@code roomId}.
    * @param roomId room id
@@ -90,7 +90,7 @@ public interface PlanningService
    * @return a list of persons' instances of type {@value Person#ESTABLISHMENT}
    */
   List<Person> getEstablishments(String where);
-  
+
   /**
    * Returns a map associating room's id with the list of the date's schedules.
    *
@@ -99,8 +99,8 @@ public interface PlanningService
    * @return a map
    */
   Map<Integer, Collection<ScheduleElement>> getDaySchedule(Date date, int estab);
-  
-  Map<Integer, Collection<ScheduleElement>> getWeekSchedule(int week, int idper);
+
+  Map<Integer, Collection<ScheduleElement>> getWeekSchedule(Date start, Date end, int idper);
 
   /**
    * Gets the list of free rooms at the date {@code date} in the establishment {@code estab}.
@@ -126,7 +126,7 @@ public interface PlanningService
    * @return a list of schedules or an empty list if no conflict was detected
    */
   List<ScheduleElement> getPersonConflicts(Booking booking);
-  
+
   Booking getBooking(int id);
 
   /**

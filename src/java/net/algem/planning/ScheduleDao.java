@@ -1,5 +1,5 @@
 /*
- * @(#)ScheduleDao.java	1.2.0 30/03/16
+ * @(#)ScheduleDao.java	1.2.0 02/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -69,7 +69,7 @@ public class ScheduleDao
 
     String query = "INSERT INTO " + TABLE + " VALUES("
       + id
-      + ",'" + p.getDate().toString() + "'"
+      + ",'" + p.getDateFr().toString() + "'"
       + ",'" + p.getStart() + "'"
       + ",'" + p.getEnd() + "'"
       + "," + p.getType()
@@ -82,7 +82,7 @@ public class ScheduleDao
 
   public void update(Schedule p) throws SQLException {
     String query = "UPDATE " + TABLE + " SET "
-      + "jour = '" + p.getDate()
+      + "jour = '" + p.getDateFr()
       + "',debut = '" + p.getStart()
       + "',fin = '" + p.getEnd()
       + "',ptype = " + p.getType()
@@ -121,7 +121,7 @@ public class ScheduleDao
       public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
         ScheduleElement d = new ScheduleElement();
         d.setId(rs.getInt(1));
-        d.setDate(new DateFr(rs.getString(2)));
+        d.setDateFr(new DateFr(rs.getString(2)));
         d.setStart(new Hour(rs.getString(3)));
         d.setEnd(new Hour(rs.getString(4)));
         d.setType(rs.getInt(5));
@@ -377,7 +377,7 @@ public class ScheduleDao
         b.setId(rs.getInt(1));
         b.setIdAction(rs.getInt(2));
         b.setIdPerson(rs.getInt(3));
-        b.setDate(rs.getDate(4));
+        b.setDateFr(rs.getDate(4));
         b.setStart(new Hour(rs.getString(5)));
         b.setEnd(new Hour(rs.getString(6)));
         b.setType(rs.getInt(7));
@@ -396,7 +396,7 @@ public class ScheduleDao
   private ScheduleElement getConflictFromRS(ResultSet rs) throws SQLException {
     ScheduleElement e = new ScheduleElement();
     e.setId(rs.getInt(1));
-    e.setDate(rs.getDate(2));
+    e.setDateFr(rs.getDate(2));
     e.setStart(new Hour(rs.getString(3)));
     e.setEnd(new Hour(rs.getString(4)));
     e.setType(rs.getInt(5));
@@ -472,8 +472,8 @@ public class ScheduleDao
     }, keyHolder);
     return keyHolder.getKey().intValue();
   }
-  
-  public List<ScheduleElement> findWeek(int w, int idper) {
+
+  public List<ScheduleElement> findWeek(Date start, Date end, int idper) {
     String query = "SELECT p.id,p.jour,pl.debut,pl.fin,p.ptype,p.idper,p.action,p.lieux,p.note, c.id, c.titre, c.collectif, c.code, s.nom, t.prenom, t.nom"
             + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
             + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper), salle s, plage pl"
@@ -482,14 +482,13 @@ public class ScheduleDao
             + " AND pl.adherent = ?"
             + " AND jour BETWEEN ? AND ?"
             + " ORDER BY p.jour, p.debut";
-    Calendar cal = Calendar.getInstance();
-    cal.set(Calendar.WEEK_OF_YEAR, w);
-    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-    Date start = cal.getTime();
-    cal.add(Calendar.DATE, 6);
-    Date end = cal.getTime();
-    Logger.getLogger(ScheduleDao.class.getName()).log(Level.INFO, start.toString());
-    Logger.getLogger(ScheduleDao.class.getName()).log(Level.INFO, end.toString());
+//    Calendar cal = Calendar.getInstance();
+//    cal.set(Calendar.WEEK_OF_YEAR, w);
+//    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+//    Date start = cal.getTime();
+//    cal.add(Calendar.DATE, 6);
+//    Date end = cal.getTime();
+
 
     return jdbcTemplate.query(query, new RowMapper<ScheduleElement>() {
 
@@ -497,7 +496,7 @@ public class ScheduleDao
       public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
         ScheduleElement d = new ScheduleElement();
         d.setId(rs.getInt(1));
-        d.setDate(new DateFr(rs.getString(2)));
+        d.setDateFr(new DateFr(rs.getString(2)));
         d.setStart(new Hour(rs.getString(3)));
         d.setEnd(new Hour(rs.getString(4)));
         d.setType(rs.getInt(5));

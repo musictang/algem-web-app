@@ -51,6 +51,12 @@
         </tr>
         <tr><th th:text="#{profile.label}"></th><td th:text="#{${user.profile.label}}">trois</td></tr>
       </table>
+      <h3 th:text="#{schedule.label}"></h3>
+      <div th:with="c=${#calendars.createNow()}">
+        <ul>
+          <li><a th:href="@{/perso/weekly.html(w=${c.get(T(java.util.Calendar).WEEK_OF_YEAR)},id=${user.id})}" th:text="#{my.weekly.schedule.label}">Mon planning</a></li>
+      </ul>
+      </div>
       <h3 th:text="#{my.bookings.label}">Mes réservations</h3>
       <table class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile">
         <thead>

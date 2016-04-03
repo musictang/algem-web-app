@@ -23,12 +23,13 @@
     <title th:text="${title}"></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" />
-    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="@{/resources/themes/css/pure-min.css" />
+    <!--<link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css' />-->
     <link rel="stylesheet" th:href="@{/resources/themes/css/common.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/mediaqueries.css}" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/font-awesome.min.css}" />
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />-->
     <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
     <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/common.js}"></script>
     <script th:fragment="script-menu" type="text/javascript">

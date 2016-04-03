@@ -94,7 +94,7 @@
           <option th:each="estab :${estabList}" th:value="${estab.id}" th:text="${estab.name}"></option>
         </select>
         <div id="date-panel">
-        <label id="dow" for="datepicker" th:text="${dayName}"></label><a href="" th:title="#{prev.day.label}" id="previous" tabindex="2"><i class="fa fa-chevron-left"></i></a>&nbsp;&nbsp;<input type="text" id="datepicker" style="font-size:small" tabindex="3"/>&nbsp;&nbsp;<a href="" th:title="#{next.day.label}" id="next" tabindex="1"><i class="fa fa-chevron-right"></i></a>
+        <label id="dow" for="datepicker" th:text="${dayName}"></label><a href="" th:title="#{prev.day.label}" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;&nbsp;<input type="text" id="datepicker" style="font-size:small" tabindex="3"/>&nbsp;&nbsp;<a href="" th:title="#{next.day.label}" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
         </div>
       </nav>
     </header>

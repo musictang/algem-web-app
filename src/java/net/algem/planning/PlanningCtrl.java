@@ -1,7 +1,7 @@
 /*
- * @(#)PlanningCtrl.java	1.1.0 15/02/16
+ * @(#)PlanningCtrl.java	1.2.0 02/04/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -20,12 +20,16 @@
  */
 package net.algem.planning;
 
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +41,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * MVC Controller for planning view.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -98,13 +102,34 @@ public class PlanningCtrl
     model.addAttribute("estabList", service.getEstablishments(estabFilter));
     return "index";
   }
-  
+
   @RequestMapping(method = RequestMethod.GET, value={ "perso/weekly.html"})
-  String loadWeekSchedule(Model model) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
-    Map<Integer, Collection<ScheduleElement>> schedules = service.getWeekSchedule(14, 21753);
-    model.addAttribute("now", dateFormat.format(new Date()));
+  String loadWeekSchedule(Model model, HttpServletRequest request) {
+    int id = Integer.parseInt(request.getParameter("id"));
+    int week = Integer.parseInt(request.getParameter("w"));
+
+    Calendar cal = Calendar.getInstance();
+
+    cal.set(Calendar.WEEK_OF_YEAR, week-1);
+    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+    Date start = cal.getTime();
+    cal.add(Calendar.DATE, 6);
+    Date end = cal.getTime();
+    Logger.getLogger(ScheduleDao.class.getName()).log(Level.INFO, start.toString());
+    Logger.getLogger(ScheduleDao.class.getName()).log(Level.INFO, end.toString());
+    Map<Integer, Collection<ScheduleElement>> schedules = service.getWeekSchedule(start, end, id);
+
     model.addAttribute("planning", schedules);
+    DateFormatSymbols dfs = new DateFormatSymbols(Locale.FRANCE);
+    model.addAttribute("weekDays", dfs.getWeekdays());
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
+    model.addAttribute("start", dateFormat.format(start));
+    model.addAttribute("end", dateFormat.format(end));
+    StringBuilder sb = new StringBuilder();
+    for (String s : dfs.getWeekdays()) {
+      sb.append(s);
+    }
+    Logger.getLogger(PlanningCtrl.class.getName()).log(Level.INFO, sb.toString());
 //    model.addAttribute("estabList", service.getEstablishments(estabFilter));
     return "weekly";
   }

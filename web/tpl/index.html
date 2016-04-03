@@ -44,7 +44,7 @@
     </header>
     <div class="global">
       <div class="centered">
-        <h2>Planning</h2>
+        <h2 th:text="#{schedule.label}">Planning</h2>
         <section class="gallery">
           <div class="thumbnails thumbnails-out" th:each="estab: ${estabList}">
             <a class="img-link" th:href="@{daily.html(d=${now},e=${estab.id})}">

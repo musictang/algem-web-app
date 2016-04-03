@@ -79,7 +79,7 @@
 }
 
 .schedule_col_w {
-  width: 14%;
+  width: 12.5%;
 }
 
 .title_col {
@@ -118,9 +118,12 @@
   z-index: 1003;
 }
 .course_label {
-  background-color: #ccc;
+  display: block;
+  background-color: #eee;
   color: black;
-  line-height: 1em;
+  line-height: 0.8em;
+  opacity:0.85;
+  z-index: 1002;
 }
 .range {
   position: absolute;
@@ -181,6 +184,8 @@ footer {
   /*color: #008335;*/
   text-decoration: none;
   font-weight: bold;
+  font-size: x-large;
+  vertical-align: middle;
   border: none;
 }
 
