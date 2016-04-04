@@ -474,6 +474,40 @@ public class ScheduleDao
   }
 
   public List<ScheduleElement> findWeek(Date start, Date end, int idper) {
+    List<ScheduleElement> schedules = findWeekCourse(start, end, idper);
+    schedules.addAll(findWeekRehearsal(start, end, idper));
+    return schedules;
+  }
+
+  private List<ScheduleElement> findWeekRehearsal(Date start, Date end, int idper) {
+    String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.action,p.lieux,p.note,s.nom"
+      + " FROM " + TABLE + " p INNER JOIN salle s ON (p.lieux = s.id)"
+      + " WHERE p.ptype = " + Schedule.MEMBER
+      + " AND p.idper = ?"
+      + " AND p.jour BETWEEN ? AND ?"
+      + " ORDER BY p.jour, p.debut";
+
+    return jdbcTemplate.query(query, new RowMapper<ScheduleElement>() {
+
+      @Override
+      public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
+        ScheduleElement d = new ScheduleElement();
+        d.setId(rs.getInt(1));
+        d.setDateFr(new DateFr(rs.getString(2)));
+        d.setStart(new Hour(rs.getString(3)));
+        d.setEnd(new Hour(rs.getString(4)));
+        d.setType(rs.getInt(5));
+        d.setIdPerson(rs.getInt(6));
+        d.setIdAction(rs.getInt(7));
+        d.setPlace(rs.getInt(8));
+        d.setNote(rs.getInt(9));
+        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(10)));
+        return d;
+      }
+    },idper,start,end);
+  }
+
+  private List<ScheduleElement> findWeekCourse(Date start, Date end, int idper) {
     String query = "SELECT p.id,p.jour,pl.debut,pl.fin,p.ptype,p.idper,p.action,p.lieux,p.note, c.id, c.titre, c.collectif, c.code, s.nom, t.prenom, t.nom"
             + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
             + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper), salle s, plage pl"
@@ -482,14 +516,6 @@ public class ScheduleDao
             + " AND pl.adherent = ?"
             + " AND jour BETWEEN ? AND ?"
             + " ORDER BY p.jour, p.debut";
-//    Calendar cal = Calendar.getInstance();
-//    cal.set(Calendar.WEEK_OF_YEAR, w);
-//    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-//    Date start = cal.getTime();
-//    cal.add(Calendar.DATE, 6);
-//    Date end = cal.getTime();
-
-
     return jdbcTemplate.query(query, new RowMapper<ScheduleElement>() {
 
       @Override

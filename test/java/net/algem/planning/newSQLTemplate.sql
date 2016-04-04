@@ -46,6 +46,13 @@ FROM planning p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)
 ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper), salle s,plage pl
 where p.lieux = s.id
 and p.id = pl.idplanning
-AND pl.adherent = 21753
-AND jour BETWEEN '04-04-2016' AND '09-04-2016'
+AND pl.adherent = 21611
+AND jour BETWEEN '04-04-2016' AND '10-04-2016'
+ORDER BY p.jour, p.debut;
+
+SELECT p.id,p.jour,p.ptype,p.idper,p.action,p.lieux,p.note
+FROM planning p INNER JOIN salle s ON (p.lieux = s.id)
+where (p.ptype = 3 or p.ptype = 4)
+and p.idper = 21611
+AND p.jour BETWEEN '04-04-2016' AND '10-04-2016'
 ORDER BY p.jour, p.debut;

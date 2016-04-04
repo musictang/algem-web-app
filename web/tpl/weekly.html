@@ -72,7 +72,7 @@
              th:class="'schedule' + ${p.label == null ? ' closed' :''}"
              th:with="pos=${(p.minutes - 540) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime}"
              th:style="'top:'+${pos}+'%;height:'+${h}+'%;background-color:'+${p.htmlColor}+${p.minutes >= 720 ? ';-webkit-transform: translate(0, -3px)':''}"
-             th:utext="|<span class='course_label'>${#strings.replace(p.label, '<br />', ' ')}</span>Salle ${p.detail['room']}<br />${p.detail['person']}|"
+             th:utext="|<span class='course_label'>${#strings.replace(p.label, '<br />', ' ')}</span>Salle ${p.detail['room']}<br />${p.detail['person'] ?: ''}|"
              ></div>
       </div>
     </section>
