@@ -20,6 +20,7 @@
  */
 package net.algem.planning;
 
+import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,8 +29,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,10 +47,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class PlanningCtrl
 {
 
+  private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
+  private final String estabFilter = " AND id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)";
+  
   @Autowired
   private PlanningService service;
-
-  private final String estabFilter = " AND id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)";
 
   public void setService(PlanningService service) {
     this.service = service;
@@ -67,9 +67,9 @@ public class PlanningCtrl
    */
   @RequestMapping(method = RequestMethod.GET, value = "/daily.html")
   String loadDaySchedule(HttpServletRequest request, Model model, Booking booking) throws ParseException {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
+//    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
     SimpleDateFormat dayNameFormat = new SimpleDateFormat("EEE");
-    Date date = dateFormat.parse(request.getParameter("d"));
+    Date date = DATE_FORMAT.parse(request.getParameter("d"));
     String dayName = dayNameFormat.format(date);
     int estab = Integer.parseInt(request.getParameter("e"));
     booking.setTimeLength(1);
@@ -97,39 +97,38 @@ public class PlanningCtrl
    */
   @RequestMapping(method = RequestMethod.GET, value={ "/", "index.html"})
   String loadEstablishment(Model model) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
-    model.addAttribute("now", dateFormat.format(new Date()));
+    model.addAttribute("now", DATE_FORMAT.format(new Date()));
     model.addAttribute("estabList", service.getEstablishments(estabFilter));
     return "index";
   }
 
   @RequestMapping(method = RequestMethod.GET, value={ "perso/weekly.html"})
-  String loadWeekSchedule(Model model, HttpServletRequest request) {
+  String loadWeekSchedule(Model model, HttpServletRequest request) throws ParseException {
     int id = Integer.parseInt(request.getParameter("id"));
-    int week = Integer.parseInt(request.getParameter("w"));
-
+    String sow = request.getParameter("d");
     Calendar cal = Calendar.getInstance();
-
-    cal.set(Calendar.WEEK_OF_YEAR, week-1);
-    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-    Date start = cal.getTime();
+    Date start = DATE_FORMAT.parse(sow);
+    cal.setTime(start);
     cal.add(Calendar.DATE, 6);
+    int week = cal.get(Calendar.WEEK_OF_YEAR);
     Date end = cal.getTime();
-    Logger.getLogger(ScheduleDao.class.getName()).log(Level.INFO, start.toString());
-    Logger.getLogger(ScheduleDao.class.getName()).log(Level.INFO, end.toString());
+
     Map<Integer, Collection<ScheduleElement>> schedules = service.getWeekSchedule(start, end, id);
 
+    cal.add(Calendar.DATE,-13);
+    Date prev = cal.getTime();   
+    cal.add(Calendar.DATE, 14);
+    Date next = cal.getTime();
+    
     model.addAttribute("planning", schedules);
     DateFormatSymbols dfs = new DateFormatSymbols(Locale.FRANCE);
     model.addAttribute("weekDays", dfs.getWeekdays());
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
-    model.addAttribute("start", dateFormat.format(start));
-    model.addAttribute("end", dateFormat.format(end));
-    StringBuilder sb = new StringBuilder();
-    for (String s : dfs.getWeekdays()) {
-      sb.append(s);
-    }
-    Logger.getLogger(PlanningCtrl.class.getName()).log(Level.INFO, sb.toString());
+    model.addAttribute("start", start);
+    model.addAttribute("end", end);
+    model.addAttribute("prevDate", prev);
+    model.addAttribute("nextDate", next);
+    model.addAttribute("w", week);
+    model.addAttribute("timeOffset", service.getTimeOffset());
 //    model.addAttribute("estabList", service.getEstablishments(estabFilter));
     return "weekly";
   }

@@ -36,20 +36,25 @@
     }
 
 #canvas {
-  height:900px;
+  /*height:900px;*/
   width: 98%;
 }
 #grid {
-  height:900px
+  /*height:900px*/
 }
 .schedule_col {
-  height:900px;
+  /*height:900px;*/
 }
 .schedule {
   line-height:1em;
   padding:0;
 }
-
+#week {
+  display: inline-block;
+  padding-right: 1em;
+  font-size: smaller;
+  
+}
 .week-date{
   font-size:small;
   color:black;
@@ -57,7 +62,7 @@
   text-align: center;
 }
 footer {
-  top: 902px;
+  /*top: 902px;*/
 }
 /*iPhone 2G, 3G, 4, 4S, Moto E  Media Queries : Portrait*/
 @media only screen

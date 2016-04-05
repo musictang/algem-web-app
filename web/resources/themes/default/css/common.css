@@ -4,7 +4,17 @@
     Last: 1.1.1 03/03/2016
 */
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
+@font-face {
+    font-family: 'Exo 2';
+    src: url('../fonts/Exo2-Bold-webfont.eot');
+    src: url('../fonts/Exo2-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Exo2-Bold-webfont.woff') format('woff'),
+         url('../fonts/Exo2-Bold-webfont.ttf') format('truetype'),
+         url('../fonts/Exo2-Bold-webfont.svg#exo_2bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
 
+}
 /*@font-face {
     font-family: 'droid_sans_monoregular';
     src: url('../fonts/droidsansmono-webfont-webfont.eot');
@@ -175,13 +185,12 @@ footer a.logo img {
 }
 
 h1 {
-  font-family:'Exo 2',Arial,sans-serif;
-  font-size: 2.3em;
+  font-family:'Exo 2','Arial Black',sans-serif;
+  font-size: 2.2em;
   padding: 0;
-  font-weight: 800;
   text-align: center;
   text-transform: uppercase;
-  line-height: 1em;
+  line-height: 1.25em;
   color: #ce8600;
   /*text-shadow: 1px 1px 1px rgba(256, 256, 256, 1);*/
 }

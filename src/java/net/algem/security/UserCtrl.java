@@ -34,6 +34,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import net.algem.config.Config;
+import net.algem.config.ConfigKey;
 import net.algem.contact.Email;
 import net.algem.contact.Person;
 import net.algem.planning.BookingScheduleElement;
@@ -186,6 +188,13 @@ public class UserCtrl
     List<BookingScheduleElement> bookings = planningService.getBookings(u.getId());
     model.addAttribute("bookings", bookings);
     model.addAttribute("person", service.getPersonFromUser(u.getId()));
+    Date now = new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(now);
+    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+    model.addAttribute("startOfW",  cal.getTime());
+    Config c = service.getConf(ConfigKey.DEFAULT_ESTABLISHMENT.getKey());
+    model.addAttribute("e",  c.getValue());
     return "dossier";
   }
 

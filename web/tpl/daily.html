@@ -36,6 +36,7 @@
 
     <script th:with="delay=24" type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
+      var tOffset = /*[[${timeOffset}]]*/ '720';
       var debug = false;
       var logged = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
       var offPeakTime = /*[[${conf['offPeakTime']}]]*/ '0';
@@ -62,7 +63,7 @@
         preEnrolmentStart: /*[[${conf['preEnrolmentStart']}]]*/ '01-07-2016',
       };
       var steps = {
-        height: 720,//Canvas height
+        height: 1440 - tOffset, //720,//Canvas height
         max: 8 //Max booking length (in hours)
       };
       if (debug) console.log(logVars(commonParams, bookingParams, steps));
@@ -72,6 +73,8 @@
         initBookingDate(commonParams.date);
         setUI();
         setBooking(bookingParams, steps);
+                $("#canvas, #grid, .schedule_col").css("height", (1440 - tOffset) +'px');
+        $("footer").css("top", (1442 - tOffset) +'px');
       });
       /*]]>*/
     </script>
@@ -108,19 +111,19 @@
         <!--Schedules-->
         <div th:each="p : ${entry.value}" th:class="'schedule' + ${p.label == null ? ' closed' :''}"
              th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime}"
-             th:style="'top:'+${pos}+'%;height:'+${h}+'%;background-color:'+${p.htmlColor}+${p.minutes >= 720 ? ';-webkit-transform: translate(0, -3px)':''}"
+             th:style="'top:'+${pos}+'%;height:'+${h}+'%;background-color:'+${p.htmlColor}"
              ></div>
         <!--Labels-->
         <div th:each="p : ${entry.value}" class="labels"
              th:if="${p.label} != null"
              th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime}"
-             th:style="'color:'+${p.labelColor}+';top:'+${pos}+'%;height:'+${h}+'%'+${p.minutes >= 720 ? ';-webkit-transform: translate(0,-3px)':''}"
+             th:style="'color:'+${p.labelColor}+';top:'+${pos}+'%;height:'+${h}+'%'"
              th:utext="${p.label}"></div>
         <!--Range : external div is only a loop container -->
         <div th:each="p : ${entry.value}" th:remove="tag">
           <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
                th:with="pos=${(r.minutes - timeOffset) * 100.0 / totalTime},h=${(r.length - 1) * 100.0 / totalTime}"
-               class="schedule range" th:style="'top:'+${pos}+'%;height:'+${h}+'%'+${p.minutes >= 720 ? ';-webkit-transform: translate(0,-3px)':''}"></div>
+               class="schedule range" th:style="'top:'+${pos}+'%;height:'+${h}+'%'"></div>
         </div>
       </div>
       <!--Free rooms-->

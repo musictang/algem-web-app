@@ -23,6 +23,7 @@ package net.algem.security;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import net.algem.config.Config;
 import net.algem.contact.Person;
 import net.algem.group.Group;
 import org.springframework.stereotype.Component;
@@ -136,6 +137,8 @@ public interface UserService
   public PasswordResetToken getToken(int userId);
 
   public void updatePassword(int userId, String password);
+  
+  public Config getConf(String key);
 
 }
 

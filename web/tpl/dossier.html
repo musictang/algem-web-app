@@ -28,6 +28,7 @@
       <ul>
         <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
+        <li th:if="${e != null && T(java.lang.Integer).parseInt(e) > 0}"><a th:with="n=${#dates.createNow()}" th:href="@{/daily.html(d=${#dates.format(n,'dd-MM-yyyy')},e=${e})}" th:title="#{daily.schedule.label}"><i class="fa fa-calendar"></i></a></li>
         <li th:replace="fragments/menu :: cnx"></li>
       </ul>
     </div>
@@ -52,9 +53,9 @@
         <tr><th th:text="#{profile.label}"></th><td th:text="#{${user.profile.label}}">trois</td></tr>
       </table>
       <h3 th:text="#{schedule.label}"></h3>
-      <div th:with="c=${#calendars.createNow()}">
+      <div>
         <ul>
-          <li><a th:href="@{/perso/weekly.html(w=${c.get(T(java.util.Calendar).WEEK_OF_YEAR)},id=${user.id})}" th:text="#{my.weekly.schedule.label}">Mon planning</a></li>
+          <li><a th:href="@{/perso/weekly.html(d=${#dates.format(startOfW,'dd-MM-yyyy')},id=${user.id})}" th:text="#{my.member.schedule.label}">Mon planning</a></li>
       </ul>
       </div>
       <h3 th:text="#{my.bookings.label}">Mes réservations</h3>

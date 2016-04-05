@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.algem.config.Config;
 import net.algem.config.ConfigIO;
 import net.algem.contact.Person;
 import net.algem.group.Group;
@@ -176,6 +177,11 @@ public class CommonUserService
     } catch (UserException ex) {
       Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, null, ex);
     }
+  }
+
+  @Override
+  public Config getConf(String key) {
+    return configIO.findId(key);
   }
 
 }

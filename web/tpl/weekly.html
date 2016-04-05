@@ -32,9 +32,13 @@
     <script type="text/javascript" th:src="@{/resources/js/jquery-ui-1.11.4.min.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/common.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/planning.js}"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
+      var h = /*[[${timeOffset}]]*/ '720';
+      
       $(function () {
         setCommonEvents();
+        $("#canvas, #grid, .schedule_col").css("height", (1440 - h) +'px');
+        $("footer").css("top", (1442 - h) +'px');
       });
     </script>
     </head>
@@ -51,27 +55,29 @@
     <section id="login-panel" class="closeable" th:include="fragments/user :: login"></section>
     <header>
       <nav>
-        <div id="date-panel" th:with="cp=${planning[4]}">
-          <a th:href="@{/perso/weekly.html(w=${T(java.lang.Integer).parseInt(param.w[0])-1},id=${param.id[0]})}" title="Semaine précédente" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;&nbsp;<input id="from" type="text" class="week-date" readonly="readonly" tabindex="3" th:value="${start}"/>&nbsp;<label for="to">au</label>&nbsp;<input id="to" type="text" class="week-date" readonly="readonly" tabindex="4" th:value="${end}"/>&nbsp;&nbsp;<a th:href="@{/perso/weekly.html(w=${T(java.lang.Integer).parseInt(param.w[0])+1},id=${param.id[0]})}" title="Semaine suivante" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
+        <div id="date-panel"><span id="week" th:text="|s.${w}|"></span>
+          <a th:href="@{/perso/weekly.html(d=${#dates.format(prevDate,'dd-MM-yyyy')},id=${param.id[0]})}" title="Semaine précédente" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;&nbsp;<input id="from" type="text" class="week-date" readonly="readonly" tabindex="3" th:value="${#dates.format(start,'dd-MM-yyyy')}"/>&nbsp;<label for="to">au</label>&nbsp;<input id="to" type="text" class="week-date" readonly="readonly" tabindex="4" th:value="${#dates.format(end,'dd-MM-yyyy')}"/>&nbsp;&nbsp;<a th:href="@{/perso/weekly.html(d=${#dates.format(nextDate,'dd-MM-yyyy')},id=${param.id[0]})}" title="Semaine suivante" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
         </div>
       </nav>
       </header>
     <table id="grid"><!-- important : loop on one line -->
-      <tr th:each="half,dv : ${#numbers.sequence(540, 1410, 30)}" >
+      <tr th:each="half,dv : ${#numbers.sequence(timeOffset, 1410, 30)}" >
         <th>
-          <p th:utext="(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')"></p>
+          <p th:utext="(${timeOffset%60 == 0} ? ((${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')) :
+             ((${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '30':'00')))"></p>
         </th>
         <td></td>
       </tr>
     </table>
-    <section id="canvas" th:with="totalTime=${1440 - 540}">
+    <section id="canvas" th:with="totalTime=${1440 - timeOffset}">
       <div th:id="${entry.key}" th:each="entry,iterStat : ${planning}" class="schedule_col schedule_col_w">
         <p class="title_col" th:text="${#strings.toUpperCase(weekDays[iterStat.index < 6 ? iterStat.index +2 :1])}"></p>
         <!--Schedules-->
+        <!--th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime}"-->
         <div th:each="p : ${entry.value}"
              th:class="'schedule' + ${p.label == null ? ' closed' :''}"
-             th:with="pos=${(p.minutes - 540) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime}"
-             th:style="'top:'+${pos}+'%;height:'+${h}+'%;background-color:'+${p.htmlColor}+${p.minutes >= 720 ? ';-webkit-transform: translate(0, -3px)':''}"
+             th:with="pos=${p.minutes - timeOffset},h=${p.length}"
+             th:style="'top:'+${pos}+'px;height:'+${h}+'px;background-color:'+${p.htmlColor}"
              th:utext="|<span class='course_label'>${#strings.replace(p.label, '<br />', ' ')}</span>Salle ${p.detail['room']}<br />${p.detail['person'] ?: ''}|"
              ></div>
       </div>
