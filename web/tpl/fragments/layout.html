@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
- * @(#) layout.html Algem Web App 1.0.6 05/12/2015
+ * @(#) layout.html Algem Web App 1.2.0 06/04/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -23,7 +23,7 @@
     <title th:text="${title}"></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="@{/resources/themes/css/pure-min.css" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/pure-min.css}" />
     <!--<link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css' />-->
     <link rel="stylesheet" th:href="@{/resources/themes/css/common.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
@@ -66,18 +66,23 @@
       <div class="indented">
         <h2 th:id="#{hotline.label}" th:text="#{hotline.label}">Hotline</h2>
         <table class="pure-table pure-table-horizontal mobile">
-          <tr th:each="estab:${@hotline}"><th th:text="${estab.key}"></th>
+          <tr th:each="estab:${@hotline}">
+            <th th:text="${estab.key}"></th>
             <td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a></td>
-            <td><ul><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul></td>
+            <td>
+              <ul><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul>
+            </td>
           </tr>
         </table>
         <h2 th:id="#{contact.label}" th:text="#{contact.label}">Contact</h2>
         <table class="pure-table pure-table-horizontal mobile" th:with="org=${@organization}">
-          <tr><th th:text="#{email.label}"></th><td><a th:text="${org['email.label']}" th:href="${'mailto:' + org['email.label']}"></a></td></tr>
+          <tr>
+            <th th:text="#{email.label}"></th><td><a th:text="${org['email.label']}" th:href="${'mailto:' + org['email.label']}"></a></td>
+          </tr>
           <tr><th th:text="#{address.label}"></th><td><a target="_blank" th:text="${org['address.label']}" th:href="${org['address.map']}"></a></td></tr>
           <tr th:each="entry,status:${org}" th:if="${status.index} > 3">
-            <th th:text="#{${entry.key}}"></th>
-            <td><a target="_blank" th:text="${entry.value}" th:href="${entry.value}"></a></td>
+            <th>&nbsp;</th>
+            <td><a target="_blank" th:utext="#{${entry.key}}" th:href="${entry.value}"></a></td>
           </tr>
         </table>
       </div>

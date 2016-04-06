@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.1.1 03/03/2016
+ * @(#) dossier.html Algem Web App 1.2.0 06/04/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -28,7 +28,6 @@
       <ul>
         <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
-        <li th:if="${e != null && T(java.lang.Integer).parseInt(e) > 0}"><a th:with="n=${#dates.createNow()}" th:href="@{/daily.html(d=${#dates.format(n,'dd-MM-yyyy')},e=${e})}" th:title="#{daily.schedule.label}"><i class="fa fa-calendar"></i></a></li>
         <li th:replace="fragments/menu :: cnx"></li>
       </ul>
     </div>
@@ -54,8 +53,16 @@
       </table>
       <h3 th:text="#{schedule.label}"></h3>
       <div>
-        <ul>
-          <li><a th:href="@{/perso/weekly.html(d=${#dates.format(startOfW,'dd-MM-yyyy')},id=${user.id})}" th:text="#{my.member.schedule.label}">Mon planning</a></li>
+        <ul class="simple">
+          <li th:if="${e != null && T(java.lang.Integer).parseInt(e) > 0}"><i class="fa fa-calendar-plus-o"></i>
+            <a th:with="n=${#dates.createNow()}" th:href="@{/daily.html(d=${#dates.format(n,'dd-MM-yyyy')},e=${e})}" th:text="#{book.label}"></a>
+          </li>
+          <li><i class="fa fa-calendar"></i>
+            <a th:href="@{/perso/weekly.html(d=${#dates.format(startOfW,'dd-MM-yyyy')},id=${user.id},t=0)}" th:text="#{my.member.schedule.label}" th:title="#{my.weekly.schedule.title}">Mon planning</a>
+          </li>
+          <li th:if="${user.teacher || user.tech}"><i class="fa fa-briefcase"></i>
+            <a th:href="@{/perso/weekly.html(d=${#dates.format(startOfW,'dd-MM-yyyy')},id=${user.id},t=1)}" th:text="#{my.teacher.schedule.label}" th:title="#{my.weekly.schedule.title}">Mon planning</a>
+          </li>
       </ul>
       </div>
       <h3 th:text="#{my.bookings.label}">Mes réservations</h3>
@@ -68,17 +75,17 @@
             <th th:text="#{date.label}">Date</th>
             <th th:text="#{hour.label}">Heure</th>
             <th th:text="#{status.label}">Statut</th>
-            <th style="width: 10%">&nbsp;</th>
+            <th style="width: 10%;text-align: center"><a href="javascript:location.reload(true);" th:title="#{refresh.page.label}"><i class="fa fa-refresh"></i></a></th>
           </tr>
         </thead>
         <tbody><tr th:each="b:${bookings}">
           <td th:text="${b.detail['group']}"></td>
           <td th:text="${b.detail['estab']}"></td>
           <td th:text="${b.detail['room']}"></td>
-          <td><a th:href="@{/daily.html(d=${b.date},e=${b.detail['estab'].id})}" th:text="${b.date}"></a></td>
+          <td><a th:href="@{/daily.html(d=${b.dateFr},e=${b.detail['estab'].id})}" th:text="${b.dateFr}"></a></td>
           <td th:text="${b.start + '-' + b.end}"></td>
           <td th:class="${b.status == 0 ? 'pending' : 'confirmed'}" th:text="#{${b.status == 0} ? booking.pending.label : booking.confirmed.label}"></td>
-          <td><a th:if="${b.status == 0}" th:text="#{cancel.label}" th:href="@{/perso/book-cancel.html(id=${b.id},action=${b.idAction},date=${b.date},start=${b.start})}">Annuler</a></td>
+          <td><a th:if="${b.status == 0}" th:text="#{cancel.label}" th:href="@{/perso/book-cancel.html(id=${b.id},action=${b.idAction},date=${b.dateFr},start=${b.start})}">Annuler</a></td>
         </tr>
         </tbody>
       </table>

@@ -1,7 +1,7 @@
 /*
- * @(#)UserDaoImpl.java	1.1.0 17/02/16
+ * @(#)UserDaoImpl.java	1.2.0 06/04/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -54,13 +54,13 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0 11/02/13
  */
 @Repository
 public class UserDaoImpl
-  extends AbstractGemDao implements UserDao 
-        
+  extends AbstractGemDao implements UserDao
+
 {
 
   public static final String TABLE = "login";
@@ -88,12 +88,24 @@ public class UserDaoImpl
 
   @Override
   public User find(String login) {
-    String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom FROM " 
-            + TABLE + " l INNER JOIN " + PersonIO.TABLE + " p ON (l.idper = p.id) WHERE l.login = ?";
+    String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom,e.actif,t.idper"
+      + " FROM " + TABLE + " l INNER JOIN " + PersonIO.TABLE + " p ON (l.idper = p.id)"
+      + " LEFT OUTER JOIN prof e ON (l.idper = e.idper)"
+      + " LEFT OUTER JOIN technicien t ON (l.idper = t.idper)"
+      + " WHERE l.login = ?";
     return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
       @Override
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return getFromRS(rs);
+        User u = new User();
+        u.setId(rs.getInt(1));
+        u.setLogin(rs.getString(2));
+        u.setProfile(getProfileFromId(rs.getShort(3)));
+        u.setName(rs.getString(4));
+        u.setFirstName(rs.getString(5));
+        u.setTeacher(rs.getBoolean(6));
+        u.setTech(rs.getInt(7) > 0);
+
+        return u;
       }
     }, login);
 

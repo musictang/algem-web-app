@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.1.0 28/01/16
+ * @(#) login.html Algem Web App 1.2.0 06/04/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -59,11 +59,22 @@
           <p>
             <label for="startTime" th:text="#{hour.label}">Heure</label>
             <select id="startTime" style="display: inline-block;width:4.5em" th:field="*{startTime}">
-              <option th:each="half,dv : ${#numbers.sequence(offset, 1410, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
+              <option th:each="half,dv : ${#numbers.sequence(offset, 1410, 30)}"
+                      th:with="hh=${half < 600 ? '0' + half/60 : half/60}, hm=(${timeOffset%60 == 0} ?
+                               (${hh} + ':' + (${dv.odd} ? '00':'30')) :
+                              (${hh} + ':' + (${dv.odd} ? '30':'00')))"
+                      th:value="${hm}"
+                      th:text="${hm}" />
             </select>
             <select id="endTime" style="display: inline-block;width:4.5em" disabled="disabled" >
-              <option th:each="half,dv : ${#numbers.sequence(offset, 1440, 30)}" th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')" th:value="${h}" th:text="${h}" />
+              <option th:each="half,dv : ${#numbers.sequence(offset, 1440, 30)}"
+                      th:with="hh=${half < 600 ? '0' + half/60 : half/60}, hm=(${timeOffset%60 == 0} ?
+                               (${hh} + ':' + (${dv.odd} ? '00':'30')) :
+                              (${hh} + ':' + (${dv.odd} ? '30':'00')))"
+                      th:value="${hm}"
+                      th:text="${hm}" />
             </select>
+            <!--th:with="h=(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')"-->
             <span class="error"></span>
           </p>
           <p>

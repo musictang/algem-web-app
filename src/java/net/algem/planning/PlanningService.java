@@ -1,7 +1,7 @@
 /*
- * @(#) PlanningService.java Algem Web App 1.1.0 15/02/16
+ * @(#) PlanningService.java Algem Web App 1.2.0 06/04/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -31,7 +31,7 @@ import net.algem.room.Room;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.6 27/01/2016
  */
 public interface PlanningService
@@ -100,7 +100,7 @@ public interface PlanningService
    */
   Map<Integer, Collection<ScheduleElement>> getDaySchedule(Date date, int estab);
 
-  Map<Integer, Collection<ScheduleElement>> getWeekSchedule(Date start, Date end, int idper);
+  Map<Integer, Collection<ScheduleElement>> getWeekSchedule(Date start, Date end, int idper, int type);
 
   /**
    * Gets the list of free rooms at the date {@code date} in the establishment {@code estab}.

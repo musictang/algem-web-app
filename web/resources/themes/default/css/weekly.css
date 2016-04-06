@@ -1,7 +1,7 @@
 /*
- * @(#) weekly.css Algem Web App 1.1.0 02/04/2016
+ * @(#) weekly.css Algem Web App 1.2.0 06/04/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -20,7 +20,7 @@
 /*
     Created on : 02/04/2016, 21:10:32
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Version    : 1.1.0
+    Version    : 1.2.0
 */
 /*@import url(https://fonts.googleapis.com/css?family=PT+Sans+Narrow);*/
 @font-face {
@@ -36,14 +36,10 @@
     }
 
 #canvas {
-  /*height:900px;*/
-  width: 98%;
-}
-#grid {
-  /*height:900px*/
+  width: 95.9%; /* (7*13.7) */
 }
 .schedule_col {
-  /*height:900px;*/
+  width: 13.7%;
 }
 .schedule {
   line-height:1em;
@@ -53,7 +49,6 @@
   display: inline-block;
   padding-right: 1em;
   font-size: smaller;
-  
 }
 .week-date{
   font-size:small;
@@ -61,19 +56,17 @@
   width:6em;
   text-align: center;
 }
-footer {
-  /*top: 902px;*/
-}
+
 /*iPhone 2G, 3G, 4, 4S, Moto E  Media Queries : Portrait*/
 @media only screen
 and (min-device-width : 320px)
-and (max-device-width : 399px) {
-  header {height: 10%}
+and (max-device-width : 480px) {
+  header {height: 14%}
   header > nav {
     padding:0.5em 0;
   }
   h1 {font-size: 2em;}
-  #grid, #canvas{top: 10%}
+  #grid, #canvas{top: 14%}
 
   .schedule {
     font-size: xx-small;
@@ -105,7 +98,7 @@ and (max-device-width : 399px) {
 /*iPhone 2G, 3G, 4, 4S, Moto E Media Queries : landscape*/
 @media only screen
 and (min-device-width : 320px)
-and (max-device-width : 399px)
+and (max-device-width : 480px)
 and (orientation : landscape) {
   header {height: 14%}
   header > nav {
@@ -128,8 +121,8 @@ and (orientation : landscape) {
 }
 
 @media only screen and (min-width:480px) and (max-width: 799px) {
-  header {height: 14%}
-  #grid, #canvas {top: 14%}
+  header {height: 12%}
+  #grid, #canvas {top: 12%}
   h1 {font-size: 2em;}
   .centered {
     width: 100%;

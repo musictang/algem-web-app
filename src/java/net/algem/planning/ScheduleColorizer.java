@@ -1,5 +1,5 @@
 /*
- * @(#) ScheduleColorizer.java Algem Web App 1.2.0 30/03/16
+ * @(#) ScheduleColorizer.java Algem Web App 1.2.0 06/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -69,6 +69,8 @@ public class ScheduleColorizer implements Colorizer<ScheduleElement> {
         return colorPref.getColor(ScheduleColor.BOOKING_GROUP);
       case Schedule.BOOKING_MEMBER:
         return colorPref.getColor(ScheduleColor.BOOKING_MEMBER);
+      case Schedule.ADMINISTRATIVE:
+        return colorPref.getColor(ScheduleColor.ADMINISTRATIVE);
     }
     return Color.WHITE;
   }

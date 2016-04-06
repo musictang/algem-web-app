@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.2.0 30/03/16
+ * @(#) daily.html Algem Web App 1.2.0 06/04/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -101,8 +101,17 @@
         </div>
       </nav>
     </header>
-    <table id="grid"><!-- important : loop on one line -->
-      <tr th:each="half,dv : ${#numbers.sequence(timeOffset, 1410, 30)}" ><th><p th:utext="(${half < 600} ? '0' + ${half/60} : ${half/60}) + ':' + (${dv.odd} ? '00':'30')"></p></th><td></td></tr>
+    <table id="grid">
+      <tr th:each="half,dv : ${#numbers.sequence(timeOffset, 1410, 30)}" >
+        <th>
+          <p th:with="hh=${half < 600 ? '0' + half/60 : half/60}"
+             th:utext="(${timeOffset%60 == 0} ?
+             (${hh} + ':' + (${dv.odd} ? '00':'30')) :
+            (${hh} + ':' + (${dv.odd} ? '30':'00')))">
+          </p>
+        </th>
+        <td></td>
+      </tr>
     </table>
     <section id="canvas" th:with="totalTime=${1440 - timeOffset}">
       <div th:id="${entry.key}" th:each="entry : ${planning}" class="schedule_col">
@@ -110,7 +119,7 @@
         <p class="title_col" th:text="${entry.value[0].detail['room']}"></p>
         <!--Schedules-->
         <div th:each="p : ${entry.value}" th:class="'schedule' + ${p.label == null ? ' closed' :''}"
-             th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime}"
+             th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length) * 100.0 / totalTime}"
              th:style="'top:'+${pos}+'%;height:'+${h}+'%;background-color:'+${p.htmlColor}"
              ></div>
         <!--Labels-->
@@ -151,6 +160,7 @@
       <div sec:authorize="${hasAnyRole('0','10')}">
         <p th:text="#{booking.rights.warning}"></p>
       </div>
+    </div>
     <div id="errorDialog" th:title="#{warning.label}"></div>
   </body>
 </html>

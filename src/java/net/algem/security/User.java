@@ -1,7 +1,7 @@
 /*
- * @(#)User.java	1.0.6 22/11/15
+ * @(#)User.java	1.2.0 06/04/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -33,11 +33,11 @@ import org.springframework.stereotype.Component;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.6
+ * @version 1.2.0
  * @since 1.0.0 11/02/13
  */
 @Component
-@Scope("session")
+//@Scope("session")
 public class User
 {
 
@@ -70,6 +70,9 @@ public class User
 
   /** Teacher status. */
   private boolean teacher;
+
+  /** Technician status. */
+  private boolean tech;
 
   private UserPass passInfo;
 
@@ -143,6 +146,14 @@ public class User
 
   public void setTeacher(boolean teacher) {
     this.teacher = teacher;
+  }
+
+  public boolean isTech() {
+    return tech;
+  }
+
+  public void setTech(boolean tech) {
+    this.tech = tech;
   }
 
   public UserPass getPass() {

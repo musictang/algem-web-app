@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningCtrl.java	1.2.0 02/04/16
+ * @(#)PlanningCtrl.java	1.2.0 06/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -49,7 +49,7 @@ public class PlanningCtrl
 
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
   private final String estabFilter = " AND id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)";
-  
+
   @Autowired
   private PlanningService service;
 
@@ -106,6 +106,7 @@ public class PlanningCtrl
   String loadWeekSchedule(Model model, HttpServletRequest request) throws ParseException {
     int id = Integer.parseInt(request.getParameter("id"));
     String sow = request.getParameter("d");
+    int type = Integer.parseInt(request.getParameter("t"));
     Calendar cal = Calendar.getInstance();
     Date start = DATE_FORMAT.parse(sow);
     cal.setTime(start);
@@ -113,13 +114,13 @@ public class PlanningCtrl
     int week = cal.get(Calendar.WEEK_OF_YEAR);
     Date end = cal.getTime();
 
-    Map<Integer, Collection<ScheduleElement>> schedules = service.getWeekSchedule(start, end, id);
+    Map<Integer, Collection<ScheduleElement>> schedules = service.getWeekSchedule(start, end, id, type);
 
     cal.add(Calendar.DATE,-13);
-    Date prev = cal.getTime();   
+    Date prev = cal.getTime();
     cal.add(Calendar.DATE, 14);
     Date next = cal.getTime();
-    
+
     model.addAttribute("planning", schedules);
     DateFormatSymbols dfs = new DateFormatSymbols(Locale.FRANCE);
     model.addAttribute("weekDays", dfs.getWeekdays());
@@ -132,4 +133,5 @@ public class PlanningCtrl
 //    model.addAttribute("estabList", service.getEstablishments(estabFilter));
     return "weekly";
   }
+
 }

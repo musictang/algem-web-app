@@ -1,5 +1,5 @@
 /*
- * @(#)ScheduleDao.java	1.2.0 02/04/16
+ * @(#)ScheduleDao.java	1.2.0 06/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -27,7 +27,6 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -473,18 +472,24 @@ public class ScheduleDao
     return keyHolder.getKey().intValue();
   }
 
-  public List<ScheduleElement> findWeek(Date start, Date end, int idper) {
+  public List<ScheduleElement> findWeekMember(Date start, Date end, int idper) {
     List<ScheduleElement> schedules = findWeekCourse(start, end, idper);
     schedules.addAll(findWeekRehearsal(start, end, idper));
+    return schedules;
+  }
+
+  public List<ScheduleElement> findWeekEmployee(Date start, Date end, int idper) {
+    List<ScheduleElement> schedules = findWeekAdministrative(start, end, idper);
+    schedules.addAll(findWeekTech(start, end, idper));
     return schedules;
   }
 
   private List<ScheduleElement> findWeekRehearsal(Date start, Date end, int idper) {
     String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.action,p.lieux,p.note,s.nom"
       + " FROM " + TABLE + " p INNER JOIN salle s ON (p.lieux = s.id)"
-      + " WHERE p.ptype = " + Schedule.MEMBER
-      + " AND p.idper = ?"
-      + " AND p.jour BETWEEN ? AND ?"
+      + " WHERE p.jour BETWEEN ? AND ?"
+      + " AND (((p.ptype = " + Schedule.MEMBER + " OR p.ptype = " + Schedule.BOOKING_MEMBER + ") AND p.idper = ?)"
+      + " OR ((p.ptype = " + Schedule.GROUP + " OR p.ptype = " + Schedule.BOOKING_GROUP +  " OR p.ptype = " + Schedule.STUDIO +") AND p.idper IN (SELECT id FROM groupe_det WHERE musicien = ?)))"
       + " ORDER BY p.jour, p.debut";
 
     return jdbcTemplate.query(query, new RowMapper<ScheduleElement>() {
@@ -504,7 +509,7 @@ public class ScheduleDao
         d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(10)));
         return d;
       }
-    },idper,start,end);
+    },start,end,idper,idper);
   }
 
   private List<ScheduleElement> findWeekCourse(Date start, Date end, int idper) {
@@ -512,6 +517,7 @@ public class ScheduleDao
             + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
             + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper), salle s, plage pl"
             + " WHERE p.lieux = s.id"
+            + " AND p.ptype IN ("+Schedule.COURSE+","+Schedule.TRAINING+","+Schedule.WORKSHOP+")"
             + " AND p.id = pl.idplanning"
             + " AND pl.adherent = ?"
             + " AND jour BETWEEN ? AND ?"
@@ -547,4 +553,65 @@ public class ScheduleDao
     }, idper, start, end);
   }
 
+ private List<ScheduleElement> findWeekAdministrative(Date start, Date end, int idper) {
+    String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.action,p.lieux,p.note, c.id, c.titre, c.collectif, c.code, s.nom"
+      + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
+            + " ON (p.action = a.id) JOIN salle s ON (p.lieux = s.id)"
+            + " WHERE p.idper = ?"
+            + " AND p.ptype IN ("+Schedule.COURSE+","+Schedule.TRAINING+","+Schedule.WORKSHOP+","+Schedule.ADMINISTRATIVE+")"
+            + " AND jour BETWEEN ? AND ?"
+            + " ORDER BY p.jour, p.debut";
+    return jdbcTemplate.query(query, new RowMapper<ScheduleElement>() {
+
+      @Override
+      public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
+        ScheduleElement d = new ScheduleElement();
+        d.setId(rs.getInt(1));
+        d.setDateFr(new DateFr(rs.getString(2)));
+        d.setStart(new Hour(rs.getString(3)));
+        d.setEnd(new Hour(rs.getString(4)));
+        d.setType(rs.getInt(5));
+        d.setIdPerson(rs.getInt(6));
+        d.setIdAction(rs.getInt(7));
+        d.setPlace(rs.getInt(8));
+        d.setNote(rs.getInt(9));
+        d.setDetail("course", new NamedModel(rs.getInt(10), rs.getString(11)));
+        d.setCollective(rs.getBoolean(12));
+        d.setCode(rs.getInt(13));
+        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(14)));
+        d.setDetail("estab", null);
+        return d;
+      }
+    }, idper, start, end);
+  }
+
+  private List<ScheduleElement> findWeekTech(Date start, Date end, int idper) {
+    String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.action,p.lieux,p.note, s.nom, g.nom"
+      + " FROM " + TABLE + " p INNER JOIN plage pl ON (p.id = pl.idplanning) LEFT OUTER JOIN groupe g ON (p.idper = g.id)"
+      + " INNER JOIN salle s ON (p.lieux = s.id)"
+      + " WHERE p.ptype = 8"
+      + " AND pl.adherent = ?"
+      + " AND p.jour BETWEEN ? AND ?"
+      + " ORDER BY p.jour, p.debut";
+    return jdbcTemplate.query(query, new RowMapper<ScheduleElement>() {
+
+      @Override
+      public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
+        ScheduleElement d = new ScheduleElement();
+        d.setId(rs.getInt(1));
+        d.setDateFr(new DateFr(rs.getString(2)));
+        d.setStart(new Hour(rs.getString(3)));
+        d.setEnd(new Hour(rs.getString(4)));
+        d.setType(rs.getInt(5));
+        d.setIdPerson(rs.getInt(6));
+        d.setIdAction(rs.getInt(7));
+        d.setPlace(rs.getInt(8));
+        d.setNote(rs.getInt(9));
+        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(10)));
+        d.setDetail("estab", null);
+        d.setDetail("person", new NamedModel(d.getIdPerson(), rs.getString(11)));
+        return d;
+      }
+    }, idper, start, end);
+  }
 }

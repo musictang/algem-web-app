@@ -56,3 +56,28 @@ where (p.ptype = 3 or p.ptype = 4)
 and p.idper = 21611
 AND p.jour BETWEEN '04-04-2016' AND '10-04-2016'
 ORDER BY p.jour, p.debut;
+
+-- planning hebdo répets, reservations
+SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.action,p.lieux,p.note,s.nom
+FROM planning p INNER JOIN salle s ON (p.lieux = s.id)
+WHERE p.jour BETWEEN '04-04-2016' AND '10-04-2016'
+AND (((p.ptype = 4 OR p.ptype = 14) AND p.idper = 21611)
+OR ((p.ptype = 3 OR p.ptype = 13) AND p.idper IN (SELECT id FROM groupe_det WHERE musicien = 21611)))
+ORDER BY p.jour, p.debut;
+
+-- planning hebdo salarie
+SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.action,p.lieux,p.note, c.id, c.titre, c.collectif, c.code, s.nom, t.prenom, t.nom
+FROM planning p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)
+ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper) JOIN salle s ON (p.lieux = s.id)
+WHERE p.idper = 16094
+AND p.ptype IN (1,3,4,9)
+AND jour BETWEEN '04-04-2016' AND '10-04-2016'
+ORDER BY p.jour, p.debut;
+
+SELECT p.id,p.jour,p.debut,p.fin,p.ptype,pl.adherent,p.action,p.lieux,p.note, s.nom, t.prenom, t.nom
+FROM planning p INNER JOIN plage pl ON (p.id = pl.idplanning) LEFT OUTER JOIN personne t ON (pl.adherent = t.id)
+INNER JOIN salle s ON (p.lieux = s.id)
+WHERE p.ptype = 8
+AND pl.adherent = 16094
+AND p.jour BETWEEN '04-04-2016' AND '10-04-2016'
+ORDER BY p.jour, p.debut;
