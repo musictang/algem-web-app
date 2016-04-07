@@ -26,7 +26,9 @@
     <link th:replace="fragments/styles :: common" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/planning.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/mediaqueries.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/weekly.css}" />
+    
 
     <script type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/jquery-ui-1.11.4.min.js}"></script>
@@ -55,7 +57,8 @@
     <section id="login-panel" class="closeable" th:include="fragments/user :: login"></section>
     <header>
       <nav>
-        <div id="date-panel"><span id="week" th:text="|s.${w}|"></span>
+        <div id="date-panel">
+          <!--<span id="week" th:text="|s.${w}|"></span>-->
           <a th:href="@{/perso/weekly.html(d=${#dates.format(prevDate,'dd-MM-yyyy')},id=${param.id[0]},t=${param.t[0]})}" title="Semaine précédente" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;&nbsp;<input id="from" type="text" class="week-date" readonly="readonly" tabindex="3" th:value="${#dates.format(start,'dd-MM-yyyy')}"/>&nbsp;<label for="to">au</label>&nbsp;<input id="to" type="text" class="week-date" readonly="readonly" tabindex="4" th:value="${#dates.format(end,'dd-MM-yyyy')}"/>&nbsp;&nbsp;<a th:href="@{/perso/weekly.html(d=${#dates.format(nextDate,'dd-MM-yyyy')},id=${param.id[0]},t=${param.t[0]})}" title="Semaine suivante" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
         </div>
       </nav>
