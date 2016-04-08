@@ -79,7 +79,7 @@
           </p>
           <p>
             <label class="inline" for="spinner" th:text="#{booking.length.label}">Durée</label>
-            <input style="width: 1.5em" id="spinner" value="1" th:field="*{timeLength}">
+            <input style="width: 2.5em;height:2em" id="spinner" value="1" readonly="readonly" th:field="*{timeLength}">
           </p>
           <p><label for="room" th:text="#{room.label}"></label>
             <select id="room" th:field="*{room}">

@@ -400,7 +400,7 @@ function getGroups(params) {
       $("<p id=\"groupInfo\" class=\"error\" style=\"font-size: smaller\">"+params.groupWarning+"</p>").appendTo("#groupPanel");
     } else {
       $("<p id=\"groupInfo\">").appendTo("#groupPanel");
-      $("<label for=\"bookingGroup\">"+(params.groupLabel === undefined ? "" : params.groupLabel)+"</label>").appendTo('#groupInfo');
+      $("<label style=\"padding-right: 0.25em\" for=\"bookingGroup\">"+(params.groupLabel === undefined ? "" : params.groupLabel)+"</label>").appendTo('#groupInfo');
       $("<select id=\"bookingGroup\" name=\"group\">").appendTo('#groupInfo');
       $.each(data, function (index, value) {
         $("<option value=\""+value.id+"\">"+value.name+"</otpion>").appendTo('#bookingGroup');

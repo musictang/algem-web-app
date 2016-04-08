@@ -59,7 +59,7 @@ h2, h3, h4, fieldset > legend {
   border-color: #FF9770;
 }
 
-a:link,a:visited, a:active, a:hover,
+a:link,a:visited, a:hover, a:active, 
 .pure-menu, .pure-menu-heading, #menu
 {
   color: #D33900;
@@ -69,16 +69,13 @@ a:link,a:visited, a:active, a:hover,
 }
 
 a:link,a:visited, a:active {
-  /*border-bottom-color: #ff5719;*/
   border-bottom-color: #FFC170;
-  /*border-bottom-color:white;*/
 }
 a:hover {
-  /*border-bottom-color: #FFC170;*/
   border-bottom-color: #666;
 }
 
-footer a:link,footer a:visited,footer a:active,footer a:hover {
+footer a:link,footer a:visited, footer a:hover, footer a:active {
   color: #FFF;
 }
 

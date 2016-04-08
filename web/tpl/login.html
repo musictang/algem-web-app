@@ -39,8 +39,9 @@
         <!--<div id="login-panel" style="display: block;position: static;padding: 1em;">-->
         <div>
           <form id="login-form" th:action="@{j_spring_security_check}" method="post" >
-            <fieldset><legend th:text="#{connect.label}"></legend>
-              <label for="login" th:text="#{form.username.label}">Login</label>
+            <fieldset>
+              <legend th:text="#{connect.label}"></legend>
+              <label for="login" th:text="#{form.username.label}" style="">Login</label>
               <!--<%-- Les messages d'erreur doivent être affichés à l'intérieur du formulaire --%>-->
               <input type="text" id="login" required="required" name="j_username"/>
               <label for="password" th:text="#{form.password.label}" >Password</label>

@@ -22,8 +22,6 @@
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
     Last    : 1.2.0
 */
-/*@media only screen and (max-device-width:480px),
-only screen and (-webkit-min-device-pixel-ratio: 2)*/
 /*@import url(https://fonts.googleapis.com/css?family=PT+Sans+Narrow);*/
 @font-face {
   font-family: 'PT Sans Narrow';
@@ -44,7 +42,15 @@ and (orientation : landscape) {
   header {height: 12%}
   #grid, #canvas{top: 12%}
 }
-/*iPhone 2G, 3G, 4, 4S : Portrait*/
+
+@media only screen 
+and (min-width : 1024px) 
+and (max-height : 800px) {
+  header {height: 8%}
+  #grid, #canvas{top: 8%}
+}
+
+/*320x480 Portrait*/
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) 
@@ -53,7 +59,12 @@ and (orientation : portrait) {
   header > nav {
     padding:0.5em 0;
   }
-  h1 {font-size: 2em;}
+  h1 {font-size: 1.4em;text-align: left}
+  h2 {font-size: 1.35em;}
+h3 {font-size: 1.3em;}
+h4 {font-size: 1.2em;}
+h5 {font-size: 1.1em;}
+h6 {font-size: 1em;}
   #grid, #canvas{top: 12%}
   .schedule_col {
     width: 40px;
@@ -88,7 +99,7 @@ and (orientation : portrait) {
   }
 }
 
-/*iPhone i6 */
+/*375x667 iPhone i6 */
 @media only screen
 and (min-device-width : 375px) /* or 213.4375em or 3in or 9cm*/
 and (max-device-width : 667px)
@@ -99,7 +110,12 @@ and (orientation : landscape)
   header > nav {
     padding:0.5em 0;
   }
-  h1 {font-size: 2em;}
+  h1 {font-size: 1.8em;}
+  h2 {font-size: 1.6em;}
+h3 {font-size: 1.5em;}
+h4 {font-size: 1.5em;}
+h5 {font-size: 1.3em;}
+h6 {font-size: 1.2em;}
   #grid, #canvas{top: 16%}
   /* STYLES GO HERE */
   .schedule_col {
@@ -110,14 +126,14 @@ and (orientation : landscape)
     line-height: 1em;
   }
   .centered {
-    width: 80%;
+    width: 100%;
   }
   #canvas, .title_col {
     font-family: 'PT Sans Narrow';
   }
 }
 
-/*Galaxy s4*/
+/*Galaxy s4 360x600*/
 @media only screen 
 and (min-device-width : 360px) 
 and (max-device-width : 600px) 
@@ -130,7 +146,7 @@ and (orientation : portrait)
   h1 {font-size: 1.8em;}
   #grid, #canvas{top: 9%}
   .schedule_col {
-    width: 45px;
+    width: 42px;
   }
   .schedule {
     font-size: xx-small;
@@ -166,8 +182,8 @@ and (orientation : portrait)
   .schedule_col {
     width: 75px;
   }
-  header {height: 10%}
-  #grid, #canvas {top: 10%}
+  header {height: 8%}
+  #grid, #canvas {top: 8%}
   .schedule {
     font-size: xx-small;
     line-height: 1em;
