@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) weekly.html Algem Web App 1.2.0 06/04/16
+ * @(#) weekly.html Algem Web App 1.2.0 12/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -59,7 +59,7 @@
       <nav>
         <div id="date-panel">
           <!--<span id="week" th:text="|s.${w}|"></span>-->
-          <a th:href="@{/perso/weekly.html(d=${#dates.format(prevDate,'dd-MM-yyyy')},id=${param.id[0]},t=${param.t[0]})}" title="Semaine précédente" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;&nbsp;<input id="from" type="text" class="week-date" readonly="readonly" tabindex="3" th:value="${#dates.format(start,'dd-MM-yyyy')}"/>&nbsp;<label for="to">au</label>&nbsp;<input id="to" type="text" class="week-date" readonly="readonly" tabindex="4" th:value="${#dates.format(end,'dd-MM-yyyy')}"/>&nbsp;&nbsp;<a th:href="@{/perso/weekly.html(d=${#dates.format(nextDate,'dd-MM-yyyy')},id=${param.id[0]},t=${param.t[0]})}" title="Semaine suivante" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
+          <a th:href="@{/perso/weekly.html(d=${#dates.format(prevDate,'dd-MM-yyyy')},id=${param.id[0]},t=${param.t[0]})}" title="Semaine précédente" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;<input id="from" type="text" class="week-date" readonly="readonly" tabindex="3" th:value="${#dates.format(start,'dd-MM-yyyy')}"/>&nbsp;<label for="to">au</label>&nbsp;<input id="to" type="text" class="week-date" readonly="readonly" tabindex="4" th:value="${#dates.format(end,'dd-MM-yyyy')}"/>&nbsp;<a th:href="@{/perso/weekly.html(d=${#dates.format(nextDate,'dd-MM-yyyy')},id=${param.id[0]},t=${param.t[0]})}" title="Semaine suivante" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
         </div>
       </nav>
       </header>

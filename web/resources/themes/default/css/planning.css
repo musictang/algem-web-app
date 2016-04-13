@@ -1,5 +1,5 @@
 /*
- * @(#) planning.css Algem Web App 1.2.0 06/04/16
+ * @(#) planning.css Algem Web App 1.2.0 12/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -112,12 +112,14 @@
 }
 
 .schedule {
+  box-sizing:  border-box;
   position: absolute;
   width:100%;
   font-size: x-small;
   text-align: center;
   text-wrap: normal;
-  /*border-bottom: 1px solid gray;*/
+  /*border-top: 1px solid gray;*/
+  border-bottom: 1px solid gray;
   z-index: 1001;
 }
 
@@ -130,7 +132,7 @@
   line-height:0.9em;
   text-align: center;
   background-color: transparent;
-  border-bottom: 1px solid gray;
+  /*border-bottom: 1px solid gray;*/
   z-index: 1003;
 }
 .course_label {
@@ -200,4 +202,8 @@ footer {top: 722px;}
   vertical-align: middle;
   border: none;
 }
+
+/*#spinner .ui-button-text .ui-icon {
+  width: 3em
+}*/
 

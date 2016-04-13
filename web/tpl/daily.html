@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.2.0 06/04/16
+ * @(#) daily.html Algem Web App 1.2.0 12/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -96,7 +96,7 @@
           <option th:each="estab :${estabList}" th:value="${estab.id}" th:text="${estab.name}"></option>
         </select>
         <div id="date-panel">
-        <label id="dow" for="datepicker" th:text="${dayName}"></label><a href="" th:title="#{prev.day.label}" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;&nbsp;<input type="text" id="datepicker" style="font-size:small" tabindex="3"/>&nbsp;&nbsp;<a href="" th:title="#{next.day.label}" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
+        <label id="dow" for="datepicker" th:text="${dayName}"></label><a href="" th:title="#{prev.day.label}" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;<input type="text" id="datepicker" style="font-size:small" tabindex="3" readonly="readonly"/>&nbsp;<a href="" th:title="#{next.day.label}" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
         </div>
       </nav>
     </header>
@@ -130,7 +130,7 @@
         <!--Range : external div is only a loop container -->
         <div th:each="p : ${entry.value}" th:remove="tag">
           <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
-               th:with="pos=${(r.minutes - timeOffset) * 100.0 / totalTime},h=${(r.length - 1) * 100.0 / totalTime}"
+               th:with="pos=${(r.minutes - timeOffset) * 100.0 / totalTime},h=${(r.length) * 100.0 / totalTime}"
                class="schedule range" th:style="'top:'+${pos}+'%;height:'+${h}+'%'"></div>
         </div>
       </div>

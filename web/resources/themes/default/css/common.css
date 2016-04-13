@@ -1,7 +1,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.1.1 03/03/2016
+    Last: 1.2.0 12/04/16
 */
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
 @font-face {
@@ -294,6 +294,7 @@ select {font-size: small;}
   text-align: center;
   padding: 0.15em 0.5em;
   cursor: pointer;
+  color:#444
 }
 #menu ul {
   list-style-type: none;font-size: 2em;margin:0;padding:0
@@ -332,12 +333,8 @@ select {font-size: small;}
 .panel, #xlogin-panel {padding: 1em;}
 .ui-widget { font-family: Ubuntu,'Segoe UI',Verdana,Helvetica,sans-serif;}
 .ui-datepicker-title {color: #444;}
-/*.ui-spinner-input {font-size: x-small;}*/
-.ui-spinner-button {width: 1.5em;}
-.ui-spinner .ui-button-text .ui-icon {text-align: center}
-.ui-button-text {/*background: lightgray;*/}
 
-#bookdate {display: inline-block;}
+#bookdate {display: inline-block;width: 6em;padding:0 0.25em;text-align: center}
 .closing-bar {
   position: relative;
   width: 100%;

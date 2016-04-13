@@ -2,7 +2,7 @@
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @since 09/05/15
- * @version 1.1.0
+ * @version 1.2.0
  * @returns {void}
  */
 
@@ -245,21 +245,15 @@ function setBooking(params, steps) {
       //**************************
 
       $("#room").val(roomId);
-      $("#booking #spinner").spinner({
-        min: 1,
-        max: steps.max,
-        step: 0.5,
-        numberFormat: "n",
-        spin : function(event,ui) {
-          //Gives Previous value
-          //console.log($(this).val());
-          //Gives current value
-          var startIndex = $("#startTime option:selected").index();
-          var endIndex = startIndex + (ui.value * 60 * (steps.max * 2) / (steps.max * 60));
-          $("#endTime option").eq(endIndex).prop("selected", true);
-        }
+      $("#booking #timelength").change(function() {
+        var t = $(this).val();
+        var startIndex = $("#startTime option:selected").index();
+        var endIndex = startIndex + (t * 60 * (steps.max * 2) / (steps.max * 60));
+        var lastIndex = $("#endTime option:last-child").index();
+        if (endIndex > lastIndex) endIndex = lastIndex;
+        $("#endTime option").eq(endIndex).prop("selected", true);
       });
-
+      
       setEndIndex($("#startTime"), steps);
       setPassChecked();
     }
@@ -286,9 +280,9 @@ function setBooking(params, steps) {
     getGroups(params);
   });
 
-  $("#booking-form input[type='submit']").click(function () {
+  /*$("#booking-form input[type='submit']").click(function () {
     console.log("booking submit button");
-  });
+  });*/
 
   //unactive ENTER key on booking dialog
   $("#booking-form").bind("keypress", function (e) {
@@ -296,7 +290,7 @@ function setBooking(params, steps) {
       e.preventDefault();
       return false;
     }
-});
+  });
 
 }
 
@@ -365,7 +359,8 @@ function isInactive() {
 function setEndIndex(element, steps) {
   var maxIndex = $(element).children("option").length;
   var startIndex = $(element).children("option:selected").index();
-  var value = $("#booking #spinner").spinner("value");
+  //var value = $("#booking #spinner").slider("value"); // spinner replaced by plain select component
+  var value = $("#booking #timelength").val();
   var endIndex = startIndex + (value * 60 * (steps.max * 2) / (steps.max * 60));
   if (endIndex > maxIndex) {
     endIndex = maxIndex;
@@ -436,10 +431,10 @@ function initBookingDate(date) {
   bookDatePicker.datepicker({
     changeMonth: true,
     changeYear: true,
-    showOn: "button",
-//    buttonImage: "images/calendar.gif",
-//    buttonImageOnly: true,
-//    buttonText: "Select date"
+    //showOn: "button",
+    //buttonImage: "images/calendar.gif",
+    //buttonImageOnly: true,
+    //buttonText: "Select date"
   });
 
   bookDatePicker.datepicker('setDate', date);

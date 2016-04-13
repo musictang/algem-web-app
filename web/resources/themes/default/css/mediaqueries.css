@@ -1,5 +1,5 @@
 /*
- * @(#) mediaqueries.css Algem Web App 1.2.0 07/04/16
+ * @(#) mediaqueries.css Algem Web App 1.2.0 11/04/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -17,12 +17,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
 */
-/*
-    Created on : 29/12/2015, 15:34:39
+/* 
+    Created on : 11 avr. 2016, 15:04:00
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last    : 1.2.0
 */
-/*@import url(https://fonts.googleapis.com/css?family=PT+Sans+Narrow);*/
 @font-face {
   font-family: 'PT Sans Narrow';
   src: url('../fonts/ptn57f-webfont.eot');
@@ -34,38 +32,80 @@
   font-weight: normal;
   font-style: normal;
 }
-/*i6 plus*/
 @media only screen 
-and (min-device-width : 414px) 
-and (max-device-width : 736px) 
-and (orientation : landscape) {
-  header {height: 12%}
-  #grid, #canvas{top: 12%}
+and (min-width : 1600px) 
+{
+  .schedule_col {
+    width: 120px;
+  }
 }
-
 @media only screen 
-and (min-width : 1024px) 
-and (max-height : 800px) {
+and (max-device-width : 1024px) 
+{
+  header {height: 7%}
+  #grid, #canvas{top: 7%}
+  .schedule_col {
+    width: 80px;
+  }
+}
+@media only screen 
+and (max-width : 1280px) 
+and (max-height : 800px)
+{
   header {height: 8%}
   #grid, #canvas{top: 8%}
 }
-
-/*320x480 Portrait*/
-@media only screen
-and (min-device-width : 320px)
-and (max-device-width : 480px) 
+@media only screen 
+and (max-width : 600px) 
 and (orientation : portrait) {
-  header {height: 12%}
+  header {height: 65px}
   header > nav {
     padding:0.5em 0;
   }
-  h1 {font-size: 1.4em;text-align: left}
+  #grid, #canvas{top: 65px}
+  h1 {font-size: 1.6em;text-align: left;line-height: 1em}
+  .schedule_col {
+    width: 45px;
+  }
+  table.mobile {
+    overflow-x: auto;
+    display: block;
+  }
+  .centered {
+    width: 100%;
+  }
+  #canvas, .title_col {
+    font-family: 'PT Sans Narrow';
+  }
+  .closing-bar a.close-link {
+    font-size: 1.45em;
+    padding: 0 0.5em;
+  }
+  #info-bar .close-link > .fa-close,
+  #help-panel .close-link > .fa-close,
+  #login-panel .close-link > .fa-close {
+    padding: 0;
+    font-size: 1.45em;
+  }
+}
+
+@media only screen 
+and (max-width : 320px) 
+and (orientation : portrait) {
+  header {height: 60px}
+  #grid, #canvas{top: 60px}
+  header > nav {
+    padding:0.5em 0;
+  }
+  body {
+    font-size: 0.9em;
+  }
+  h1 {font-size: 1.6em;text-align: left;line-height: 1em}
   h2 {font-size: 1.35em;}
-h3 {font-size: 1.3em;}
-h4 {font-size: 1.2em;}
-h5 {font-size: 1.1em;}
-h6 {font-size: 1em;}
-  #grid, #canvas{top: 12%}
+  h3 {font-size: 1.3em;}
+  h4 {font-size: 1.2em;}
+  h5 {font-size: 1.1em;}
+  h6 {font-size: 1em;}
   .schedule_col {
     width: 40px;
   }
@@ -73,20 +113,29 @@ h6 {font-size: 1em;}
     font-size: xx-small;
     line-height: 1em;
   }
-  .closing-bar {
-    height: 2em;
-  }
   .closing-bar a.close-link {
     font-size: 1.4em;
-    padding: 0 0.5em;
   }
-
   #info-bar .close-link > .fa-close,
   #help-panel .close-link > .fa-close,
   #login-panel .close-link > .fa-close {
-    padding: 0;
     font-size: 1.4em;
   }
+}
+@media only screen 
+and (max-width : 800px) 
+and (orientation : landscape) {
+  header {height: 60px}
+  #grid, #canvas{top: 60px}
+   .schedule_col {
+    width: 65px;
+  }
+  h1 {font-size: 1.8em;text-align: left;line-height: 1em}
+  h2 {font-size: 1.5em;}
+  h3 {font-size: 1.4em;}
+  h4 {font-size: 1.3em;}
+  h5 {font-size: 1.2em;}
+  h6 {font-size: 1em;}
   table.mobile {
     overflow-x: auto;
     display: block;
@@ -94,78 +143,21 @@ h6 {font-size: 1em;}
   .centered {
     width: 100%;
   }
-  #canvas, .title_col {
-    font-family: 'PT Sans Narrow';
-  }
 }
-
-/*375x667 iPhone i6 */
-@media only screen
-and (min-device-width : 375px) /* or 213.4375em or 3in or 9cm*/
-and (max-device-width : 667px)
-and (orientation : landscape)
-/* or 41.6875em */
-{
-  header {height: 16%}
-  header > nav {
-    padding:0.5em 0;
-  }
-  h1 {font-size: 1.8em;}
-  h2 {font-size: 1.6em;}
-h3 {font-size: 1.5em;}
-h4 {font-size: 1.5em;}
-h5 {font-size: 1.3em;}
-h6 {font-size: 1.2em;}
-  #grid, #canvas{top: 16%}
-  /* STYLES GO HERE */
-  .schedule_col {
+@media only screen 
+and (max-width : 480px) 
+and (orientation : landscape) {
+  header {height: 60px}
+  #grid, #canvas{top: 60px}
+   .schedule_col {
     width: 60px;
   }
-  .schedule {
-    font-size: xx-small;
-    line-height: 1em;
-  }
-  .centered {
-    width: 100%;
-  }
-  #canvas, .title_col {
-    font-family: 'PT Sans Narrow';
-  }
-}
-
-/*Galaxy s4 360x600*/
-@media only screen 
-and (min-device-width : 360px) 
-and (max-device-width : 600px) 
-and (orientation : portrait) 
-{
-  header {height: 9%}
-  header > nav {
-    /*padding:0.5em 0;*/
-  }
-  h1 {font-size: 1.8em;}
-  #grid, #canvas{top: 9%}
-  .schedule_col {
-    width: 42px;
-  }
-  .schedule {
-    font-size: xx-small;
-    line-height: 1em;
-  }
-  .closing-bar {
-    height: 2em;
-  }
-  .closing-bar a.close-link {
-    font-size: 1.4em;
-    padding: 0 0.5em;
-  }
-
-  #info-bar .close-link > .fa-close,
-  #help-panel .close-link > .fa-close,
-  #login-panel .close-link > .fa-close {
-    padding: 0;
-    font-size: 1.4em;
-  }
+  h1 {font-size: 1.8em;text-align: left;line-height: 1em}
+  h2 {font-size: 1.5em;}
+  h3 {font-size: 1.4em;}
+  h4 {font-size: 1.3em;}
+  h5 {font-size: 1.2em;}
+  h6 {font-size: 1em;}
   table.mobile {
     overflow-x: auto;
     display: block;
@@ -173,27 +165,4 @@ and (orientation : portrait)
   .centered {
     width: 100%;
   }
-  #canvas, .title_col {
-    font-family: 'PT Sans Narrow';
-  }
 }
-
-@media only screen and (min-width:600px) and (max-width: 1024px) and (orientation : portrait) {
-  .schedule_col {
-    width: 75px;
-  }
-  header {height: 8%}
-  #grid, #canvas {top: 8%}
-  .schedule {
-    font-size: xx-small;
-    line-height: 1em;
-  }
-  .centered {
-    width: 80%;
-  }
-}
-
-
-
-
-
