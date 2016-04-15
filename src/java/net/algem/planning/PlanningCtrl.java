@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningCtrl.java	1.2.0 06/04/16
+ * @(#)PlanningCtrl.java	1.2.0 14/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -67,7 +67,6 @@ public class PlanningCtrl
    */
   @RequestMapping(method = RequestMethod.GET, value = "/daily.html")
   String loadDaySchedule(HttpServletRequest request, Model model, Booking booking) throws ParseException {
-//    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
     SimpleDateFormat dayNameFormat = new SimpleDateFormat("EEE");
     Date date = DATE_FORMAT.parse(request.getParameter("d"));
     String dayName = dayNameFormat.format(date);
@@ -104,9 +103,9 @@ public class PlanningCtrl
 
   @RequestMapping(method = RequestMethod.GET, value={ "perso/weekly.html"})
   String loadWeekSchedule(Model model, HttpServletRequest request) throws ParseException {
-    int id = Integer.parseInt(request.getParameter("id"));
+    int idper = Integer.parseInt(request.getParameter("id"));
     String sow = request.getParameter("d");
-    int type = Integer.parseInt(request.getParameter("t"));
+//    int type = Integer.parseInt(request.getParameter("t"));
     Calendar cal = Calendar.getInstance();
     Date start = DATE_FORMAT.parse(sow);
     cal.setTime(start);
@@ -114,7 +113,7 @@ public class PlanningCtrl
     int week = cal.get(Calendar.WEEK_OF_YEAR);
     Date end = cal.getTime();
 
-    Map<Integer, Collection<ScheduleElement>> schedules = service.getWeekSchedule(start, end, id, type);
+    Map<Integer, Collection<ScheduleElement>> schedules = service.getWeekSchedule(start, end, idper);
 
     cal.add(Calendar.DATE,-13);
     Date prev = cal.getTime();
@@ -130,7 +129,6 @@ public class PlanningCtrl
     model.addAttribute("nextDate", next);
     model.addAttribute("w", week);
     model.addAttribute("timeOffset", service.getTimeOffset());
-//    model.addAttribute("estabList", service.getEstablishments(estabFilter));
     return "weekly";
   }
 

@@ -34,6 +34,11 @@ function setUI() {
   setBookingDialog();
 }
 
+function setViewPortSize(timeOffset) {
+  $("#canvas, #grid, .schedule_col").css("height", (1440 - timeOffset) +'px');
+  $("footer").css("top", (1442 - timeOffset) +'px');
+}
+
 /**
  * Init navigation elements.
  * @commonParams {Object} global parameters

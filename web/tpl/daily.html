@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.2.0 12/04/16
+ * @(#) daily.html Algem Web App 1.2.0 14/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -73,8 +73,7 @@
         initBookingDate(commonParams.date);
         setUI();
         setBooking(bookingParams, steps);
-                $("#canvas, #grid, .schedule_col").css("height", (1440 - tOffset) +'px');
-        $("footer").css("top", (1442 - tOffset) +'px');
+        setViewPortSize(tOffset);
       });
       /*]]>*/
     </script>
@@ -124,9 +123,14 @@
         <!--Labels-->
         <div th:each="p : ${entry.value}" class="labels"
              th:if="${p.label} != null"
-             th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime}"
-             th:style="'color:'+${p.labelColor}+';top:'+${pos}+'%;height:'+${h}+'%'"
-             th:utext="${p.label}"></div>
+             th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime},wl=${p.type == T(net.algem.planning.Schedule).COURSE || p.type == T(net.algem.planning.Schedule).WORKSHOP || p.type == T(net.algem.planning.Schedule).TRAINING}"
+             th:style="'color:'+${p.labelColor}+';top:'+${pos}+'%'">
+          <span th:utext="${p.label}"></span>
+          <span style="display: block" th:if="${h >= 60}" sec:authorize="${hasAnyRole('1','4')}" th:utext="${p.detail['person']}"></span>
+          <span style="display: block" sec:authorize="${hasAnyRole('2','3','11')}" 
+                th:if="${wl}"
+                th:utext="${p.length >= 45 ? p.detail['person'] : 'test'}"></span>
+        </div>
         <!--Range : external div is only a loop container -->
         <div th:each="p : ${entry.value}" th:remove="tag">
           <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"

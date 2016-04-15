@@ -29,6 +29,12 @@
     <link rel="stylesheet" th:href="@{/resources/themes/css/mediaqueries.css}" />
     <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
     <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/common.js}"></script>
+    <script type="text/javascript">
+      $(function () {
+        setCommonEvents();
+        $("#info-bar").hide()
+      });
+  </script>
   </head>
   <body>
     <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
@@ -61,10 +67,4 @@
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>
   </body>
-   <script type="text/javascript">
-      $(function () {
-        setCommonEvents();
-        $("#info-bar").hide()
-      });
-  </script>
 </html>

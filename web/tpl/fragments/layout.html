@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) layout.html Algem Web App 1.2.0 06/04/16
+ * @(#) layout.html Algem Web App 1.2.0 14/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -24,7 +24,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/pure-min.css}" />
-    <!--<link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css' />-->
     <link rel="stylesheet" th:href="@{/resources/themes/css/common.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/mediaqueries.css}" />
@@ -89,7 +88,7 @@
     </div>
     <div th:fragment="roomInfo" th:with="offPeakTime=${conf['offPeakTime']}" class="indented">
       <h2 th:text="#{room.info.label}"></h2>
-      <table class="pure-table pure-table-bordered pure-table-striped mobile">
+      <table class="pure-table pure-table-bordered pure-table-striped mobile condensed">
         <thead>
           <tr>
             <th th:text="#{room.label}" style="width:20%"></th>

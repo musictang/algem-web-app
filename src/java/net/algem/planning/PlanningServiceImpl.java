@@ -153,9 +153,9 @@ public class PlanningServiceImpl
     return map;
   }
 
-  public Map<Integer, Collection<ScheduleElement>> getWeekSchedule(Date start, Date end, int idper, int type) {
+  public Map<Integer, Collection<ScheduleElement>> getWeekSchedule(Date start, Date end, int idper) {
     Map<Integer, Collection<ScheduleElement>> map = new LinkedHashMap<Integer, Collection<ScheduleElement>>();
-    int p = -1;
+//    int p = -1;
     Calendar cal = Calendar.getInstance();
     map.put(Calendar.MONDAY, new ArrayList<ScheduleElement>());
     map.put(Calendar.TUESDAY, new ArrayList<ScheduleElement>());
@@ -164,12 +164,13 @@ public class PlanningServiceImpl
     map.put(Calendar.FRIDAY, new ArrayList<ScheduleElement>());
     map.put(Calendar.SATURDAY, new ArrayList<ScheduleElement>());
     map.put(Calendar.SUNDAY, new ArrayList<ScheduleElement>());
-    List<ScheduleElement> schedules;
-    if (type == 0) {
-      schedules = scheduleDao.findWeekMember(start, end, idper);
-    } else {
-      schedules = scheduleDao.findWeekEmployee(start, end, idper);
-    }
+//    List<ScheduleElement> schedules;
+//    if (type == 0) {
+//      schedules = scheduleDao.findWeekMember(start, end, idper);
+//    } else {
+//      schedules = scheduleDao.findWeekEmployee(start, end, idper);
+//    }
+    List<ScheduleElement> schedules = scheduleDao.findWeekIdper(start, end, idper);
     for (ScheduleElement d : schedules) {
       d.setLabel(getHtmlTitle(d));
       d.setColor(ScheduleColorizer.colorToHex(COLORIZER.getColor(d)));

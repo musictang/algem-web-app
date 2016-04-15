@@ -100,7 +100,7 @@ public interface PlanningService
    */
   Map<Integer, Collection<ScheduleElement>> getDaySchedule(Date date, int estab);
 
-  Map<Integer, Collection<ScheduleElement>> getWeekSchedule(Date start, Date end, int idper, int type);
+  Map<Integer, Collection<ScheduleElement>> getWeekSchedule(Date start, Date end, int idper);
 
   /**
    * Gets the list of free rooms at the date {@code date} in the establishment {@code estab}.

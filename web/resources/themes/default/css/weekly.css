@@ -1,5 +1,5 @@
 /*
- * @(#) weekly.css Algem Web App 1.2.0 07/04/16
+ * @(#) weekly.css Algem Web App 1.2.0 14/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -23,7 +23,7 @@
     Version    : 1.2.0
 */
 #canvas {
-  width: 93.1%; /* (7*13.7) */
+  width: 93.1%; /* (7*13.3) */
 }
 .schedule_col {
   width: 13.3%;

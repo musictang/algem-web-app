@@ -105,9 +105,10 @@ public class ScheduleDao
    * @return a list of schedule elements
    */
   public List<ScheduleElement> find(Date date, int estab) {
-    String query = " SELECT p.*, c.id, c.titre, c.collectif, c.code, s.nom, t.prenom, t.nom"
+    String query = " SELECT p.*, c.id, c.titre, c.collectif, c.code, s.nom, t.prenom, t.nom, g.nom"
       + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
-      + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper)"
+      + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (p.idper = t.id)"
+      + " LEFT OUTER JOIN groupe g ON (p.idper = g.id)"
       + ", salle s"
       + " where p.lieux = s.id"
       + " AND s.public = true"
@@ -133,10 +134,15 @@ public class ScheduleDao
         d.setCode(rs.getInt(13));
         d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(14)));
         d.setDetail("estab", null);
-        String firstName = rs.getString(15);
-        String lastName = rs.getString(16);
-        String name = firstName == null ? (lastName == null ? "" : lastName) : firstName + " " + lastName;
-        d.setDetail("person",new NamedModel(d.getIdPerson(), name));
+        String name = "";
+        if (Schedule.GROUP == d.getType() || Schedule.BOOKING_GROUP == d.getType() || Schedule.STUDIO == d.getType()) {
+          name = rs.getString(17);
+        } else {
+          String firstName = rs.getString(15);
+          String lastName = rs.getString(16);
+          name = firstName == null ? (lastName == null ? "" : lastName) : firstName + " " + lastName;
+        } 
+        d.setDetail("person", new NamedModel(d.getIdPerson(), name));
         if (d.type == Schedule.COURSE && !d.isCollective()) {
           d.setRanges(getTimeSlots(d.getId()));
         }
@@ -472,6 +478,13 @@ public class ScheduleDao
     return keyHolder.getKey().intValue();
   }
 
+  public List<ScheduleElement> findWeekIdper(Date start, Date end, int idper) {
+    List<ScheduleElement> schedules = findWeekCourse(start, end, idper);
+    schedules.addAll(findWeekRehearsal(start, end, idper));
+    schedules.addAll(findWeekAdministrative(start, end, idper));
+    schedules.addAll(findWeekTech(start, end, idper));
+    return schedules;
+  }
   public List<ScheduleElement> findWeekMember(Date start, Date end, int idper) {
     List<ScheduleElement> schedules = findWeekCourse(start, end, idper);
     schedules.addAll(findWeekRehearsal(start, end, idper));
