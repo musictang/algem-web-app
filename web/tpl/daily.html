@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.2.0 14/04/16
+ * @(#) daily.html Algem Web App 1.2.0 16/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -126,10 +126,11 @@
              th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime},wl=${p.type == T(net.algem.planning.Schedule).COURSE || p.type == T(net.algem.planning.Schedule).WORKSHOP || p.type == T(net.algem.planning.Schedule).TRAINING}"
              th:style="'color:'+${p.labelColor}+';top:'+${pos}+'%'">
           <span th:utext="${p.label}"></span>
-          <span style="display: block" th:if="${h >= 60}" sec:authorize="${hasAnyRole('1','4')}" th:utext="${p.detail['person']}"></span>
-          <span style="display: block" sec:authorize="${hasAnyRole('2','3','11')}" 
+          <span style="display: block" th:if="${p.length >= 30}" sec:authorize="${hasAnyRole('1','4')}"
+                th:utext="${p.length >= 45 ? p.detail['person'] : #strings.substringBefore(p.detail['person'],' ')}"></span>
+          <span style="display: block" sec:authorize="${hasAnyRole('2','3','11')}"
                 th:if="${wl}"
-                th:utext="${p.length >= 45 ? p.detail['person'] : 'test'}"></span>
+                th:utext="${p.length >= 45 ? p.detail['person'] : #strings.substringBefore(p.detail['person'],' ')}"></span>
         </div>
         <!--Range : external div is only a loop container -->
         <div th:each="p : ${entry.value}" th:remove="tag">

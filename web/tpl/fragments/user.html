@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.2.0 12/04/16
+ * @(#) login.html Algem Web App 1.2.0 16/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -79,7 +79,8 @@
           <p>
             <label class="inline" for="timelength" th:text="#{booking.length.label}">Durée</label>
             <select id="timelength" th:field="*{timeLength}">
-              <option value="1">1:00</option>
+              <option value="0.5">0:30</option>
+              <option value="1" selected="selected">1:00</option>
               <option value="1.5">1:30</option>
               <option value="2">2:00</option>
               <option value="2.5">2:30</option>

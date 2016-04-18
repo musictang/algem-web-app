@@ -215,7 +215,6 @@ function setBooking(params, steps) {
     //console.log((e.pageX - posX) + ' , ' + (e.pageY - posY));
     var target = e.target || e.srcElement;
     if ("schedule_col" === target.className) {
-      //var room = $(this).children(".title_col");
       var roomId = $(this).attr("id");
       var posY = $(this).offset().top;
       var idx = getStartTimeIndex(steps.height, e.pageY - posY);
@@ -258,7 +257,7 @@ function setBooking(params, steps) {
         if (endIndex > lastIndex) endIndex = lastIndex;
         $("#endTime option").eq(endIndex).prop("selected", true);
       });
-      
+
       setEndIndex($("#startTime"), steps);
       setPassChecked();
     }
