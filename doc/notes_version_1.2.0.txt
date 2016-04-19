@@ -9,6 +9,10 @@ Les boutons de sélection de durée dans la fenêtre de réservation ont été r
 L'ouverture du calendrier dans un champ date ne provoque plus l'ouverture du clavier virtuel sur smartphone.
 Les couleurs par défaut des plannings sont maintenant conformes à celles paramétrées dans Algem.
 Afin de les rendre plus lisibles, la couleur des libellés varie du noir au blanc en fonction de la couleur de fond des plannings.
+Suivant leur profil, les personnes connectées peuvent maintenant visualiser le nom des professeurs, des groupes ou des adhérents dans les libellés des plannings.
+Les visiteurs non connectés ne peuvent voir que le nom des plannings.
+profil administrateur ou utilisateur : nom des groupes, des professeurs ou des répétiteurs.
+profil adhérent ou professeur : nom des professeurs
 
 PAGE PERSO
 Un nouveau lien "Réserver" sur la page personnelle de l'utilisateur lui permet d'accéder au planning général sans avoir besoin de passer par la page d'accueil comme auparavant.
@@ -16,6 +20,5 @@ Un nouveau lien "Réserver" sur la page personnelle de l'utilisateur lui permet 
 La liste des réservations peut être maintenant mise à jour en cliquant sur l'icone "Recharger la page", à droite du champ "Statut".
 
 L'élève, l'adhérent ou le professeur connectés peuvent maintenant consulter leurs plannings hebdomadaires respectifs.
-En cliquant sur "Mon planning perso adhérent", l'utilisateur accède directement à son planning pour la semaine courante : cours (en tant qu'élève), répétitions, réservations, séances de studio. Il peut accéder aux semaines précédentes et suivantes en cliquant sur les flèches de gauche et de droite de part et d'autre des dates de début et de fin de semaine. Chaque planning est représenté par le libellé de l'activité, son horaire, la salle et le professeur intervenant, s'il s'agit d'un cours.
+En cliquant sur "Mon planning hebdo", l'utilisateur accède directement à son planning pour la semaine courante : cours (en tant qu'élève), répétitions, réservations, séances de studio, séances administratives. Il peut accéder aux semaines précédentes et suivantes en cliquant sur les flèches de gauche et de droite de part et d'autre des dates de début et de fin de semaine. Chaque planning est représenté par le libellé de l'activité, son horaire, la salle et le professeur intervenant, s'il s'agit d'un cours.
 
-Les professeurs actifs connectés disposent en supplément d'un planning hebdomadaire enseignant. En cliquant sur le lien "Mon planning perso enseignant", ils accèdent à leur planning de cours pour la semaine courante. Ce planning affiche également leurs éventuelles heures de travail administratif.
