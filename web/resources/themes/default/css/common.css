@@ -1,7 +1,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.2.0 16/04/16
+    Last: 1.2.0 19/04/16
 */
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
 @font-face {
@@ -269,11 +269,6 @@ a:link,a:visited, a:hover, a:active {
   border-bottom-width: 2px;
   line-height: 1.2em;
 }
-/*a:hover {
-  text-decoration: none;
-  border-bottom-style: solid;
-  border-bottom-width:2px;
-}*/
 a.img-link {border: none;}
 
 select {font-size: small;}

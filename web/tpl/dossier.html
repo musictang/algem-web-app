@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.2.0 15/04/16
+ * @(#) dossier.html Algem Web App 1.2.0 18/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -19,7 +19,7 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-  <head th:with="title=${@organization['name.label']}" th:include="fragments/layout :: common-head">
+  <head th:with="title=|${@organization['name.label']} : ${user.firstName} ${user.name}|" th:include="fragments/layout :: common-head">
     <title th:text="#{my.page.label}">TODO supply a title</title>
   </head>
   <body>

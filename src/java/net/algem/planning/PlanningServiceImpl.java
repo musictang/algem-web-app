@@ -1,7 +1,7 @@
 /*
- * @(#)PlanningServiceImpl.java	1.2.0 06/04/16
+ * @(#)PlanningServiceImpl.java	1.2.0 18/04/16
  *
- * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -36,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
-import org.springframework.scheduling.quartz.AdaptableJobFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -155,7 +154,6 @@ public class PlanningServiceImpl
 
   public Map<Integer, Collection<ScheduleElement>> getWeekSchedule(Date start, Date end, int idper) {
     Map<Integer, Collection<ScheduleElement>> map = new LinkedHashMap<Integer, Collection<ScheduleElement>>();
-//    int p = -1;
     Calendar cal = Calendar.getInstance();
     map.put(Calendar.MONDAY, new ArrayList<ScheduleElement>());
     map.put(Calendar.TUESDAY, new ArrayList<ScheduleElement>());
@@ -164,12 +162,7 @@ public class PlanningServiceImpl
     map.put(Calendar.FRIDAY, new ArrayList<ScheduleElement>());
     map.put(Calendar.SATURDAY, new ArrayList<ScheduleElement>());
     map.put(Calendar.SUNDAY, new ArrayList<ScheduleElement>());
-//    List<ScheduleElement> schedules;
-//    if (type == 0) {
-//      schedules = scheduleDao.findWeekMember(start, end, idper);
-//    } else {
-//      schedules = scheduleDao.findWeekEmployee(start, end, idper);
-//    }
+
     List<ScheduleElement> schedules = scheduleDao.findWeekIdper(start, end, idper);
     for (ScheduleElement d : schedules) {
       d.setLabel(getHtmlTitle(d));

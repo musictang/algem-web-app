@@ -1,5 +1,5 @@
 /*
- * @(#)ScheduleDao.java	1.2.0 06/04/16
+ * @(#)ScheduleDao.java	1.2.0 18/04/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -485,17 +485,6 @@ public class ScheduleDao
     schedules.addAll(findWeekTech(start, end, idper));
     return schedules;
   }
-  public List<ScheduleElement> findWeekMember(Date start, Date end, int idper) {
-    List<ScheduleElement> schedules = findWeekCourse(start, end, idper);
-    schedules.addAll(findWeekRehearsal(start, end, idper));
-    return schedules;
-  }
-
-  public List<ScheduleElement> findWeekEmployee(Date start, Date end, int idper) {
-    List<ScheduleElement> schedules = findWeekAdministrative(start, end, idper);
-    schedules.addAll(findWeekTech(start, end, idper));
-    return schedules;
-  }
 
   private List<ScheduleElement> findWeekRehearsal(Date start, Date end, int idper) {
     String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.action,p.lieux,p.note,s.nom"
@@ -526,9 +515,9 @@ public class ScheduleDao
   }
 
   private List<ScheduleElement> findWeekCourse(Date start, Date end, int idper) {
-    String query = "SELECT p.id,p.jour,pl.debut,pl.fin,p.ptype,p.idper,p.action,p.lieux,p.note, c.id, c.titre, c.collectif, c.code, s.nom, t.prenom, t.nom"
+    String query = "SELECT p.id,p.jour,pl.debut,pl.fin,p.ptype,p.idper,p.action,p.lieux,p.note, c.id, c.titre, c.collectif, c.code, s.nom, n.prenom, n.nom"
             + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
-            + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (t.id = p.idper), salle s, plage pl"
+            + " ON (p.action = a.id) LEFT OUTER JOIN personne n ON (p.idper = n.id), salle s, plage pl"
             + " WHERE p.lieux = s.id"
             + " AND p.ptype IN ("+Schedule.COURSE+","+Schedule.TRAINING+","+Schedule.WORKSHOP+")"
             + " AND p.id = pl.idplanning"
@@ -558,9 +547,7 @@ public class ScheduleDao
         String lastName = rs.getString(16);
         String name = firstName == null ? (lastName == null ? "" : lastName) : firstName + " " + lastName;
         d.setDetail("person",new NamedModel(d.getIdPerson(), name));
-//        if (d.type == Schedule.COURSE && !d.isCollective()) {
-//          d.setRanges(getTimeSlots(d.getId()));
-//        }
+        
         return d;
       }
     }, idper, start, end);
@@ -593,6 +580,10 @@ public class ScheduleDao
         d.setCode(rs.getInt(13));
         d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(14)));
         d.setDetail("estab", null);
+        
+        if (d.type == Schedule.COURSE && !d.isCollective()) {
+          d.setRanges(getTimeSlots(d.getId()));
+        }
         return d;
       }
     }, idper, start, end);

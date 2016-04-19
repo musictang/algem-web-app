@@ -109,7 +109,7 @@ function setWidth() {
  * @returns {undefined}
  */
 function setHoverStyle() {
-  $('div.labels').hover(
+  $('div.labels,div.schedule,p.title_col').hover(
     function () {
       $(this).css({
         cursor: "not-allowed",

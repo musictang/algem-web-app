@@ -105,7 +105,6 @@ public class PlanningCtrl
   String loadWeekSchedule(Model model, HttpServletRequest request) throws ParseException {
     int idper = Integer.parseInt(request.getParameter("id"));
     String sow = request.getParameter("d");
-//    int type = Integer.parseInt(request.getParameter("t"));
     Calendar cal = Calendar.getInstance();
     Date start = DATE_FORMAT.parse(sow);
     cal.setTime(start);
@@ -129,6 +128,7 @@ public class PlanningCtrl
     model.addAttribute("nextDate", next);
     model.addAttribute("w", week);
     model.addAttribute("timeOffset", service.getTimeOffset());
+    model.addAttribute("colorDefs", service.getDefaultColorCodes());
     return "weekly";
   }
 

@@ -1,23 +1,19 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.1.1 03/03/2016
+    Last: 1.2.0 19/04/16
 */
-@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);
-
-/*@font-face {
-    font-family: 'droid_sans_monoregular';
-    src: url('../fonts/droidsansmono-webfont-webfont.eot');
-    src: url('../fonts/droidsansmono-webfont-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/droidsansmono-webfont-webfont.woff2') format('woff2'),
-         url('../fonts/droidsansmono-webfont-webfont.woff') format('woff'),
-         url('../fonts/droidsansmono-webfont-webfont.ttf') format('truetype'),
-         url('../fonts/droidsansmono-webfont-webfont.svg#droid_sans_monoregular') format('svg');
+/*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
+@font-face {
+    font-family: 'Exo 2';
+    src: url('../fonts/Exo2-Bold-webfont.eot');
+    src: url('../fonts/Exo2-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Exo2-Bold-webfont.woff') format('woff'),
+         url('../fonts/Exo2-Bold-webfont.ttf') format('truetype'),
+         url('../fonts/Exo2-Bold-webfont.svg#exo_2bold') format('svg');
     font-weight: normal;
     font-style: normal;
 }
-
-*/
 @font-face {
     font-family: 'ubuntumedium';
     src: url('../fonts/ubuntu-m-webfont.eot');
@@ -29,19 +25,17 @@
     font-weight: normal;
     font-style: normal;
 }
-
-/*@font-face {
-    font-family: 'ubunturegular';
+@font-face {
+    font-family: 'ubuntu';
     src: url('../fonts/ubuntu-r-webfont.eot');
     src: url('../fonts/ubuntu-r-webfont.eot?#iefix') format('embedded-opentype'),
          url('../fonts/ubuntu-r-webfont.woff2') format('woff2'),
          url('../fonts/ubuntu-r-webfont.woff') format('woff'),
          url('../fonts/ubuntu-r-webfont.ttf') format('truetype'),
-         url('../fonts/ubuntu-r-webfont.svg#ubunturegular') format('svg');
+         url('../fonts/ubuntu-r-webfont.svg#ubuntumedium') format('svg');
     font-weight: normal;
     font-style: normal;
-}*/
-
+}
 /*
  CSS Reset by Eric Meyer - Released under Public Domain
    http://meyerweb.com/eric/tools/css/reset/
@@ -72,26 +66,11 @@ p, blockquote, pre, ul, ol, dl {
   padding: 0.25em 0;
   line-height: 1.5em;
 }
-
-ul {
-  margin: 0 1em;
-}
-
-ul li {
-  margin: 0.5em;
-}
-
-ol {
-  list-style-position: inside;
-}
-
-dl dt  {
-  font-weight: bold;
-}
-
-dl dd {
-  margin-left: 1em;
-}
+ul {margin: 0 1em;}
+ul li {margin: 0.5em;}
+ol {list-style-position: inside;}
+dl dt  {font-weight: bold;}
+dl dd {margin-left: 1em;}
 
 /*Pure css hack pour restreindre la largeur des menus*/
 .custom-restricted-width {
@@ -101,20 +80,12 @@ dl dd {
   /* width: 10em; */
 }
 
-html {
-  height: 100%;
-}
-
-.busy {
-  cursor: wait !important;
-}
-
+html {height: 100%;}
 body {
   height:100%;
-  font-family: Ubuntu,'Segoe UI',Verdana,Helvetica,sans-serif;
+  font-family: Verdana,Helvetica,sans-serif;
   color: #444;
 }
-
 header {
   position: relative;
   height: 6%;
@@ -129,13 +100,11 @@ header > nav {
 }
 
 .global {
-  /*background-color: #fff8dc;*/
   padding: 2em 1em;
   width: auto;
   /*hauteur minimale de page*/
   min-height: 80%;
 }
-
 footer {
   position: relative;
   background-position: bottom;
@@ -143,14 +112,12 @@ footer {
   width: 100%;
   z-index: 2000;
 }
-
 footer > address {
   position: absolute;
   top:0;
   font-style: normal;
   font-size: smaller;
 }
-
 /*Emplacement du logo*/
 footer a.logo {
   position: relative;
@@ -159,14 +126,10 @@ footer a.logo {
   border: none;
   opacity: 0.8;
 }
-
-footer a:hover.logo {
-  opacity: 1;
-}
+footer a:hover.logo {opacity: 1;}
 
 /*Force la taille du logo en bas de page*/
 footer a.logo img {
-  /*width: 64px;*/
   height: 64px;
   border-width: 5px;
   border-style: solid;
@@ -175,15 +138,13 @@ footer a.logo img {
 }
 
 h1 {
-  font-family:'Exo 2',Arial,sans-serif;
-  font-size: 2.3em;
+  font-family:'Exo 2','Arial Black',sans-serif;
+  font-size: 2.2em;
   padding: 0;
-  font-weight: 800;
   text-align: center;
   text-transform: uppercase;
-  line-height: 1em;
+  line-height: 1.25em;
   color: #ce8600;
-  /*text-shadow: 1px 1px 1px rgba(256, 256, 256, 1);*/
 }
 
 h1 > span {
@@ -198,38 +159,21 @@ h2, h3, h4, h5, h6, fieldset > legend {
   line-height: 1em;
   border-radius: 8px
 }
-
 h2, h3, h4, fieldset > legend {
-  font-family: 'Catamaran',sans-serif;
+  font-family: ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;
   font-weight: bold;
   border-bottom-width: 4px;
   border-style: solid;
 }
-
-h2 {
-  font-size: 1.75em;
-}
-
-h3 {
-  font-size: 1.5em;
-}
-
-h4 {
-  font-size: 1.25em;
-}
-
-h5 {
-  font-size: 1.15em;
-}
-
-h6 {
-  font-size: 1em;
-}
+h2 {font-size: 1.75em;}
+h3 {font-size: 1.5em;}
+h4 {font-size: 1.25em;}
+h5 {font-size: 1.15em;}
+h6 {font-size: 1em;}
 
 table tr > th {
   padding: 0 1em;
 }
-
 table.vertical-header th, table.vertical-header td {
   text-align: left;
   padding: 0.5em 0 0 1em;
@@ -245,11 +189,9 @@ table.vertical-header th, table.vertical-header td {
   text-align: center;
   border-radius: 10px;
 }
-
 .thumbnails > a img{
   opacity: 0.8;
 }
-
 .thumbnails > a:hover img{
   opacity: 1;
 }
@@ -266,34 +208,18 @@ table.vertical-header th, table.vertical-header td {
   -moz-box-shadow: inset 0px 0px 8px 3px rgba(0,0,0,0.8);
   box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.8);
 }
+.busy {cursor: wait !important;}
 /*Espacement en bas de page avant le footer*/
-.last-block {
-  height: 2em;
-}
+.last-block {height: 2em;}
 /*Couleur du texte des erreurs*/
-.error {
-  color: red;
-}
+.error {color: red;}
+span.error {display: block;}
+.success {color: green;}
+fieldset legend {font-size: 1.3em;}
+input[type=submit] {margin: 1em 0;}
 
-span.error {
-  display: block;
-}
-
-.success {
-  color: green;
-}
-
-fieldset legend {
-  font-size: 1.3em;
-}
-
-input[type=submit] {
-  margin: 1em 0;
-}
-
-.inline {
-  display: inline;
-}
+.inline {display: inline;}
+/*label.inline {padding-right: 0.5em;}*/
 
 .button-success,
 .button-error,
@@ -303,43 +229,19 @@ input[type=submit] {
   border-radius: 4px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
-
-.button-success {
-  background: rgb(28, 184, 65); /* this is a green */
-}
-
-.button-error {
-  background: rgb(202, 60, 60); /* this is a maroon */
-}
-
-.button-warning {
-  background: rgb(223, 117, 20); /* this is an orange */
-}
-
-.button-secondary {
-  background: rgb(66, 184, 221); /* this is a light blue */
-}
-
-.button-large {
-  font-size: 110%;
-  background-color: orange;
-}
-
-.button-xlarge {
-  font-size: 125%;
-  background-color: orange;
-}
-
+.button-success {background: rgb(28, 184, 65);} /* this is a green */
+.button-error {background: rgb(202, 60, 60);} /* this is a maroon */
+.button-warning {background: rgb(223, 117, 20);} /* this is an orange */
+.button-secondary {background: rgb(66, 184, 221);} /* this is a light blue */
+.button-large {font-size: 110%;background-color: orange;}
+.button-xlarge {font-size: 125%;background-color: orange;}
 .bt-close {
   position:relative;
   top:0;
   right: 0;
   padding: 0 1em;
 }
-
-.bordered {
-  border : 1px solid red;
-}
+.bordered {border : 1px solid red;}
 
 /*Centrage d'un bloc*/
 .centered {
@@ -347,10 +249,7 @@ input[type=submit] {
   width: 50%;
   margin: 0 auto;
 }
-
-.indented {
-  padding: 0 1em;
-}
+.indented {padding: 0 1em;}
 
 .framed {
   width: 85%;
@@ -358,39 +257,22 @@ input[type=submit] {
   border-radius: 4px;
   padding: 1em;
 }
-
 .note {
   margin: 0 0 1em 0;
   font-size: smaller;
 }
+.warning {background-color: lightpink;}
 
-.warning {
-  background-color: lightpink;
-}
-
-a:link,a:visited, a:active {
+a:link,a:visited, a:hover, a:active {
   text-decoration: none;
   border-bottom-style: solid;
   border-bottom-width: 2px;
+  line-height: 1.2em;
 }
-a:hover {
-  text-decoration: none;
-  border-bottom-style: solid;
-  border-bottom-width:2px;
-}
+a.img-link {border: none;}
 
-a.img-link {
-  border: none;
-}
-
-select {
-  font-size: small;
-}
-
-.pure-menu-list a {
-  border: none;
-}
-
+select {font-size: small;}
+.pure-menu-list a {border: none;}
 .pure-menu {
   position: fixed;
   top: 0;
@@ -399,11 +281,9 @@ select {
   z-index: 1000;
   border-radius: 0 0 0 10px ;
 }
-
 #menu {
   position: fixed;
   display: none;
-  /*top: 5%;*/
   top:0;
   right:0;
   height: auto;
@@ -420,12 +300,11 @@ select {
   text-align: center;
   padding: 0.15em 0.5em;
   cursor: pointer;
+  color:#444
 }
-
 #menu ul {
   list-style-type: none;font-size: 2em;margin:0;padding:0
 }
-
 #menu ul li {
   padding:0;
   color: #fff8dc;
@@ -435,7 +314,6 @@ select {
   text-decoration: none;
   border: none;
 }
-
 #help-panel, #info-panel, #login-panel {
   position: absolute;
   top:6%;
@@ -443,63 +321,38 @@ select {
   display: none;
   border: 1px dotted gray;
   /*padding: 1em;*/
-  font-family: Verdana, sans-serif;
   line-height: 1.5em;
   height:auto;
   max-width: 100%;
   z-index:3001;
 }
+#login-panel {width: 20em;}
 
-#login-panel {
-  width: 20em;
-}
-
-#help-panel ul {
-  list-style-type: none;
-}
+#help-panel ul {list-style-type: none;}
 
 .colorHelp {
   text-align: center;
   font-size: larger;
   font-weight: bold
 }
+.panel, #xlogin-panel {padding: 1em;}
+.ui-dialog-title {font-family: ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;}
+.ui-widget,#datepicker,.week-date {font-family: ubuntu,Verdana,sans-serif}
+.ui-datepicker-title {color: #444;}
 
-.panel, #xlogin-panel {
-  padding: 1em;
-}
-
-.ui-widget { font-family: Ubuntu,'Segoe UI',Verdana,Helvetica,sans-serif;}
-
-.ui-datepicker-title {
-  color: #444;
-}
-
-.ui-spinner-input {
-  font-size: x-small;
-}
-
-.ui-button-text {
-  /*background: lightgray;*/
-}
-
-#bookdate {
-  display: inline-block;
-}
-
+#bookdate {display: inline-block;width: 6em;padding:0 0.25em;text-align: center}
 .closing-bar {
   position: relative;
   width: 100%;
   height: 2em;
   text-align: right;
 }
-
 .closing-bar + p {
   position: relative;
   top: -1.5em;
   font-size: smaller;
   font-weight: bold;
 }
-
 .closing-bar a.close-link {
   font-size: 1.6em;
   padding: 0 1em;
@@ -507,49 +360,33 @@ select {
   text-decoration: none;
   border: none;
 }
-
 .closeable{}
 
 form input[type='text'], input[type='password'], form input[type='button'], form input[type='submit']{
   display: block;
   /*margin: 0 0 1em 0;*/
 }
-
 form input[type='button'], form input[type='submit'] {
   margin-top: 1em
 }
-
+form input + span {display: inline;}
 form label {
   display: inline-block;
   margin-top: 0.5em;
   font-family: 'ubuntumedium','Segoe UI',Verdana,sans-serif;
-  /*font-weight: 600;*/
+}
+form legend + label {
+  display: block;
 }
 
 #booking label {
   width: 3.4em;
 }
-
 #booking input[type='radio'] + label {
   padding: 0 0.5em;
 }
-
-table.mobile {
-  display: table;
-  width: 100%;
-}
-
-.pending {
-  color: red;
-}
-
-.confirmed {
-  color: green;
-}
-
-form input + span {
-  display: inline;
-}
+.pending {color: red;}
+.confirmed {color: green;}
 
 .pure-menu-heading {
   height: 3em;
@@ -561,23 +398,15 @@ form input + span {
 }
 .pure-menu-link:link, .pure-menu-link:visited, .pure-menu-link:active {
   color:#fff8dc;
-
 }
-.pure-menu-link:hover {
-}
-
-.pure-table-horizontal {
-  border: none;
-}
+.pure-menu-link:hover {}
+.pure-table-horizontal {border: none;}
 
 .pure-table-horizontal th, .pure-table-horizontal td {
   text-align: left;
   border: none;
 }
-
-.pure-table-horizontal th {
-  font-weight: bold;
-}
+.pure-table-horizontal th {font-weight: bold;}
 
 ul.disc{
   list-style: disc;
@@ -596,4 +425,12 @@ ul.simple {
   line-height: 0;
   font-family: 'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
   font-stretch: condensed;
+}
+
+.condensed {
+  font-size: smaller;
+}
+table.mobile {
+  display: table;
+  width: 100%;
 }
