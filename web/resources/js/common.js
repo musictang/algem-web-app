@@ -1,7 +1,7 @@
 /*
- * @(#)common.js	1.1.0 29/01/16
+ * @(#)common.js	1.2.1 04/05/16
  *
- * Copyright (c) 2013 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -30,12 +30,12 @@ function setCommonEvents() {
   var delay = 500;
   jQuery.ajaxSetup({
     beforeSend: function() {
-       $('body').addClass('busy');
+      $("#busy").show();
     },
     complete: function() {
-       $('body').removeClass('busy');
+      $("#busy").hide();
     }
-});
+  });
 
   $('#bars').click(function () {
     $('#menu').show(delay);

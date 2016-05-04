@@ -63,12 +63,14 @@
     </div>
     <div th:fragment="color-help">
       <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
-      <h2 th:text="#{help.color.label}">Couleurs</h2>
+      <div style="padding: 0 1em">
+        <h2 th:text="#{help.color.label}">Couleurs</h2>
         <ul style="margin-bottom: 1em">
           <li th:each="def:${colorDefs}"  >
             <span class="color-square" th:title="#{${def.value.key}}" th:style="${'background-color:'+def.value.value}"></span>[[#{${def.value.key}}]]
           </li>
         </ul>
+      </div>
     </div>
     <div th:fragment="info">
       <div class="indented">

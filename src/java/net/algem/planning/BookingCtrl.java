@@ -90,7 +90,7 @@ public class BookingCtrl
 
   @RequestMapping(method = RequestMethod.GET, value = "/xgroups")
   public @ResponseBody
-  List<Group> getGroups(Principal p) {
+    List<Group> getGroups(Principal p) {
     List<Group> groups = service.getGroups(p.getName());
     return groups;
   }

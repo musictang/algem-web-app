@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) weekly.html Algem Web App 1.2.0 14/04/16
+ * @(#) weekly.html Algem Web App 1.2.1 04/05/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -83,12 +83,14 @@
         </div>
         <div th:each="p : ${entry.value}" class="labels"
              th:if="${p.label} != null"
-             th:with="pos=${p.minutes - timeOffset}"
+             th:with="pos=${p.minutes - timeOffset},pLabel=${#strings.substringBefore(p.label,'<br />')},pTime=${#strings.substringAfter(p.label,'<br />')}"
              th:style="'top:'+${pos}+'px;color:'+${p.labelColor}">
-          <span class="course_label" th:utext="${#strings.replace(p.label, '<br />', ' ')}"></span>
-          <span th:text="|Salle ${p.detail['room']}|"></span>
-          <span th:if="${p.length >= 45}" th:text="${p.detail['person'] ?: ''}"></span>
+          <span th:text="${pLabel}" th:class="${p.length >= 45 || #strings.length(pLabel) <= 10 ? 'course_label wrapped' : 'course_label ellipsed'}"></span>
+          <span th:text="${pTime}" ></span>
+          <span th:with="rName=${'Sle ' + p.detail['room']}" th:class="${p.length >= 60 || #strings.length(rName) <= 10 ? 'wrapped' : 'ellipsed'}" th:text="${rName}"></span>
+          <span th:class="${p.length >= 45 ? 'wrapped' : 'ellipsed'}" th:if="${p.length >= 45}" th:text="${p.detail['person'] ?: ''}"></span>
         </div>
+        <!--${#strings.replace(p.label, '<br />', ' ')}-->
         <div th:each="p : ${entry.value}" th:remove="tag">
           <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
                th:with="pos=${r.minutes - timeOffset},h=${r.length}"

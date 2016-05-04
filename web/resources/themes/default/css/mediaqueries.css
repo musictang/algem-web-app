@@ -1,5 +1,5 @@
 /*
- * @(#) mediaqueries.css Algem Web App 1.2.0 11/04/2016
+ * @(#) mediaqueries.css Algem Web App 1.2.1 04/05/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -35,18 +35,14 @@
 @media only screen 
 and (min-width : 1600px) 
 {
-  .schedule_col {
-    width: 120px;
-  }
+  .schedule_col {width: 120px;}
 }
 @media only screen 
 and (max-device-width : 1024px) 
 {
   header {height: 7%}
   #grid, #canvas{top: 7%}
-  .schedule_col {
-    width: 80px;
-  }
+  .schedule_col {width: 80px;}
 }
 @media only screen 
 and (max-width : 1280px) 
@@ -59,24 +55,17 @@ and (max-height : 800px)
 and (max-width : 600px) 
 and (orientation : portrait) {
   header {height: 65px}
-  header > nav {
-    padding:0.5em 0;
-  }
+  header > nav {padding:0.5em 0;}
   #grid, #canvas{top: 65px}
   h1 {font-size: 1.6em;text-align: left;line-height: 1em}
-  .schedule_col {
-    width: 45px;
-  }
+  .schedule_col {width: 48px;}
+  .labels {font-size: 0.65em;}
   table.mobile {
     overflow-x: auto;
     display: block;
   }
-  .centered {
-    width: 100%;
-  }
-  #canvas, .title_col {
-    font-family: 'PT Sans Narrow';
-  }
+  .centered {width: 100%;}
+  #canvas, .title_col {font-family: 'PT Sans Narrow';}
   .closing-bar a.close-link {
     font-size: 1.45em;
     padding: 0 0.5em;
@@ -94,28 +83,21 @@ and (max-width : 320px)
 and (orientation : portrait) {
   header {height: 60px}
   #grid, #canvas{top: 60px}
-  header > nav {
-    padding:0.5em 0;
-  }
-  body {
-    font-size: 0.9em;
-  }
+  header > nav {padding:0.5em 0;}
+  body {font-size: 0.9em;}
   h1 {font-size: 1.6em;text-align: left;line-height: 1em}
   h2 {font-size: 1.35em;}
   h3 {font-size: 1.3em;}
   h4 {font-size: 1.2em;}
   h5 {font-size: 1.1em;}
   h6 {font-size: 1em;}
-  .schedule_col {
-    width: 40px;
-  }
+  .schedule_col {width: 45px;}
   .schedule {
     font-size: xx-small;
     line-height: 1em;
   }
-  .closing-bar a.close-link {
-    font-size: 1.4em;
-  }
+  .labels {font-size: 0.65em;}
+  .closing-bar a.close-link {font-size: 1.4em;}
   #info-bar .close-link > .fa-close,
   #help-panel .close-link > .fa-close,
   #login-panel .close-link > .fa-close {
@@ -127,9 +109,7 @@ and (max-width : 800px)
 and (orientation : landscape) {
   header {height: 60px}
   #grid, #canvas{top: 60px}
-   .schedule_col {
-    width: 65px;
-  }
+   .schedule_col {width: 65px;}
   h1 {font-size: 1.8em;text-align: left;line-height: 1em}
   h2 {font-size: 1.5em;}
   h3 {font-size: 1.4em;}
@@ -140,18 +120,14 @@ and (orientation : landscape) {
     overflow-x: auto;
     display: block;
   }
-  .centered {
-    width: 100%;
-  }
+  .centered {width: 100%;}
 }
 @media only screen 
 and (max-width : 480px) 
 and (orientation : landscape) {
   header {height: 60px}
   #grid, #canvas{top: 60px}
-   .schedule_col {
-    width: 60px;
-  }
+   .schedule_col {width: 60px;}
   h1 {font-size: 1.8em;text-align: left;line-height: 1em}
   h2 {font-size: 1.5em;}
   h3 {font-size: 1.4em;}
@@ -162,7 +138,5 @@ and (orientation : landscape) {
     overflow-x: auto;
     display: block;
   }
-  .centered {
-    width: 100%;
-  }
+  .centered {width: 100%;}
 }

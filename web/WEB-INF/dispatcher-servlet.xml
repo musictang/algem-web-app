@@ -44,7 +44,7 @@
         p:suffix=".html"
         p:templateMode="HTML"
         p:characterEncoding="UTF-8"
-        p:cacheable="true"
+        p:cacheable="false"
   />
 
   <bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
