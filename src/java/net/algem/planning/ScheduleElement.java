@@ -1,7 +1,7 @@
 /*
- * @(#)ScheduleElement.java	1.2.0 30/03/16
+ * @(#)ScheduleElement.java	1.2.1 06/05/16
  *
- * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -30,7 +30,7 @@ import net.algem.util.NamedModel;
  * This class is used in calendar to display a time slot with label, position and time.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.2.0
+ * @version 1.2.1
  * @since 1.0.0 11/02/13
  */
 public class ScheduleElement
@@ -43,6 +43,7 @@ public class ScheduleElement
   private boolean collective;
   private Collection<ScheduleRange> ranges;
   private String label;
+  private String timeLabel;
   private String color;
   private String labelColor;
   private int code;
@@ -93,6 +94,14 @@ public class ScheduleElement
 
   public void setLabel(String label) {
     this.label = label;
+  }
+
+  public String getTimeLabel() {
+    return timeLabel;
+  }
+
+  public void setTimeLabel(String timeLabel) {
+    this.timeLabel = timeLabel;
   }
 
   @Override

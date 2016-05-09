@@ -1,3 +1,24 @@
+/*
+ * @(#)planning.js	1.2.1 08/05/16
+ *
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
@@ -5,7 +26,7 @@
  * @version 1.2.0
  * @returns {void}
  */
-
+var isMobileAndWebkit = isMobile() && 'WebkitAppearance' in document.documentElement.style;
 /**
  * Group constructor.
  * @param {Number} id group Id
@@ -29,6 +50,8 @@ function logVars() {
 
 function setUI() {
   setWidth();
+  setScroll();
+  setResize();
   setHoverStyle();
   setDialog();
   setBookingDialog();
@@ -41,7 +64,7 @@ function setViewPortSize(timeOffset) {
 
 /**
  * Init navigation elements.
- * @commonParams {Object} global parameters
+ * @param {Object} commonParams global parameters
  * @returns {undefined}
  */
 function setDatePicker(commonParams) {
@@ -88,11 +111,10 @@ function setDatePicker(commonParams) {
 function setWidth() {
   var cols = $('.schedule_col').length;
   var canvas = $("#canvas");
-  var emSize = parseFloat($(canvas).css("font-size"));
-  var leftMarginGrid = (2.2 * emSize);
   var windowWidth = $(window).width();
+  var leftMarginGrid = getMarginGrid();
   var actualWidth = parseInt($('.schedule_col').css('width'));
-  var canvasWidth = ((cols + 1) * actualWidth) + leftMarginGrid;
+  var canvasWidth = leftMarginGrid + ((cols + 1) * actualWidth);
   if (canvasWidth > windowWidth) {
     var gridWidth = canvasWidth + leftMarginGrid;
     $("#grid").css({
@@ -102,6 +124,46 @@ function setWidth() {
       width: canvasWidth + "px"
     });
   }
+}
+
+/**
+ * Manage scroll event.
+ * @returns {undefined}
+ */
+function setScroll() {
+  $(window).scroll(function () {
+    setTopBar();
+  });
+}
+
+function setTopBar() {
+  var headerHeight = parseInt($("header").css('height'));
+  var titleBar = $(".title_col");
+  var emSize = parseFloat($(titleBar).css("font-size")) * 1.5;
+  //console.log(emSize);
+  var offset = $(window).scrollTop();
+  //console.log(offset);
+  if (offset > headerHeight) {
+      $(titleBar).css('transform', 'translateY('+(offset+emSize-headerHeight)+'px)');
+  } else {
+      $(titleBar).css('transform', 'translateY('+0+'px)');
+  }
+}
+
+function setResize() {
+  $(window).resize(function() {
+    setWidth();
+    setTopBar();
+  });
+}
+
+/**
+ * Gets the left margin size.
+ * @returns {getMarginGrid.emSize|Number}
+ */
+function getMarginGrid() {
+  var emSize = parseFloat($(canvas).css("font-size"));
+  return 2.2 * emSize;
 }
 
 /**

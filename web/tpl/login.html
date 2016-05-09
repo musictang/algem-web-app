@@ -26,7 +26,7 @@
     <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
     <div id="menu">
       <ul>
-        <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
+        <li><a href="#" class="close-link" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
         <!--<li><a th:href="@{daily.html(d=${now},e=${estab.id})}" th:title="planning"><i class="fa fa-user"></i></a></li>-->
       </ul>
@@ -59,4 +59,9 @@
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>
   </body>
+  <script type="text/javascript">
+    $(function () {
+      setCommonEvents();
+    });
+  </script>
 </html>

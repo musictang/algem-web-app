@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.2.1 04/05/16
+ * @(#) daily.html Algem Web App 1.2.1 06/05/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -111,42 +111,44 @@
         <td></td>
       </tr>
     </table>
+<!--    <div id="title_col"><p th:each="entry : ${planning}" th:text="${entry.value[0].detail['room']}" th:title="${entry.value[0].detail['room']}"></p><p th:each="entry: ${freeplace}" th:text="${entry.key.name}" th:title="${entry.key.name}"></p></div>-->
     <section id="canvas" th:with="totalTime=${1440 - timeOffset}">
-      <div th:each="entry,iterStat : ${planning}" class="title_col2" th:text="${entry.value[0].detail['room']}" th:style="'left:'+${iterStat.index*100}+'px'" ></div>
       <div th:id="${entry.key}" th:each="entry : ${planning}" class="schedule_col">
         <!--Column header : room names-->
-        <!--<p class="title_col" th:text="${entry.value[0].detail['room']}"></p>-->
+        <p class="title_col" th:text="${entry.value[0].detail['room']}"></p>
         <!--Schedules-->
-        <div th:each="p : ${entry.value}" th:class="'schedule' + ${p.label == null ? ' closed' :''}"
-             th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length) * 100.0 / totalTime}"
-             th:style="'top:'+${pos}+'%;height:'+${h}+'%;background-color:'+${p.htmlColor}"
+        <div th:each="p : ${entry.value}"
+             th:class="'schedule' + ${p.label == null ? ' closed' :''}"
+             th:with="pos=${p.minutes - timeOffset},h=${p.length}"
+             th:style="'top:'+${pos == 0 ? 1 : pos}+'px;height:'+${p.label == null ? h-1 : h}+'px;background-color:'+${p.htmlColor}"
              ></div>
         <!--Labels-->
         <div th:each="p : ${entry.value}" class="labels"
              th:if="${p.label} != null"
-             th:with="pos=${(p.minutes - timeOffset) * 100.0 / totalTime},h=${(p.length - 1) * 100.0 / totalTime},wl=${p.type == T(net.algem.planning.Schedule).COURSE || p.type == T(net.algem.planning.Schedule).WORKSHOP || p.type == T(net.algem.planning.Schedule).TRAINING}"
-             th:style="'color:'+${p.labelColor}+';top:'+${pos}+'%'">
-          <span th:utext="${p.label}" th:class="${p.length >= 45 ? 'wrapped' : 'ellipsed'}"></span>
+             th:with="pos=${p.minutes - timeOffset},h=${p.length - 1},wl=${p.type == T(net.algem.planning.Schedule).COURSE || p.type == T(net.algem.planning.Schedule).WORKSHOP || p.type == T(net.algem.planning.Schedule).TRAINING}"
+             th:style="'color:'+${p.labelColor}+';top:'+${pos}+'px'">
+          <span th:utext="|${p.label}<br />${p.timeLabel}|" th:class="${p.length >= 45 ? 'wrapped' : 'ellipsed'}"></span>
           <span th:class="${p.length >= 45 ? 'wrapped' : 'ellipsed'}" th:if="${p.length >= 30}" sec:authorize="${hasAnyRole('1','4')}"
                 th:text="${p.detail['person']}"></span>
           <span th:class="${p.length >= 45 ? 'wrapped' : 'ellipsed'}" sec:authorize="${hasAnyRole('2','3','11')}"
                 th:if="${wl && p.length >= 30}" th:text="${p.detail['person']}"
                 ></span>
         </div>
-        <!--Range : external div is only a loop container -->
+        <!--Range : external div is only a loop container-->
         <div th:each="p : ${entry.value}" th:remove="tag">
           <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
-               th:with="pos=${(r.minutes - timeOffset) * 100.0 / totalTime},h=${(r.length) * 100.0 / totalTime}"
-               class="schedule range" th:style="'top:'+${pos}+'%;height:'+${h}+'%'"></div>
+               th:with="pos=${r.minutes - timeOffset},h=${r.length}"
+               class="schedule range" th:style="'top:'+${pos}+'px;height:'+${h}+'px'"></div>
         </div>
       </div>
       <!--Free rooms-->
       <div th:id="${entry.key.id}" th:each="entry: ${freeplace}" class="schedule_col">
           <p class="title_col" th:text="${entry.key.name}" ></p>
             <div th:each="p : ${entry.value}" class="schedule closed"
-                 th:with="pos=${(p.minutes - timeOffset) * 100F / totalTime},h=${(p.length) * 100F / totalTime}"
-                 th:style="'top:'+${pos}+'%;height:'+${h}+'%;background-color:'+${p.htmlColor}"></div>
-        </div>
+                 th:with="pos=${p.minutes - timeOffset},h=${p.length}"
+              th:style="'top:'+${pos == 0 ? 1 : pos}+'px;height:'+${h-1}+'px;background-color:'+${p.htmlColor}">
+            </div>
+      </div>
     </section>
     <aside id="help-panel" class="closeable" th:include="fragments/layout :: help"></aside>
     <aside id="info-panel" class="closeable">

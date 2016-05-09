@@ -446,3 +446,9 @@ table.mobile {
   display: table;
   width: 100%;
 }
+
+.androidFix {
+    overflow:hidden !important;
+    overflow-y:hidden !important;
+    overflow-x:hidden !important;
+}

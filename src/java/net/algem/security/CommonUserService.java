@@ -141,21 +141,11 @@ public class CommonUserService
 
   @Override
   public List<Group> getGroups(String login) {
-    try {
-      Thread.sleep(2000);
-    } catch (InterruptedException ex) {
-      Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, null, ex);
-    }
     return dao.getGroups(login);
   }
 
   @Override
   public boolean hasPass(String login) {
-     try {
-      Thread.sleep(2000);
-    } catch (InterruptedException ex) {
-      Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, null, ex);
-    }
     return dao.findPass(login) > 0;
   }
 

@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningServiceImpl.java	1.2.0 18/04/16
+ * @(#)PlanningServiceImpl.java	1.2.1 06/05/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -43,7 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Service class for schedule operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.2.0
+ * @version 1.2.1
  * @since 1.0.0 11/02/13
  */
 @Service
@@ -133,6 +133,7 @@ public class PlanningServiceImpl
     int place = -1;
     for (ScheduleElement d : scheduleDao.find(date, estab)) {
       d.setLabel(getHtmlTitle(d));
+      d.setTimeLabel(d.getStart() + "-" + d.getEnd());
       d.setColor(ScheduleColorizer.colorToHex(COLORIZER.getColor(d)));
       d.setLabelColor(ScheduleColorizer.colorToHex(COLORIZER.getTextColor(d)));
       if (d.getPlace() != place) {
@@ -166,6 +167,7 @@ public class PlanningServiceImpl
     List<ScheduleElement> schedules = scheduleDao.findWeekIdper(start, end, idper);
     for (ScheduleElement d : schedules) {
       d.setLabel(getHtmlTitle(d));
+      d.setTimeLabel(d.getStart() + "-" + d.getEnd());
       d.setColor(ScheduleColorizer.colorToHex(COLORIZER.getColor(d)));
       d.setLabelColor(ScheduleColorizer.colorToHex(COLORIZER.getTextColor(d)));
       cal.setTime(d.getDate());
@@ -360,7 +362,7 @@ public class PlanningServiceImpl
       default:
         t = "";
     }
-    return t.toUpperCase() + "<br />" + e.getStart() + "-" + e.getEnd();
+    return t.toUpperCase();// + "<br />" + e.getStart() + "-" + e.getEnd();
   }
 
 }
