@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.2.1 06/05/16
+ * @(#) daily.html Algem Web App 1.2.1 10/05/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -22,7 +22,8 @@
   <head>
     <title th:text="${@organization['name.label']}"></title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- !important : minimum-scale=1.0 prevents zooming on orientation change-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0" />
     <link th:replace="fragments/styles :: common" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/planning.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
@@ -95,7 +96,7 @@
           <option th:each="estab :${estabList}" th:value="${estab.id}" th:text="${estab.name}"></option>
         </select>
         <div id="date-panel">
-        <label id="dow" for="datepicker" th:text="${dayName}"></label><a href="" th:title="#{prev.day.label}" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;<input type="text" id="datepicker" style="font-size:small" tabindex="3" readonly="readonly"/>&nbsp;<a href="" th:title="#{next.day.label}" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
+          <label id="dow" for="datepicker" th:text="${dayName}"></label><a href="" th:title="#{prev.day.label}" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;<input type="text" id="datepicker" tabindex="3" readonly="readonly"/>&nbsp;<a href="" th:title="#{next.day.label}" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
         </div>
       </nav>
     </header>

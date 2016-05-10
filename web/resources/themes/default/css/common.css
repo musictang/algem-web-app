@@ -1,7 +1,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.2.0 19/04/16
+    Last: 1.2.1 10/05/16
 */
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
 @font-face {
@@ -157,7 +157,7 @@ h2, h3, h4, h5, h6, fieldset > legend {
   margin: 0.5em 0;
   padding: 0.20em 0;
   line-height: 1em;
-  border-radius: 8px
+  /*border-radius: 8px*/
 }
 h2, h3, h4, fieldset > legend {
   font-family: ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;
@@ -445,10 +445,4 @@ ul.simple {
 table.mobile {
   display: table;
   width: 100%;
-}
-
-.androidFix {
-    overflow:hidden !important;
-    overflow-y:hidden !important;
-    overflow-x:hidden !important;
 }

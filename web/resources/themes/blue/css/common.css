@@ -1,7 +1,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.2.0 16/04/16
+    Last: 1.2.0 19/04/16
 */
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
 @font-face {
@@ -157,7 +157,7 @@ h2, h3, h4, h5, h6, fieldset > legend {
   margin: 0.5em 0;
   padding: 0.20em 0;
   line-height: 1em;
-  border-radius: 8px
+  /*border-radius: 8px*/
 }
 h2, h3, h4, fieldset > legend {
   font-family: ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;
@@ -208,7 +208,7 @@ table.vertical-header th, table.vertical-header td {
   -moz-box-shadow: inset 0px 0px 8px 3px rgba(0,0,0,0.8);
   box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.8);
 }
-.busy {cursor: wait !important;}
+#busy {display:none;position: fixed;top:50%;left:50%;margin-left: -32px;margin-top: -32px;z-index: 20000;width:64px;height:64px;background:url(../img/ajax-loader.gif) no-repeat center transparent;}
 /*Espacement en bas de page avant le footer*/
 .last-block {height: 2em;}
 /*Couleur du texte des erreurs*/
@@ -219,6 +219,7 @@ fieldset legend {font-size: 1.3em;}
 input[type=submit] {margin: 1em 0;}
 
 .inline {display: inline;}
+/*label.inline {padding-right: 0.5em;}*/
 
 .button-success,
 .button-error,
@@ -429,6 +430,18 @@ ul.simple {
 .condensed {
   font-size: smaller;
 }
+
+.ellipsed {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.wrapped {
+  display: block;
+}
+
 table.mobile {
   display: table;
   width: 100%;

@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.2.1 08/05/16
+ * @(#)planning.js	1.2.1 09/05/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -111,19 +111,18 @@ function setDatePicker(commonParams) {
 function setWidth() {
   var cols = $('.schedule_col').length;
   var canvas = $("#canvas");
-  var windowWidth = $(window).width();
-  var leftMarginGrid = getMarginGrid();
-  var actualWidth = parseInt($('.schedule_col').css('width'));
-  var canvasWidth = leftMarginGrid + ((cols + 1) * actualWidth);
-  if (canvasWidth > windowWidth) {
-    var gridWidth = canvasWidth + leftMarginGrid;
-    $("#grid").css({
-      width: gridWidth + "px"
-    });
-    $(canvas).css({
-      width: canvasWidth + "px"
-    });
+  var ww = $(window).width();
+  var leftMargin = getMarginGrid();
+  var actualColWidth = parseInt($('.schedule_col').css('width'));
+  var cw = leftMargin + ((cols + 1) * actualColWidth);
+  //console.log("canvas :"+ cw+" window : "+ww)
+  var gridWidth = leftMargin + cw;
+  if (cw > ww) {
+    $("#grid").css({width: gridWidth + "px"});
+  } else {
+    $("#grid").css({width: "100%"});
   }
+  $(canvas).css({width: cw + "px"});
 }
 
 /**

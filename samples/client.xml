@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+  <!--===============================-->
+  <!--CLIENT PROPERTIES CONFIGURATION-->
+  <!--===============================-->
+  <util:map id="organization" key-type="java.lang.String" >
+    <!--NAME VALUE IN UPPERCASE PREFERABLY-->
+    <entry key="name.label" value="MON ORGANISATION" />
+    <entry key="email.label" value="info@domain.tld" />
+    <entry key="address.label" value="1 rue Sans Issue 75000 PARIS" />
+    <!--GOOGLE MAP ADDRESS : ALWAYS PRESENT ! (if none, set value to "")-->
+    <entry key="address.map" value="" />
+    <entry key="website.label" value="http://www.domain.tld" />
+    <entry key="facebook.label" value="https://fr-fr.facebook.com/myaddress" />
+    <entry key="twitter.label" value="https://twitter.com/myaddress" />
+  </util:map>
+
+  <util:map id="hotline" key-type="java.lang.String" >
+    <!--FIRST ENTRY : MANDATORY-->
+    <entry key="Paris">
+      <util:list>
+        <!--PHONE NUMBER-->
+        <value>01&#160;40&#160;84&#160;80&#160;09</value>
+        <!--TIMES-->
+        <value>lundi,vendredi : 10h-22h</value>
+        <value>samedi : 11h-18h</value>
+        <value>lundi-vendredi : 9h-12h, 13h30-17h</value>
+      </util:list>
+    </entry>
+    <!--OTPIONAL ENTRIES-->
+    <!--<entry key="Lyon">
+      <util:list>
+        <value>01 40 80 04 05</value>
+        <value>lundi-jeudi : 8h-20h</value>
+        <value>vendredi : 12h30-19h</value>
+        <value>samedi : 14h00-19h</value>
+      </util:list>
+    </entry>-->
+  </util:map>
+
+<!-- this is a template message that we can pre-load with default state -->
+ <bean id="recoverMessage" class="org.springframework.mail.SimpleMailMessage">
+ <property name="from" value="accueil@domain.tld"/>
+ <property name="subject" value="Récupération mot de passe"/>
+</bean>
+ <bean id="bookingMessage" class="org.springframework.mail.SimpleMailMessage">
+ <property name="to" value="accueil@domain.tld"/>
+ <property name="subject" value="Réservation salle"/>
+</bean>
+<bean id="bookingCancelMessage" class="org.springframework.mail.SimpleMailMessage">
+ <property name="to" value="accueil@domain.tld"/>
+ <property name="subject" value="Annulation réservation"/>
+</bean>
+</beans>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.1.0 12/02/16
+ * @(#) login.html Algem Web App 1.2.1 09/05/16
  *
- * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -28,7 +28,6 @@
       <ul>
         <li><a href="#" class="close-link" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
-        <!--<li><a th:href="@{daily.html(d=${now},e=${estab.id})}" th:title="planning"><i class="fa fa-user"></i></a></li>-->
       </ul>
     </div>
     <header>
@@ -36,7 +35,6 @@
     </header>
     <div class="global">
       <div class="centered">
-        <!--<div id="login-panel" style="display: block;position: static;padding: 1em;">-->
         <div>
           <form id="login-form" th:action="@{j_spring_security_check}" method="post" >
             <fieldset>
@@ -59,9 +57,4 @@
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>
   </body>
-  <script type="text/javascript">
-    $(function () {
-      setCommonEvents();
-    });
-  </script>
 </html>

@@ -1,0 +1,10 @@
+1.2.1
+CORRECTIFS
+* Les petites erreurs de marge dans le planning ont été corrigées, notamment pour les plages représentant les horaires de fermeture.
+* Le redimensionnement de la fenêtre de planning et le changement d'orientation sont désormais pris en charge. Il fallait auparavant rafraîchir la page pour qu'elle soit affichée correctement.
+AMELIORATIONS
+Dans la vue par jour, le nom des salles en haut de colonne ne s'étend plus sur plusieurs lignes afin de ne pas empiéter sur les horaires de planning. Si le nom ne peut être affiché dans son intégralité, les derniers caractères visibles seront suivis d'un point.
+
+LES NOMS DES SALLES (vue par jour) et des JOURS DE LA SEMAINE (planning hebdo) RESTENT TOUJOURS VISIBLES, quelle que soit la position de l'ascenseur dans la page. 
+
+Dans le planning hebdo, si la durée de la séance est trop courte pour faire apparaître toutes les informations (nom du professeur par ex.), il suffit de la SURVOLER à la souris pour qu'elles soient visibles dans une bulle d'aide. Sur les appareils mobiles (smartphones, tablettes), l'intégralité des informations est visible en CLIQUANT sur la séance.

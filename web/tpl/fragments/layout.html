@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) layout.html Algem Web App 1.2.0 14/04/16
+ * @(#) layout.html Algem Web App 1.2.1 10/05/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -32,11 +32,11 @@
     <script type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/jquery-ui-1.11.4.min.js}"></script>
     <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/common.js}"></script>
-<!--    <script th:fragment="script-menu" type="text/javascript">
+    <script th:fragment="script-menu" type="text/javascript">
       $(function () {
         setCommonEvents();
       });
-    </script>-->
+    </script>
   </head>
   <body>
     <header th:fragment="header"></header>
@@ -48,11 +48,12 @@
         <p th:text="#{booking.help.info}"></p>
         <h5>Remarques</h5>
         <ol style="width:80%;font-size:smaller">
-          <li th:text="#{booking.help.note1}"></li>
+          <li th:text="|#{booking.help.note1} *|"></li>
           <li th:text="#{booking.help.note2(${bookingConf.minDelay},${bookingConf.maxDelay})}"></li>
           <li th:text="#{booking.help.note3}"></li>
           <li th:text="#{booking.help.note4}"></li>
         </ol>
+        <p style="font-size: smaller;font-style:italic">* Ouvrez le menu <i class="fa fa-bars"></i> et cliquez sur l'icone <i class="fa fa-user"></i> pour vous connecter.</p>
         <p><a th:href="@{/help.html}" th:text="#{help.page.label}">Help</a></p>
         <h2 th:text="#{help.color.label}">Couleurs</h2>
         <ul style="margin-bottom: 1em">

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) weekly.html Algem Web App 1.2.1 06/05/16
+ * @(#) weekly.html Algem Web App 1.2.1 10/05/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -22,7 +22,7 @@
   <head>
     <title th:text="${@organization['name.label']}"></title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
     <link th:replace="fragments/styles :: common" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/planning.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
@@ -38,6 +38,7 @@
       $(function () {
         setCommonEvents();
         setViewPortSize(h);
+        setScroll();
       });
     </script>
   </head>
@@ -91,7 +92,6 @@
           <span th:with="rName=${'Sle ' + p.detail['room']}" th:class="${p.length >= 60 || #strings.length(rName) <= 10 ? 'wrapped' : 'ellipsed'}" th:text="${rName}"></span>
           <span th:class="${p.length >= 45 ? 'wrapped' : 'ellipsed'}" th:if="${p.length >= 45}" th:text="${p.detail['person'] ?: ''}"></span>
         </div>
-        <!--${#strings.replace(p.label, '<br />', ' ')}-->
         <div th:each="p : ${entry.value}" th:remove="tag">
           <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
                th:with="pos=${r.minutes - timeOffset},h=${r.length}"
