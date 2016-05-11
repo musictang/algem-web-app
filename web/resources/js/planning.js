@@ -26,7 +26,7 @@
  * @version 1.2.0
  * @returns {void}
  */
-var isMobileAndWebkit = isMobile() && 'WebkitAppearance' in document.documentElement.style;
+//var isMobileAndWebkit = isMobile() && 'WebkitAppearance' in document.documentElement.style;
 /**
  * Group constructor.
  * @param {Number} id group Id
