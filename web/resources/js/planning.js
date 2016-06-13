@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.2.1 09/05/16
+ * @(#)planning.js	1.3.0 12/06/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -23,7 +23,7 @@
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @since 09/05/15
- * @version 1.2.0
+ * @version 1.3.0
  * @returns {void}
  */
 //var isMobileAndWebkit = isMobile() && 'WebkitAppearance' in document.documentElement.style;
@@ -102,6 +102,68 @@ function setDatePicker(commonParams) {
     window.location = 'daily.html?d=' + $(picker).val() + '&e=' + eId;
   });
 
+}
+
+function weeklyDatePicker(date, idper) {
+  var from = $("#pickerFrom");
+  from.datepicker({changeMonth: true, changeYear: true});
+  from.datepicker('setDate', date);
+  from.datepicker("refresh");
+
+  from.change(function () {
+    //console.log(this.value);
+    var d = new Date(from.datepicker('getDate'));
+    var first = new Date(d.setDate(d.getDate() - d.getDay() + 2));// +2 pour lundi
+    var arg = dateFormatFR(first);
+    //console.log(arg);
+    window.location = 'weekly.html?d=' + arg + '&id=' + idper;
+  });
+
+  var to = $("#pickerTo");
+  var d2 = new Date(from.datepicker('getDate'));
+  var last = new Date(d2.setDate(d2.getDate() + d2.getDay() + 6));
+  to.datepicker({changeMonth: true, changeYear: true});
+  to.datepicker('setDate', dateFormatFR(last));
+  to.datepicker("refresh");
+
+  to.change(function () {
+    var d = new Date(to.datepicker('getDate'));
+    var first = new Date(d.setDate(d.getDate() - d.getDay() +2));// +2 pour lundi
+    //console.log(first);
+    var arg = dateFormatFR(first);
+    //console.log(arg);
+    window.location = 'weekly.html?d=' + arg + '&id=' + idper;
+  });
+}
+
+/**
+ * Convert a date to format dd-mm-yyyy.
+ * date.toLocaleDateString('fr') is not compatible with most of browsers.
+ * @param {type} d date
+ * @returns {string}
+ */
+function dateFormatFR(d) {
+  if (!d instanceof Date) {
+    console.log("erreur date");
+  }
+  //var arg = first.toLocaleString().replace(/\//g, "-");
+  var s = d.toISOString().slice(0, 10);//2016-06-12 yyyy-mm-dd
+  var dd = s.slice(8, 10);
+  var mm = s.slice(5, 7);
+  var y = s.slice(0, 4);
+  var sep = "-";
+  return dd.concat(sep, mm, sep, y);
+}
+
+function logDate(d) {
+  if (!d instanceof Date) {
+    console.log("erreur date");
+  }
+  console.log("UTC =" + d.toUTCString()
+    + ", GMT =" + d.toGMTString()
+    + ", ISO =" + d.toISOString()
+    + ", FR =" + d.toLocaleDateString("fr")
+    );
 }
 
 /**
