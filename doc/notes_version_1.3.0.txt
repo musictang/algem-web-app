@@ -1,0 +1,4 @@
+1.3.0
+
+AMELIORATIONS
+On peut maintenant accéder immédiatement à n'importe quelle semaine passée ou future en cliquant sur l'un des champs date en haut de page et en choisissant un jour dans le calendrier. Les icones "Semaine précédente" et "Semaine suivante", trop restrictifs pour accéder facilement à une date antérieure ou postérieure, restent toujours présents cependant.
