@@ -1,4 +1,9 @@
 1.3.0
 
 AMELIORATIONS
+
+PLANNING HEBDO
 On peut maintenant accéder immédiatement à n'importe quelle semaine passée ou future en cliquant sur l'un des champs date en haut de page et en choisissant un jour dans le calendrier. Les icones "Semaine précédente" et "Semaine suivante", trop restrictifs pour accéder facilement à une date antérieure ou postérieure, restent toujours présents cependant.
+
+PAGE PERSO
+Les espacements dans la section "Profil" sur la page perso d'un adhérent ont été réduits afin d'optimiser l'affichage sur petits écrans. La liste des mails est désormais bien alignée sur la gauche.
