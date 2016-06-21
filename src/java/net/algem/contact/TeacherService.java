@@ -1,7 +1,7 @@
 /*
- * @(#) TeacherIO.java Algem Web App 1.0.6 06/01/2016
+ * @(#) TeacherService.java Algem Web App 1.4.0 21/06/2016
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -22,21 +22,16 @@ package net.algem.contact;
 
 import java.util.List;
 import net.algem.planning.ScheduleElement;
-import net.algem.util.AbstractGemDao;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.6
- * @since 1.0.6 06/01/2016
+ * @version 1.4.0
+ * @since 1.4.0 21/06/2016
  */
-public class TeacherIO 
-  extends AbstractGemDao {
-
-  public static final String TABLE = "prof";
+public interface TeacherService 
+{
   
-  public List<ScheduleElement> findFollowUp(int teacher) {
-    return null;
-  }
+  List<ScheduleElement> getFollowUp(int teacher);
 
 }

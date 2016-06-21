@@ -1,7 +1,7 @@
 /*
- * @(#) TeacherIO.java Algem Web App 1.0.6 06/01/2016
+ * @(#) TeacherCtrl.java Algem Web App 1.4.0 21/06/2016
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -20,23 +20,32 @@
 
 package net.algem.contact;
 
+import java.security.Principal;
 import java.util.List;
 import net.algem.planning.ScheduleElement;
-import net.algem.util.AbstractGemDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.6
- * @since 1.0.6 06/01/2016
+ * @version 1.4.0
+ * @since 1.4.0 21/06/2016
  */
-public class TeacherIO 
-  extends AbstractGemDao {
-
-  public static final String TABLE = "prof";
+public class TeacherCtrl {
   
-  public List<ScheduleElement> findFollowUp(int teacher) {
-    return null;
-  }
+    @Autowired
+  private TeacherService service;
 
+  public void setService(TeacherService service) {
+    this.service = service;
+  }
+ @RequestMapping(method = RequestMethod.GET, value = "/xgroups")
+  public @ResponseBody
+    List<ScheduleElement> getFollow(Principal p) {
+    List<ScheduleElement> f = service.getFollowUp(0);
+    return f;
+  }
 }
