@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.4.0 21/06/2016
+ * @(#) TeacherCtrl.java Algem Web App 1.4.0 27/06/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,9 +21,17 @@
 package net.algem.contact;
 
 import java.security.Principal;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.algem.planning.ScheduleElement;
+import net.algem.security.UserCtrl;
+import static net.algem.util.Constants.DATE_FORMAT;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,18 +42,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @version 1.4.0
  * @since 1.4.0 21/06/2016
  */
+@Controller
 public class TeacherCtrl {
   
-    @Autowired
+  @Autowired
   private TeacherService service;
 
   public void setService(TeacherService service) {
     this.service = service;
   }
- @RequestMapping(method = RequestMethod.GET, value = "/xgroups")
-  public @ResponseBody
-    List<ScheduleElement> getFollow(Principal p) {
-    List<ScheduleElement> f = service.getFollowUp(0);
+  
+ @RequestMapping(method = RequestMethod.GET, value = "/perso/xFollowUp")
+  public @ResponseBody List<ScheduleElement> getFollowUp(Principal p) {
+    List<ScheduleElement> f = null;
+    try {
+      Date dateFrom = DATE_FORMAT.parse("06-06-2016");
+      Date dateTo = DATE_FORMAT.parse("12-06-2016");
+      f = service.getFollowUp(12019, dateFrom, dateTo);
+    } catch(DataAccessException ex) {
+      Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (ParseException ex) {
+      Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, null, ex);
+    }
     return f;
   }
 }

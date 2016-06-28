@@ -41,7 +41,7 @@ public class ScheduleElement
 
   private Map<String,NamedModel> detail = new HashMap<>();
   private boolean collective;
-  private Collection<ScheduleRange> ranges;
+  private Collection<? extends ScheduleRange> ranges;
   private String label;
   private String timeLabel;
   private String color;
@@ -127,7 +127,7 @@ public class ScheduleElement
    *
    * @return a collection of time slots
    */
-  public Collection<ScheduleRange> getRanges() {
+  public Collection<? extends ScheduleRange> getRanges() {
     return ranges;
   }
 
@@ -136,7 +136,7 @@ public class ScheduleElement
    *
    * @param ranges
    */
-  public void setRanges(Collection<ScheduleRange> ranges) {
+  public void setRanges(Collection<? extends ScheduleRange> ranges) {
     this.ranges = ranges;
   }
 

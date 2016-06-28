@@ -184,8 +184,7 @@ public class ScheduleDao
    * @return a collection of schedule ranges
    */
   private Collection<ScheduleRange> getTimeSlots(int id) {
-    String query = " SELECT pl.* FROM " + TABLE + " p," + ScheduleRangeIO.TABLE + " pl"
-      + " WHERE pl.idplanning = p.id AND p.id = ?";
+    String query = " SELECT pl.* FROM " + ScheduleRangeIO.TABLE + " pl WHERE pl.idplanning = ?";
     return jdbcTemplate.query(query, new RowMapper<ScheduleRange>() {
 
       @Override

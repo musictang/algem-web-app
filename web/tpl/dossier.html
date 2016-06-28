@@ -83,7 +83,87 @@
         </tr>
         </tbody>
       </table>
+      <section sec:authorize="${hasRole('2')}">
+      <h3 th:text="#{follow-up.label}">Suivi</h3>
+       <header>
+      <nav class="date-panel">
+        <input id="follow-d" type="button" th:value="#{today.label}" th:formaction="@{/perso/xFollowUp}" ></input><input type="button" th:value="#{current.month.label}"/><label for="pickerFrom">Semaine du </label><input id="pickerFrom" type="text" readonly="readonly" tabindex="3" /></nav></header>
+      <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
+        <thead>
+          <tr><th>Jour</th><th>Date</th><th>Début</th><th>Fin</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Elèves</th><th>Suivi</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot></tfoot>
+      </table>
+      </section>
     </div>
+    <div id="test-suivi"></div>
     <footer th:replace="fragments/layout :: footer"></footer>
   </body>
+  <script type="text/javascript">
+    $("#follow-d").click(function() {
+      console.log("click suivi")
+      getFollowUp(this);
+    });
+    function getFollowUp(el) {
+      var urlPath = $(el).attr("formaction");
+      console.log(urlPath);
+      $.get(urlPath, function (data) {
+      if (typeof data === 'undefined' || !data.length) {
+        console.log("no data");
+      } else {
+        console.log(data);
+        var content = "";
+        $.each(data, function (index, value) {
+//          console.log(dateFormatFR(new Date(value.date)));
+//          console.log(value.start.hour.pad() + ":"+value.start.minute.pad());
+//          console.log(value.end.hour.pad() + ":"+value.end.minute.pad());
+//          console.log(value.detail['course'].name)
+//          console.log(value.detail['room'].name)
+console.log(value.ranges[0].person.firstName + " " + value.ranges[0].person.name);
+ content += "<tr>"
+                  +"<td>"+value.id+"</td><td>"
+                  + dateFormatFR(new Date(value.date))
+                  +"</td><td>"+value.start.hour.pad() + ":"+value.start.minute.pad()
+                  +"</td><td>"+value.end.hour.pad() + ":"+value.end.minute.pad()
+                  +"</td><td></td><td>"
+                  +value.detail['room'].name+"</td><td>"
+                  +value.detail['course'].name
+                  +"</td><td>";
+          if (value.collective) {
+            content +="<a href=\"javascript:;\" class=\"show-detail\">Liste des élèves...</a><ul>";
+            for (var i = 0; i < value.ranges.length; i++) {
+              content += "<li>"+value.ranges[i].person.firstName + " " + value.ranges[i].person.name+"</li>";
+//              console.log(value.ranges[i].person.firstName + " " + value.ranges[i].person.name);
+            }
+            content +="</ul>";
+          } else {
+            content +=value.ranges[0].person.firstName + " " + value.ranges[0].person.name;
+          }
+          content +="</td><td></td></tr>\n";
+          
+        });
+        $("#follow-up-result tbody").html(content);
+//        $("#test-suivi").append("</table>");
+      }
+    }, "json");
+  }Number.prototype.pad = function(size) {
+      var s = String(this);
+      while (s.length < (size || 2)) {s = "0" + s;}
+      return s;
+    }
+    function dateFormatFR(d) {
+  if (!d instanceof Date) {
+    console.log("erreur date");
+  }
+  //var arg = first.toLocaleString().replace(/\//g, "-");
+  var s = d.toISOString().slice(0, 10);//2016-06-12 yyyy-mm-dd
+  var dd = s.slice(8, 10);
+  var mm = s.slice(5, 7);
+  var y = s.slice(0, 4);
+  var sep = "-";
+  return dd.concat(sep, mm, sep, y);
+}
+  </script>
 </html>

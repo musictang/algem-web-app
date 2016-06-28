@@ -1,7 +1,7 @@
 /*
- * @(#)Person.java	1.1.0 23/02/16
+ * @(#)Person.java	1.4.0 27/06/16
  *
- * Copyright (c) 2013 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 201-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -25,7 +25,7 @@ import java.util.List;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.4.0
  * @since 1.0.0 11/02/13
  */
 public class Person
@@ -41,6 +41,7 @@ public class Person
   private int type;
   private String name;
   private String firstName;
+  private String nickName;
   private List<Email> emails;
 
   public Person() {
@@ -89,6 +90,14 @@ public class Person
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getNickName() {
+    return nickName;
+  }
+
+  public void setNickName(String nickName) {
+    this.nickName = nickName;
   }
 
   public List<Email> getEmail() {

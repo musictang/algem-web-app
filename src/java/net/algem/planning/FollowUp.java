@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherServiceImpl.java Algem Web App 1.4.0 27/06/2016
+ * @(#) FollowUp.java Algem Web App 1.4.0 28/06/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -18,33 +18,60 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.algem.contact;
-
-import java.util.Date;
-import java.util.List;
-
-import net.algem.planning.ScheduleElement;
-import static net.algem.util.Constants.DATE_FORMAT;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+package net.algem.planning;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @version 1.4.0
- * @since 1.4.0 21/06/2016
+ * @since 1.4.0 28/06/2016
  */
-@Service
-public class TeacherServiceImpl 
-    implements TeacherService
-{
-
-  @Autowired
-  private TeacherIO dao;
+public class FollowUp {
   
-  @Override
-  public List<ScheduleElement> getFollowUp(int teacher, Date from, Date to) {
-    return dao.findFollowUp(teacher, from, to);
+  private int id;
+  private String content;
+  private String note;
+  private boolean absent;
+  private boolean excused;
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public String getNote() {
+    return note;
+  }
+
+  public void setNote(String note) {
+    this.note = note;
+  }
+
+  public boolean isAbsent() {
+    return absent;
+  }
+
+  public void setAbsent(boolean absent) {
+    this.absent = absent;
+  }
+
+  public boolean isExcused() {
+    return excused;
+  }
+
+  public void setExcused(boolean excused) {
+    this.excused = excused;
   }
 
 }

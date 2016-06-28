@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherServiceImpl.java Algem Web App 1.4.0 27/06/2016
+ * @(#) ScheduleRangeElement.java Algem Web App 1.4.0 27/06/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -18,33 +18,28 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.algem.contact;
+package net.algem.planning;
 
-import java.util.Date;
-import java.util.List;
-
-import net.algem.planning.ScheduleElement;
-import static net.algem.util.Constants.DATE_FORMAT;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import net.algem.contact.Person;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @version 1.4.0
- * @since 1.4.0 21/06/2016
+ * @since 1.4.0 27/06/2016
  */
-@Service
-public class TeacherServiceImpl 
-    implements TeacherService
+public class ScheduleRangeElement 
+        extends ScheduleRange
 {
-
-  @Autowired
-  private TeacherIO dao;
   
-  @Override
-  public List<ScheduleElement> getFollowUp(int teacher, Date from, Date to) {
-    return dao.findFollowUp(teacher, from, to);
+  private Person person;
+
+  public Person getPerson() {
+    return person;
   }
 
+  public void setPerson(Person person) {
+    this.person = person;
+  }
+  
 }

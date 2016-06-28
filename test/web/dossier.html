@@ -25,6 +25,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../../web/resources/themes/default/css/pure-min.css" />
     <link rel="stylesheet" href="../../web/resources/themes/default/css/common.css" />
+    <link rel="stylesheet" href="../../web/resources/themes/default/css/planning.css" />
     <link rel="stylesheet" href="../../web/resources/themes/default/css/custom.css" />
     <link rel="stylesheet" href="../../web/resources/themes/default/css/mediaqueries.css" />
     <link rel="stylesheet" href="../../web/resources/themes/default/css/font-awesome.min.css" />
@@ -32,10 +33,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
     <style>
       .detail{display: none}
+      .date-panel label, .date-panel input[type=button] {
+        margin-right: 1em;
+        /*display: inline-block;*/
+      }
+      #suivi legend {font-size: 1em;font-weight: bold}
+      #pickerFrom {width: 6em}
     </style>
     <script type="text/javascript" src="../../web/resources/js/jquery-1.9.0.min.js"></script>
     <script type="text/javascript" src="../../web/resources/js/jquery-ui-1.11.4.min.js"></script>
-    <script charset="UTF-8" type="text/javascript" src="../../web/resources/js/common.js"></script>
+    <script type="text/javascript" src="../../web/resources/js/common.js"></script>
+    <script type="text/javascript" src="../../web/resources/js/planning.js"></script>
+    <script type="text/javascript" src="../../web/resources/js/jquery-ui.datepicker-fr.js"></script>
     <script type="text/javascript">
       $(function () {
         setCommonEvents();
@@ -44,14 +53,28 @@
           modal: false,
           autoOpen: false,
           width: 400,
-          height: 440
+          height: 480,
+           buttons: {
+      Abandon: function () {
+        $(this).dialog("close");
+      },
+      Ok: function () {
+        ;
+      }
+    }
         });
       
-        $("#1234").click(function() {
-          $("#suivi").dialog({title:"Dupont"}).dialog("open");
+        $(".elink").click(function() {
+          $("#suivi").dialog({title:$(this).text()}).dialog("open");
         });
       $(".show-detail").click(function() {
         $(".detail").toggle();
+      });
+      weeklyDatePicker("30-05-2016", 1234);
+          $( "input[value='aujourd\'hui']")
+      .button()
+      .click(function( event ) {
+        event.preventDefault();
       });
       });
     </script>
@@ -66,7 +89,6 @@
         <input id="abs" type="checkbox" />&nbsp;<label for="abs">Absent</label>
         <input id="exc" type="checkbox" />&nbsp;<label for="exc">Excusé</label>
         </fieldset>
-        
       </form>
     </div>
     <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
@@ -74,11 +96,8 @@
       <ul>
         <li><a href="#" id="menu-close" title="Fermer"><i class="fa fa-close"></i></a></li>
         <li><a href="/algem/planning/index.html" title="Accueil"><i class="fa fa-home"></i></a></li>
-        
-      
         <li><a href="/algem/planning/perso/home.html" id="dossier" title="Mon compte"><i class="fa fa-user-plus"></i></a><span class="pseudo">julien</span></li>
         <li><a href="/algem/planning/j_spring_security_logout" id="menu-logout" title="Déconnexion"><i class="fa fa-sign-out"></i></a></li>
-    
       </ul>
     </div>
     <header>
@@ -135,21 +154,27 @@
         </tbody>
       </table>
       <h3>Suivi</h3>
-      Du <input type="date" />&nbsp; au <input type="date" />
+      <header>
+      <nav class="date-panel">
+        <input type="button" value="Aujourd'hui" /><input type="button" value="Mois courant"/><label for="pickerFrom">Semaine du </label><input id="pickerFrom" type="text" readonly="readonly" tabindex="3" /></nav></header>
       <table class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
         <thead>
           <tr><th>Jour</th><th>Date</th><th>Début</th><th>Fin</th><th>Durée</th><th>Cours</th><th>Elèves</th><th>Suivi</th></tr>
         </thead>
         <tbody>
-          <tr><td>mercredi</td><td>01-06-2016</td><td>15:15</td><td>15:45</td><td></td><td>PIANO</td><td></td><td></td></tr>
-          <tr><td>mercredi</td><td>01-06-2016</td><td>	15:45</td><td>	17:00</td><td>01:15</td><td>PIANO CO</td><td><a href="#" class="show-detail">Détail élèves</a><ul class="detail"><li><a class="elink" href="#" >Elise durand</a></li><li><a class="elink" href="#" >Marcel Dupont</a></li><li><a class="elink" href="#" >Charles Martel</a></li></ul></td><td></td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	17:00</td><td>	17:30</td><td>00:30</td><td>PIANO</td><td><a class="elink" id="1234" href="#1234">Dupont</a></td><td>Le beau danuble bleu premier couplet et refrain. La gamme diatonique.</td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	17:30</td><td>	18:00</td><td></td><td>PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>07-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+          <tr><td>mardi</td><td>07-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+<tr><td>mardi</td><td>07-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+<tr><td>mardi</td><td>07-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+<tr><td>mardi</td><td>07-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+          <tr><td>mercredi</td><td>01-06-2016</td><td>15:15</td><td>15:45</td><td></td><td>PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>
+          <tr><td>mercredi</td><td>01-06-2016</td><td>	15:45</td><td>	17:00</td><td>01:15</td><td>PIANO CO</td><td><a href="javascript:;" class="show-detail">Liste des élèves...</a><ul class="detail"><li><a id="1250" class="elink" href="javascript:;" >Elise durand</a></li><li><a class="elink" href="javascript:;" >Marcel Dupont</a></li><li><a class="elink" href="javascript:;" >Charles Martel</a></li></ul></td><td></td></tr>	
+<tr><td>mercredi</td><td>01-06-2016</td><td>	17:00</td><td>	17:30</td><td>00:30</td><td>PIANO</td><td><a class="elink" href="javascript:;">Marcel Dupont</a></td><td>Le beau danuble bleu premier couplet et refrain. La gamme diatonique.</td></tr>	
+<tr><td>mercredi</td><td>01-06-2016</td><td>	17:30</td><td>	18:00</td><td></td><td>PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+<tr><td>mercredi</td><td>01-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+<tr><td>mercredi</td><td>01-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td><a href="javascript:;" class="show-detail">Liste des  élèves...</a><ul class="detail"><li><a id="1250" class="elink" href="javascript:;" >Elise durand</a></li><li><a class="elink" href="javascript:;" >Marcel Dupont</a></li><li><a class="elink" href="javascript:;" >Charles Martel</a></td><td></td></tr>	
+<tr><td>mercredi</td><td>01-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+<tr><td>mercredi</td><td>01-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+<!--<tr><td>mardi</td><td>07-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
 <tr><td>mardi</td><td>07-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
 <tr><td>mardi</td><td>07-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
 <tr><td>mardi</td><td>07-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
@@ -196,7 +221,7 @@
 <tr><td>mercredi</td><td>29-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
 <tr><td>mercredi</td><td>29-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td></td><td></td></tr>	
 <tr><td>mercredi</td><td>29-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>29-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+<tr><td>mercredi</td><td>29-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	-->
         </tbody>
       </table>
     </div>
