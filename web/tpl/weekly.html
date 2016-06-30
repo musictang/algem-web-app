@@ -34,19 +34,7 @@
     <script type="text/javascript" th:src="@{/resources/js/common.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/planning.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/jquery-ui.datepicker-fr.js}"></script>
-    <script type="text/javascript" th:inline="javascript">
-       /*<![CDATA[*/
-      var h = /*[[${timeOffset}]]*/ '720';
-      var fdow = /*[[${param.d[0]}]]*/ '04-01-2016';
-      var idper = /*[[${param.id[0]}]]*/ '1234';
-      $(function () {
-        setCommonEvents();
-        setViewPortSize(h);
-        setScroll();
-        weeklyDatePicker(fdow, idper);
-      });
-      /*]]>*/
-    </script>
+
   </head>
   <body>
     <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
@@ -108,6 +96,19 @@
     <aside id="help-panel" class="closeable" th:include="fragments/layout :: color-help"></aside>
     <footer th:replace="fragments/layout :: footer"></footer>
     <div id="errorDialog" title="Avertissement"></div>
+    <script type="text/javascript" th:inline="javascript">
+       /*<![CDATA[*/
+      var h = /*[[${timeOffset}]]*/ '720';
+      var fdow = /*[[${param.d[0]}]]*/ '04-01-2016';
+      var idper = /*[[${param.id[0]}]]*/ '1234';
+      $(function () {
+        setCommonEvents();
+        setViewPortSize(h);
+        setScroll();
+        weeklyDatePicker(fdow, idper);
+      });
+      /*]]>*/
+    </script>
   </body>
 </html>
 

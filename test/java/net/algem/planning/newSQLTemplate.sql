@@ -102,15 +102,26 @@ AND p.idper = 12019
 AND p.ptype IN (1,5,6)
 ORDER BY p.jour,pl.debut;
 
-SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom 
-FROM planning p JOIN plage pl ON (p.id = pl.idplanning) JOIN action a ON (p.action = a.id) JOIN cours c ON (a.cours = c.id) JOIN salle s ON (p.lieux = s.id) 
+SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom
+FROM planning p JOIN plage pl ON (p.id = pl.idplanning) JOIN action a ON (p.action = a.id) JOIN cours c ON (a.cours = c.id) JOIN salle s ON (p.lieux = s.id)
 WHERE jour BETWEEN '06-06-2016' AND '12-06-2016' AND p.idper = 12019 ORDER BY p.jour,pl.debut;
 
 
-SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom 
-FROM planning p 
+SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom
+FROM planning p
 JOIN plage pl ON (p.id = pl.idplanning)
- JOIN action a ON (p.action = a.id) 
-JOIN cours c ON (a.cours = c.id) 
-JOIN salle s ON (p.lieux = s.id) 
+ JOIN action a ON (p.action = a.id)
+JOIN cours c ON (a.cours = c.id)
+JOIN salle s ON (p.lieux = s.id)
 WHERE jour BETWEEN '06-06-2016' AND '12-06-2016' AND p.idper = 12019 ORDER BY p.jour,pl.debut;
+
+SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom,v.texte
+FROM planning p
+JOIN plage pl ON (p.id = pl.idplanning)
+JOIN action a ON (p.action = a.id)
+ JOIN cours c ON (a.cours = c.id)
+JOIN salle s ON (p.lieux = s.id)
+JOIN suivi v ON (p.note = v.id)
+WHERE p.idper = 12019
+AND jour BETWEEN '06-06-2016' AND '12-06-2016'
+ORDER BY p.jour,pl.debut;

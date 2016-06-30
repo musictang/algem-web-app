@@ -19,7 +19,7 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-  <head th:with="title=${@organization['name.label'] + ' 403'}" th:include="fragments/layout :: common-head">
+  <head th:include="fragments/layout :: common-head(${@organization['name.label'] + ' 403'})">
     <title>TODO supply a title</title>
   </head>
   <body>
@@ -46,5 +46,6 @@
       </div>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>
+    <script type="text/javascript" th:include="fragments/layout :: common-script"></script>
   </body>
 </html>

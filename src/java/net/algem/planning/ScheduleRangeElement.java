@@ -28,11 +28,12 @@ import net.algem.contact.Person;
  * @version 1.4.0
  * @since 1.4.0 27/06/2016
  */
-public class ScheduleRangeElement 
+public class ScheduleRangeElement
         extends ScheduleRange
 {
-  
+
   private Person person;
+  private FollowUp followUp;
 
   public Person getPerson() {
     return person;
@@ -41,5 +42,14 @@ public class ScheduleRangeElement
   public void setPerson(Person person) {
     this.person = person;
   }
-  
+
+  public FollowUp getFollowUp() {
+    return followUp;
+  }
+
+  public void setFollowUp(FollowUp followUp) {
+    this.followUp = followUp;
+  }
+
+
 }

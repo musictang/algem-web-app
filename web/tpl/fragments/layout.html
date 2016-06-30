@@ -19,7 +19,7 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-  <head th:fragment="common-head">
+  <head th:fragment="common-head(title)">
     <title th:text="${title}"></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,11 +32,6 @@
     <script type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/jquery-ui-1.11.4.min.js}"></script>
     <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/common.js}"></script>
-    <script th:fragment="script-menu" type="text/javascript">
-      $(function () {
-        setCommonEvents();
-      });
-    </script>
   </head>
   <body>
     <header th:fragment="header"></header>
@@ -128,6 +123,11 @@
         &copy;&nbsp;2015&nbsp;Musiques&nbsp;Tangentes&nbsp;AGPL&nbsp;3&nbsp;| v.1.2.1&nbsp;<a href="http://www.algem.net" target="_blank">www.algem.net</a>
       </address>
     </footer>
+    <script th:fragment="common-script" type="text/javascript">
+      $(function () {
+        setCommonEvents();
+      });
+    </script>
   </body>
 </html>
 

@@ -19,7 +19,7 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-  <head th:with="title=${@organization['name.label']}" th:include="fragments/layout :: common-head">
+  <head th:include="fragments/layout :: common-head(${@organization['name.label']})">
     <title th:text="#{help.label}"></title>
   </head>
   <body>
@@ -81,5 +81,6 @@
       </article>
     </section>
     <footer th:replace="fragments/layout :: footer"></footer>
+    <script type="text/javascript" th:include="fragments/layout :: common-script"></script>
   </body>
 </html>

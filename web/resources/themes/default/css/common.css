@@ -472,6 +472,14 @@ table.simple th, table.simple td {
   display: block;
 }
 
+.collapse {display: none}
+
+.expand {}
+
+.dlg {cursor: pointer}
+
+#follow-up-result tbody tr td:first-child {text-align: right}
+
 table.mobile {
   display: table;
   width: 100%;

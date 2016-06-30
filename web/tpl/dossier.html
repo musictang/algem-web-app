@@ -19,8 +19,21 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-  <head th:with="title=|${@organization['name.label']} : ${user.firstName} ${user.name}|" th:include="fragments/layout :: common-head">
-    <title th:text="#{my.page.label}">TODO supply a title</title>
+  <head>
+    <title th:text="|${@organization['name.label']} : ${user.firstName} ${user.name}|">TODO supply a title</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/pure-min.css}" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/common.css}" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/jquery-ui.css}" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/mediaqueries.css}" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/font-awesome.min.css}" />
+    <script type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/jquery-ui-1.11.4.min.js}"></script>
+    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/common.js}"></script>
+    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/util.js}"></script>
+    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/dossier.js}"></script>
   </head>
   <body>
     <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
@@ -57,7 +70,7 @@
           <li><i class="fa fa-calendar"></i>
             <a th:href="@{/perso/weekly.html(d=${#dates.format(startOfW,'dd-MM-yyyy')},id=${user.id})}" th:text="#{my.weekly.schedule.label}" th:title="#{my.weekly.schedule.title}">Mon planning</a>
           </li>
-      </ul>
+        </ul>
       </div>
       <h3 th:text="#{my.bookings.label}">Mes réservations</h3>
       <table class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
@@ -73,97 +86,86 @@
           </tr>
         </thead>
         <tbody><tr th:each="b:${bookings}">
-          <td th:text="${b.detail['group']}"></td>
-          <td th:text="${b.detail['estab']}"></td>
-          <td th:text="${b.detail['room']}"></td>
-          <td><a th:href="@{/daily.html(d=${b.dateFr},e=${b.detail['estab'].id})}" th:text="${b.dateFr}"></a></td>
-          <td th:text="${b.start + '-' + b.end}"></td>
-          <td th:class="${b.status == 0 ? 'pending' : 'confirmed'}" th:text="#{${b.status == 0} ? booking.pending.label : booking.confirmed.label}"></td>
-          <td><a th:if="${b.status == 0}" th:text="#{cancel.label}" th:href="@{/perso/book-cancel.html(id=${b.id},action=${b.idAction},date=${b.dateFr},start=${b.start})}">Annuler</a></td>
-        </tr>
+            <td th:text="${b.detail['group']}"></td>
+            <td th:text="${b.detail['estab']}"></td>
+            <td th:text="${b.detail['room']}"></td>
+            <td><a th:href="@{/daily.html(d=${b.dateFr},e=${b.detail['estab'].id})}" th:text="${b.dateFr}"></a></td>
+            <td th:text="${b.start + '-' + b.end}"></td>
+            <td th:class="${b.status == 0 ? 'pending' : 'confirmed'}" th:text="#{${b.status == 0} ? booking.pending.label : booking.confirmed.label}"></td>
+            <td><a th:if="${b.status == 0}" th:text="#{cancel.label}" th:href="@{/perso/book-cancel.html(id=${b.id},action=${b.idAction},date=${b.dateFr},start=${b.start})}">Annuler</a></td>
+          </tr>
         </tbody>
       </table>
       <section sec:authorize="${hasRole('2')}">
-      <h3 th:text="#{follow-up.label}">Suivi</h3>
-       <header>
-      <nav class="date-panel">
-        <input id="follow-d" type="button" th:value="#{today.label}" th:formaction="@{/perso/xFollowUp}" ></input><input type="button" th:value="#{current.month.label}"/><label for="pickerFrom">Semaine du </label><input id="pickerFrom" type="text" readonly="readonly" tabindex="3" /></nav></header>
-      <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
-        <thead>
-          <tr><th>Jour</th><th>Date</th><th>Début</th><th>Fin</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Elèves</th><th>Suivi</th></tr>
-        </thead>
-        <tbody>
-        </tbody>
-        <tfoot></tfoot>
-      </table>
+        <h3 th:text="#{follow-up.label}">Suivi</h3>
+        <header>
+          <nav class="date-panel">
+            <input id="follow-d" type="button" th:value="#{today.label}" th:formaction="@{/perso/xFollowUp}" ></input><input type="button" th:value="#{current.month.label}"/><label for="pickerFrom">Semaine du </label><input id="pickerFrom" type="text" readonly="readonly" tabindex="3" /></nav></header>
+        <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
+          <thead>
+            <tr><th>Jour</th><th>Horaire</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Suivi individuel</th><th>Suivi co.</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <tfoot></tfoot>
+        </table>
       </section>
     </div>
-    <div id="test-suivi"></div>
+    <div id="follow-up-dlg">
+      <form th:action="@{/perso/xEditFollowUp}">
+        <fieldset>
+          <legend>PIANO<br />mercredi 01-06-2016 17:00-17:30</legend>
+          <label for="follow-content">Suivi</label><textarea style="display: block;width: 100%" rows="10" id="follow-content" name="content"></textarea>
+          <label for="note">Note</label><input id="note" type="text" name="note" maxlength="8" style="width: 4em" />
+          <input id="abs" type="checkbox" />&nbsp;<label for="abs" name="abs">Absent</label>
+          <input id="exc" type="checkbox" />&nbsp;<label for="exc" name="exc">Excusé</label>
+          <input id="noteId" type="hidden" name="noteId" value=""/>
+        </fieldset>
+      </form>
+    </div>
     <footer th:replace="fragments/layout :: footer"></footer>
   </body>
-  <script type="text/javascript">
-    $("#follow-d").click(function() {
-      console.log("click suivi")
-      getFollowUp(this);
+  <script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    var userId = /*[[${user.id}]]*/ 1234;
+    var dlg = $("#follow-up-dlg");
+    setCommonEvents();
+    initFollowUpDialog(dlg);
+    $("#follow-d").click(function () {
+      getFollowUp(this, userId);
     });
-    function getFollowUp(el) {
-      var urlPath = $(el).attr("formaction");
-      console.log(urlPath);
-      $.get(urlPath, function (data) {
-      if (typeof data === 'undefined' || !data.length) {
-        console.log("no data");
-      } else {
-        console.log(data);
-        var content = "";
-        $.each(data, function (index, value) {
-//          console.log(dateFormatFR(new Date(value.date)));
-//          console.log(value.start.hour.pad() + ":"+value.start.minute.pad());
-//          console.log(value.end.hour.pad() + ":"+value.end.minute.pad());
-//          console.log(value.detail['course'].name)
-//          console.log(value.detail['room'].name)
-console.log(value.ranges[0].person.firstName + " " + value.ranges[0].person.name);
- content += "<tr>"
-                  +"<td>"+value.id+"</td><td>"
-                  + dateFormatFR(new Date(value.date))
-                  +"</td><td>"+value.start.hour.pad() + ":"+value.start.minute.pad()
-                  +"</td><td>"+value.end.hour.pad() + ":"+value.end.minute.pad()
-                  +"</td><td></td><td>"
-                  +value.detail['room'].name+"</td><td>"
-                  +value.detail['course'].name
-                  +"</td><td>";
-          if (value.collective) {
-            content +="<a href=\"javascript:;\" class=\"show-detail\">Liste des élèves...</a><ul>";
-            for (var i = 0; i < value.ranges.length; i++) {
-              content += "<li>"+value.ranges[i].person.firstName + " " + value.ranges[i].person.name+"</li>";
-//              console.log(value.ranges[i].person.firstName + " " + value.ranges[i].person.name);
-            }
-            content +="</ul>";
-          } else {
-            content +=value.ranges[0].person.firstName + " " + value.ranges[0].person.name;
-          }
-          content +="</td><td></td></tr>\n";
-          
-        });
-        $("#follow-up-result tbody").html(content);
-//        $("#test-suivi").append("</table>");
+    //manage ajax loaded content
+    $(document).on("click", ".expand", function () {
+      $(this).next().toggle();
+    });
+
+    $(document).on("click", ".dlg", function () {
+      console.log("click dialog");
+      $("#follow-content").empty();
+      var row = $(this).closest('tr');
+      var course = row.find(':nth-child(5)').contents().get(0).nodeValue;
+      var dateTime = row.find(':nth-child(1)').contents().get(0).nodeValue;
+      dateTime += " " + row.find(':nth-child(2)').contents().get(0).nodeValue;
+      var isDetail = $(this).attr("accessKey") === "D";
+      var isCo = $(this).attr("accessKey") === "C";
+      console.log("isDetail ? " + isDetail + " isCo ? " + isCo);
+      var noteContent = undefined;
+      if (isDetail) {
+        noteContent = $(this).next().contents();
+      } else if (isCo) {
+        noteContent = $(this).contents();
       }
-    }, "json");
-  }Number.prototype.pad = function(size) {
-      var s = String(this);
-      while (s.length < (size || 2)) {s = "0" + s;}
-      return s;
-    }
-    function dateFormatFR(d) {
-  if (!d instanceof Date) {
-    console.log("erreur date");
-  }
-  //var arg = first.toLocaleString().replace(/\//g, "-");
-  var s = d.toISOString().slice(0, 10);//2016-06-12 yyyy-mm-dd
-  var dd = s.slice(8, 10);
-  var mm = s.slice(5, 7);
-  var y = s.slice(0, 4);
-  var sep = "-";
-  return dd.concat(sep, mm, sep, y);
-}
+      var legendInfo = course + "<br />" + dateTime;
+      var legend = $(dlg).find("legend");
+      var t = isCo ? "Suivi collectif" : $(this).html();
+      $(legend).html(legendInfo);
+      console.log(noteContent);
+      if (noteContent !== undefined && noteContent.get(0) !== undefined) {
+        $("#follow-content").html(noteContent.get(0).nodeValue);
+      }
+      $(dlg).dialog({title: t}).dialog("open");
+
+    });
+    /*]]>*/
   </script>
 </html>
