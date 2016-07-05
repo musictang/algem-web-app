@@ -445,6 +445,13 @@ ul.simple li {
   margin: 0.5em 0;
 }
 
+ul.horizontal-panel-menu {
+  list-style-type: none;
+}
+ul.horizontal-panel-menu li {
+  display: inline-block;
+}
+
 table.simple th, table.simple td {
   padding: 0 0.5em;
 }
@@ -479,6 +486,20 @@ table.simple th, table.simple td {
 .dlg {cursor: pointer}
 
 #follow-up-result tbody tr td:first-child {text-align: right}
+
+#datepicker, #pickerFrom, #pickerTo {
+  position: relative;
+  z-index: 3000;
+}
+
+#datepicker, .week-date {
+  font-size: small;
+  text-align: center;
+  width: 5.5em;
+  background-color: #eee;
+  border: 1px solid gray;
+  border-radius: 4px
+}
 
 table.mobile {
   display: table;

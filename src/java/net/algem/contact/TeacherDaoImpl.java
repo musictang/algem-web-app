@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherIO.java Algem Web App 1.4.0 27/06/2016
+ * @(#) TeacherDaoImpl.java Algem Web App 1.4.0 27/06/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -19,6 +19,8 @@
  */
 package net.algem.contact;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -33,6 +35,7 @@ import net.algem.planning.ScheduleRangeElement;
 import net.algem.planning.ScheduleRangeIO;
 import net.algem.util.AbstractGemDao;
 import net.algem.util.NamedModel;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -43,11 +46,15 @@ import org.springframework.stereotype.Repository;
  * @since 1.0.6 06/01/2016
  */
 @Repository
-public class TeacherIO
-        extends AbstractGemDao
+public class TeacherDaoImpl
+        extends AbstractGemDao 
+        implements TeacherDao
 {
 
   public static final String TABLE = "prof";
+  public static final String FOLLOW_UP_T = "suivi";
+  public static final String FOLLOW_UP_SEQ = "idsuivi";
+  
   private final static String FOLLOWUP_STATEMENT = "SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom,v.texte"
           + " FROM " + ScheduleDao.TABLE + " p"
           + " JOIN " + ScheduleRangeIO.TABLE + " pl ON (p.id = pl.idplanning)"
@@ -59,6 +66,7 @@ public class TeacherIO
           + " AND jour BETWEEN ? AND ?"
           + " ORDER BY p.jour,pl.debut";
 
+  @Override
   public List<ScheduleElement> findFollowUp(final int teacher, Date from, Date to) {
     System.out.println(FOLLOWUP_STATEMENT);
     return jdbcTemplate.query(FOLLOWUP_STATEMENT, new RowMapper<ScheduleElement>()
@@ -79,7 +87,7 @@ public class TeacherIO
         d.setDetail("note", new NamedModel(d.getNote(), rs.getString(11)));
         d.setDetail("estab", null);
 
-        Collection<ScheduleRangeElement> ranges = getRanges(d.getId());
+        Collection<ScheduleRangeElement> ranges = getRanges(d.getId(), d.getStart().toString());
         d.setRanges(ranges);
 
         return d;
@@ -87,11 +95,11 @@ public class TeacherIO
     }, teacher, from, to);
   }
 
-  private Collection<ScheduleRangeElement> getRanges(final int id) {
+  private Collection<ScheduleRangeElement> getRanges(final int id, String start) {
     String query = " SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte"
             + " FROM " + ScheduleRangeIO.TABLE + " pl JOIN " + PersonIO.TABLE + " p ON (pl.adherent = p.id)"
             + " LEFT JOIN suivi s ON (pl.note = s.id)"
-            + " WHERE pl.idplanning = ? ORDER BY pl.debut";
+            + " WHERE pl.idplanning = ? AND pl.debut = ? ORDER BY pl.debut";
     System.out.println(query);
     return jdbcTemplate.query(query, new RowMapper<ScheduleRangeElement>()
     {
@@ -117,7 +125,61 @@ public class TeacherIO
 
         return r;
       }
-    }, id);
+    }, id, java.sql.Time.valueOf(start + ":00"));
   }
 
+  @Override
+  public void createFollowUp(final FollowUp follow) {
+    final int id = nextId(FOLLOW_UP_SEQ);
+    follow.setId(id);
+    final String sql = "INSERT INTO suivi(id,texte) VALUES(?,?)";
+    jdbcTemplate.update(new PreparedStatementCreator()
+    {
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, id);
+        ps.setString(2, follow.getContent());
+        return ps;
+      }
+    });
+    
+  }
+  
+  private void updateSchedule(final int id, final int noteId) {
+     final String sql = "UPDATE " + ScheduleDao.TABLE + " SET note = ? WHERE id = ?";
+    jdbcTemplate.update(new PreparedStatementCreator()
+    {
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, noteId);
+        ps.setInt(2, id);
+        
+        return ps;
+      }
+    });
+  }
+  
+  @Override
+  public void updateFollowUp(final FollowUp follow) {
+    String text = follow.getContent();
+    if (text == null || text.isEmpty()) {
+      //delete
+      return;
+    }
+    final String sql = "UPDATE suivi SET texte = ? WHERE id = ?";
+    jdbcTemplate.update(new PreparedStatementCreator()
+    {
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, follow.getContent());
+        ps.setInt(2, follow.getId());
+        
+        return ps;
+      }
+    });
+  }
+  
 }

@@ -195,20 +195,6 @@
   display: inline-block;
 }
 
-#datepicker, #pickerFrom, #pickerTo {
-  position: relative;
-  z-index: 3000;
-}
-
-#datepicker, .week-date {
-  font-size: small;
-  text-align: center;
-  width: 5.5em;
-  background-color: #eee;
-  border: 1px solid gray;
-  border-radius: 4px
-}
-
 .tip {
   position: absolute;
   top: 1.2em;

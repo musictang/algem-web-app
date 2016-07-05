@@ -36,7 +36,7 @@ import net.algem.config.ConfigKey;
 import net.algem.contact.Email;
 import net.algem.contact.Person;
 import net.algem.contact.PersonIO;
-import net.algem.contact.TeacherIO;
+import net.algem.contact.TeacherDaoImpl;
 import net.algem.group.Group;
 import net.algem.group.GroupIO;
 import net.algem.util.AbstractGemDao;
@@ -259,7 +259,7 @@ public class UserDaoImpl
 
   @Override
   public int getTeacher(int userId) {
-    String query = "SELECT idper FROM " + TeacherIO.TABLE + " WHERE idper = ? AND actif = TRUE";
+    String query = "SELECT idper FROM " + TeacherDaoImpl.TABLE + " WHERE idper = ? AND actif = TRUE";
     return jdbcTemplate.queryForObject(query, Integer.class, userId);
   }
 

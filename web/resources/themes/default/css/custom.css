@@ -29,6 +29,10 @@ body {
   color: white;
 }
 
+.main-text-color {
+  color: #ff5719;
+}
+
 .global {
   color: #444;
   background-color: white;

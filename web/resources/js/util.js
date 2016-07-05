@@ -17,6 +17,24 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
+function logVars() {
+  var l = arguments.length;
+  if (l == 0) {return;}
+  for (var i = 0 ;i < l; i++) {
+    $.each(arguments[i], function (key, value) {
+      console.log(key, value);
+    });
+  }
+}
+
+//function log() {
+//  var l = arguments.length;
+//  if (l == 0) {return;}
+//  for (var i = 0 ;i < l; i++) {
+//    console.log("i", i);
+//  }
+//}
+
 /**
  * Pad a number with 0.
  * If size is undefined, default padding length is 2.
@@ -43,7 +61,7 @@ function dateFormatFR(d) {
     console.log("erreur date");
   }
   //var arg = first.toLocaleString().replace(/\//g, "-");
-  var s = d.toISOString().slice(0, 10);//2016-06-12 yyyy-mm-dd
+  var s = d.toISOString().slice(0, 10);//2016-06-12 yyyy-mm-dd 
   var dd = s.slice(8, 10);
   var mm = s.slice(5, 7);
   var y = s.slice(0, 4);
@@ -51,6 +69,47 @@ function dateFormatFR(d) {
   return dd.concat(sep, mm, sep, y);
 }
 
+/**
+ * Gets a string representation of a time in minutes : hh:mm.
+ * @param {type} m time in minutes
+ * @returns {String} a time-formatted string
+ */
 function getTimeFromMinutes(m) {
   return (m/60>>0).pad() + ":" + (m%60).pad();
+}
+
+/**
+ * Gets first and last day of the week the date in argument is.
+ * @param {type} d selected date
+ * @returns {getCurrentWeekDates.utilAnonym$0}
+ */
+function getCurrentWeekDates(d) {
+  var first = new Date(d.setDate(d.getDate() - d.getDay() + 1));
+  first.setHours(0, -first.getTimezoneOffset(), 0, 0); //removing the timezone offset.
+  var last = new Date(first);
+  var last = new Date(last.setDate(last.getDate() + last.getDay() + 5));
+  last.setHours(0, -last.getTimezoneOffset(), 0, 0); 
+  
+  return {first: first, last: last}
+}
+
+/**
+ * Gets first and last day of the current month.
+ * @returns {getCurrentMonthDates.utilAnonym$1}
+ */
+function getCurrentMonthDates() {
+  var now = new Date();
+  var first = new Date(now.getFullYear(), now.getMonth(), 1);
+  first.setHours(0, -first.getTimezoneOffset(), 0, 0); //removing the timezone offset.
+  var last = new Date();
+  var last = new Date(last.getFullYear(), last.getMonth() + 1, 0);
+  last.setHours(0, -last.getTimezoneOffset(), 0, 0); 
+  
+  return {first: first, last: last};
+}
+
+function getLocale() {
+  return navigator.languages && navigator.languages[0] || // Chrome / Firefox
+               navigator.language ||   // All browsers
+               navigator.userLanguage; // IE <= 10
 }

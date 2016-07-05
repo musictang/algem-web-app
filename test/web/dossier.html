@@ -54,40 +54,40 @@
           autoOpen: false,
           width: 400,
           height: 480,
-           buttons: {
-      Abandon: function () {
-        $(this).dialog("close");
-      },
-      Ok: function () {
-        ;
-      }
-    }
+          buttons: {
+            Abandon: function () {
+              $(this).dialog("close");
+            },
+            Ok: function () {
+              ;
+            }
+          }
         });
-      
-        $(".elink").click(function() {
-          $("#suivi").dialog({title:$(this).text()}).dialog("open");
+
+        $(".elink").click(function () {
+          $("#suivi").dialog({title: $(this).text()}).dialog("open");
         });
-      $(".show-detail").click(function() {
-        $(".detail").toggle();
-      });
-      weeklyDatePicker("30-05-2016", 1234);
-          $( "input[value='aujourd\'hui']")
-      .button()
-      .click(function( event ) {
-        event.preventDefault();
-      });
+        $(".show-detail").click(function () {
+          $(".detail").toggle();
+        });
+        weeklyDatePicker("30-05-2016", 1234);
+        $("input[value='aujourd\'hui']")
+                .button()
+                .click(function (event) {
+                  event.preventDefault();
+                });
       });
     </script>
   </head>
   <body>
-     <div id="suivi">
+    <div id="suivi">
       <form>
         <fieldset>
           <legend>PIANO<br />mercredi 01-06-2016 17:00-17:30</legend>
-        <label for="app">Suivi</label><textarea style="display: block;width: 100%" rows="10" id="app"></textarea>
-        <label for="note">Note</label><input id="note" type="text" maxlength="8" style="width: 4em"/>
-        <input id="abs" type="checkbox" />&nbsp;<label for="abs">Absent</label>
-        <input id="exc" type="checkbox" />&nbsp;<label for="exc">Excusé</label>
+          <label for="app">Suivi</label><textarea style="display: block;width: 100%" rows="10" id="app"></textarea>
+          <label for="note">Note</label><input id="note" type="text" maxlength="8" style="width: 4em"/>
+          <input id="abs" type="checkbox" />&nbsp;<label for="abs">Absent</label>
+          <input id="exc" type="checkbox" />&nbsp;<label for="exc">Excusé</label>
         </fieldset>
       </form>
     </div>
@@ -127,7 +127,7 @@
           <li><i class="fa fa-calendar"></i>
             <a href="/algem/planning/perso/weekly.html?d=20-06-2016&amp;id=12019" title="Vue par semaine">Mon planning hebdo</a>
           </li>
-      </ul>
+        </ul>
       </div>
       <h3>Mes réservations</h3>
       <table class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
@@ -143,94 +143,125 @@
           </tr>
         </thead>
         <tbody><tr>
-          <td></td>
-          <td>Malakoff</td>
-          <td>BLEUE</td>
-          <td><a href="/algem/planning/daily.html?d=09-04-2016&amp;e=3501">09-04-2016</a></td>
-          <td>12:00-13:00</td>
-          <td class="pending">En attente de confirmation</td>
-          <td><a href="/algem/planning/perso/book-cancel.html?id=11&amp;action=78154&amp;date=09-04-2016&amp;start=12:00">Annuler</a></td>
-        </tr>
+            <td></td>
+            <td>Malakoff</td>
+            <td>BLEUE</td>
+            <td><a href="/algem/planning/daily.html?d=09-04-2016&amp;e=3501">09-04-2016</a></td>
+            <td>12:00-13:00</td>
+            <td class="pending">En attente de confirmation</td>
+            <td><a href="/algem/planning/perso/book-cancel.html?id=11&amp;action=78154&amp;date=09-04-2016&amp;start=12:00">Annuler</a></td>
+          </tr>
         </tbody>
       </table>
       <h3>Suivi</h3>
       <header>
-      <nav class="date-panel">
-        <input type="button" value="Aujourd'hui" /><input type="button" value="Mois courant"/><label for="pickerFrom">Semaine du </label><input id="pickerFrom" type="text" readonly="readonly" tabindex="3" /></nav></header>
+        <nav class="date-panel">
+          <input type="button" value="Aujourd'hui" /><input type="button" value="Mois courant"/><label for="pickerFrom">Semaine du </label><input id="pickerFrom" type="text" readonly="readonly" tabindex="3" /></nav></header>
       <table class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
         <thead>
           <tr><th>Jour</th><th>Date</th><th>Début</th><th>Fin</th><th>Durée</th><th>Cours</th><th>Elèves</th><th>Suivi</th></tr>
         </thead>
         <tbody>
           <tr><td>mardi</td><td>07-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
-<tr><td>mardi</td><td>07-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
-<tr><td>mardi</td><td>07-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
-<tr><td>mardi</td><td>07-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+          <tr><td>mardi</td><td>07-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+          <tr><td>mardi</td><td>07-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+          <tr><td>mardi</td><td>07-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
           <tr><td>mercredi</td><td>01-06-2016</td><td>15:15</td><td>15:45</td><td></td><td>PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>
           <tr><td>mercredi</td><td>01-06-2016</td><td>	15:45</td><td>	17:00</td><td>01:15</td><td>PIANO CO</td><td><a href="javascript:;" class="show-detail">Liste des élèves...</a><ul class="detail"><li><a id="1250" class="elink" href="javascript:;" >Elise durand</a></li><li><a class="elink" href="javascript:;" >Marcel Dupont</a></li><li><a class="elink" href="javascript:;" >Charles Martel</a></li></ul></td><td></td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	17:00</td><td>	17:30</td><td>00:30</td><td>PIANO</td><td><a class="elink" href="javascript:;">Marcel Dupont</a></td><td>Le beau danuble bleu premier couplet et refrain. La gamme diatonique.</td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	17:30</td><td>	18:00</td><td></td><td>PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td><a href="javascript:;" class="show-detail">Liste des  élèves...</a><ul class="detail"><li><a id="1250" class="elink" href="javascript:;" >Elise durand</a></li><li><a class="elink" href="javascript:;" >Marcel Dupont</a></li><li><a class="elink" href="javascript:;" >Charles Martel</a></td><td></td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
-<tr><td>mercredi</td><td>01-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
-<!--<tr><td>mardi</td><td>07-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>07-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>07-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>07-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>08-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>08-06-2016</td><td>	15:45</td><td>	17:00</td><td></td><td>	PIANO CO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>08-06-2016</td><td>	17:00</td><td>	17:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>08-06-2016</td><td>	17:30	</td><td>18:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>08-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>08-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>08-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>08-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>14-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>14-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>14-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>14-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>15-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>15-06-2016</td><td>	15:45</td><td>	17:00</td><td></td><td>	PIANO CO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>15-06-2016</td><td>	17:00</td><td>	17:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>15-06-2016</td><td>	17:30</td><td>	18:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>15-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>15-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>15-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>15-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>21-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>21-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>21-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>21-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>22-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>22-06-2016</td><td>	15:45</td><td>	17:00</td><td></td><td>	PIANO CO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>22-06-2016</td><td>	17:00</td><td>	17:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>22-06-2016</td><td>	17:30</td><td>	18:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>22-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>22-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>22-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>22-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>28-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>28-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>28-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mardi</td><td>28-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>29-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>29-06-2016</td><td>	15:45</td><td>	17:00</td><td></td><td>	PIANO CO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>29-06-2016</td><td>	17:00</td><td>	17:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>29-06-2016</td><td>	17:30</td><td>	18:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>29-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>29-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>29-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
-<tr><td>mercredi</td><td>29-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	-->
-        </tbody>
-      </table>
-    </div>
-   
-    <footer>
-      <a class="logo" target="_blank" href="http://www.musiques-tangentes.asso.fr"><img src="/algem/planning/resources/themes/img/logo.png" /></a>
-      <address>
-        &copy;&nbsp;2015&nbsp;Musiques&nbsp;Tangentes&nbsp;AGPL&nbsp;3&nbsp;| v.1.2.1&nbsp;<a href="http://www.algem.net" target="_blank">www.algem.net</a>
-      </address>
-    </footer>
-  </body>
-</html>
+          <tr><td>mercredi</td><td>01-06-2016</td><td>	17:00</td><td>	17:30</td><td>00:30</td><td>PIANO</td><td><a class="elink" href="javascript:;">Marcel Dupont</a></td><td>Le beau danuble bleu premier couplet et refrain. La gamme diatonique.</td></tr>	
+          <tr><td>mercredi</td><td>01-06-2016</td><td>	17:30</td><td>	18:00</td><td></td><td>PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+          <tr><td>mercredi</td><td>01-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+          <tr><td>mercredi</td><td>01-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td><a href="javascript:;" class="show-detail">Liste des  élèves...</a><ul class="detail"><li><a id="1250" class="elink" href="javascript:;" >Elise durand</a></li><li><a class="elink" href="javascript:;" >Marcel Dupont</a></li><li><a class="elink" href="javascript:;" >Charles Martel</a></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>01-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>01-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td><a id="1250" class="elink" href="javascript:;" >Elise durand</a></td><td></td></tr>	
+                  <!--<tr><td>mardi</td><td>07-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>07-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>07-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>07-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>08-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>08-06-2016</td><td>	15:45</td><td>	17:00</td><td></td><td>	PIANO CO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>08-06-2016</td><td>	17:00</td><td>	17:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>08-06-2016</td><td>	17:30	</td><td>18:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>08-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>08-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>08-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>08-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>14-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>14-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>14-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>14-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>15-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>15-06-2016</td><td>	15:45</td><td>	17:00</td><td></td><td>	PIANO CO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>15-06-2016</td><td>	17:00</td><td>	17:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>15-06-2016</td><td>	17:30</td><td>	18:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>15-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>15-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>15-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>15-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>21-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>21-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>21-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>21-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>22-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>22-06-2016</td><td>	15:45</td><td>	17:00</td><td></td><td>	PIANO CO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>22-06-2016</td><td>	17:00</td><td>	17:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>22-06-2016</td><td>	17:30</td><td>	18:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>22-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>22-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>22-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>22-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>28-06-2016</td><td>	14:00</td><td>	14:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>28-06-2016</td><td>	14:30</td><td>	15:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>28-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mardi</td><td>28-06-2016</td><td>	15:45</td><td>	16:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>29-06-2016</td><td>	15:15</td><td>	15:45</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>29-06-2016</td><td>	15:45</td><td>	17:00</td><td></td><td>	PIANO CO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>29-06-2016</td><td>	17:00</td><td>	17:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>29-06-2016</td><td>	17:30</td><td>	18:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>29-06-2016</td><td>	18:15</td><td>	19:00</td><td></td><td>	PIANO</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>29-06-2016</td><td>	19:00</td><td>	20:30</td><td></td><td>	AT. MUSTANG 3</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>29-06-2016</td><td>	20:30</td><td>	21:00</td><td></td><td>	HARMONIE IND</td><td></td><td></td></tr>	
+                  <tr><td>mercredi</td><td>29-06-2016</td><td>	21:00</td><td>	21:30</td><td></td><td>	PIANO</td><td></td><td></td></tr>	-->
+                  </tbody>
+                  </table>
+                  </div>
+                  <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
+                    <thead>
+                      <tr><th>Jour</th><th>Horaire</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Suivi individuel</th><th>Suivi co.</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr id="100262"><!--id planning-->
+                        <td>mardi 07-06-2016</td><td>14:00-14:30</td><td>00:30</td><td>VERTE</td><td>PIANO</td>
+                        <td>
+                          <ul class="simple">
+                            <li id="225415"> <!--id plage-->
+                              <a id="41018" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Gilbert LAMANT</a>
+                              <p>Suivi individuel 07-06-2016</p>
+                            </li>
+                          </ul>
+                        </td>
+                        <td id="41018" class="dlg" accesskey="C">Suivi collectif du 07-06 13:00</td></tr>
+                      <tr id="102675"><td>mardi 07-06-2016</td><td>14:30-15:00</td><td>00:30</td><td>VERTE</td><td>HARMONIE IND</td><td><ul class="simple"><li id="225398"><a id="41019" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Florence THEOBALD</a><p>Suivi individuel 07-06-2016
+                                14:30</p></li></ul></td><td id="41019" class="dlg" accesskey="C"></td></tr>
+                      <tr id="96023"><td>mardi 07-06-2016</td><td>15:15-15:45</td><td>00:30</td><td>VERTE</td><td>PIANO</td><td><ul class="simple"><li id="219723"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Lea PENNETEAU</a></li></ul></td><td id="0" class="dlg" accesskey="C"></td></tr>
+                      <tr id="96023"><td>mardi 07-06-2016</td><td>15:45-16:30</td><td>00:45</td><td>VERTE</td><td>PIANO</td><td><ul class="simple"><li id="214244"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Jacques TAILLADE</a></li></ul></td><td id="0" class="dlg" accesskey="C"></td></tr>
+                      <tr id="99884"><td>mercredi 08-06-2016</td><td>15:15-15:45</td><td>00:30</td><td>VERTE</td><td>PIANO</td><td><ul class="simple"><li id="219954"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Malcolm DANSET</a></li></ul></td><td id="0" class="dlg" accesskey="C"></td></tr>
+                      <tr id="96279"><td>mercredi 08-06-2016</td><td>15:45-17:00</td><td>01:15</td><td>VERTE</td><td>PIANO CO</td><td><a href="javascript:;" class="expand">Liste des élèves...</a><ul class="simple collapse"><li id="219275"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Anaïs CHABERT</a></li><li id="219307"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Jérémie CHAUMIER</a></li><li id="219339"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Sacha BERAUD</a></li></ul></td><td id="0" class="dlg" accesskey="C"></td></tr>
+                      <tr id="96311"><td>mercredi 08-06-2016</td><td>17:00-17:30</td><td>00:30</td><td>VERTE</td><td>PIANO</td><td><ul class="simple"><li id="218507"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Antoine DEVERINES HAUSEUX</a></li></ul></td><td id="0" class="dlg" accesskey="C"></td></tr>
+                      <tr id="100643"><td>mercredi 08-06-2016</td><td>17:30-18:00</td><td>00:30</td><td>ORCHESTRA</td><td>PIANO</td><td><ul class="simple"><li id="221777"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Rémy GINOYER</a></li></ul></td><td id="0" class="dlg" accesskey="C"></td></tr>
+                      <tr id="96411"><td>mercredi 08-06-2016</td><td>18:15-19:00</td><td>00:45</td><td>VERTE</td><td>PIANO</td><td><ul class="simple"><li id="212738"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Ulysse VIDAL</a></li></ul></td><td id="0" class="dlg" accesskey="C"></td></tr>
+                      <tr id="95446"><td>mercredi 08-06-2016</td><td>19:00-20:30</td><td>01:30</td><td>ORCHESTRA</td><td>AT. MUSTANG 3</td><td><a href="javascript:;" class="expand">Liste des élèves...</a><ul class="simple collapse"><li id="212802"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Laurent PIERRE</a></li><li id="214276"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Jacques TAILLADE</a></li><li id="214948"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Marie-José GIREAUD</a></li><li id="221438"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Delphine ROCHET</a></li><li id="222092"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Younes MAHI</a></li><li id="222917"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Corinne HUMBERT</a></li></ul></td><td id="0" class="dlg" accesskey="C"></td></tr>
+                      <tr id="97567"><td>mercredi 08-06-2016</td><td>20:30-21:00</td><td>00:30</td><td>VERTE</td><td>HARMONIE IND</td><td><ul class="simple"><li id="214532"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Pierre JACQUET</a></li></ul></td><td id="0" class="dlg" accesskey="C"></td></tr>
+                      <tr id="96443"><td>mercredi 08-06-2016</td><td>21:00-21:30</td><td>00:30</td><td>VERTE</td><td>PIANO</td><td><ul class="simple"><li id="223923"><a id="0" href="javascript:;" class="dlg" title="Cliquez-moi pour éditer mon suivi individuel" accesskey="D">Mathias SICHLER</a></li></ul></td><td id="0" class="dlg" accesskey="C"></td></tr>
+                      <tr><th colspan="2">Total</th><td colspan="5"><b>08:15</b></td></tr></tbody>
+                    <tfoot></tfoot>
+                  </table>
+
+                  <footer>
+                    <a class="logo" target="_blank" href="http://www.musiques-tangentes.asso.fr"><img src="/algem/planning/resources/themes/img/logo.png" /></a>
+                    <address>
+                      &copy;&nbsp;2015&nbsp;Musiques&nbsp;Tangentes&nbsp;AGPL&nbsp;3&nbsp;| v.1.2.1&nbsp;<a href="http://www.algem.net" target="_blank">www.algem.net</a>
+                    </address>
+                  </footer>
+                  </body>
+                  </html>

@@ -30,10 +30,13 @@
     <link rel="stylesheet" th:href="@{/resources/themes/css/mediaqueries.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/font-awesome.min.css}" />
     <script type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
+
     <script type="text/javascript" th:src="@{/resources/js/jquery-ui-1.11.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/jquery-ui.datepicker-fr.js}"></script>
     <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/common.js}"></script>
     <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/util.js}"></script>
     <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/dossier.js}"></script>
+
   </head>
   <body>
     <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
@@ -99,8 +102,15 @@
       <section sec:authorize="${hasRole('2')}">
         <h3 th:text="#{follow-up.label}">Suivi</h3>
         <header>
-          <nav class="date-panel">
-            <input id="follow-d" type="button" th:value="#{today.label}" th:formaction="@{/perso/xFollowUp}" ></input><input type="button" th:value="#{current.month.label}"/><label for="pickerFrom">Semaine du </label><input id="pickerFrom" type="text" readonly="readonly" tabindex="3" /></nav></header>
+          <nav>
+            <ul class="horizontal-panel-menu">
+              <li><a href="" id="follow-d" th:text="#{today.label}" th:formaction="@{/perso/xFollowUp}" /></li>
+              <li><a href="" id="follow-m" th:text="#{current.month.label}"/></li>
+              <li><a href="" id="follow-w" th:text="#{current.week.label}"/></li>
+              <li><label for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value="04-07-2016"/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value="10-07-2016"/></li>
+            </ul>
+          </nav>
+        </header>
         <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
           <thead>
             <tr><th>Jour</th><th>Horaire</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Suivi individuel</th><th>Suivi co.</th></tr>
@@ -112,7 +122,7 @@
       </section>
     </div>
     <div id="follow-up-dlg">
-      <form th:action="@{/perso/xEditFollowUp}">
+      <form id="follow-up-form" th:action="@{/perso/xEditFollowUp}">
         <fieldset>
           <legend>PIANO<br />mercredi 01-06-2016 17:00-17:30</legend>
           <label for="follow-content">Suivi</label><textarea style="display: block;width: 100%" rows="10" id="follow-content" name="content"></textarea>
@@ -120,6 +130,8 @@
           <input id="abs" type="checkbox" />&nbsp;<label for="abs" name="abs">Absent</label>
           <input id="exc" type="checkbox" />&nbsp;<label for="exc" name="exc">Excusé</label>
           <input id="noteId" type="hidden" name="noteId" value=""/>
+          <input id="scheduleId" type="hidden" name="scheduleId" value=""/>
+          <input id="noteType" type="hidden" name="noteType" value=""/>
         </fieldset>
       </form>
     </div>
@@ -131,8 +143,26 @@
     var dlg = $("#follow-up-dlg");
     setCommonEvents();
     initFollowUpDialog(dlg);
+    var cwd = getCurrentWeekDates(new Date());
+    var url = $("#follow-d").attr("formaction");
+    setWeekDates(dateFormatFR(cwd.first), dateFormatFR(cwd.last));
+    setWeekChange(url, userId);
     $("#follow-d").click(function () {
-      getFollowUp(this, userId);
+      var now = new Date();
+      console.log(dateFormatFR(now));
+      getFollowUp(url, userId, dateFormatFR(now), dateFormatFR(now));
+      setWeekDates(dateFormatFR(now), dateFormatFR(now));
+    });
+    $("#follow-m").click(function () {
+      var cmd = getCurrentMonthDates();
+      console.log(dateFormatFR(cmd.first) + " " + dateFormatFR(cmd.last));
+      getFollowUp(url, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+      setWeekDates(dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+    });
+    $("#follow-w").click(function () {
+      console.log(dateFormatFR(cwd.first) + " " + dateFormatFR(cwd.last));
+      getFollowUp(url, userId, dateFormatFR(cwd.first), dateFormatFR(cwd.last));
+      setWeekDates(dateFormatFR(cwd.first), dateFormatFR(cwd.last));
     });
     //manage ajax loaded content
     $(document).on("click", ".expand", function () {
@@ -163,6 +193,10 @@
       if (noteContent !== undefined && noteContent.get(0) !== undefined) {
         $("#follow-content").html(noteContent.get(0).nodeValue);
       }
+      
+      $("#noteId").val($(this).attr("id"));
+      $("#scheduleId").val(isCo ? row.attr("id"): $(this).closest("li").attr("id"));
+      $("#noteType").val(isCo);
       $(dlg).dialog({title: t}).dialog("open");
 
     });

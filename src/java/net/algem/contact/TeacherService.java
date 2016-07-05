@@ -17,11 +17,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.algem.contact;
 
 import java.util.Date;
 import java.util.List;
+import net.algem.planning.FollowUp;
 import net.algem.planning.ScheduleElement;
 
 /**
@@ -30,9 +30,13 @@ import net.algem.planning.ScheduleElement;
  * @version 1.4.0
  * @since 1.4.0 21/06/2016
  */
-public interface TeacherService 
+public interface TeacherService
 {
-  
+
   List<ScheduleElement> getFollowUp(int teacher, Date from, Date to);
+
+  void createFollowUp(FollowUp up);
+
+  void updateFollowUp(FollowUp up);
 
 }

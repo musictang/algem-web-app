@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherServiceImpl.java Algem Web App 1.4.0 27/06/2016
+ * @(#) TeacherDao.java Algem Web App 1.4.0 05/07/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -24,39 +24,19 @@ import java.util.Date;
 import java.util.List;
 import net.algem.planning.FollowUp;
 import net.algem.planning.ScheduleElement;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @version 1.4.0
- * @since 1.4.0 21/06/2016
+ * @since 1.4.0 05/07/2016
  */
-@Service
-public class TeacherServiceImpl 
-    implements TeacherService
-{
+public interface TeacherDao {
 
-  @Autowired
-  private TeacherDaoImpl dao;
+  List<ScheduleElement> findFollowUp(final int teacher, Date from, Date to);
   
-  @Override
-  public List<ScheduleElement> getFollowUp(int teacher, Date from, Date to) {
-    return dao.findFollowUp(teacher, from, to);
-  }
+  void createFollowUp(final FollowUp follow);
 
-  @Override
-  @Transactional
-  public void createFollowUp(FollowUp up) {
-    dao.updateFollowUp(up);
-  }
-
-  @Override
-  @Transactional
-  public void updateFollowUp(FollowUp up) {
-    dao.createFollowUp(up);
-  }
+  void updateFollowUp(final FollowUp follow);
 
 }

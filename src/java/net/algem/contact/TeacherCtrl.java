@@ -26,14 +26,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.algem.planning.FollowUp;
 import net.algem.planning.ScheduleElement;
-import net.algem.security.UserCtrl;
 import static net.algem.util.Constants.DATE_FORMAT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -53,12 +54,16 @@ public class TeacherCtrl {
   }
   
  @RequestMapping(method = RequestMethod.GET, value = "/perso/xFollowUp")
-  public @ResponseBody List<ScheduleElement> getFollowUp(Principal p) {
+  public @ResponseBody List<ScheduleElement> getFollowUp(
+          @RequestParam("userId") String userId,
+          @RequestParam("from") String from,
+          @RequestParam("to") String to,
+          Principal p) {
     List<ScheduleElement> f = null;
     try {
-      Date dateFrom = DATE_FORMAT.parse("06-06-2016");
-      Date dateTo = DATE_FORMAT.parse("12-06-2016");
-      f = service.getFollowUp(12019, dateFrom, dateTo);
+      Date dateFrom = DATE_FORMAT.parse(from);
+      Date dateTo = DATE_FORMAT.parse(to);
+      f = service.getFollowUp(Integer.parseInt(userId), dateFrom, dateTo);
     } catch(DataAccessException ex) {
       Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, null, ex);
     } catch (ParseException ex) {
@@ -66,4 +71,27 @@ public class TeacherCtrl {
     }
     return f;
   }
+  
+  @RequestMapping(method = RequestMethod.POST, value = "/perso/xEditFollowUp")
+  public @ResponseBody boolean editFollowUp(
+          @RequestParam("noteId") int id,
+          @RequestParam("scheduleId") int scheduleId,
+          @RequestParam("noteType") boolean type,
+          @RequestParam("content") String content) {
+    FollowUp up = new FollowUp();
+    up.setId(id);
+    up.setContent(content);
+    System.out.println(up.getId());
+    System.out.println(up.getContent());
+    if (id == 0) {
+      // create
+    } else {
+      //service.updateFollowUp(up);
+    }
+    
+    return false;
+  }
+  
+  
+          
 }

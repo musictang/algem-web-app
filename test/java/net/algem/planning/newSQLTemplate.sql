@@ -125,3 +125,8 @@ JOIN suivi v ON (p.note = v.id)
 WHERE p.idper = 12019
 AND jour BETWEEN '06-06-2016' AND '12-06-2016'
 ORDER BY p.jour,pl.debut;
+
+SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte 
+FROM plage pl JOIN personne p ON (pl.adherent = p.id) LEFT JOIN suivi s ON (pl.note = s.id) 
+WHERE pl.idplanning = 96023 and pl.debut = '15:15'
+ORDER BY pl.debut;
