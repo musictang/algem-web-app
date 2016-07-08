@@ -358,6 +358,7 @@ select {font-size: small;}
   font-weight: bold
 }
 .panel, #xlogin-panel {padding: 1em;}
+.ui-dialog {z-index: 2002 !important ;}
 .ui-dialog-title {font-family: ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;}
 .ui-widget,#datepicker,.week-date {font-family: ubuntu,Verdana,sans-serif}
 .ui-datepicker-title {color: #444;}

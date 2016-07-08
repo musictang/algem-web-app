@@ -27,14 +27,6 @@ function logVars() {
   }
 }
 
-//function log() {
-//  var l = arguments.length;
-//  if (l == 0) {return;}
-//  for (var i = 0 ;i < l; i++) {
-//    console.log("i", i);
-//  }
-//}
-
 /**
  * Pad a number with 0.
  * If size is undefined, default padding length is 2.

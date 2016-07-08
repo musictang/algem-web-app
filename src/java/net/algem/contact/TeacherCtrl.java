@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.algem.contact;
 
 import java.security.Principal;
@@ -32,6 +31,7 @@ import static net.algem.util.Constants.DATE_FORMAT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,17 +44,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @since 1.4.0 21/06/2016
  */
 @Controller
-public class TeacherCtrl {
-  
+public class TeacherCtrl
+{
+
   @Autowired
   private TeacherService service;
 
   public void setService(TeacherService service) {
     this.service = service;
   }
-  
- @RequestMapping(method = RequestMethod.GET, value = "/perso/xFollowUp")
-  public @ResponseBody List<ScheduleElement> getFollowUp(
+
+  @RequestMapping(method = RequestMethod.GET, value = "/perso/xFollowUp")
+  public @ResponseBody
+  List<ScheduleElement> getFollowUp(
           @RequestParam("userId") String userId,
           @RequestParam("from") String from,
           @RequestParam("to") String to,
@@ -64,34 +66,73 @@ public class TeacherCtrl {
       Date dateFrom = DATE_FORMAT.parse(from);
       Date dateTo = DATE_FORMAT.parse(to);
       f = service.getFollowUp(Integer.parseInt(userId), dateFrom, dateTo);
-    } catch(DataAccessException ex) {
+    } catch (DataAccessException ex) {
       Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, null, ex);
     } catch (ParseException ex) {
       Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, null, ex);
     }
     return f;
   }
-  
+
   @RequestMapping(method = RequestMethod.POST, value = "/perso/xEditFollowUp")
-  public @ResponseBody boolean editFollowUp(
-          @RequestParam("noteId") int id,
-          @RequestParam("scheduleId") int scheduleId,
-          @RequestParam("noteType") boolean type,
-          @RequestParam("content") String content) {
+  public @ResponseBody
+  FollowUpResponse editFollowUp(
+          @RequestParam String id,
+          @RequestParam String scheduleId,
+          @RequestParam String collective,
+          @RequestParam String content
+  ) {
     FollowUp up = new FollowUp();
-    up.setId(id);
+    int upId = Integer.parseInt(id);
+    up.setId(upId);
+    up.setScheduleId(Integer.parseInt(scheduleId));
+    up.setCollective(Boolean.parseBoolean(collective));
     up.setContent(content);
-    System.out.println(up.getId());
-    System.out.println(up.getContent());
-    if (id == 0) {
-      // create
-    } else {
-      //service.updateFollowUp(up);
+    Logger.getLogger(TeacherCtrl.class.getName()).log(Level.INFO, up.toString());
+    if (service.updateFollowUp(up)) {
+      return new FollowUpResponse(true, up.isCollective(), upId == 0);
     }
-    
-    return false;
+    return new FollowUpResponse(false,false,false);
   }
   
-  
-          
+  private class FollowUpResponse {
+    private boolean success;
+    private boolean collective;
+    private boolean creation;
+
+    public FollowUpResponse() {
+    }
+
+    public FollowUpResponse(boolean success, boolean collective, boolean creation) {
+      this.success = success;
+      this.collective = collective;
+      this.creation = creation;
+    }
+
+    public boolean isCollective() {
+      return collective;
+    }
+
+    public void setCollective(boolean collective) {
+      this.collective = collective;
+    }
+
+    public boolean isCreation() {
+      return creation;
+    }
+
+    public void setCreation(boolean creation) {
+      this.creation = creation;
+    }
+
+    public boolean isSuccess() {
+      return success;
+    }
+
+    public void setSuccess(boolean success) {
+      this.success = success;
+    }
+    
+  }
+
 }

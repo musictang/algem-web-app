@@ -83,6 +83,7 @@ function initFollowUpDialog(element) {
       },
       Enregistrer: function () {
         updateFollowUp($("#follow-up-form"));
+        $(this).dialog("close");
       }
     }
   });
@@ -106,17 +107,36 @@ function updateFollowUp(form) {
   var url = $(form).attr("action");
   var id = $(form).find("#noteId").val();
   var schedule = $(form).find("#scheduleId").val();
-  var type = $(form).find("#noteType").val();
+  var collective = $(form).find("#noteType").val();
   console.log(url);
   console.log(id);
   console.log(schedule);
-  console.log(type);
-  $.post(url, JSON.stringify({noteId: id, scheduleId: schedule, noteType: type}), function (data) {
-    if (typeof data === 'undefined' || !data.length) {
-      console.log("post no data");
+  console.log(collective);
+  $.post(url, form.serialize(), function (data) {
+    console.log(data);
+    if (data && data.success) {
+      var content = $("#follow-content").val();
+      console.log("id = " +id + ", content = " + content);
+      console.log(collective);
+      refreshFollowContent(id, data, content);
+    } else {
+      console.log("erreur !!!")
     }
-//    console.log(data)
   }, "json");
+}
+
+function refreshFollowContent(id, data, content) {
+  if (data.collective) {
+    console.log("c'est collectif")
+    $("#" + id).text(content);
+  } else {
+    console.log(" id " + id + " c'est individuel")
+    if (data.creation) {
+      $("#" + id).closest("li").append("<p>" + content + "</p>");
+    } else {
+      $("#" + id).next().text(content);
+    }
+  }
 }
 
 function setWeekDates(firstDay, lastDay) {

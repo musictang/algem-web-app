@@ -35,8 +35,6 @@ public interface TeacherService
 
   List<ScheduleElement> getFollowUp(int teacher, Date from, Date to);
 
-  void createFollowUp(FollowUp up);
-
-  void updateFollowUp(FollowUp up);
+  boolean updateFollowUp(FollowUp up);
 
 }

@@ -22,9 +22,12 @@ package net.algem.contact;
 
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.algem.planning.FollowUp;
 import net.algem.planning.ScheduleElement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,14 +52,14 @@ public class TeacherServiceImpl
 
   @Override
   @Transactional
-  public void createFollowUp(FollowUp up) {
-    dao.updateFollowUp(up);
-  }
-
-  @Override
-  @Transactional
-  public void updateFollowUp(FollowUp up) {
-    dao.createFollowUp(up);
+  public boolean updateFollowUp(FollowUp up) {
+    try {
+      dao.updateFollowUp(up);
+    } catch(DataAccessException ex) {
+      Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+      return false;
+    }
+    return true;
   }
 
 }

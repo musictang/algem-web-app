@@ -47,14 +47,14 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class TeacherDaoImpl
-        extends AbstractGemDao 
+        extends AbstractGemDao
         implements TeacherDao
 {
 
   public static final String TABLE = "prof";
   public static final String FOLLOW_UP_T = "suivi";
   public static final String FOLLOW_UP_SEQ = "idsuivi";
-  
+
   private final static String FOLLOWUP_STATEMENT = "SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom,v.texte"
           + " FROM " + ScheduleDao.TABLE + " p"
           + " JOIN " + ScheduleRangeIO.TABLE + " pl ON (p.id = pl.idplanning)"
@@ -127,6 +127,23 @@ public class TeacherDaoImpl
       }
     }, id, java.sql.Time.valueOf(start + ":00"));
   }
+  
+    @Override
+  public void updateFollowUp(final FollowUp follow) {
+    String text = follow.getContent();
+    if (text == null || text.isEmpty()) {
+      //delete
+      return;
+    }
+    if (follow.getId() > 0) {
+      updateFollowUpContent(follow);
+    } else {
+      createFollowUp(follow);
+      updateSchedule(follow.getScheduleId(), follow.getId(), follow.isCollective());
+    }
+    
+
+  }
 
   @Override
   public void createFollowUp(final FollowUp follow) {
@@ -143,31 +160,10 @@ public class TeacherDaoImpl
         return ps;
       }
     });
-    
+
   }
-  
-  private void updateSchedule(final int id, final int noteId) {
-     final String sql = "UPDATE " + ScheduleDao.TABLE + " SET note = ? WHERE id = ?";
-    jdbcTemplate.update(new PreparedStatementCreator()
-    {
-      @Override
-      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, noteId);
-        ps.setInt(2, id);
-        
-        return ps;
-      }
-    });
-  }
-  
-  @Override
-  public void updateFollowUp(final FollowUp follow) {
-    String text = follow.getContent();
-    if (text == null || text.isEmpty()) {
-      //delete
-      return;
-    }
+
+  private void updateFollowUpContent(final FollowUp follow) {
     final String sql = "UPDATE suivi SET texte = ? WHERE id = ?";
     jdbcTemplate.update(new PreparedStatementCreator()
     {
@@ -176,10 +172,26 @@ public class TeacherDaoImpl
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, follow.getContent());
         ps.setInt(2, follow.getId());
-        
+
         return ps;
       }
     });
   }
-  
+
+  private void updateSchedule(final int id, final int noteId, boolean collective) {
+    
+    final String sql = "UPDATE " + (collective ? ScheduleDao.TABLE : ScheduleRangeIO.TABLE) + " SET note = ? WHERE id = ?";
+    jdbcTemplate.update(new PreparedStatementCreator()
+    {
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, noteId);
+        ps.setInt(2, id);
+
+        return ps;
+      }
+    });
+  }
+
 }

@@ -121,17 +121,17 @@
         </table>
       </section>
     </div>
-    <div id="follow-up-dlg">
+    <div id="follow-up-dlg" style="z-index: 30000">
       <form id="follow-up-form" th:action="@{/perso/xEditFollowUp}">
         <fieldset>
           <legend>PIANO<br />mercredi 01-06-2016 17:00-17:30</legend>
-          <label for="follow-content">Suivi</label><textarea style="display: block;width: 100%" rows="10" id="follow-content" name="content"></textarea>
+          <label for="follow-content">Suivi</label><textarea style="display: block;width: 100%" rows="10" id="follow-content" th:name="content"></textarea>
           <label for="note">Note</label><input id="note" type="text" name="note" maxlength="8" style="width: 4em" />
           <input id="abs" type="checkbox" />&nbsp;<label for="abs" name="abs">Absent</label>
           <input id="exc" type="checkbox" />&nbsp;<label for="exc" name="exc">Excusé</label>
-          <input id="noteId" type="hidden" name="noteId" value=""/>
-          <input id="scheduleId" type="hidden" name="scheduleId" value=""/>
-          <input id="noteType" type="hidden" name="noteType" value=""/>
+          <input id="noteId" type="hidden" th:name="id" />
+          <input id="scheduleId" type="hidden" th:name="scheduleId" />
+          <input id="noteType" type="hidden" th:name="collective" />
         </fieldset>
       </form>
     </div>
@@ -171,7 +171,7 @@
 
     $(document).on("click", ".dlg", function () {
       console.log("click dialog");
-      $("#follow-content").empty();
+      $("#follow-content").val('');
       var row = $(this).closest('tr');
       var course = row.find(':nth-child(5)').contents().get(0).nodeValue;
       var dateTime = row.find(':nth-child(1)').contents().get(0).nodeValue;
@@ -191,9 +191,9 @@
       $(legend).html(legendInfo);
       console.log(noteContent);
       if (noteContent !== undefined && noteContent.get(0) !== undefined) {
-        $("#follow-content").html(noteContent.get(0).nodeValue);
+        $("#follow-content").val(noteContent.get(0).nodeValue);
       }
-      
+      // complete form
       $("#noteId").val($(this).attr("id"));
       $("#scheduleId").val(isCo ? row.attr("id"): $(this).closest("li").attr("id"));
       $("#noteType").val(isCo);

@@ -29,10 +29,15 @@ package net.algem.planning;
 public class FollowUp {
   
   private int id;
+  private int scheduleId;
   private String content;
   private String note;
   private boolean absent;
   private boolean excused;
+  private boolean collective;
+
+  public FollowUp() {
+  }
 
   public int getId() {
     return id;
@@ -40,6 +45,14 @@ public class FollowUp {
 
   public void setId(int id) {
     this.id = id;
+  }
+
+  public int getScheduleId() {
+    return scheduleId;
+  }
+
+  public void setScheduleId(int scheduleId) {
+    this.scheduleId = scheduleId;
   }
 
   public String getContent() {
@@ -72,6 +85,19 @@ public class FollowUp {
 
   public void setExcused(boolean excused) {
     this.excused = excused;
+  }
+
+  public boolean isCollective() {
+    return collective;
+  }
+
+  public void setCollective(boolean collective) {
+    this.collective = collective;
+  }
+
+  @Override
+  public String toString() {
+    return "FollowUp{" + "id=" + id + ", scheduleId=" + scheduleId + ", content=" + content + ", note=" + note + ", absent=" + absent + ", excused=" + excused + ", collective=" + collective + '}';
   }
 
 }
