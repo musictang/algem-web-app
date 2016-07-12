@@ -67,7 +67,7 @@ public class TeacherDaoImpl
           + " ORDER BY p.jour,pl.debut";
 
   @Override
-  public List<ScheduleElement> findFollowUp(final int teacher, Date from, Date to) {
+  public List<ScheduleElement> findFollowUpSchedules(final int teacher, Date from, Date to) {
     System.out.println(FOLLOWUP_STATEMENT);
     return jdbcTemplate.query(FOLLOWUP_STATEMENT, new RowMapper<ScheduleElement>()
     {
@@ -94,9 +94,26 @@ public class TeacherDaoImpl
       }
     }, teacher, from, to);
   }
+  
+  public FollowUp findFollowUp(final int id) {
+    String query = "SELECT texte,note,abs,exc FROM " + FOLLOW_UP_T + " WHERE id = ?";
+    return jdbcTemplate.queryForObject(query, new RowMapper<FollowUp>() {
+      @Override
+      public FollowUp mapRow(ResultSet rs, int arg1) throws SQLException {
+        FollowUp up = new FollowUp();
+        up.setId(id);
+        up.setContent(rs.getString(1));
+        up.setNote(rs.getString(2));
+        up.setAbsent(rs.getBoolean(3));
+        up.setExcused(rs.getBoolean(4));
+        
+        return up;
+      }
+    }, id);
+  }
 
   private Collection<ScheduleRangeElement> getRanges(final int id, String start) {
-    String query = " SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte"
+    String query = " SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.abs,s.exc"
             + " FROM " + ScheduleRangeIO.TABLE + " pl JOIN " + PersonIO.TABLE + " p ON (pl.adherent = p.id)"
             + " LEFT JOIN suivi s ON (pl.note = s.id)"
             + " WHERE pl.idplanning = ? AND pl.debut = ? ORDER BY pl.debut";
@@ -121,6 +138,10 @@ public class TeacherDaoImpl
         FollowUp up = new FollowUp();
         up.setId(rs.getInt(9));
         up.setContent(rs.getString(10));
+        up.setNote(rs.getString(11));
+        up.setAbsent(rs.getBoolean(12));
+        up.setExcused(rs.getBoolean(13));
+        
         r.setFollowUp(up);
 
         return r;
@@ -133,7 +154,7 @@ public class TeacherDaoImpl
     String text = follow.getContent();
     if (text == null || text.isEmpty()) {
       //delete
-      return;
+//      return;
     }
     if (follow.getId() > 0) {
       updateFollowUpContent(follow);
@@ -149,7 +170,7 @@ public class TeacherDaoImpl
   public void createFollowUp(final FollowUp follow) {
     final int id = nextId(FOLLOW_UP_SEQ);
     follow.setId(id);
-    final String sql = "INSERT INTO suivi(id,texte) VALUES(?,?)";
+    final String sql = "INSERT INTO suivi(id,texte,note,abs,exc) VALUES(?,?,?,?,?)";
     jdbcTemplate.update(new PreparedStatementCreator()
     {
       @Override
@@ -157,6 +178,9 @@ public class TeacherDaoImpl
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, id);
         ps.setString(2, follow.getContent());
+        ps.setString(3, follow.getNote());
+        ps.setBoolean(4, follow.isAbsent());
+        ps.setBoolean(5, follow.isExcused());
         return ps;
       }
     });
@@ -164,15 +188,17 @@ public class TeacherDaoImpl
   }
 
   private void updateFollowUpContent(final FollowUp follow) {
-    final String sql = "UPDATE suivi SET texte = ? WHERE id = ?";
+    final String sql = "UPDATE suivi SET texte = ?, note=?, abs=?, exc=? WHERE id = ?";
     jdbcTemplate.update(new PreparedStatementCreator()
     {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, follow.getContent());
-        ps.setInt(2, follow.getId());
-
+        ps.setString(2, follow.getNote());
+        ps.setBoolean(3, follow.isAbsent());
+        ps.setBoolean(4, follow.isExcused());
+        ps.setInt(5, follow.getId());
         return ps;
       }
     });

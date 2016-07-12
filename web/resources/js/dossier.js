@@ -17,15 +17,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
-function getFollowUp(urlPath, user, dateFrom, dateTo) {
-//  var urlPath = $(el).attr("formaction");
-  console.log(urlPath);
+function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
   $.get(urlPath, {userId: user, from: dateFrom, to: dateTo}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("no data");
       $("#follow-up-result tbody").empty(); // supprimer contenu
     } else {
-      //console.log(data);
       var result = "";
       var total = 0;
       var indTitle = "Cliquez-moi pour éditer mon suivi individuel";
@@ -58,9 +55,12 @@ function getFollowUp(urlPath, user, dateFrom, dateTo) {
         }
         for (var i = 0, len = value.ranges.length; i < len; i++) {
           firstNameName = value.ranges[i].person.firstName + " " + value.ranges[i].person.name;
-          var nc = value.ranges[i].followUp.content;
-          result += "<li id=\""+ value.ranges[i].id +"\"><a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\"" + indTitle + "\" accessKey=\"D\">" + firstNameName + "</a>";
-          result += nc === null ? "</li>" : "<p>" + nc + "</p></li>";
+          var nc = value.ranges[i].followUp.content || "";
+          var sub = getFollowUpSubContent(value.ranges[i].followUp);
+          result += "<li id=\""+ value.ranges[i].id +"\"><a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\""+nc+"\" accessKey=\"D\">" + firstNameName + "</a>";
+          result += "<p class=\"follow-up-content\">" + nc + "</p>";
+          result += "<p class=\"subContent\">" + sub + "</p>";
+          result += "</li>";
         }
         result += "</ul>";
         result += "</td><td id=\"" + value.note + "\" class=\"dlg\" accessKey=\"C\">" + noteCo + "</td></tr>\n";
@@ -69,6 +69,18 @@ function getFollowUp(urlPath, user, dateFrom, dateTo) {
       $("#follow-up-result tbody").html(result);
     }
   }, "json");
+}
+
+function getFollowUpSubContent(followUp) {
+  var note = followUp.note;
+  var abs = followUp.absent;
+//  console.log("typeof abs " + typeof abs);
+  var exc = followUp.excused;
+  var sub = (note !== null && note.length > 0) ? "<span class=\"follow-up-note\">NOTE : " + note + "</span>" : "";
+  sub += (abs == true) ? "<span class=\"absent\">ABS</span>" : "";
+  sub += (exc == true) ? "<span class=\"excused\">EXC</span>" : "";
+  console.log("sub = " + sub)
+  return sub || "";
 }
 
 function initFollowUpDialog(element) {
@@ -83,7 +95,6 @@ function initFollowUpDialog(element) {
       },
       Enregistrer: function () {
         updateFollowUp($("#follow-up-form"));
-        $(this).dialog("close");
       }
     }
   });
@@ -103,38 +114,89 @@ function FollowUpElement(id, date, time, course) {
   this.course = course;
 }
 
+function FollowUpObject(id,scheduleId,text,note,abs,exc) {
+  this.id = id;
+  this.scheduleId = scheduleId;
+  this.content = text;
+  this.note = note;
+  this.absent = abs;
+  this.excused = exc;
+}
+
+function resetFollowUpDialog() {
+  $("#follow-content").val('');
+  $('#abs-check').prop('checked', false); 
+  $('#exc-check').prop('checked', false); 
+  $("#note").val('');
+  $("#follow-up-dlg").find(".error").text('');
+}
+
+/**
+ * 
+ * @param {type} url xhttp url
+ * @param {type} id followUp id
+ * @returns {FollowUpObject} 
+ */
+function getFollowUp(url, id) {
+  $.get(url, {id: id}, function (data) {
+    if (typeof data === 'undefined' || data === null) {
+      console.log("no data");
+    } else {
+      var up = new FollowUpObject(data.id,data.content,data.note,data.absent,data.excused);
+      console.log(up);
+      $("#note").val(up.note);
+      $("#abs-check").prop("checked",up.absent);
+      $("#exc-check").prop("checked",up.excused);
+    }
+  });
+}
 function updateFollowUp(form) {
   var url = $(form).attr("action");
   var id = $(form).find("#noteId").val();
-  var schedule = $(form).find("#scheduleId").val();
-  var collective = $(form).find("#noteType").val();
-  console.log(url);
-  console.log(id);
-  console.log(schedule);
-  console.log(collective);
+  var abs = $("#abs-check")[0].checked;
+  var exc = $("#exc-check")[0].checked;
+  $("#abs").val(abs);
+  $("#exc").val(exc);
+  
+  console.log("abs ? "+abs)
+  console.log("exc ? "+exc)
+  var note = $("#note").val();
   $.post(url, form.serialize(), function (data) {
     console.log(data);
     if (data && data.success) {
       var content = $("#follow-content").val();
-      console.log("id = " +id + ", content = " + content);
-      console.log(collective);
-      refreshFollowContent(id, data, content);
+      console.log("data.followUp.id " + data.followUp.id)
+      console.log("data.followUp.scheduleId " + data.followUp.scheduleId)
+      var up = new FollowUpObject(data.followUp.id,data.followUp.scheduleId,content,note,abs,exc);
+      refreshFollowContent(data.creation, up);
+      $(form).next(".error").text('');
+      $("#follow-up-dlg").dialog("close");
     } else {
-      console.log("erreur !!!")
+      console.log(data.message);
+      $(form).next(".error").text(data.message);
     }
   }, "json");
 }
 
-function refreshFollowContent(id, data, content) {
-  if (data.collective) {
-    console.log("c'est collectif")
-    $("#" + id).text(content);
+function refreshFollowContent(creation, followUp) {
+  var subContent = getFollowUpSubContent(followUp);
+  var id = followUp.id;
+  $("#" + id).attr("title", followUp.content);
+  if (followUp.collective) {
+    $("#" + id).text(followUp.content);
+    $("#" + id + ".subContent").html(subContent);
   } else {
-    console.log(" id " + id + " c'est individuel")
-    if (data.creation) {
-      $("#" + id).closest("li").append("<p>" + content + "</p>");
+    var parent = $("#" + id).closest("li");
+    var par1 = $(parent).children('p').first();
+    if (creation) {
+      console.log("creation " + creation)
+      var ref = $("#"+followUp.scheduleId);
+      ref.attr("title", followUp.content);
+      $(ref).children('p').first().text(followUp.content);
+      $(ref).find(".subContent").html(subContent);
     } else {
-      $("#" + id).next().text(content);
+      $(par1).text(followUp.content);
+      $(parent).find(".subContent").html(subContent);
     }
   }
 }
@@ -154,7 +216,7 @@ function setWeekChange(url, idper) {
     console.log(this.value);
     var d = new Date(from.datepicker('getDate'));
     var wd = getCurrentWeekDates(d);
-    getFollowUp(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
+    getFollowUpSchedules(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
     from.datepicker('setDate', wd.first);
     to.datepicker('setDate', wd.last);
     from.blur();
@@ -164,7 +226,7 @@ function setWeekChange(url, idper) {
     console.log(this.value);
     var d = new Date(to.datepicker('getDate'));
     var wd = getCurrentWeekDates(d);
-    getFollowUp(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
+    getFollowUpSchedules(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
     from.datepicker('setDate', wd.first);
     to.datepicker('setDate', wd.last);
     to.blur();

@@ -486,7 +486,20 @@ table.simple th, table.simple td {
 
 .dlg {cursor: pointer}
 
+.subContent {display: inline-block;}
+
 #follow-up-result tbody tr td:first-child {text-align: right}
+
+.follow-up-content {padding: 0}
+.follow-up-note, .absent, .excused {
+  display: inline-block;
+  padding: 0 0.2em;
+  font-family: monospace;
+  font-weight: bold;
+}
+.absent {background-color: #FF5252;color: white;}
+.excused {background-color: seagreen;color: white;}
+.follow-up-note {background-color: #F7F77C;color: black}
 
 #datepicker, #pickerFrom, #pickerTo {
   position: relative;

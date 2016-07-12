@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherDao.java Algem Web App 1.4.0 05/07/2016
+ * @(#) FollowUpException.java Algem Web App 1.4.0 12/07/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -17,26 +17,41 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
-
-package net.algem.contact;
-
-import java.util.Date;
-import java.util.List;
-import net.algem.planning.FollowUp;
-import net.algem.planning.ScheduleElement;
+package net.algem.planning;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @version 1.4.0
- * @since 1.4.0 05/07/2016
+ * @since 1.4.0 12/07/2016
  */
-public interface TeacherDao {
+public class FollowUpException
+        extends IllegalArgumentException
+{
 
-  List<ScheduleElement> findFollowUpSchedules(final int teacher, Date from, Date to);
+  private Object[] args;
+
+  /**
+   * Creates a new instance of <code>FollowUpException</code> without detail message.
+   */
+  public FollowUpException() {
+  }
+
+  /**
+   * Constructs an instance of <code>FollowUpException</code> with the specified detail message.
+   *
+   * @param msg the detail message.
+   */
+  public FollowUpException(String msg) {
+    super(msg);
+  }
+
+  public FollowUpException(String msg, Object[] args) {
+    super(msg);
+    this.args = args;
+  }
   
-  void createFollowUp(final FollowUp follow);
-
-  void updateFollowUp(final FollowUp follow);
-
+  public Object[] getArgs() {
+    return args;
+  }
 }

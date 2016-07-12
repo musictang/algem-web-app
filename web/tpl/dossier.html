@@ -104,7 +104,7 @@
         <header>
           <nav>
             <ul class="horizontal-panel-menu">
-              <li><a href="" id="follow-d" th:text="#{today.label}" th:formaction="@{/perso/xFollowUp}" /></li>
+              <li><a href="" id="follow-d" th:text="#{today.label}" th:formaction="@{/perso/xFollowUpSchedules}" /></li>
               <li><a href="" id="follow-m" th:text="#{current.month.label}"/></li>
               <li><a href="" id="follow-w" th:text="#{current.week.label}"/></li>
               <li><label for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value="04-07-2016"/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value="10-07-2016"/></li>
@@ -121,19 +121,22 @@
         </table>
       </section>
     </div>
-    <div id="follow-up-dlg" style="z-index: 30000">
+    <div id="follow-up-dlg">
       <form id="follow-up-form" th:action="@{/perso/xEditFollowUp}">
         <fieldset>
           <legend>PIANO<br />mercredi 01-06-2016 17:00-17:30</legend>
           <label for="follow-content">Suivi</label><textarea style="display: block;width: 100%" rows="10" id="follow-content" th:name="content"></textarea>
-          <label for="note">Note</label><input id="note" type="text" name="note" maxlength="8" style="width: 4em" />
-          <input id="abs" type="checkbox" />&nbsp;<label for="abs" name="abs">Absent</label>
-          <input id="exc" type="checkbox" />&nbsp;<label for="exc" name="exc">Excusé</label>
+          <label for="note">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="width: 4em" />
+          <input id="abs-check" type="checkbox" />&nbsp;<label for="abs-check">Absent</label>
+          <input id="exc-check" type="checkbox" />&nbsp;<label for="exc-check">Excusé</label>
           <input id="noteId" type="hidden" th:name="id" />
           <input id="scheduleId" type="hidden" th:name="scheduleId" />
           <input id="noteType" type="hidden" th:name="collective" />
+          <input id="abs" type="hidden" th:name="abs" />
+          <input id="exc" type="hidden" th:name="exc" />
         </fieldset>
       </form>
+      <p class="error">Erreur</p>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>
   </body>
@@ -141,6 +144,7 @@
     /*<![CDATA[*/
     var userId = /*[[${user.id}]]*/ 1234;
     var dlg = $("#follow-up-dlg");
+    var followUpURL = /*[[@{/perso/xFollowUp}]]*/ 
     setCommonEvents();
     initFollowUpDialog(dlg);
     var cwd = getCurrentWeekDates(new Date());
@@ -170,8 +174,9 @@
     });
 
     $(document).on("click", ".dlg", function () {
-      console.log("click dialog");
-      $("#follow-content").val('');
+//      console.log("click dialog");
+      resetFollowUpDialog();
+      getFollowUp(followUpURL, $(this).attr("id"));
       var row = $(this).closest('tr');
       var course = row.find(':nth-child(5)').contents().get(0).nodeValue;
       var dateTime = row.find(':nth-child(1)').contents().get(0).nodeValue;
@@ -181,18 +186,21 @@
       console.log("isDetail ? " + isDetail + " isCo ? " + isCo);
       var noteContent = undefined;
       if (isDetail) {
-        noteContent = $(this).next().contents();
+//        noteContent = $(this).next().contents();
+          noteContent = $(this).attr("title");
       } else if (isCo) {
-        noteContent = $(this).contents();
+//        noteContent = $(this).contents();
+    $(this).html();
       }
       var legendInfo = course + "<br />" + dateTime;
       var legend = $(dlg).find("legend");
       var t = isCo ? "Suivi collectif" : $(this).html();
       $(legend).html(legendInfo);
-      console.log(noteContent);
-      if (noteContent !== undefined && noteContent.get(0) !== undefined) {
-        $("#follow-content").val(noteContent.get(0).nodeValue);
-      }
+      console.log("noteContent : " + noteContent);
+//      if (noteContent !== undefined && noteContent.get(0) !== undefined) {
+//        $("#follow-content").val(noteContent.get(0).nodeValue);
+//      }
+      $("#follow-content").val(noteContent);
       // complete form
       $("#noteId").val($(this).attr("id"));
       $("#scheduleId").val(isCo ? row.attr("id"): $(this).closest("li").attr("id"));

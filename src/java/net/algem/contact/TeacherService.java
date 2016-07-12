@@ -33,7 +33,9 @@ import net.algem.planning.ScheduleElement;
 public interface TeacherService
 {
 
-  List<ScheduleElement> getFollowUp(int teacher, Date from, Date to);
+  List<ScheduleElement> getFollowUpSchedules(int teacher, Date from, Date to);
+  
+  FollowUp getFollowUp(int id);
 
   boolean updateFollowUp(FollowUp up);
 

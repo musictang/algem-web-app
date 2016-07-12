@@ -46,8 +46,12 @@ public class TeacherServiceImpl
   private TeacherDaoImpl dao;
   
   @Override
-  public List<ScheduleElement> getFollowUp(int teacher, Date from, Date to) {
-    return dao.findFollowUp(teacher, from, to);
+  public List<ScheduleElement> getFollowUpSchedules(int teacher, Date from, Date to) {
+    return dao.findFollowUpSchedules(teacher, from, to);
+  }
+  
+  public FollowUp getFollowUp(int id) {
+    return dao.findFollowUp(id);
   }
 
   @Override
