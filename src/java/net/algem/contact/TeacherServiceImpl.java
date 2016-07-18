@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherServiceImpl.java Algem Web App 1.4.0 27/06/2016
+ * @(#) TeacherServiceImpl.java Algem Web App 1.4.0 13/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -38,20 +38,24 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.4.0 21/06/2016
  */
 @Service
-public class TeacherServiceImpl 
+public class TeacherServiceImpl
     implements TeacherService
 {
 
   @Autowired
   private TeacherDaoImpl dao;
-  
+
   @Override
   public List<ScheduleElement> getFollowUpSchedules(int teacher, Date from, Date to) {
     return dao.findFollowUpSchedules(teacher, from, to);
   }
-  
+
+  @Override
   public FollowUp getFollowUp(int id) {
-    return dao.findFollowUp(id);
+    if (id > 0) {
+      return dao.findFollowUp(id);
+    }
+    return null;
   }
 
   @Override

@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.4.0 29/06/2016
+ * @(#) dossier.js Algem Web App 1.4.0 16/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -17,6 +17,47 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
+var labels = {};
+/**
+ * FollowUpSchedule constructor.
+ * @param {Number} id
+ * @param {String} date
+ * @param {String} time
+ * @param {String} course
+ * @returns {FollowUpSchedule}
+ */
+function FollowUpSchedule(id, date, time, course) {
+  this.id = id;
+  this.date = date;
+  this.time = time;
+  this.course = course;
+}
+
+/**
+ * FollowUpObject constructor.
+ * @param {Number} id
+ * @param {Number} scheduleId
+ * @param {String} text
+ * @param {String} note
+ * @param {Boolean} abs
+ * @param {Boolean} exc
+ * @param {Boolean} co
+ * @returns {FollowUpObject}
+ */
+function FollowUpObject(id, scheduleId, text, note, abs, exc, co) {
+  this.id = id;
+  this.scheduleId = scheduleId;
+  this.content = text;
+  this.note = note;
+  this.absent = abs;
+  this.excused = exc;
+  this.collective = co;
+}
+
+function setPersonalHomePageLabels (_labels) {
+  labels = _labels;
+}
+
 function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
   $.get(urlPath, {userId: user, from: dateFrom, to: dateTo}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
@@ -25,8 +66,8 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
     } else {
       var result = "";
       var total = 0;
-      var indTitle = "Cliquez-moi pour éditer mon suivi individuel";
-      var coTitle = "Cliquez-moi pour éditer le suivi collectif";
+      var indTitle = labels.individual_monitoring_action;
+      var coTitle = labels.collective_monitoring_action;
       $.each(data, function (index, value) {
         var d = new Date(value.date);
         var dateInfo = d.toLocaleString(getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d);
@@ -37,19 +78,17 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
         var roomInfo = value.detail['room'].name;
         var courseInfo = value.detail['course'].name;
         var firstNameName = "";
-        var noteInd = "";
-        var noteCo = value.detail['note'].name || "";
-
+        var noteCo = value.followUp.content || "";
         total += length;
 
-        result += "<tr id=\""+value.id+"\">" // id planning
+        result += "<tr class=\"" + value.id + "\">"// id planning
           + "<td>" + dateInfo + "</td>"
           + "<td>" + timeInfo + "</td>"
           + "<td>" + getTimeFromMinutes(length) + "</td>"
           + "<td>" + roomInfo + "</td>"
           + "<td>" + courseInfo + "</td><td>";
         if (value.collective) {
-          result += "<a href=\"javascript:;\" class=\"expand\">Liste des élèves...</a><ul class=\"simple collapse\">";
+          result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.expand_collapse+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
         } else {
           result += "<ul class=\"simple\">";
         }
@@ -57,13 +96,13 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
           firstNameName = value.ranges[i].person.firstName + " " + value.ranges[i].person.name;
           var nc = value.ranges[i].followUp.content || "";
           var sub = getFollowUpSubContent(value.ranges[i].followUp);
-          result += "<li id=\""+ value.ranges[i].id +"\"><a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\""+nc+"\" accessKey=\"D\">" + firstNameName + "</a>";
-          result += "<p class=\"follow-up-content\">" + nc + "</p>";
+          result += "<li id=\"" + value.ranges[i].id + "\"><a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\"" + indTitle + "\" accessKey=\"D\">" + firstNameName + "</a>";
+          result += "<p class=\"follow-up-content\">" + $('<div />').text(nc).html() + "</p>"; // encode entities
           result += "<p class=\"subContent\">" + sub + "</p>";
           result += "</li>";
         }
         result += "</ul>";
-        result += "</td><td id=\"" + value.note + "\" class=\"dlg\" accessKey=\"C\">" + noteCo + "</td></tr>\n";
+        result += "</td><td id=\"" + value.note + "\" class=\"dlg\" accessKey=\"C\" title=\"" + coTitle + "\"><p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + getFollowUpSubContent(value.followUp) + "</p></td></tr>\n";
       });
       result += "<tr><th colspan=\"2\">Total</th><td colspan=\"5\"><b>" + getTimeFromMinutes(total) + "</b></td></tr>";
       $("#follow-up-result tbody").html(result);
@@ -71,6 +110,36 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
   }, "json");
 }
 
+/**
+ * Ajax function to get some followUp.
+ * @param {String} url xhttp url
+ * @param {Number} id followUp id
+ * @param {Boolean} co collective
+ * @returns {FollowUpObject}
+ */
+function getFollowUp(url, id, co) {
+  if (id === 0) {
+    return;
+  }
+  $.get(url, {id: id}, function (data) {
+    if (typeof data === 'undefined' || data === null) {
+      console.log("no data");
+    } else {
+      var up = new FollowUpObject(data.id, 0, data.content, data.note, data.absent, data.excused, co);
+//      console.log(up);
+      $("#follow-content").val(up.content);
+      $("#note").val(up.note);
+      $("#abs-check").prop("checked", up.absent);
+      $("#exc-check").prop("checked", up.excused);
+    }
+  });
+}
+
+/**
+ * Returns the subContent info of the followUp in argument.
+ * @param {FollowUpObject} followUp
+ * @returns {String}
+ */
 function getFollowUpSubContent(followUp) {
   var note = followUp.note;
   var abs = followUp.absent;
@@ -79,10 +148,15 @@ function getFollowUpSubContent(followUp) {
   var sub = (note !== null && note.length > 0) ? "<span class=\"follow-up-note\">NOTE : " + note + "</span>" : "";
   sub += (abs == true) ? "<span class=\"absent\">ABS</span>" : "";
   sub += (exc == true) ? "<span class=\"excused\">EXC</span>" : "";
-  console.log("sub = " + sub)
+  //console.log("sub = " + sub)
   return sub || "";
 }
 
+/**
+ * Inits followUp dialog edition.
+ * @param {type} element
+ * @returns {undefined}
+ */
 function initFollowUpDialog(element) {
   $(element).dialog({
     modal: false,
@@ -100,79 +174,44 @@ function initFollowUpDialog(element) {
   });
 }
 
+/**
+ *
+ * @param {FollowUpSchedule} f
+ * @returns {undefined}
+ */
 function showDialog(f) {
   var dlg = $("#follow-up-dlg");
-  $(dlg).find("legend").html(f.name+ " : " + f.time);
-//  console.log($(dlg).find("legend").html());
+  $(dlg).find("legend").html(f.name + " : " + f.time);
   $(dlg).dialog({title: f.course + " " + f.date}).dialog("open");
-}
-
-function FollowUpElement(id, date, time, course) {
-  this.id = id;
-  this.date = date;
-  this.time = time;
-  this.course = course;
-}
-
-function FollowUpObject(id,scheduleId,text,note,abs,exc) {
-  this.id = id;
-  this.scheduleId = scheduleId;
-  this.content = text;
-  this.note = note;
-  this.absent = abs;
-  this.excused = exc;
 }
 
 function resetFollowUpDialog() {
   $("#follow-content").val('');
-  $('#abs-check').prop('checked', false); 
-  $('#exc-check').prop('checked', false); 
+  $('#abs-check').prop('checked', false);
+  $('#exc-check').prop('checked', false);
   $("#note").val('');
   $("#follow-up-dlg").find(".error").text('');
 }
 
-/**
- * 
- * @param {type} url xhttp url
- * @param {type} id followUp id
- * @returns {FollowUpObject} 
- */
-function getFollowUp(url, id) {
-  $.get(url, {id: id}, function (data) {
-    if (typeof data === 'undefined' || data === null) {
-      console.log("no data");
-    } else {
-      var up = new FollowUpObject(data.id,data.content,data.note,data.absent,data.excused);
-      console.log(up);
-      $("#note").val(up.note);
-      $("#abs-check").prop("checked",up.absent);
-      $("#exc-check").prop("checked",up.excused);
-    }
-  });
-}
 function updateFollowUp(form) {
   var url = $(form).attr("action");
-  var id = $(form).find("#noteId").val();
   var abs = $("#abs-check")[0].checked;
-  var exc = $("#exc-check")[0].checked;
+  var exc = $("#exc-check").prop("readonly") ? false : $("#exc-check")[0].checked;
   $("#abs").val(abs);
   $("#exc").val(exc);
-  
-  console.log("abs ? "+abs)
-  console.log("exc ? "+exc)
-  var note = $("#note").val();
+
   $.post(url, form.serialize(), function (data) {
-    console.log(data);
     if (data && data.success) {
       var content = $("#follow-content").val();
-      console.log("data.followUp.id " + data.followUp.id)
-      console.log("data.followUp.scheduleId " + data.followUp.scheduleId)
-      var up = new FollowUpObject(data.followUp.id,data.followUp.scheduleId,content,note,abs,exc);
+      var co = $("#noteType").val();
+      var note = $("#note").prop("readonly") ? null : $("#note").val();
+      var up = new FollowUpObject(data.followUp.id, data.followUp.scheduleId, content, note, abs, exc, co);
+      console.log(up);
       refreshFollowContent(data.creation, up);
       $(form).next(".error").text('');
       $("#follow-up-dlg").dialog("close");
     } else {
-      console.log(data.message);
+      console.log("no update");
       $(form).next(".error").text(data.message);
     }
   }, "json");
@@ -181,39 +220,51 @@ function updateFollowUp(form) {
 function refreshFollowContent(creation, followUp) {
   var subContent = getFollowUpSubContent(followUp);
   var id = followUp.id;
-  $("#" + id).attr("title", followUp.content);
-  if (followUp.collective) {
-    $("#" + id).text(followUp.content);
-    $("#" + id + ".subContent").html(subContent);
+  if (followUp.collective === 'true') {
+//    if (creation) {
+    $("." + followUp.scheduleId).each(function () {
+      var el = $(this).children("td").last();
+      $(el).children("p").first().text(followUp.content);
+      $(el).find(".subContent").html(subContent);
+      $(el).attr("id", followUp.id);
+    });
+
   } else {
-    var parent = $("#" + id).closest("li");
-    var par1 = $(parent).children('p').first();
     if (creation) {
-      console.log("creation " + creation)
-      var ref = $("#"+followUp.scheduleId);
-      ref.attr("title", followUp.content);
+      //console.log("creation " + creation)
+      var ref = $("#" + followUp.scheduleId);
       $(ref).children('p').first().text(followUp.content);
       $(ref).find(".subContent").html(subContent);
+      $(ref).children('a').first().attr("id", followUp.id);
     } else {
-      $(par1).text(followUp.content);
+      var parent = $("#" + id).closest("li");
+      var p1 = $(parent).children('p').first();
+      $(p1).text(followUp.content);
       $(parent).find(".subContent").html(subContent);
     }
   }
 }
 
-function setWeekDates(firstDay, lastDay) {
+function initWeekDates(today) {
   var from = $("#weekFrom");
-  from.datepicker({changeMonth: true, changeYear: true, dateFormat: 'dd-mm-yy'}).datepicker('setDate', firstDay);
-  from.datepicker("refresh");
   var to = $("#weekTo");
-  to.datepicker({changeMonth: true, changeYear: true, dateFormat: 'dd-mm-yy'}).datepicker('setDate', lastDay);
+  $(from).datepicker({changeMonth: true, changeYear: true, dateFormat: 'dd-mm-yy'}).datepicker('setDate', today);
+  $(to).datepicker({changeMonth: true, changeYear: true, dateFormat: 'dd-mm-yy'}).datepicker('setDate', today);
+  $(from).val(dateFormatFR(today));
+  $(to).val(dateFormatFR(today));
+
+}
+
+function setWeekDates(firstDay, lastDay) {
+  $("#weekFrom").datepicker('setDate', firstDay);
+  $("#weekTo").datepicker('setDate', lastDay);
 }
 
 function setWeekChange(url, idper) {
   var from = $("#weekFrom");
   var to = $("#weekTo");
   from.change(function () {
-    console.log(this.value);
+    //console.log(this.value);
     var d = new Date(from.datepicker('getDate'));
     var wd = getCurrentWeekDates(d);
     getFollowUpSchedules(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
@@ -221,9 +272,9 @@ function setWeekChange(url, idper) {
     to.datepicker('setDate', wd.last);
     from.blur();
   });
-  
+
   to.change(function () {
-    console.log(this.value);
+    //console.log(this.value);
     var d = new Date(to.datepicker('getDate'));
     var wd = getCurrentWeekDates(d);
     getFollowUpSchedules(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));

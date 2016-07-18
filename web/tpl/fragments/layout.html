@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) layout.html Algem Web App 1.2.1 10/05/16
+ * @(#) layout.html Algem Web App 1.4.0 16/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -31,7 +31,7 @@
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />-->
     <script type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/jquery-ui-1.11.4.min.js}"></script>
-    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/common.js}"></script>
   </head>
   <body>
     <header th:fragment="header"></header>
@@ -70,14 +70,12 @@
       </div>
     </div>
     <div th:fragment="info">
-      <div class="indented">
+      <div class="indented info">
         <h2 th:id="#{hotline.label}" th:text="#{hotline.label}">Hotline</h2>
         <table class="pure-table pure-table-horizontal mobile">
           <tr th:each="estab:${@hotline}">
             <th th:text="${estab.key}"></th>
-            <td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a></td>
-            <td>
-              <ul><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul>
+            <td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a><ul><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul>
             </td>
           </tr>
         </table>

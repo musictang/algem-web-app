@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.2.0 16/04/16
+ * @(#) login.html Algem Web App 1.4.0 16/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -39,8 +39,8 @@
         <p class="success" style="display: none;"></p>
       </form>
       <p class="note indented"><a href="recover.html" th:text="#{password.forgotten}"></a></p>
-      <p class="note indented"><span th:text="#{sign-up.warning}"></span><br />
-        <a href="signup.html" th:text="#{sign-up.label}"></a></p>
+      <p class="note indented"><span th:text="#{signup.warning}"></span><br />
+        <a href="signup.html" th:text="#{signup.label}"></a></p>
     </div>
     <div th:fragment="booking">
       <form id="booking-form" th:action="@{/book.html}" method="post" th:object="${booking}">

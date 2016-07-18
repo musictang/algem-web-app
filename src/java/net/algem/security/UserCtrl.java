@@ -143,8 +143,8 @@ public class UserCtrl
   public String performLogin(
           @RequestParam("j_username") String username,
           @RequestParam("j_password") String password,
-          HttpServletRequest request, HttpServletResponse response,
-          User currentUser) {
+          HttpServletRequest request, HttpServletResponse response)
+  {
     try {
       SecurityContext secuContext = SecurityContextHolder.getContext();
 //      UserDetails userDetails = (UserDetails) secuContext.getAuthentication().getPrincipal();
@@ -164,7 +164,7 @@ public class UserCtrl
     } catch (BadCredentialsException ex) {
       return "{\"status\": \"" + ex.getMessage() + "\"}";
     } catch (Exception other) {
-      other.printStackTrace();
+      Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, other);
       return "{\"status\": \"" + other.getMessage() + "\"}";
     }
   }
@@ -243,6 +243,7 @@ public class UserCtrl
         return "signup";
       }
 
+      user.setTeacher(service.isTeacher(user.getId())); // detect user status
       service.create(user);
     } catch (DataAccessException ex) {
       Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, ex);

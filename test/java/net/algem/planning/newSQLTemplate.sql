@@ -82,7 +82,7 @@ AND pl.adherent = 16094
 AND p.jour BETWEEN '04-04-2016' AND '10-04-2016'
 ORDER BY p.jour, p.debut;
 
-SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,a.cours,s1.id,s1.texte AS "Suivi ind.",s2.id,s2.texte AS "Suivi co."
+SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,a.cours,s1.id,s1.texte AS Suivi ind.,s2.id,s2.texte AS Suivi co.
 FROM planning p JOIN plage pl ON p.id=pl.idplanning
 JOIN actiON a ON p.actiON = a.id
 JOIN cours c ON a.cours = c.id
@@ -126,7 +126,14 @@ WHERE p.idper = 12019
 AND jour BETWEEN '06-06-2016' AND '12-06-2016'
 ORDER BY p.jour,pl.debut;
 
-SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte 
-FROM plage pl JOIN personne p ON (pl.adherent = p.id) LEFT JOIN suivi s ON (pl.note = s.id) 
+SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte
+FROM plage pl JOIN personne p ON (pl.adherent = p.id) LEFT JOIN suivi s ON (pl.note = s.id)
 WHERE pl.idplanning = 96023 and pl.debut = '15:15'
 ORDER BY pl.debut;
+
+SELECT l.idper,l.login,l.profil,per.nom,per.prenom,coalesce(prof.actif, false),coalesce(tech.idper,0),coalesce(e.idper,0)
+FROM  login  l INNER JOIN  personne  per ON (l.idper = per.id)
+LEFT OUTER JOIN prof ON (l.idper = prof.idper)
+LEFT OUTER JOIN technicien tech ON (l.idper = tech.idper)
+LEFT OUTER JOIN eleve e ON (l.idper = e.idper)
+WHERE l.login = 'laurence';

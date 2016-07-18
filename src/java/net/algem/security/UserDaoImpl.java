@@ -88,10 +88,11 @@ public class UserDaoImpl
 
   @Override
   public User find(String login) {
-    String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom,e.actif,t.idper"
-      + " FROM " + TABLE + " l INNER JOIN " + PersonIO.TABLE + " p ON (l.idper = p.id)"
-      + " LEFT OUTER JOIN prof e ON (l.idper = e.idper)"
-      + " LEFT OUTER JOIN technicien t ON (l.idper = t.idper)"
+    String query = "SELECT l.idper,l.login,l.profil,per.nom,per.prenom,coalesce(prof.actif, false),coalesce(e.idper,0),coalesce(tech.idper,0)"
+      + " FROM " + TABLE + " l INNER JOIN " + PersonIO.TABLE + " per ON (l.idper = per.id)"
+      + " LEFT OUTER JOIN prof ON (l.idper = prof.idper)"
+      + " LEFT OUTER JOIN eleve e ON (l.idper = e.idper)"
+      + " LEFT OUTER JOIN technicien tech ON (l.idper = tech.idper)"
       + " WHERE l.login = ?";
     return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
       @Override
@@ -102,8 +103,9 @@ public class UserDaoImpl
         u.setProfile(getProfileFromId(rs.getShort(3)));
         u.setName(rs.getString(4));
         u.setFirstName(rs.getString(5));
-        u.setTeacher(rs.getBoolean(6));
-        u.setTech(rs.getInt(7) > 0);
+        u.setTeacher(rs.getBoolean(6));// active teachers only
+        u.setStudent(rs.getInt(7) > 0);
+        u.setTech(rs.getInt(8) > 0);
 
         return u;
       }
@@ -259,7 +261,7 @@ public class UserDaoImpl
 
   @Override
   public int getTeacher(int userId) {
-    String query = "SELECT idper FROM " + TeacherDaoImpl.TABLE + " WHERE idper = ? AND actif = TRUE";
+    String query = "SELECT coalesce(idper,0) FROM " + TeacherDaoImpl.TABLE + " WHERE idper = ?";// AND actif = TRUE";
     return jdbcTemplate.queryForObject(query, Integer.class, userId);
   }
 
@@ -296,7 +298,7 @@ public class UserDaoImpl
         PreparedStatement ps = con.prepareStatement("INSERT INTO " + TABLE + " VALUES(?,?,?,?,?)");
         ps.setInt(1, user.getId());
         ps.setString(2, user.getLogin());
-        ps.setInt(3, Profile.Member.getId());
+        ps.setInt(3, user.isTeacher() ? Profile.Teacher.getId() : Profile.Member.getId());
         ps.setString(4, Base64.encodeBase64String(user.getPass().getPass()));
         ps.setString(5, Base64.encodeBase64String(user.getPass().getKey()));
 

@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherDaoImpl.java Algem Web App 1.4.0 27/06/2016
+ * @(#) TeacherDaoImpl.java Algem Web App 1.4.0 13/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -26,6 +26,8 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.algem.planning.DateFr;
 import net.algem.planning.FollowUp;
 import net.algem.planning.Hour;
@@ -47,30 +49,28 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class TeacherDaoImpl
-        extends AbstractGemDao
-        implements TeacherDao
-{
+  extends AbstractGemDao
+  implements TeacherDao {
 
   public static final String TABLE = "prof";
   public static final String FOLLOW_UP_T = "suivi";
   public static final String FOLLOW_UP_SEQ = "idsuivi";
 
-  private final static String FOLLOWUP_STATEMENT = "SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom,v.texte"
-          + " FROM " + ScheduleDao.TABLE + " p"
-          + " JOIN " + ScheduleRangeIO.TABLE + " pl ON (p.id = pl.idplanning)"
-          + " JOIN " + ScheduleDao.T_ACTION + " a ON (p.action = a.id)"
-          + " JOIN cours c ON (a.cours = c.id)"
-          + " JOIN salle s ON (p.lieux = s.id)"
-          + " JOIN suivi v ON (p.note = v.id)"
-          + " WHERE p.idper = ?"
-          + " AND jour BETWEEN ? AND ?"
-          + " ORDER BY p.jour,pl.debut";
+  private final static String FOLLOWUP_STATEMENT = "SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom,v.texte,v.abs"
+    + " FROM " + ScheduleDao.TABLE + " p"
+    + " JOIN " + ScheduleRangeIO.TABLE + " pl ON (p.id = pl.idplanning)"
+    + " JOIN " + ScheduleDao.T_ACTION + " a ON (p.action = a.id)"
+    + " JOIN cours c ON (a.cours = c.id)"
+    + " JOIN salle s ON (p.lieux = s.id)"
+    + " LEFT JOIN suivi v ON (p.note = v.id)"
+    + " WHERE p.idper = ?"
+    + " AND jour BETWEEN ? AND ?"
+    + " ORDER BY p.jour,pl.debut";
 
   @Override
   public List<ScheduleElement> findFollowUpSchedules(final int teacher, Date from, Date to) {
-    System.out.println(FOLLOWUP_STATEMENT);
-    return jdbcTemplate.query(FOLLOWUP_STATEMENT, new RowMapper<ScheduleElement>()
-    {
+//    System.out.println(FOLLOWUP_STATEMENT);
+    return jdbcTemplate.query(FOLLOWUP_STATEMENT, new RowMapper<ScheduleElement>() {
       @Override
       public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
         ScheduleElement d = new ScheduleElement();
@@ -84,8 +84,12 @@ public class TeacherDaoImpl
         d.setDetail("course", new NamedModel(rs.getInt(7), rs.getString(8)));
         d.setCollective(rs.getBoolean(9));
         d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(10)));
-        d.setDetail("note", new NamedModel(d.getNote(), rs.getString(11)));
         d.setDetail("estab", null);
+        FollowUp up = new FollowUp();
+        up.setId(d.getNote());
+        up.setContent(rs.getString(11));
+        up.setAbsent(rs.getBoolean(12));
+        d.setFollowUp(up);
 
         Collection<ScheduleRangeElement> ranges = getRanges(d.getId(), d.getStart().toString());
         d.setRanges(ranges);
@@ -94,7 +98,7 @@ public class TeacherDaoImpl
       }
     }, teacher, from, to);
   }
-  
+
   public FollowUp findFollowUp(final int id) {
     String query = "SELECT texte,note,abs,exc FROM " + FOLLOW_UP_T + " WHERE id = ?";
     return jdbcTemplate.queryForObject(query, new RowMapper<FollowUp>() {
@@ -106,7 +110,7 @@ public class TeacherDaoImpl
         up.setNote(rs.getString(2));
         up.setAbsent(rs.getBoolean(3));
         up.setExcused(rs.getBoolean(4));
-        
+
         return up;
       }
     }, id);
@@ -114,12 +118,11 @@ public class TeacherDaoImpl
 
   private Collection<ScheduleRangeElement> getRanges(final int id, String start) {
     String query = " SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.abs,s.exc"
-            + " FROM " + ScheduleRangeIO.TABLE + " pl JOIN " + PersonIO.TABLE + " p ON (pl.adherent = p.id)"
-            + " LEFT JOIN suivi s ON (pl.note = s.id)"
-            + " WHERE pl.idplanning = ? AND pl.debut = ? ORDER BY pl.debut";
-    System.out.println(query);
-    return jdbcTemplate.query(query, new RowMapper<ScheduleRangeElement>()
-    {
+      + " FROM " + ScheduleRangeIO.TABLE + " pl JOIN " + PersonIO.TABLE + " p ON (pl.adherent = p.id)"
+      + " LEFT JOIN suivi s ON (pl.note = s.id)"
+      + " WHERE pl.idplanning = ? AND pl.debut = ? ORDER BY pl.debut";
+//    System.out.println(query);
+    return jdbcTemplate.query(query, new RowMapper<ScheduleRangeElement>() {
 
       @Override
       public ScheduleRangeElement mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -141,28 +144,28 @@ public class TeacherDaoImpl
         up.setNote(rs.getString(11));
         up.setAbsent(rs.getBoolean(12));
         up.setExcused(rs.getBoolean(13));
-        
+
         r.setFollowUp(up);
 
         return r;
       }
     }, id, java.sql.Time.valueOf(start + ":00"));
   }
-  
-    @Override
+
+  @Override
   public void updateFollowUp(final FollowUp follow) {
     String text = follow.getContent();
-    if (text == null || text.isEmpty()) {
-      //delete
-//      return;
-    }
-    if (follow.getId() > 0) {
+    if ((text == null || text.isEmpty())
+      && (follow.getNote() == null || follow.getNote().isEmpty())
+      && !follow.isAbsent() && !follow.isExcused()) {
+      deleteFollowUp(follow);
+    } else if (follow.getId() > 0) {
       updateFollowUpContent(follow);
     } else {
+//      Logger.getLogger(getClass().getName()).log(Level.INFO, follow.toString());
       createFollowUp(follow);
       updateSchedule(follow.getScheduleId(), follow.getId(), follow.isCollective());
     }
-    
 
   }
 
@@ -170,9 +173,9 @@ public class TeacherDaoImpl
   public void createFollowUp(final FollowUp follow) {
     final int id = nextId(FOLLOW_UP_SEQ);
     follow.setId(id);
+    Logger.getLogger(getClass().getName()).log(Level.INFO, follow.toString());
     final String sql = "INSERT INTO suivi(id,texte,note,abs,exc) VALUES(?,?,?,?,?)";
-    jdbcTemplate.update(new PreparedStatementCreator()
-    {
+    jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
         PreparedStatement ps = con.prepareStatement(sql);
@@ -187,10 +190,22 @@ public class TeacherDaoImpl
 
   }
 
+  private void deleteFollowUp(final FollowUp follow) {
+    final String sql = "DELETE FROM suivi WHERE id = ?";
+    jdbcTemplate.update(new PreparedStatementCreator() {
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, follow.getId());
+        return ps;
+      }
+    });
+    updateSchedule(follow.getScheduleId(), 0, follow.isCollective());// reset
+  }
+
   private void updateFollowUpContent(final FollowUp follow) {
     final String sql = "UPDATE suivi SET texte = ?, note=?, abs=?, exc=? WHERE id = ?";
-    jdbcTemplate.update(new PreparedStatementCreator()
-    {
+    jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
         PreparedStatement ps = con.prepareStatement(sql);
@@ -205,10 +220,9 @@ public class TeacherDaoImpl
   }
 
   private void updateSchedule(final int id, final int noteId, boolean collective) {
-    
+
     final String sql = "UPDATE " + (collective ? ScheduleDao.TABLE : ScheduleRangeIO.TABLE) + " SET note = ? WHERE id = ?";
-    jdbcTemplate.update(new PreparedStatementCreator()
-    {
+    jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
         PreparedStatement ps = con.prepareStatement(sql);

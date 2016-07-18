@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.2.1 11/05/16
+ * @(#) common.css Algem Web App 1.4.0 16/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.2.1 11/05/16
+    Last: 1.4.0 13/07/16
 */
 
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
@@ -88,7 +88,8 @@ p, blockquote, pre, ul, ol, dl {
   line-height: 1.5em;
 }
 ul {margin: 0 1em;}
-ul li {margin: 0.5em;}
+ul li {margin: 0.5em}
+.info ul li {margin: 0.5em 0;}
 ol {list-style-position: inside;}
 dl dt  {font-weight: bold;}
 dl dd {margin-left: 1em;}
@@ -352,15 +353,25 @@ select {font-size: small;}
 
 #help-panel ul {list-style-type: none;}
 
+.info table th {width: 8em}
+
 .colorHelp {
   text-align: center;
   font-size: larger;
   font-weight: bold
 }
 .panel, #xlogin-panel {padding: 1em;}
+.ui-dialog {z-index: 2002 !important ;}
 .ui-dialog-title {font-family: ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;}
 .ui-widget,#datepicker,.week-date {font-family: ubuntu,Verdana,sans-serif}
 .ui-datepicker-title {color: #444;}
+#accordion .ui-accordion-content {padding: 1em 0.8em}
+#accordion .ui-accordion-icons {padding-left: 1.6em}
+#accordion .ui-widget-content {background: white}
+/*#accordion .ui-state-active .ui-icon {background-image: url("images/ui-icons_3d3d3d_256x240.png")}*/
+#accordion .ui-state-active .ui-icon {background-image: url("images/ui-icons_ffffff_256x240.png")}
+#accordion .ui-accordion-header {font-size: larger; font-weight: normal; color: #555}
+#accordion h3.ui-state-active {color: white}
 
 #bookdate {display: inline-block;width: 6em;padding:0 0.25em;text-align: center}
 .closing-bar {
@@ -392,6 +403,8 @@ form input[type='button'], form input[type='submit'] {
   margin-top: 1em
 }
 form input + span {display: inline;}
+
+form input[type='checkbox'] {vertical-align: middle}
 form label {
   display: inline-block;
   margin-top: 0.5em;
@@ -400,13 +413,14 @@ form label {
 form legend + label {
   display: block;
 }
-
+.field-help {font-size: smaller;max-width: 320px;display:none}
 #booking label {
   width: 3.4em;
 }
 #booking input[type='radio'] + label {
   padding: 0 0.5em;
 }
+
 .pending {color: red;}
 .confirmed {color: green;}
 
@@ -441,6 +455,31 @@ ul.simple {
   margin: 0;
 }
 
+ul.simple li {
+  margin: 0.5em 0;
+}
+ul.simple li:first-child {
+  margin-top: 0;
+}
+
+ul.horizontal-panel-menu {
+  list-style-type: none;
+  margin: 0;
+}
+ul.horizontal-panel-menu li {
+  display: inline-block;
+  margin: 0 0.5em 0 0;
+  /*font-size: smaller;*/
+}
+
+nav.horizontal-panel-menu {
+  margin: 0; padding: 0
+}
+
+table.simple th, table.simple td {
+  padding: 0 0.5em;
+}
+
 .pseudo {
   display: block;
   font-size: small;
@@ -453,6 +492,8 @@ ul.simple {
   font-size: smaller;
 }
 
+table.condensed th, table.condensed td {padding: 0 0.5em}
+
 .ellipsed {
   display: block;
   overflow: hidden;
@@ -462,6 +503,46 @@ ul.simple {
 
 .wrapped {
   display: block;
+}
+
+.collapse {display: none}
+
+.expand {}
+
+.dlg {cursor: pointer}
+
+#follow-up-form legend {
+  margin:0;
+  font-size: smaller;
+  border-bottom-width: 2px;
+}
+
+#follow-up-result tbody tr td:first-child {text-align: right}
+
+.follow-up-content, .subContent {padding: 0;}
+
+.follow-up-note, .absent, .excused {
+  display: inline-block;
+  padding: 0 0.2em;
+  font-family: monospace;
+  font-weight: bold;
+}
+.absent {background-color: #FF5252;color: white;}
+.excused {background-color: seagreen;color: white;}
+.follow-up-note {background-color: #F7F77C;color: black;font-size: larger}
+
+#datepicker, #pickerFrom, #pickerTo {
+  position: relative;
+  z-index: 3000;
+}
+
+#datepicker, .week-date {
+  font-size: small;
+  text-align: center;
+  width: 5.5em;
+  background-color: #eee;
+  border: 1px solid gray;
+  border-radius: 4px
 }
 
 table.mobile {

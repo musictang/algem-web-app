@@ -1,5 +1,5 @@
 /*
- * @(#)User.java	1.2.0 06/04/16
+ * @(#)User.java	1.4.0 16/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.2.0
+ * @version 1.4.0
  * @since 1.0.0 11/02/13
  */
 @Component
@@ -70,6 +70,9 @@ public class User
 
   /** Teacher status. */
   private boolean teacher;
+
+  /** Student status. */
+  private boolean student;
 
   /** Technician status. */
   private boolean tech;
@@ -146,6 +149,14 @@ public class User
 
   public void setTeacher(boolean teacher) {
     this.teacher = teacher;
+  }
+
+  public boolean isStudent() {
+    return student;
+  }
+
+  public void setStudent(boolean student) {
+    this.student = student;
   }
 
   public boolean isTech() {

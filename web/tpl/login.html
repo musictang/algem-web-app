@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.2.1 09/05/16
+ * @(#) login.html Algem Web App 1.4.0 16/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -51,7 +51,7 @@
           <div class="note" th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}">
             <a href="recover.html" th:text="#{password.forgotten}"></a>
           </div>
-          <p class="note"><span th:text="#{sign-up.warning}"></span><br /><a href="signup.html" th:text="#{sign-up.label}"></a></p>
+          <p class="note"><span th:text="#{signup.warning}"></span><br /><a href="signup.html" th:text="#{signup.label}"></a></p>
         </div>
       </div>
     </div>

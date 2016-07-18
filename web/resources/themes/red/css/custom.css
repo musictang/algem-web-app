@@ -27,7 +27,9 @@ body {
   background-color: #fe1800;
   color: white;
 }
-
+.main-text-color {
+  color: #fe1800;
+}
 .global {
   color: #444;
   background-color: white;
@@ -96,3 +98,5 @@ footer a:link,footer a:visited,footer a:active,footer a:hover {
 .title_col {
   background-color: #fe1800;
 }
+#accordion .ui-state-active {background: #fe1800;}
+#accordion .ui-widget-content a {color: #ff301a;}

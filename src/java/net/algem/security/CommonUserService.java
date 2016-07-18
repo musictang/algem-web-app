@@ -1,5 +1,5 @@
 /*
- * @(#)CommonUserService.java	1.1.0 17/02/16
+ * @(#)CommonUserService.java	1.4.0 16/07/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -37,7 +37,7 @@ import org.springframework.stereotype.Service;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.4.0
  * @since 1.0.6 18/11/15
  */
 @Service
@@ -137,6 +137,11 @@ public class CommonUserService
   @Override
   public boolean isMember(String login, String startDate, String endDate) {
     return dao.isMemberOnYear(login, startDate, endDate);
+  }
+
+  @Override
+  public boolean isTeacher(int id) {
+    return dao.getTeacher(id) > 0;
   }
 
   @Override

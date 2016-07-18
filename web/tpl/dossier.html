@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.3.0 20/06/16
+ * @(#) dossier.html Algem Web App 1.4.0 13/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -51,84 +51,86 @@
       <h1 th:utext="${@organization['name.label']}"></h1>
     </header>
     <div class="global">
-      <h3 th:text="|${user.firstName} ${user.name}|">Mes informations</h3>
-      <table class="pure-table pure-table-horizontal simple">
-        <tr><th th:text="#{login.label}"></th><td th:text="${user.login}">deux</td></tr>
-        <tr>
-          <th th:text="#{email.label}"></th>
-          <td>
-            <ul class="simple">
-              <li th:each="em:${person.email}"><a th:href="@{'mailto:'+${em.email}}" th:text="${em.email}"></a></li>
-            </ul>
-          </td>
-        </tr>
-        <tr><th th:text="#{profile.label}"></th><td th:text="#{${user.profile.label}}">trois</td></tr>
-      </table>
-      <h3 th:text="#{schedule.label}"></h3>
-      <div>
-        <ul class="simple">
-          <li th:if="${e != null && T(java.lang.Integer).parseInt(e) > 0}"><i class="fa fa-calendar-plus-o"></i>
-            <a th:with="n=${#dates.createNow()}" th:href="@{/daily.html(d=${#dates.format(n,'dd-MM-yyyy')},e=${e})}" th:text="#{book.label}"></a>
-          </li>
-          <li><i class="fa fa-calendar"></i>
-            <a th:href="@{/perso/weekly.html(d=${#dates.format(startOfW,'dd-MM-yyyy')},id=${user.id})}" th:text="#{my.weekly.schedule.label}" th:title="#{my.weekly.schedule.title}">Mon planning</a>
-          </li>
-        </ul>
-      </div>
-      <h3 th:text="#{my.bookings.label}">Mes réservations</h3>
-      <table class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
-        <thead>
+      <div id="accordion">
+        <h3 th:text="|${user.firstName} ${user.name}|">Mes informations</h3>
+        <table class="pure-table pure-table-horizontal simple">
+          <tr><th th:text="#{login.label}"></th><td th:text="${user.login}">deux</td></tr>
           <tr>
-            <th th:text="#{group.label}"></th>
-            <th th:text="#{establishment.label}">Etablissement</th>
-            <th th:text="#{room.label}">Salle</th>
-            <th th:text="#{date.label}">Date</th>
-            <th th:text="#{hour.label}">Heure</th>
-            <th th:text="#{status.label}">Statut</th>
-            <th style="width: 10%;text-align: center"><a href="javascript:location.reload(true);" th:title="#{refresh.page.label}"><i class="fa fa-refresh"></i></a></th>
+            <th th:text="#{email.label}"></th>
+            <td>
+              <ul class="simple">
+                <li th:each="em:${person.email}"><a th:href="@{'mailto:'+${em.email}}" th:text="${em.email}"></a></li>
+              </ul>
+            </td>
           </tr>
-        </thead>
-        <tbody><tr th:each="b:${bookings}">
-            <td th:text="${b.detail['group']}"></td>
-            <td th:text="${b.detail['estab']}"></td>
-            <td th:text="${b.detail['room']}"></td>
-            <td><a th:href="@{/daily.html(d=${b.dateFr},e=${b.detail['estab'].id})}" th:text="${b.dateFr}"></a></td>
-            <td th:text="${b.start + '-' + b.end}"></td>
-            <td th:class="${b.status == 0 ? 'pending' : 'confirmed'}" th:text="#{${b.status == 0} ? booking.pending.label : booking.confirmed.label}"></td>
-            <td><a th:if="${b.status == 0}" th:text="#{cancel.label}" th:href="@{/perso/book-cancel.html(id=${b.id},action=${b.idAction},date=${b.dateFr},start=${b.start})}">Annuler</a></td>
-          </tr>
-        </tbody>
-      </table>
-      <section sec:authorize="${hasRole('2')}">
-        <h3 th:text="#{follow-up.label}">Suivi</h3>
-        <header>
-          <nav>
-            <ul class="horizontal-panel-menu">
-              <li><a href="" id="follow-d" th:text="#{today.label}" th:formaction="@{/perso/xFollowUpSchedules}" /></li>
-              <li><a href="" id="follow-m" th:text="#{current.month.label}"/></li>
-              <li><a href="" id="follow-w" th:text="#{current.week.label}"/></li>
-              <li><label for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value="04-07-2016"/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value="10-07-2016"/></li>
-            </ul>
-          </nav>
-        </header>
-        <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
-          <thead>
-            <tr><th>Jour</th><th>Horaire</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Suivi individuel</th><th>Suivi co.</th></tr>
-          </thead>
-          <tbody>
-          </tbody>
-          <tfoot></tfoot>
+          <tr><th th:text="#{profile.label}"></th><td th:text="#{${user.profile.label}}">trois</td></tr>
         </table>
-      </section>
+        <h3 th:text="#{schedule.label}"></h3>
+        <div>
+          <ul class="simple">
+            <li th:if="${e != null && T(java.lang.Integer).parseInt(e) > 0}"><i class="fa fa-calendar-plus-o"></i>
+              <a th:with="n=${#dates.createNow()}" th:href="@{/daily.html(d=${#dates.format(n,'dd-MM-yyyy')},e=${e})}" th:text="#{book.label}"></a>
+            </li>
+            <li><i class="fa fa-calendar"></i>
+              <a th:href="@{/perso/weekly.html(d=${#dates.format(startOfW,'dd-MM-yyyy')},id=${user.id})}" th:text="#{my.weekly.schedule.label}" th:title="#{my.weekly.schedule.title}">Mon planning</a>
+            </li>
+          </ul>
+        </div>
+        <h3 th:text="#{my.bookings.label}">Mes réservations</h3>
+        <table class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
+          <thead>
+            <tr>
+              <th th:text="#{group.label}"></th>
+              <th th:text="#{establishment.label}">Etablissement</th>
+              <th th:text="#{room.label}">Salle</th>
+              <th th:text="#{date.label}">Date</th>
+              <th th:text="#{hour.label}">Heure</th>
+              <th th:text="#{status.label}">Statut</th>
+              <th style="width: 10%;text-align: center"><a href="javascript:location.reload(true);" th:title="#{refresh.page.label}"><i class="fa fa-refresh"></i></a></th>
+            </tr>
+          </thead>
+          <tbody><tr th:each="b:${bookings}">
+              <td th:text="${b.detail['group']}"></td>
+              <td th:text="${b.detail['estab']}"></td>
+              <td th:text="${b.detail['room']}"></td>
+              <td><a th:href="@{/daily.html(d=${b.dateFr},e=${b.detail['estab'].id})}" th:text="${b.dateFr}"></a></td>
+              <td th:text="${b.start + '-' + b.end}"></td>
+              <td th:class="${b.status == 0 ? 'pending' : 'confirmed'}" th:text="#{${b.status == 0} ? booking.pending.label : booking.confirmed.label}"></td>
+              <td><a th:if="${b.status == 0}" th:text="#{cancel.label}" th:href="@{/perso/book-cancel.html(id=${b.id},action=${b.idAction},date=${b.dateFr},start=${b.start})}">Annuler</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <h3 th:if="${user.teacher}" th:text="#{teacher.monitoring.label}">Suivi</h3>
+        <section th:if="${user.teacher}">
+          <header>
+            <nav class="horizontal-panel-menu">
+              <ul class="horizontal-panel-menu">
+                <li><a href="javascript:;" id="follow-d" th:text="#{today.label}" th:formaction="@{/perso/xFollowUpSchedules}" /></li>
+                <li><a href="javascript:;" id="follow-w" th:text="#{current.week.label}"/></li>
+                <li><a href="javascript:;" id="follow-m" th:text="#{current.month.label}"/></li>
+                <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value=""/></li>
+              </ul>
+            </nav>
+          </header>
+          <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
+            <thead>
+              <tr><th>Jour</th><th>Horaire</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Suivi individuel</th><th>Suivi co.</th></tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+          </table>
+        </section>
+      </div>
     </div>
     <div id="follow-up-dlg">
       <form id="follow-up-form" th:action="@{/perso/xEditFollowUp}">
         <fieldset>
           <legend>PIANO<br />mercredi 01-06-2016 17:00-17:30</legend>
-          <label for="follow-content">Suivi</label><textarea style="display: block;width: 100%" rows="10" id="follow-content" th:name="content"></textarea>
-          <label for="note">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="width: 4em" />
-          <input id="abs-check" type="checkbox" />&nbsp;<label for="abs-check">Absent</label>
-          <input id="exc-check" type="checkbox" />&nbsp;<label for="exc-check">Excusé</label>
+          <label for="follow-content" th:text="#{follow-up.label}">Suivi</label><textarea style="display: block;width: 100%" rows="3" id="follow-content" th:name="content"></textarea>
+          <label for="note" th:text="#{note.label}">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="width: 4em" />
+          <input id="abs-check" type="checkbox" />&nbsp;<label for="abs-check" th:text="#{absent.label}">Absent</label>
+          <input id="exc-check" type="checkbox" />&nbsp;<label for="exc-check" th:text="#{excused.label}">Excusé</label>
           <input id="noteId" type="hidden" th:name="id" />
           <input id="scheduleId" type="hidden" th:name="scheduleId" />
           <input id="noteType" type="hidden" th:name="collective" />
@@ -139,33 +141,48 @@
       <p class="error">Erreur</p>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>
+    <div id="busy"></div>
   </body>
   <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
     var userId = /*[[${user.id}]]*/ 1234;
     var dlg = $("#follow-up-dlg");
-    var followUpURL = /*[[@{/perso/xFollowUp}]]*/ 
+    var followUpURL = /*[[@{/perso/xFollowUp}]]*/ '';
+    var url = $("#follow-d").attr("formaction");
+    var labels = {
+      "individual_monitoring_action": /*[[#{individual.monitoring.action.title}]]*/ '',
+      "collective_monitoring_action": /*[[#{collective.monitoring.action.title}]]*/ '',
+      "student_list": /*[[#{student.list.label}]]*/ '',
+      "expand_collapse": /*[[#{expand.collapse.label}]]*/ '',
+    };
     setCommonEvents();
     initFollowUpDialog(dlg);
-    var cwd = getCurrentWeekDates(new Date());
-    var url = $("#follow-d").attr("formaction");
-    setWeekDates(dateFormatFR(cwd.first), dateFormatFR(cwd.last));
+    initWeekDates(new Date());
     setWeekChange(url, userId);
+    setPersonalHomePageLabels(labels);
+    var cwd = getCurrentWeekDates(new Date());
+    $("#accordion").accordion({
+      heightStyle: "content",
+      collapsible: "true",
+      active: 1,
+      animate: false
+//      animate: {easing: "linear",duration: 200}
+    });
     $("#follow-d").click(function () {
       var now = new Date();
-      console.log(dateFormatFR(now));
-      getFollowUp(url, userId, dateFormatFR(now), dateFormatFR(now));
+      //console.log(dateFormatFR(now));
+      getFollowUpSchedules(url, userId, dateFormatFR(now), dateFormatFR(now));
       setWeekDates(dateFormatFR(now), dateFormatFR(now));
     });
     $("#follow-m").click(function () {
       var cmd = getCurrentMonthDates();
-      console.log(dateFormatFR(cmd.first) + " " + dateFormatFR(cmd.last));
-      getFollowUp(url, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+      //console.log(dateFormatFR(cmd.first) + " " + dateFormatFR(cmd.last));
+      getFollowUpSchedules(url, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
       setWeekDates(dateFormatFR(cmd.first), dateFormatFR(cmd.last));
     });
     $("#follow-w").click(function () {
-      console.log(dateFormatFR(cwd.first) + " " + dateFormatFR(cwd.last));
-      getFollowUp(url, userId, dateFormatFR(cwd.first), dateFormatFR(cwd.last));
+      //console.log(dateFormatFR(cwd.first) + " " + dateFormatFR(cwd.last));
+      getFollowUpSchedules(url, userId, dateFormatFR(cwd.first), dateFormatFR(cwd.last));
       setWeekDates(dateFormatFR(cwd.first), dateFormatFR(cwd.last));
     });
     //manage ajax loaded content
@@ -174,36 +191,27 @@
     });
 
     $(document).on("click", ".dlg", function () {
-//      console.log("click dialog");
       resetFollowUpDialog();
-      getFollowUp(followUpURL, $(this).attr("id"));
+      var isCo = $(this).attr("accessKey") === "C";
+      getFollowUp(followUpURL, $(this).attr("id"), isCo);
       var row = $(this).closest('tr');
       var course = row.find(':nth-child(5)').contents().get(0).nodeValue;
       var dateTime = row.find(':nth-child(1)').contents().get(0).nodeValue;
       dateTime += " " + row.find(':nth-child(2)').contents().get(0).nodeValue;
-      var isDetail = $(this).attr("accessKey") === "D";
-      var isCo = $(this).attr("accessKey") === "C";
-      console.log("isDetail ? " + isDetail + " isCo ? " + isCo);
-      var noteContent = undefined;
-      if (isDetail) {
-//        noteContent = $(this).next().contents();
-          noteContent = $(this).attr("title");
-      } else if (isCo) {
-//        noteContent = $(this).contents();
-    $(this).html();
-      }
       var legendInfo = course + "<br />" + dateTime;
       var legend = $(dlg).find("legend");
       var t = isCo ? "Suivi collectif" : $(this).html();
       $(legend).html(legendInfo);
-      console.log("noteContent : " + noteContent);
-//      if (noteContent !== undefined && noteContent.get(0) !== undefined) {
-//        $("#follow-content").val(noteContent.get(0).nodeValue);
-//      }
-      $("#follow-content").val(noteContent);
       // complete form
+      if (isCo) {
+        $("#exc-check").prop("readonly", true);//readonly is sent by form.serialize
+        $("#note").prop("readonly", true);
+      } else {
+        $("#exc-check").prop("readonly", false);
+        $("#note").prop("readonly", false);
+      }
       $("#noteId").val($(this).attr("id"));
-      $("#scheduleId").val(isCo ? row.attr("id"): $(this).closest("li").attr("id"));
+      $("#scheduleId").val(isCo ? row.attr("class") : $(this).closest("li").attr("id"));
       $("#noteType").val(isCo);
       $(dlg).dialog({title: t}).dialog("open");
 

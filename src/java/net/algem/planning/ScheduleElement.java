@@ -47,6 +47,7 @@ public class ScheduleElement
   private String color;
   private String labelColor;
   private int code;
+  private FollowUp followUp;
 
   public Map<String, NamedModel> getDetail() {
     return detail;
@@ -54,6 +55,14 @@ public class ScheduleElement
 
   public void setDetail(String key, NamedModel m) {
     detail.put(key, m);
+  }
+
+  public FollowUp getFollowUp() {
+    return followUp;
+  }
+
+  public void setFollowUp(FollowUp followUp) {
+    this.followUp = followUp;
   }
 
   /**

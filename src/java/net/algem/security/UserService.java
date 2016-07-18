@@ -1,5 +1,5 @@
 /*
- * @(#)UserService.java	1.1.0 17/02/16
+ * @(#)UserService.java	1.4.0 16/07/16
  *
  * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.4.0
  * @since 1.0.0 11/02/13
  */
 @Component
@@ -116,6 +116,8 @@ public interface UserService
 
   public boolean isMember(String login, String startDate, String endDate);
 
+  public boolean isTeacher(int id);
+
   public List<Group> getGroups(String login);
 
   public boolean hasPass(String login);
@@ -137,7 +139,7 @@ public interface UserService
   public PasswordResetToken getToken(int userId);
 
   public void updatePassword(int userId, String password);
-  
+
   public Config getConf(String key);
 
 }
