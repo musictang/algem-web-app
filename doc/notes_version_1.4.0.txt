@@ -1,0 +1,29 @@
+1.4.0
+
+AMELIORATIONS
+Présentation
+Page d'accueil : alignement des paragraphes.
+Page perso : la présentation de la page fait maintenant appel à un menu à onglets verticaux. L'onglet Planning est ouvert par défaut.
+Cliquez sur le titre d'un onglet pour l'ouvrir.
+
+Connexion
+Le mot de passe doit maintenant être confirmé lors de la création de compte ou de la récupération. Le mot de passe doit donc être saisi deux fois afin d'éviter des oublis malencontreux.
+Dans le formulaire de création de compte, une aide contextuelle apparaît maintenant après avoir cliqué à l'intérieur d'un champ.
+
+SUIVI PEDAGOGIQUE
+Afin d'éviter la double saisie consistant à reporter dans Algem les notes des professeurs inscrites sur leurs feuilles de présence, le suivi des enseignants peut se faire directement en ligne (seulement si vous êtes abonnés à la version Webstart). Une fois connecté, le professeur dispose sur sa page personnelle d'un module de consultation et d'édition du suivi pédagogique intitulé "Suivi enseignant". Les trois premiers liens lui permettent d'afficher respectivement son suivi du jour, de la semaine et du mois en cours. Les deux derniers champs, de type "Date", lui permettent d'accéder à n'importe quelle semaine dans le calendrier.
+
+Le suivi pédagogique est présenté sous forme de tableau dont les colonnes sont les suivantes :
+Jour | Horaire | Durée | Salle | Cours | Suivi individuel | Suivi collectif 
+
+La durée totale des séances affichées est indiquée en bas de la 3ème colonne.
+
+Le suivi individuel est affiché en-dessous du nom de chaque élève dans l'avant-dernière colonne. S'il s'agit d'un cours collectif, vous pouvez cliquez sur "Liste des élèves" pour plier ou déplier l'arborescence.
+
+On édite le suivi individuel en cliquant sur le nom d'un élève. Le champ "Note" est optionnel et permet comme son nom l'indique de noter la personne. La note  n'est pas restreinte au format numérique, on peut très bien utiliser des lettres, comme cela se fait parfois et les signes + ou -. Voici quelques exemples possibles : 12; 12.5; 12,5; A; A+; B-; ...
+
+Cochez la case "Absent" si l'élève n'a pas pu assister au cours. Si les raisons de l'absence ont été signifiées, vous pouvez également cocher la case "Excusé". En général, on ne coche pas "Excusé" sans avoir aussi déclaré un élève absent. Le motif de l'absence ou de l'excuse peut être reporté dans le champ "Suivi".
+ 
+Cliquez directement dans la dernière cellule d'une ligne pour éditer le suivi collectif. Seuls deux champs sont éditables dans ce type de suivi: le commentaire du suivi et l'absence. C'est ici que le professeur déclare son absence. Si la plage horaire du cours individuel englobe plusieurs séances, ces informations seront reportées  sur toutes les lignes correspondantes.
+
+Par rapport à la feuille de présence, ce suivi a l'avantage d'être à jour en temps réel. Les modifications d'horaire ou de salle sont bien prises en compte. C'est une raison majeure pour préférer ce mode d'édition et de consultation et nous vous encourageons à l'adopter. Cela vous permettra de plus de faire des économies de papier et de temps.

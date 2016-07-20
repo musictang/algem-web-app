@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.4.0 13/07/16
+ * @(#) TeacherCtrl.java Algem Web App 1.4.0 18/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -147,7 +147,6 @@ public class TeacherCtrl
   {
 
     private boolean success;
-//    private boolean collective;
     private boolean creation;
     private String message;
     private int id;
@@ -158,7 +157,6 @@ public class TeacherCtrl
 
     public FollowUpResponse(boolean success, boolean creation) {
       this.success = success;
-//      this.collective = collective;
       this.creation = creation;
     }
 
@@ -174,15 +172,6 @@ public class TeacherCtrl
     public void setFollowUp(FollowUp followUp) {
       this.followUp = followUp;
     }
-
-//
-//    public boolean isCollective() {
-//      return collective;
-//    }
-//
-//    public void setCollective(boolean collective) {
-//      this.collective = collective;
-//    }
 
     public boolean isCreation() {
       return creation;
