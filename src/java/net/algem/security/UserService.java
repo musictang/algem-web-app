@@ -1,5 +1,5 @@
 /*
- * @(#)UserService.java	1.4.0 16/07/16
+ * @(#)UserService.java	1.4.0 20/07/16
  *
  * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,11 +21,13 @@
 package net.algem.security;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import net.algem.config.Config;
 import net.algem.contact.Person;
 import net.algem.group.Group;
+import net.algem.planning.ScheduleElement;
 import org.springframework.stereotype.Component;
 
 /**
@@ -124,6 +126,7 @@ public interface UserService
 
   public List<Map<String, Boolean>> getAcl(int userId);
 
+  public List<ScheduleElement> getFollowUp(int userId, Date from, Date to);
   /**
    * Records a token in custom table to recover password.
    * @param userId current user id

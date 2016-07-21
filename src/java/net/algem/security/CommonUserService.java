@@ -1,5 +1,5 @@
 /*
- * @(#)CommonUserService.java	1.4.0 16/07/16
+ * @(#)CommonUserService.java	1.4.0 20/07/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,6 +21,7 @@
 package net.algem.security;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -29,6 +30,7 @@ import net.algem.config.Config;
 import net.algem.config.ConfigIO;
 import net.algem.contact.Person;
 import net.algem.group.Group;
+import net.algem.planning.ScheduleElement;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -141,7 +143,12 @@ public class CommonUserService
 
   @Override
   public boolean isTeacher(int id) {
+    try {
     return dao.getTeacher(id) > 0;
+    } catch(DataAccessException ex) {
+      Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, ex.getMessage());
+      return false;
+    }
   }
 
   @Override
@@ -162,6 +169,11 @@ public class CommonUserService
   @Override
   public List<Map<String, Boolean>> getAcl(int userId) {
     return dao.listMenuAccess(userId);
+  }
+
+  @Override
+  public List<ScheduleElement> getFollowUp(int userId, Date from, Date to) {
+    return dao.getFollowUp(userId, from, to);
   }
 
   @Override

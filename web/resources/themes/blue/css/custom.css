@@ -97,5 +97,6 @@ footer a:link,footer a:visited,footer a:active,footer a:hover {
   padding:0;
 }
 
-#accordion .ui-state-active {background: #013D76;}
+#accordion h3.ui-state-active {background: #013D76;}
 #accordion .ui-widget-content a {color: #013D76;}
+.ui-dialog-titlebar {background: #013D76}

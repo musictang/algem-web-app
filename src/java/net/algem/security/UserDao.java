@@ -20,11 +20,13 @@
 
 package net.algem.security;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import net.algem.contact.Email;
 import net.algem.contact.Person;
 import net.algem.group.Group;
+import net.algem.planning.ScheduleElement;
 
 /**
  *
@@ -61,13 +63,14 @@ public interface UserDao {
   List<Map<String, Boolean>> listMenuAccess(int userId);
 
   byte[] findAuthInfo(String login, String col);
-  
+
   void createAccount(final User user);
-  
+
   void setToken(final int userId, final String token);
-  
+
   PasswordResetToken getToken(final int userId);
-  
+
   void updatePassword(final int userId, final UserPass pass);
 
+  List<ScheduleElement> getFollowUp(int userId, Date from, Date to);
 }

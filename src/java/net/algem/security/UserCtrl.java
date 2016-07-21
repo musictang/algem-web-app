@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java	1.1.0 22/02/16
+ * @(#)UserCtrl.java	1.4.0 20/07/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -22,6 +22,7 @@ package net.algem.security;
 
 import java.security.Principal;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -38,8 +39,11 @@ import net.algem.config.Config;
 import net.algem.config.ConfigKey;
 import net.algem.contact.Email;
 import net.algem.contact.Person;
+import net.algem.contact.TeacherCtrl;
 import net.algem.planning.BookingScheduleElement;
 import net.algem.planning.PlanningService;
+import net.algem.planning.ScheduleElement;
+import static net.algem.util.Constants.DATE_FORMAT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -69,7 +73,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Controller for login operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.4.0
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -356,6 +360,26 @@ public class UserCtrl
   public @ResponseBody
   boolean isMember(Principal p, @RequestParam String start, @RequestParam String end) {
     return service.isMember(p.getName(), start, end);
+  }
+
+  @RequestMapping(method = RequestMethod.GET, value = "/perso/xFollowUpStudent")
+  public @ResponseBody
+  List<ScheduleElement> getFollowUp(
+          @RequestParam("userId") String userId,
+          @RequestParam("from") String from,
+          @RequestParam("to") String to,
+          Principal p) {
+    List<ScheduleElement> f = null;
+    try {
+      Date dateFrom = DATE_FORMAT.parse(from);
+      Date dateTo = DATE_FORMAT.parse(to);
+      f = service.getFollowUp(Integer.parseInt(userId), dateFrom, dateTo);
+    } catch (DataAccessException ex) {
+      Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (ParseException ex) {
+      Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return f;
   }
 
   private boolean isEmailValid(Person p, String email) {

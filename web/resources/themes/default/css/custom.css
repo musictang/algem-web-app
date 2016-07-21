@@ -100,5 +100,6 @@ footer a:link,footer a:visited, footer a:hover, footer a:active {
   background-color: #ff5719;
 }
 
-#accordion .ui-state-active {background: #ff5719}
-#accordion .ui-widget-content a {color: #D33900;}
+#accordion h3.ui-state-active {background: #ff5719}
+#accordion .ui-widget-content a {color: #D33900}
+.ui-dialog-titlebar {background: #ff5719}

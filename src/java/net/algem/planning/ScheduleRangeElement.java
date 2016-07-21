@@ -51,5 +51,8 @@ public class ScheduleRangeElement
     this.followUp = followUp;
   }
 
-
+  @Override
+  public String toString() {
+    return super.toString() + " " + followUp.toString();
+  }
 }

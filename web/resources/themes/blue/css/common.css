@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.4.0 16/07/16
+ * @(#) common.css Algem Web App 1.4.0 20/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -362,15 +362,22 @@ select {font-size: small;}
 }
 .panel, #xlogin-panel {padding: 1em;}
 .ui-dialog {z-index: 2002 !important ;}
-.ui-dialog-title {font-family: ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;}
+.ui-dialog-title {font-family: ubuntu,ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;}
 .ui-widget,#datepicker,.week-date {font-family: ubuntu,Verdana,sans-serif}
+.ui-dialog-titlebar {border: none;}
+/*background: #817865;*/
+.ui-dialog-titlebar button.ui-dialog-titlebar-close {border: none}
+.ui-dialog-buttonset button.ui-state-default {border: 1px solid #999}
+.ui-dialog-buttonset button.ui-state-active, .ui-dialog-buttonset button.ui-state-hover {border: 1px solid #555}
 .ui-datepicker-title {color: #444;}
 #accordion .ui-accordion-content {padding: 1em 0.8em}
 #accordion .ui-accordion-icons {padding-left: 1.6em}
 #accordion .ui-widget-content {background: white}
 /*#accordion .ui-state-active .ui-icon {background-image: url("images/ui-icons_3d3d3d_256x240.png")}*/
 #accordion .ui-state-active .ui-icon {background-image: url("images/ui-icons_ffffff_256x240.png")}
-#accordion .ui-accordion-header {font-size: larger; font-weight: normal; color: #555}
+#accordion .ui-accordion-header {font-size: larger; font-weight: normal; color: #666}
+#accordion h3.ui-state-default {background: #ddd;border: 1px solid #8e846b;}
+
 #accordion h3.ui-state-active {color: white}
 
 #bookdate {display: inline-block;width: 6em;padding:0 0.25em;text-align: center}
@@ -392,6 +399,10 @@ select {font-size: small;}
   color: white;
   text-decoration: none;
   border: none;
+}
+
+.closing-bar ~ div {
+  padding: 0 1em;
 }
 .closeable{}
 

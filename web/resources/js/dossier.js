@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.4.0 16/07/16
+ * @(#) dossier.js Algem Web App 1.4.0 20/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -106,6 +106,47 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
       });
       result += "<tr><th colspan=\"2\">Total</th><td colspan=\"5\"><b>" + getTimeFromMinutes(total) + "</b></td></tr>";
       $("#follow-up-result tbody").html(result);
+    }
+  }, "json");
+}
+
+function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
+  $.get(urlPath, {userId: userId, from: dateFrom, to: dateTo}, function (data) {
+    if (typeof data === 'undefined' || !data.length) {
+      console.log("no data");
+      $("#follow-up-student tbody").empty(); // supprimer contenu
+    } else {
+      var result = "";
+      var total = 0;
+      $.each(data, function (index, value) {
+        var d = new Date(value.date);
+        var dateInfo = d.toLocaleString(getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d);
+        var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-" + value.end.hour.pad() + ":" + value.end.minute.pad();
+        var ms = (value.start.hour * 60) + value.start.minute;
+        var me = (value.end.hour * 60) + value.end.minute;
+        var length = me - ms;
+        var roomInfo = value.detail['room'].name;
+        var courseInfo = value.detail['course'].name;
+        var teacherInfo = value.detail['teacher'].name;
+        var noteCo = value.followUp.content || "";
+        var nc = value.ranges[0].followUp.content || "";
+        var sub = getFollowUpSubContent(value.ranges[0].followUp);
+        var subCo = getFollowUpSubContent(value.followUp);
+        total += length;
+
+        result += "<tr>"
+          + "<td>" + dateInfo + "</td>"
+          + "<td>" + timeInfo + "</td>"
+          + "<td>" + getTimeFromMinutes(length) + "</td>"
+          + "<td>" + roomInfo + "</td>"
+          + "<td>" + courseInfo + "</td>"
+          + "<td>" + teacherInfo + "</td>"
+          + "<td>" + nc + "<p class=\"subContent\">" + sub + "</p></td>"
+          + "<td>" + noteCo + "<p class=\"subContent\">" + subCo + "</p></td></tr>";
+      });
+      result += "<tr><th colspan=\"2\">Total</th><td colspan=\"6\"><b>" + getTimeFromMinutes(total) + "</b></td></tr>";
+      //console.log(result);
+      $("#follow-up-student tbody").html(result);
     }
   }, "json");
 }
@@ -253,13 +294,23 @@ function initWeekDates(today) {
   $(from).val(dateFormatFR(today));
   $(to).val(dateFormatFR(today));
 
+  var studentFrom = $("#student-weekFrom");
+  var studentTo = $("#student-weekTo");
+  $(studentFrom).datepicker({changeMonth: true, changeYear: true, dateFormat: 'dd-mm-yy'}).datepicker('setDate', today);
+  $(studentTo).datepicker({changeMonth: true, changeYear: true, dateFormat: 'dd-mm-yy'}).datepicker('setDate', today);
+  $(studentFrom).val(dateFormatFR(today));
+  $(studentTo).val(dateFormatFR(today));
+
 }
 
 function setWeekDates(firstDay, lastDay) {
   $("#weekFrom").datepicker('setDate', firstDay);
   $("#weekTo").datepicker('setDate', lastDay);
 }
-
+function setStudentWeekDates(firstDay, lastDay) {
+  $("#student-weekFrom").datepicker('setDate', firstDay);
+  $("#student-weekTo").datepicker('setDate', lastDay);
+}
 function setWeekChange(url, idper) {
   var from = $("#weekFrom");
   var to = $("#weekTo");
@@ -281,6 +332,30 @@ function setWeekChange(url, idper) {
     from.datepicker('setDate', wd.first);
     to.datepicker('setDate', wd.last);
     to.blur();
+  });
+}
+
+function setStudentWeekChange(url, idper) {
+  var studentFrom = $("#student-weekFrom");
+  var studentTo = $("#student-weekTo");
+  studentFrom.change(function () {
+    console.log(this.value);
+    var d = new Date(studentFrom.datepicker('getDate'));
+    var wd = getCurrentWeekDates(d);
+    getFollowUpStudent(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
+    studentFrom.datepicker('setDate', wd.first);
+    studentTo.datepicker('setDate', wd.last);
+    studentFrom.blur();
+  });
+
+  studentTo.change(function () {
+    console.log(this.value);
+    var d = new Date(studentTo.datepicker('getDate'));
+    var wd = getCurrentWeekDates(d);
+    getFollowUpStudent(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
+    studentFrom.datepicker('setDate', wd.first);
+    studentTo.datepicker('setDate', wd.last);
+    studentTo.blur();
   });
 }
 

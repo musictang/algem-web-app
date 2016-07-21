@@ -1,5 +1,5 @@
 /*
- * @(#)UserDaoImpl.java	1.2.0 06/04/16
+ * @(#)UserDaoImpl.java	1.4.0 20/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -26,6 +26,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +41,16 @@ import net.algem.contact.PersonIO;
 import net.algem.contact.TeacherDaoImpl;
 import net.algem.group.Group;
 import net.algem.group.GroupIO;
+import net.algem.planning.DateFr;
+import net.algem.planning.FollowUp;
+import net.algem.planning.Hour;
+import net.algem.planning.ScheduleDao;
+import net.algem.planning.ScheduleElement;
+import net.algem.planning.ScheduleRangeElement;
+import net.algem.planning.ScheduleRangeIO;
 import net.algem.util.AbstractGemDao;
 import net.algem.util.Constants;
+import net.algem.util.NamedModel;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -54,18 +64,30 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.2.0
+ * @version 1.4.0
  * @since 1.0.0 11/02/13
  */
 @Repository
 public class UserDaoImpl
-  extends AbstractGemDao implements UserDao
-
-{
+  extends AbstractGemDao implements UserDao {
 
   public static final String TABLE = "login";
   public static final String T_TOKEN = "jeton_login";
   public static final String T_PASSCARD = "carteabopersonne";
+  private static final String FOLLOWUP_STATEMENT
+    = "SELECT p.id,p.jour,pl.id,pl.debut,pl.fin,p.idper,per.nom,per.prenom,p.lieux,s.nom,c.id,c.titre,n1.id,n1.texte,n1.note,n1.abs,n1.exc,n2.id,n2.texte,n2.abs"
+    + " FROM " + ScheduleDao.TABLE + " p"
+    + " JOIN " + PersonIO.TABLE + " per on p.idper = per.id"
+    + " JOIN action a ON p.action = a.id"
+    + " JOIN cours c ON a.cours = c.id"
+    + " JOIN " + ScheduleRangeIO.TABLE + " pl ON p.id = pl.idplanning"
+    + " JOIN salle s ON p.lieux = s.id"
+    + " LEFT JOIN suivi n1 ON pl.note = n1.id"
+    + " LEFT JOIN suivi n2 ON p.note = n2.id"
+    + " WHERE p.ptype IN (1,5,6)"
+    + " AND pl.adherent = ?"
+    + " AND p.jour BETWEEN ? AND ?"
+    + " ORDER BY p.jour,pl.debut";
 
   @Autowired
   private ConfigIO configIO;
@@ -84,7 +106,6 @@ public class UserDaoImpl
       }
     });
   }
-
 
   @Override
   public User find(String login) {
@@ -145,10 +166,9 @@ public class UserDaoImpl
   @Override
   public User findByEmail(final String email) {
     String query = "SELECT l.idper,l.login,l.profil FROM "
-            + TABLE + " l INNER JOIN email e ON (l.idper = e.idper)"
-            + " WHERE e.email = ?";
-    return jdbcTemplate.queryForObject(query, new RowMapper<User>()
-    {
+      + TABLE + " l INNER JOIN email e ON (l.idper = e.idper)"
+      + " WHERE e.email = ?";
+    return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
       @Override
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         User u = new User();
@@ -187,7 +207,7 @@ public class UserDaoImpl
           return rs.getBoolean(1);
         }
       });
-      for(Boolean b : result) {
+      for (Boolean b : result) {
         if (b) {
           return true;
         }
@@ -203,7 +223,7 @@ public class UserDaoImpl
   @Override
   public int findPass(String userName) {
     String query = "SELECT c.idper FROM " + T_PASSCARD + " c JOIN " + TABLE + " l ON (c.idper = l.idper)"
-            + " WHERE l.login = ? AND c.restant > 0 ORDER BY c.id DESC LIMIT 1";
+      + " WHERE l.login = ? AND c.restant > 0 ORDER BY c.id DESC LIMIT 1";
     return jdbcTemplate.queryForObject(query, Integer.class, userName);
   }
 
@@ -280,7 +300,6 @@ public class UserDaoImpl
 
   }
 
-
   @Override
   public byte[] findAuthInfo(String login, String col) {
     int id = getIdFromLogin(login);
@@ -313,7 +332,6 @@ public class UserDaoImpl
     deleteToken(userId);
     createToken(userId, token);
   }
-
 
   @Override
   public PasswordResetToken getToken(final int userId) {
@@ -355,6 +373,55 @@ public class UserDaoImpl
       }
     });
     deleteToken(userId);
+  }
+
+  @Override
+  public List<ScheduleElement> getFollowUp(int userId, Date from, Date to) {
+
+    return jdbcTemplate.query(FOLLOWUP_STATEMENT, new RowMapper<ScheduleElement>() {
+      @Override
+      public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
+        ScheduleElement d = new ScheduleElement();
+        d.setId(rs.getInt(1));
+        d.setDateFr(new DateFr(rs.getString(2)));
+        d.setStart(new Hour(rs.getString(4)));
+        d.setEnd(new Hour(rs.getString(5)));
+        d.setIdPerson(rs.getInt(6));
+        String t = rs.getString(8) + " " + rs.getString(7);
+        d.setDetail("teacher", new NamedModel(rs.getInt(6), t));
+        d.setPlace(rs.getInt(9));
+        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(10)));
+        d.setDetail("course", new NamedModel(rs.getInt(11), rs.getString(12)));
+        d.setNote(rs.getInt(18));
+        d.setDetail("estab", null);
+        FollowUp up = new FollowUp();
+        up.setId(d.getNote());
+        up.setContent(rs.getString(19));
+        up.setAbsent(rs.getBoolean(20));
+        d.setFollowUp(up);
+        Collection<ScheduleRangeElement> ranges = new ArrayList<>();
+        ScheduleRangeElement r = getFollowUpDetail(rs);
+        ranges.add(getFollowUpDetail(rs));
+        d.setRanges(ranges);
+        return d;
+      }
+    }, userId, from, to);
+  }
+
+  private ScheduleRangeElement getFollowUpDetail(ResultSet rs) throws SQLException {
+    ScheduleRangeElement r = new ScheduleRangeElement();
+    r.setId(rs.getInt(3));
+    r.setStart(new Hour(rs.getString(4)));
+        r.setEnd(new Hour(rs.getString(5)));
+    FollowUp up = new FollowUp();
+    up.setId(rs.getInt(13));
+    up.setContent(rs.getString(14));
+    up.setNote(rs.getString(15));
+    up.setAbsent(rs.getBoolean(16));
+    up.setExcused(rs.getBoolean(17));
+
+    r.setFollowUp(up);
+    return r;
   }
 
   private User getFromRS(ResultSet rs) throws SQLException {

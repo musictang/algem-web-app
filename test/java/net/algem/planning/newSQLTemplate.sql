@@ -137,3 +137,29 @@ LEFT OUTER JOIN prof ON (l.idper = prof.idper)
 LEFT OUTER JOIN technicien tech ON (l.idper = tech.idper)
 LEFT OUTER JOIN eleve e ON (l.idper = e.idper)
 WHERE l.login = 'laurence';
+
+
+-- suivi eleve
+SELECT p.jour, pl.debut,pl.fin, p.idper, per.nom,per.prenom,p.lieux,s.nom,n1.texte, n2.texte
+FROM planning p
+JOIN personne per on p.idper = per.id
+JOIN plage pl ON p.id = pl.idplanning
+JOIN salle s ON p.lieux = s.id
+LEFT JOIN suivi n1 ON pl.note = n1.id
+LEFT JOIN suivi n2 ON p.note = n2.id
+WHERE p.ptype IN (1,5,6)
+AND pl.adherent = 13858
+AND p.jour BETWEEN '01-06-2016' AND '30-06-2016' ORDER BY p.jour,pl.debut;
+
+SELECT p.id,p.jour,pl.id,pl.debut,pl.fin,p.idper,per.nom,per.prenom,p.lieux,s.nom,c.id,c.titre,n1.id,n1.texte,n1.note,n1.abs,n1.exc,n2.id,n2.texte,n2.abs
+FROM planning p JOIN personne per on p.idper = per.id
+JOIN action a ON p.action = a.id
+JOIN cours c ON a.cours = c.id
+JOIN plage pl ON p.id = pl.idplanning
+JOIN salle s ON p.lieux = s.id
+LEFT JOIN suivi n1 ON pl.note = n1.id
+LEFT JOIN suivi n2 ON p.note = n2.id
+WHERE p.ptype IN (1,5,6)
+AND pl.adherent = 13858
+AND p.jour BETWEEN '06-06-2016' AND '12-06-2016'
+ORDER BY p.jour,pl.debut;

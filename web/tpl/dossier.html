@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.4.0 13/07/16
+ * @(#) dossier.html Algem Web App 1.4.0 20/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -24,17 +24,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/pure-min.css}" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/jquery-ui.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/common.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
-    <link rel="stylesheet" th:href="@{/resources/themes/css/jquery-ui.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/mediaqueries.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/font-awesome.min.css}" />
     <script type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
-
     <script type="text/javascript" th:src="@{/resources/js/jquery-ui-1.11.4.min.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/jquery-ui.datepicker-fr.js}"></script>
-    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/common.js}"></script>
     <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/util.js}"></script>
+    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/common.js}"></script>
     <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/dossier.js}"></script>
 
   </head>
@@ -53,18 +52,20 @@
     <div class="global">
       <div id="accordion">
         <h3 th:text="|${user.firstName} ${user.name}|">Mes informations</h3>
-        <table class="pure-table pure-table-horizontal simple">
-          <tr><th th:text="#{login.label}"></th><td th:text="${user.login}">deux</td></tr>
-          <tr>
-            <th th:text="#{email.label}"></th>
-            <td>
-              <ul class="simple">
-                <li th:each="em:${person.email}"><a th:href="@{'mailto:'+${em.email}}" th:text="${em.email}"></a></li>
-              </ul>
-            </td>
-          </tr>
-          <tr><th th:text="#{profile.label}"></th><td th:text="#{${user.profile.label}}">trois</td></tr>
-        </table>
+        <div>
+          <table class="pure-table pure-table-horizontal simple">
+            <tr><th th:text="#{login.label}"></th><td th:text="${user.login}">deux</td></tr>
+            <tr>
+              <th th:text="#{email.label}"></th>
+              <td>
+                <ul class="simple">
+                  <li th:each="em:${person.email}"><a th:href="@{'mailto:'+${em.email}}" th:text="${em.email}"></a></li>
+                </ul>
+              </td>
+            </tr>
+            <tr><th th:text="#{profile.label}"></th><td th:text="#{${user.profile.label}}">trois</td></tr>
+          </table>
+        </div>
         <h3 th:text="#{schedule.label}"></h3>
         <div>
           <ul class="simple">
@@ -100,6 +101,27 @@
             </tr>
           </tbody>
         </table>
+        <h3 th:if="${user.student}" th:text="#{student.monitoring.label}">Suivi</h3>
+        <section th:if="${user.student}">
+          <header>
+            <nav class="horizontal-panel-menu">
+              <ul class="horizontal-panel-menu">
+                <li><a href="javascript:;" id="student-follow-d" th:text="#{today.label}" th:formaction="@{/perso/xFollowUpStudent}" /></li>
+                <li><a href="javascript:;" id="student-follow-w" th:text="#{current.week.label}"/></li>
+                <li><a href="javascript:;" id="student-follow-m" th:text="#{current.month.label}"/></li>
+                <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="student-weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="student-weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""/>&nbsp;<label for="student-weekTo" th:text="#{to.label}"></label>&nbsp;<input id="student-weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value=""/></li>
+              </ul>
+            </nav>
+          </header>
+          <table id="follow-up-student" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
+            <thead>
+              <tr><th>Jour</th><th>Horaire</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Professeur</th><th>Suivi individuel</th><th>Suivi co.</th></tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+          </table>
+        </section>
         <h3 th:if="${user.teacher}" th:text="#{teacher.monitoring.label}">Suivi</h3>
         <section th:if="${user.teacher}">
           <header>
@@ -148,7 +170,8 @@
     var userId = /*[[${user.id}]]*/ 1234;
     var dlg = $("#follow-up-dlg");
     var followUpURL = /*[[@{/perso/xFollowUp}]]*/ '';
-    var url = $("#follow-d").attr("formaction");
+    var url1 = $("#follow-d").attr("formaction");
+    var url2 = $("#student-follow-d").attr("formaction");
     var labels = {
       "individual_monitoring_action": /*[[#{individual.monitoring.action.title}]]*/ '',
       "collective_monitoring_action": /*[[#{collective.monitoring.action.title}]]*/ '',
@@ -158,7 +181,8 @@
     setCommonEvents();
     initFollowUpDialog(dlg);
     initWeekDates(new Date());
-    setWeekChange(url, userId);
+    setWeekChange(url1, userId);
+    setStudentWeekChange(url2, userId);
     setPersonalHomePageLabels(labels);
     var cwd = getCurrentWeekDates(new Date());
     $("#accordion").accordion({
@@ -170,20 +194,32 @@
     });
     $("#follow-d").click(function () {
       var now = new Date();
-      //console.log(dateFormatFR(now));
-      getFollowUpSchedules(url, userId, dateFormatFR(now), dateFormatFR(now));
+      getFollowUpSchedules(url1, userId, dateFormatFR(now), dateFormatFR(now));
       setWeekDates(dateFormatFR(now), dateFormatFR(now));
     });
     $("#follow-m").click(function () {
       var cmd = getCurrentMonthDates();
-      //console.log(dateFormatFR(cmd.first) + " " + dateFormatFR(cmd.last));
-      getFollowUpSchedules(url, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+      getFollowUpSchedules(url1, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
       setWeekDates(dateFormatFR(cmd.first), dateFormatFR(cmd.last));
     });
     $("#follow-w").click(function () {
-      //console.log(dateFormatFR(cwd.first) + " " + dateFormatFR(cwd.last));
-      getFollowUpSchedules(url, userId, dateFormatFR(cwd.first), dateFormatFR(cwd.last));
+      getFollowUpSchedules(url1, userId, dateFormatFR(cwd.first), dateFormatFR(cwd.last));
       setWeekDates(dateFormatFR(cwd.first), dateFormatFR(cwd.last));
+    });
+
+    $("#student-follow-d").click(function () {
+      var now = new Date();
+      getFollowUpStudent(url2, userId, dateFormatFR(now), dateFormatFR(now));
+      setStudentWeekDates(dateFormatFR(now), dateFormatFR(now));
+    });
+    $("#student-follow-m").click(function () {
+      var cmd = getCurrentMonthDates();
+      getFollowUpStudent(url2, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+      setStudentWeekDates(dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+    });
+    $("#student-follow-w").click(function () {
+      getFollowUpStudent(url2, userId, dateFormatFR(cwd.first), dateFormatFR(cwd.last));
+      setStudentWeekDates(dateFormatFR(cwd.first), dateFormatFR(cwd.last));
     });
     //manage ajax loaded content
     $(document).on("click", ".expand", function () {

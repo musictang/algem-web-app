@@ -37,8 +37,7 @@
     <header th:fragment="header"></header>
     <div th:fragment="help" >
       <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
-      <!--<p>Aide</p>-->
-      <div class="indented">
+      <div>
         <h2 th:text="#{booking.help.title}">Comment réserver</h2>
         <p th:text="#{booking.help.info}"></p>
         <h5>Remarques</h5>
@@ -52,7 +51,7 @@
         <p><a th:href="@{/help.html}" th:text="#{help.page.label}">Help</a></p>
         <h2 th:text="#{help.color.label}">Couleurs</h2>
         <ul style="margin-bottom: 1em">
-          <li th:each="def:${colorDefs}"  >
+          <li th:each="def:${colorDefs}">
             <span class="color-square" th:title="#{${def.value.key}}" th:style="${'background-color:'+def.value.value}"></span>[[#{${def.value.key}}]]
           </li>
         </ul>
@@ -60,7 +59,7 @@
     </div>
     <div th:fragment="color-help">
       <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
-      <div style="padding: 0 1em">
+      <div>
         <h2 th:text="#{help.color.label}">Couleurs</h2>
         <ul style="margin-bottom: 1em">
           <li th:each="def:${colorDefs}"  >
@@ -70,7 +69,7 @@
       </div>
     </div>
     <div th:fragment="info">
-      <div class="indented info">
+      <div class="info">
         <h2 th:id="#{hotline.label}" th:text="#{hotline.label}">Hotline</h2>
         <table class="pure-table pure-table-horizontal mobile">
           <tr th:each="estab:${@hotline}">
