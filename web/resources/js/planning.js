@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.3.0 12/06/16
+ * @(#)planning.js	1.4.0 22/06/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -312,17 +312,9 @@ function setBookingDialog() {
   $("#booking").dialog({
     modal: false,
     autoOpen: false,
-//    width: 380,
     maxHeight: 440,
     position: { my: "top", at: "top+25%", of: window }
   });
-//  $("#pass").button({
-//    text: true
-//  }).change(function () {
-//    $(this).button("option", {
-//      icons: {primary: this.checked ? 'ui-icon-check' : ''}
-//    });
-//  });
 }
 
 /**
@@ -519,11 +511,11 @@ function getGroups(params) {
       //console.log("Aucun résultat");
       $("#passInfo").show();
       $("#member").prop("checked", true);
-      $("<p id=\"groupInfo\" class=\"error\" style=\"font-size: smaller\">"+params.groupWarning+"</p>").appendTo("#groupPanel");
+      $("<div id=\"groupInfo\" class=\"error\" style=\"font-size: smaller\">"+params.groupWarning+"</div>").appendTo("#groupPanel");
     } else {
-      $("<p id=\"groupInfo\">").appendTo("#groupPanel");
-      $("<label style=\"padding-right: 0.25em\" for=\"bookingGroup\">"+(params.groupLabel === undefined ? "" : params.groupLabel)+"</label>").appendTo('#groupInfo');
-      $("<select id=\"bookingGroup\" name=\"group\">").appendTo('#groupInfo');
+      $("<div id=\"groupInfo\">").appendTo("#groupPanel");
+      $("<label class=\"pure-u-6-24\" for=\"bookingGroup\">"+(params.groupLabel === undefined ? "" : params.groupLabel)+"</label>").appendTo('#groupInfo');
+      $("<select class=\"pure-u-18-24\" id=\"bookingGroup\" name=\"group\">").appendTo('#groupInfo');
       $.each(data, function (index, value) {
         $("<option value=\""+value.id+"\">"+value.name+"</otpion>").appendTo('#bookingGroup');
       });

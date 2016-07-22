@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.4.0 21/07/16
+ * @(#) common.css Algem Web App 1.4.0 22/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -242,7 +242,6 @@ fieldset legend {font-size: 1.3em;}
 input[type=submit] {margin: 1em 0;}
 
 .inline {display: inline;}
-/*label.inline {padding-right: 0.5em;}*/
 
 .button-success,
 .button-error,
@@ -365,7 +364,6 @@ select {font-size: small;}
 .ui-dialog-title {font-family: ubuntu,ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;}
 .ui-widget,#datepicker,.week-date {font-family: ubuntu,Verdana,sans-serif}
 .ui-dialog-titlebar {border: none;}
-/*background: #817865;*/
 .ui-dialog-titlebar button.ui-dialog-titlebar-close {border: none}
 .ui-dialog-buttonset button.ui-state-default {border: 1px solid #999}
 .ui-dialog-buttonset button.ui-state-active, .ui-dialog-buttonset button.ui-state-hover {border: 1px solid #555}
@@ -380,7 +378,8 @@ select {font-size: small;}
 
 #accordion h3.ui-state-active {color: white}
 
-#bookdate {display: inline-block;width: 6em;padding:0 0.25em;text-align: center}
+/*#bookdate {display: inline-block;width: 6em;padding:0 0.25em;text-align: center}*/
+#bookdate {display: inline-block;text-align: center;box-sizing: border-box}
 .closing-bar {
   position: relative;
   width: 100%;
@@ -408,7 +407,6 @@ select {font-size: small;}
 
 form input[type='text'], input[type='password'], form input[type='button'], form input[type='submit']{
   display: block;
-  /*margin: 0 0 1em 0;*/
 }
 form input[type='button'], form input[type='submit'] {
   margin-top: 1em
@@ -424,10 +422,11 @@ form label {
 form legend + label {
   display: block;
 }
+
+.pure-g label[class*="pure-u"] {font-family: 'ubuntumedium','Segoe UI',Verdana,sans-serif;vertical-align: middle}
+.row-form {margin: 0.5em 0;}
 .field-help {font-size: smaller;max-width: 320px;display:none}
-#booking label {
-  width: 3.4em;
-}
+
 #booking input[type='radio'] + label {
   padding: 0 0.5em;
 }
@@ -480,7 +479,6 @@ ul.horizontal-panel-menu {
 ul.horizontal-panel-menu li {
   display: inline-block;
   margin: 0 0.5em 0 0;
-  /*font-size: smaller;*/
 }
 
 nav.horizontal-panel-menu {

@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.4.0 20/07/16
+ * @(#) dossier.js Algem Web App 1.4.0 22/07/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -203,7 +203,6 @@ function initFollowUpDialog(element) {
     modal: false,
     autoOpen: false,
     maxWidth: 320,
-//    height: 500,
     buttons: {
       Abandonner: function () {
         $(this).dialog("close");
