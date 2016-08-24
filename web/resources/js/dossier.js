@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.4.0 22/07/16
+ * @(#) dossier.js Algem Web App 1.4.0 24/08/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -184,17 +184,17 @@ function getFollowUp(url, id, co) {
 function getFollowUpSubContent(followUp) {
   var note = followUp.note;
   var abs = followUp.absent;
-//  console.log("typeof abs " + typeof abs);
+  //console.log("typeof abs " + typeof abs);
   var exc = followUp.excused;
-  var sub = (note !== null && note.length > 0) ? "<span class=\"follow-up-note\">NOTE : " + note + "</span>" : "";
-  sub += (abs == true) ? "<span class=\"absent\">ABS</span>" : "";
-  sub += (exc == true) ? "<span class=\"excused\">EXC</span>" : "";
+  var sub = (followUp.id > 0 && note !== null && note.length > 0) ? "<span class=\"follow-up-note\">NOTE : " + note + "</span>" : "";
+  sub += abs ? "<span class=\"absent\">ABS</span>" : "";
+  sub += exc ? "<span class=\"excused\">EXC</span>" : "";
   //console.log("sub = " + sub)
   return sub || "";
 }
 
 /**
- * Inits followUp dialog edition.
+ * Inits followUp dialog editing.
  * @param {type} element
  * @returns {undefined}
  */
@@ -239,7 +239,6 @@ function updateFollowUp(form) {
   var exc = $("#exc-check").prop("readonly") ? false : $("#exc-check")[0].checked;
   $("#abs").val(abs);
   $("#exc").val(exc);
-
   $.post(url, form.serialize(), function (data) {
     if (data && data.success) {
       var content = $("#follow-content").val();

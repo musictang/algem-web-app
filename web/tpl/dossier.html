@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.4.0 20/07/16
+ * @(#) dossier.html Algem Web App 1.4.0 24/08/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -149,7 +149,7 @@
       <form id="follow-up-form" th:action="@{/perso/xEditFollowUp}">
         <fieldset>
           <legend>PIANO<br />mercredi 01-06-2016 17:00-17:30</legend>
-          <label for="follow-content" th:text="#{follow-up.label}">Suivi</label><textarea style="display: block;width: 100%" rows="3" id="follow-content" th:name="content"></textarea>
+          <label for="follow-content" th:text="#{follow-up.label}">Suivi</label><textarea style="display: block;width: 100%" rows="3" id="follow-content" th:name="content" maxlength="512"></textarea>
           <label for="note" th:text="#{note.label}">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="width: 4em" />
           <input id="abs-check" type="checkbox" />&nbsp;<label for="abs-check" th:text="#{absent.label}">Absent</label>
           <input id="exc-check" type="checkbox" />&nbsp;<label for="exc-check" th:text="#{excused.label}">Excusé</label>

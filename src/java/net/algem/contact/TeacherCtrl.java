@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.4.0 18/07/16
+ * @(#) TeacherCtrl.java Algem Web App 1.4.0 24/08/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -51,7 +51,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TeacherCtrl
 {
 
-  private final static int NOTE_LENGTH = 16;
+  private final static int NOTE_LENGTH = 8;
   @Autowired
   private TeacherService service;
 
@@ -105,7 +105,7 @@ public class TeacherCtrl
       up.setId(Integer.parseInt(id));
       up.setScheduleId(Integer.parseInt(scheduleId));
       up.setCollective(Boolean.parseBoolean(collective));
-      up.setContent(content);
+      up.setContent(content != null && content.length() > 512 ? content.substring(0,512): content);
       if (note.length() > NOTE_LENGTH) {
         throw new FollowUpException("follow-up.note.invalid.length", new Object[]{NOTE_LENGTH});
       }
