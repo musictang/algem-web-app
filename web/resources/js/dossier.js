@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.4.0 24/08/16
+ * @(#) dossier.js Algem Web App 1.4.0 26/08/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -118,9 +118,12 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
     } else {
       var result = "";
       var total = 0;
+      var supportLocales = toLocaleStringSupportsLocales();
+      console.log(supportLocales)
       $.each(data, function (index, value) {
         var d = new Date(value.date);
-        var dateInfo = d.toLocaleString(getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d);
+        // XXX toLocaleString([[locale], options]) not supported on android (excepted chrome)
+        var dateInfo = supportLocales ? d.toLocaleString(getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d) : dateFormatFR(d);
         var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-" + value.end.hour.pad() + ":" + value.end.minute.pad();
         var ms = (value.start.hour * 60) + value.start.minute;
         var me = (value.end.hour * 60) + value.end.minute;

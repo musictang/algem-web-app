@@ -1,5 +1,5 @@
 /*
- * @(#) util.js Algem Web App 1.4.0 29/06/2016
+ * @(#) util.js Algem Web App 1.4.0 26/08/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -53,7 +53,7 @@ function dateFormatFR(d) {
     console.log("erreur date");
   }
   //var arg = first.toLocaleString().replace(/\//g, "-");
-  var s = d.toISOString().slice(0, 10);//2016-06-12 yyyy-mm-dd 
+  var s = d.toISOString().slice(0, 10);//2016-06-12 yyyy-mm-dd
   var dd = s.slice(8, 10);
   var mm = s.slice(5, 7);
   var y = s.slice(0, 4);
@@ -80,8 +80,8 @@ function getCurrentWeekDates(d) {
   first.setHours(0, -first.getTimezoneOffset(), 0, 0); //removing the timezone offset.
   var last = new Date(first);
   var last = new Date(last.setDate(last.getDate() + last.getDay() + 5));
-  last.setHours(0, -last.getTimezoneOffset(), 0, 0); 
-  
+  last.setHours(0, -last.getTimezoneOffset(), 0, 0);
+
   return {first: first, last: last}
 }
 
@@ -95,8 +95,8 @@ function getCurrentMonthDates() {
   first.setHours(0, -first.getTimezoneOffset(), 0, 0); //removing the timezone offset.
   var last = new Date();
   var last = new Date(last.getFullYear(), last.getMonth() + 1, 0);
-  last.setHours(0, -last.getTimezoneOffset(), 0, 0); 
-  
+  last.setHours(0, -last.getTimezoneOffset(), 0, 0);
+
   return {first: first, last: last};
 }
 
@@ -104,4 +104,13 @@ function getLocale() {
   return navigator.languages && navigator.languages[0] || // Chrome / Firefox
                navigator.language ||   // All browsers
                navigator.userLanguage; // IE <= 10
+}
+
+function toLocaleStringSupportsLocales() {
+    try {
+        new Date().toLocaleString("i");
+    } catch (e) {
+        return e.name === "RangeError";
+    }
+    return false;
 }
