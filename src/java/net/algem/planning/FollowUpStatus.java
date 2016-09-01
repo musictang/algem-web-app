@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherService.java Algem Web App 1.4.2 31/08/2016
+ * @(#) FollowUpStatus.java Algem Web App 1.4.2 31/08/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -17,26 +17,35 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.algem.contact;
 
-import java.util.Date;
-import java.util.List;
-import net.algem.planning.FollowUp;
-import net.algem.planning.ScheduleElement;
+package net.algem.planning;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @version 1.4.2
- * @since 1.4.0 21/06/2016
+ * @since 1.4.2 31/08/2016
  */
-public interface TeacherService
-{
+public enum FollowUpStatus {
 
-  List<ScheduleElement> getFollowUpSchedules(int teacher, Date from, Date to);
+  PRE(0, "present.label"),
+  ABS(1, "absent.label"),
+  EXC(2, "excused.label");
 
-  FollowUp getFollowUp(int id);
+  private final int id;
+  private final String label;
 
-  int updateFollowUp(FollowUp up);
+  private FollowUpStatus(int id, String label) {
+    this.id = id;
+    this.label = label;
+  }
 
+  public int getId() {
+    return id;
+  }
+
+  @Override
+  public String toString() {
+    return label;
+  }
 }

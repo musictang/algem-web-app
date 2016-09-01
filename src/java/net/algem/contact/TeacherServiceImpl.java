@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherServiceImpl.java Algem Web App 1.4.0 13/07/16
+ * @(#) TeacherServiceImpl.java Algem Web App 1.4.2 31/08/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.0
+ * @version 1.4.2
  * @since 1.4.0 21/06/2016
  */
 @Service
@@ -60,14 +60,13 @@ public class TeacherServiceImpl
 
   @Override
   @Transactional
-  public boolean updateFollowUp(FollowUp up) {
+  public int updateFollowUp(FollowUp up) {
     try {
-      dao.updateFollowUp(up);
+      return dao.updateFollowUp(up);
     } catch(DataAccessException ex) {
       Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
-      return false;
+      return -1;
     }
-    return true;
   }
 
 }

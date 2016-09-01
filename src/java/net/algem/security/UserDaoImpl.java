@@ -1,5 +1,5 @@
 /*
- * @(#)UserDaoImpl.java	1.4.0 20/07/16
+ * @(#)UserDaoImpl.java	1.4.2 31/08/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -64,7 +64,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.0
+ * @version 1.4.2
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -75,7 +75,7 @@ public class UserDaoImpl
   public static final String T_TOKEN = "jeton_login";
   public static final String T_PASSCARD = "carteabopersonne";
   private static final String FOLLOWUP_STATEMENT
-    = "SELECT p.id,p.jour,pl.id,pl.debut,pl.fin,p.idper,per.nom,per.prenom,p.lieux,s.nom,c.id,c.titre,n1.id,n1.texte,n1.note,n1.abs,n1.exc,n2.id,n2.texte,n2.abs"
+    = "SELECT p.id,p.jour,pl.id,pl.debut,pl.fin,p.idper,per.nom,per.prenom,p.lieux,s.nom,c.id,c.titre,n1.id,n1.texte,n1.note,n1.statut,n2.id,n2.texte,n2.statut"
     + " FROM " + ScheduleDao.TABLE + " p"
     + " JOIN " + PersonIO.TABLE + " per on p.idper = per.id"
     + " JOIN action a ON p.action = a.id"
@@ -392,12 +392,12 @@ public class UserDaoImpl
         d.setPlace(rs.getInt(9));
         d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(10)));
         d.setDetail("course", new NamedModel(rs.getInt(11), rs.getString(12)));
-        d.setNote(rs.getInt(18));
+        d.setNote(rs.getInt(17));
         d.setDetail("estab", null);
         FollowUp up = new FollowUp();
         up.setId(d.getNote());
-        up.setContent(rs.getString(19));
-        up.setAbsent(rs.getBoolean(20));
+        up.setContent(rs.getString(18));
+        up.setStatus(rs.getShort(19));
         d.setFollowUp(up);
         Collection<ScheduleRangeElement> ranges = new ArrayList<>();
         ScheduleRangeElement r = getFollowUpDetail(rs);
@@ -412,13 +412,12 @@ public class UserDaoImpl
     ScheduleRangeElement r = new ScheduleRangeElement();
     r.setId(rs.getInt(3));
     r.setStart(new Hour(rs.getString(4)));
-        r.setEnd(new Hour(rs.getString(5)));
+    r.setEnd(new Hour(rs.getString(5)));
     FollowUp up = new FollowUp();
     up.setId(rs.getInt(13));
     up.setContent(rs.getString(14));
     up.setNote(rs.getString(15));
-    up.setAbsent(rs.getBoolean(16));
-    up.setExcused(rs.getBoolean(17));
+    up.setStatus(rs.getShort(16));
 
     r.setFollowUp(up);
     return r;

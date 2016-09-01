@@ -34,9 +34,9 @@ import net.algem.planning.ScheduleElement;
 public interface TeacherDao {
 
   List<ScheduleElement> findFollowUpSchedules(final int teacher, Date from, Date to);
-  
+
   void createFollowUp(final FollowUp follow);
 
-  void updateFollowUp(final FollowUp follow);
+  int updateFollowUp(final FollowUp follow);
 
 }
