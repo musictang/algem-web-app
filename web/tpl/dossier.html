@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.4.0 24/08/16
+ * @(#) dossier.html Algem Web App 1.4.2 31/08/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -149,15 +149,18 @@
       <form id="follow-up-form" th:action="@{/perso/xEditFollowUp}">
         <fieldset>
           <legend>PIANO<br />mercredi 01-06-2016 17:00-17:30</legend>
-          <label for="follow-content" th:text="#{follow-up.label}">Suivi</label><textarea style="display: block;width: 100%" rows="3" id="follow-content" th:name="content" maxlength="512"></textarea>
-          <label for="note" th:text="#{note.label}">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="width: 4em" />
-          <input id="abs-check" type="checkbox" />&nbsp;<label for="abs-check" th:text="#{absent.label}">Absent</label>
-          <input id="exc-check" type="checkbox" />&nbsp;<label for="exc-check" th:text="#{excused.label}">Excusé</label>
+          <label for="follow-content" th:text="#{follow-up.label}">Suivi</label><textarea style="display: block;width: 98%" rows="3" id="follow-content" th:name="content" maxlength="512"></textarea>
+          <div style="margin-top: 1em">
+            <label for="note" th:text="#{note.label}" style="margin-right: 0.5em">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="display: inline-block;width: 4em" />
+            <select id="follow-status" th:name="status" style="margin-left: 1em">
+              <option th:value="0" th:text="#{present.label}"></option>
+              <option th:value="1" th:text="#{absent.label}"></option>
+              <option th:value="2" th:text="#{excused.label}"></option>
+            </select>
+          </div>
           <input id="noteId" type="hidden" th:name="id" />
           <input id="scheduleId" type="hidden" th:name="scheduleId" />
           <input id="noteType" type="hidden" th:name="collective" />
-          <input id="abs" type="hidden" th:name="abs" />
-          <input id="exc" type="hidden" th:name="exc" />
         </fieldset>
       </form>
       <p class="error">Erreur</p>
@@ -192,6 +195,11 @@
       animate: false
 //      animate: {easing: "linear",duration: 200}
     });
+    //unactive ENTER key on dialog submit
+    $("#follow-up-form").submit(function (e) {
+        e.preventDefault();
+      }
+    );
     $("#follow-d").click(function () {
       var now = new Date();
       getFollowUpSchedules(url1, userId, dateFormatFR(now), dateFormatFR(now));
@@ -240,10 +248,10 @@
       $(legend).html(legendInfo);
       // complete form
       if (isCo) {
-        $("#exc-check").prop("readonly", true);//readonly is sent by form.serialize
+//        $("#exc-check").prop("readonly", true);//readonly is sent by form.serialize
         $("#note").prop("readonly", true);
       } else {
-        $("#exc-check").prop("readonly", false);
+//        $("#exc-check").prop("readonly", false);
         $("#note").prop("readonly", false);
       }
       $("#noteId").val($(this).attr("id"));

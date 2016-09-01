@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.4.0 24/08/16
+ * @(#) TeacherCtrl.java Algem Web App 1.4.2 31/08/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.0
+ * @version 1.4.2
  * @since 1.4.0 21/06/2016
  */
 @Controller
@@ -96,8 +96,7 @@ public class TeacherCtrl
           @RequestParam String collective,
           @RequestParam String content,
           @RequestParam String note,
-          @RequestParam String abs,
-          @RequestParam String exc
+          @RequestParam String status
   ) {
     FollowUp up = new FollowUp();
     int paramId = Integer.parseInt(id);
@@ -114,8 +113,7 @@ public class TeacherCtrl
       } else {
         throw new IllegalArgumentException("follow-up.note.invalid.entry");
       }
-      up.setAbsent(Boolean.parseBoolean(abs));
-      up.setExcused(Boolean.parseBoolean(exc));
+      up.setStatus(Short.parseShort(status));
     } catch (FollowUpException ex) {
       return getErrorResponse(ex.getMessage(), ex.getArgs());
     } catch (IllegalArgumentException ex) {
@@ -123,31 +121,32 @@ public class TeacherCtrl
       return getErrorResponse(ex.getMessage());
     }
     Logger.getLogger(TeacherCtrl.class.getName()).log(Level.INFO, up.toString());
-    if (service.updateFollowUp(up)) {
-      return new FollowUpResponse(true, paramId == 0, up);
-    } else {
+    int result = service.updateFollowUp(up);
+    if (result < 0) {
       return getErrorResponse("error.has.occurred");
+    } else {
+      return new FollowUpResponse(true, result, up);
     }
 
   }
 
   private FollowUpResponse getErrorResponse(String msg) {
-    FollowUpResponse response = new FollowUpResponse(false, false);
+    FollowUpResponse response = new FollowUpResponse(false, -1);
     response.setMessage(messageSource.getMessage(msg, null, LocaleContextHolder.getLocale()));
     return response;
   }
 
   private FollowUpResponse getErrorResponse(String msg, Object[] args) {
-    FollowUpResponse response = new FollowUpResponse(false, false);
+    FollowUpResponse response = new FollowUpResponse(false, -1);
     response.setMessage(messageSource.getMessage(msg, args, LocaleContextHolder.getLocale()));
     return response;
   }
 
-  private class FollowUpResponse
+  class FollowUpResponse
   {
 
     private boolean success;
-    private boolean creation;
+    private int operation;
     private String message;
     private int id;
     private FollowUp followUp;
@@ -155,13 +154,13 @@ public class TeacherCtrl
     public FollowUpResponse() {
     }
 
-    public FollowUpResponse(boolean success, boolean creation) {
+    public FollowUpResponse(boolean success, int operation) {
       this.success = success;
-      this.creation = creation;
+      this.operation = operation;
     }
 
-    public FollowUpResponse(boolean success, boolean creation, FollowUp followUp) {
-      this(success, creation);
+    public FollowUpResponse(boolean success, int operation, FollowUp followUp) {
+      this(success, operation);
       this.followUp = followUp;
     }
 
@@ -173,12 +172,12 @@ public class TeacherCtrl
       this.followUp = followUp;
     }
 
-    public boolean isCreation() {
-      return creation;
+    public int getOperation() {
+      return operation;
     }
 
-    public void setCreation(boolean creation) {
-      this.creation = creation;
+    public void setOperation(int operation) {
+      this.operation = operation;
     }
 
     public boolean isSuccess() {

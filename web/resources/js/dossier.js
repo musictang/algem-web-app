@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.4.0 26/08/16
+ * @(#) dossier.js Algem Web App 1.4.2 31/08/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -44,13 +44,12 @@ function FollowUpSchedule(id, date, time, course) {
  * @param {Boolean} co
  * @returns {FollowUpObject}
  */
-function FollowUpObject(id, scheduleId, text, note, abs, exc, co) {
+function FollowUpObject(id, scheduleId, text, note, status, co) {
   this.id = id;
   this.scheduleId = scheduleId;
   this.content = text;
   this.note = note;
-  this.absent = abs;
-  this.excused = exc;
+  this.status = status;
   this.collective = co;
 }
 
@@ -68,10 +67,12 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
       var total = 0;
       var indTitle = labels.individual_monitoring_action;
       var coTitle = labels.collective_monitoring_action;
+      var supportLocales = toLocaleStringSupportsLocales();
+      // zero-width space (&#8203;) inserted after hyphens to authorize breaks
       $.each(data, function (index, value) {
         var d = new Date(value.date);
-        var dateInfo = d.toLocaleString(getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d);
-        var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-" + value.end.hour.pad() + ":" + value.end.minute.pad();
+        var dateInfo = supportLocales ? d.toLocaleString(getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d) : dateFormatFR(d);
+        var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-&#8203;" + value.end.hour.pad() + ":" + value.end.minute.pad();
         var ms = (value.start.hour * 60) + value.start.minute;
         var me = (value.end.hour * 60) + value.end.minute;
         var length = me - ms;
@@ -86,7 +87,7 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
           + "<td>" + timeInfo + "</td>"
           + "<td>" + getTimeFromMinutes(length) + "</td>"
           + "<td>" + roomInfo + "</td>"
-          + "<td>" + courseInfo + "</td><td>";
+          + "<td>" + courseInfo + "</td><td style=\"min-width: 8em\">";
         if (value.collective) {
           result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.expand_collapse+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
         } else {
@@ -124,7 +125,7 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
         var d = new Date(value.date);
         // XXX toLocaleString([[locale], options]) not supported on android (excepted chrome)
         var dateInfo = supportLocales ? d.toLocaleString(getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d) : dateFormatFR(d);
-        var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-" + value.end.hour.pad() + ":" + value.end.minute.pad();
+        var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-&#8203;" + value.end.hour.pad() + ":" + value.end.minute.pad();
         var ms = (value.start.hour * 60) + value.start.minute;
         var me = (value.end.hour * 60) + value.end.minute;
         var length = me - ms;
@@ -169,12 +170,11 @@ function getFollowUp(url, id, co) {
     if (typeof data === 'undefined' || data === null) {
       console.log("no data");
     } else {
-      var up = new FollowUpObject(data.id, 0, data.content, data.note, data.absent, data.excused, co);
+      var up = new FollowUpObject(data.id, 0, data.content, data.note, data.status, co);
 //      console.log(up);
       $("#follow-content").val(up.content);
       $("#note").val(up.note);
-      $("#abs-check").prop("checked", up.absent);
-      $("#exc-check").prop("checked", up.excused);
+      $("#follow-status").val(up.status);
     }
   });
 }
@@ -186,9 +186,9 @@ function getFollowUp(url, id, co) {
  */
 function getFollowUpSubContent(followUp) {
   var note = followUp.note;
-  var abs = followUp.absent;
+  var abs = (followUp.status == 1);
   //console.log("typeof abs " + typeof abs);
-  var exc = followUp.excused;
+  var exc = (followUp.status == 2);
   var sub = (followUp.id > 0 && note !== null && note.length > 0) ? "<span class=\"follow-up-note\">NOTE : " + note + "</span>" : "";
   sub += abs ? "<span class=\"absent\">ABS</span>" : "";
   sub += exc ? "<span class=\"excused\">EXC</span>" : "";
@@ -230,26 +230,21 @@ function showDialog(f) {
 
 function resetFollowUpDialog() {
   $("#follow-content").val('');
-  $('#abs-check').prop('checked', false);
-  $('#exc-check').prop('checked', false);
+  $("#follow-status").val('0');
   $("#note").val('');
   $("#follow-up-dlg").find(".error").text('');
 }
 
 function updateFollowUp(form) {
   var url = $(form).attr("action");
-  var abs = $("#abs-check")[0].checked;
-  var exc = $("#exc-check").prop("readonly") ? false : $("#exc-check")[0].checked;
-  $("#abs").val(abs);
-  $("#exc").val(exc);
   $.post(url, form.serialize(), function (data) {
     if (data && data.success) {
       var content = $("#follow-content").val();
       var co = $("#noteType").val();
       var note = $("#note").prop("readonly") ? null : $("#note").val();
-      var up = new FollowUpObject(data.followUp.id, data.followUp.scheduleId, content, note, abs, exc, co);
+      var up = new FollowUpObject(data.followUp.id, data.followUp.scheduleId, content, note, data.followUp.status, co);
       console.log(up);
-      refreshFollowContent(data.creation, up);
+      refreshFollowContent(data.operation, up);
       $(form).next(".error").text('');
       $("#follow-up-dlg").dialog("close");
     } else {
@@ -259,11 +254,10 @@ function updateFollowUp(form) {
   }, "json");
 }
 
-function refreshFollowContent(creation, followUp) {
+function refreshFollowContent(operation, followUp) {
   var subContent = getFollowUpSubContent(followUp);
   var id = followUp.id;
   if (followUp.collective === 'true') {
-//    if (creation) {
     $("." + followUp.scheduleId).each(function () {
       var el = $(this).children("td").last();
       $(el).children("p").first().text(followUp.content);
@@ -272,7 +266,7 @@ function refreshFollowContent(creation, followUp) {
     });
 
   } else {
-    if (creation) {
+    if (operation == 2) {
       //console.log("creation " + creation)
       var ref = $("#" + followUp.scheduleId);
       $(ref).children('p').first().text(followUp.content);
@@ -283,7 +277,11 @@ function refreshFollowContent(creation, followUp) {
       var p1 = $(parent).children('p').first();
       $(p1).text(followUp.content);
       $(parent).find(".subContent").html(subContent);
+      if (operation == 0) {
+        $("#" + id).attr("id",0);
+      }
     }
+
   }
 }
 

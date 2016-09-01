@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherDaoImpl.java Algem Web App 1.4.0 13/07/16
+ * @(#) TeacherDaoImpl.java Algem Web App 1.4.2 31/08/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -44,7 +44,7 @@ import org.springframework.stereotype.Repository;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.0
+ * @version 1.4.2
  * @since 1.0.6 06/01/2016
  */
 @Repository
@@ -56,7 +56,7 @@ public class TeacherDaoImpl
   public static final String FOLLOW_UP_T = "suivi";
   public static final String FOLLOW_UP_SEQ = "idsuivi";
 
-  private final static String FOLLOWUP_STATEMENT = "SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom,v.texte,v.abs"
+  private final static String FOLLOWUP_STATEMENT = "SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom,v.texte,v.statut"
     + " FROM " + ScheduleDao.TABLE + " p"
     + " JOIN " + ScheduleRangeIO.TABLE + " pl ON (p.id = pl.idplanning)"
     + " JOIN " + ScheduleDao.T_ACTION + " a ON (p.action = a.id)"
@@ -88,7 +88,7 @@ public class TeacherDaoImpl
         FollowUp up = new FollowUp();
         up.setId(d.getNote());
         up.setContent(rs.getString(11));
-        up.setAbsent(rs.getBoolean(12));
+        up.setStatus(rs.getShort(12));
         d.setFollowUp(up);
 
         Collection<ScheduleRangeElement> ranges = getRanges(d.getId(), d.getStart().toString());
@@ -100,7 +100,7 @@ public class TeacherDaoImpl
   }
 
   public FollowUp findFollowUp(final int id) {
-    String query = "SELECT texte,note,abs,exc FROM " + FOLLOW_UP_T + " WHERE id = ?";
+    String query = "SELECT texte,note,statut FROM " + FOLLOW_UP_T + " WHERE id = ?";
     return jdbcTemplate.queryForObject(query, new RowMapper<FollowUp>() {
       @Override
       public FollowUp mapRow(ResultSet rs, int arg1) throws SQLException {
@@ -108,8 +108,7 @@ public class TeacherDaoImpl
         up.setId(id);
         up.setContent(rs.getString(1));
         up.setNote(rs.getString(2));
-        up.setAbsent(rs.getBoolean(3));
-        up.setExcused(rs.getBoolean(4));
+        up.setStatus(rs.getShort(3));
 
         return up;
       }
@@ -117,7 +116,7 @@ public class TeacherDaoImpl
   }
 
   private Collection<ScheduleRangeElement> getRanges(final int id, String start) {
-    String query = " SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.abs,s.exc"
+    String query = " SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.statut"
       + " FROM " + ScheduleRangeIO.TABLE + " pl JOIN " + PersonIO.TABLE + " p ON (pl.adherent = p.id)"
       + " LEFT JOIN suivi s ON (pl.note = s.id)"
       + " WHERE pl.idplanning = ? AND pl.debut = ? ORDER BY pl.debut";
@@ -142,9 +141,7 @@ public class TeacherDaoImpl
         up.setId(rs.getInt(9));
         up.setContent(rs.getString(10));
         up.setNote(rs.getString(11));
-        up.setAbsent(rs.getBoolean(12));
-        up.setExcused(rs.getBoolean(13));
-
+        up.setStatus(rs.getShort(12));
         r.setFollowUp(up);
 
         return r;
@@ -153,18 +150,21 @@ public class TeacherDaoImpl
   }
 
   @Override
-  public void updateFollowUp(final FollowUp follow) {
+  public int updateFollowUp(final FollowUp follow) {
     String text = follow.getContent();
     if ((text == null || text.isEmpty())
       && (follow.getNote() == null || follow.getNote().isEmpty())
       && !follow.isAbsent() && !follow.isExcused()) {
       deleteFollowUp(follow);
+      return 0;
     } else if (follow.getId() > 0) {
       updateFollowUpContent(follow);
+      return 1;
     } else {
 //      Logger.getLogger(getClass().getName()).log(Level.INFO, follow.toString());
       createFollowUp(follow);
       updateSchedule(follow.getScheduleId(), follow.getId(), follow.isCollective());
+      return 2;
     }
 
   }
@@ -174,7 +174,7 @@ public class TeacherDaoImpl
     final int id = nextId(FOLLOW_UP_SEQ);
     follow.setId(id);
     Logger.getLogger(getClass().getName()).log(Level.INFO, follow.toString());
-    final String sql = "INSERT INTO suivi(id,texte,note,abs,exc) VALUES(?,?,?,?,?)";
+    final String sql = "INSERT INTO suivi(id,texte,note,statut) VALUES(?,?,?,?)";
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
@@ -182,8 +182,7 @@ public class TeacherDaoImpl
         ps.setInt(1, id);
         ps.setString(2, follow.getContent());
         ps.setString(3, follow.getNote());
-        ps.setBoolean(4, follow.isAbsent());
-        ps.setBoolean(5, follow.isExcused());
+        ps.setShort(4, follow.getStatus());
         return ps;
       }
     });
@@ -201,19 +200,19 @@ public class TeacherDaoImpl
       }
     });
     updateSchedule(follow.getScheduleId(), 0, follow.isCollective());// reset
+//    follow.setId(0);
   }
 
   private void updateFollowUpContent(final FollowUp follow) {
-    final String sql = "UPDATE suivi SET texte = ?, note=?, abs=?, exc=? WHERE id = ?";
+    final String sql = "UPDATE suivi SET texte = ?, note=?, statut=? WHERE id = ?";
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, follow.getContent());
         ps.setString(2, follow.getNote());
-        ps.setBoolean(3, follow.isAbsent());
-        ps.setBoolean(4, follow.isExcused());
-        ps.setInt(5, follow.getId());
+        ps.setShort(3, follow.getStatus());
+        ps.setInt(4, follow.getId());
         return ps;
       }
     });

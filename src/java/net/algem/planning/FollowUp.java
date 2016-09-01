@@ -1,5 +1,5 @@
 /*
- * @(#) FollowUp.java Algem Web App 1.4.0 28/06/2016
+ * @(#) FollowUp.java Algem Web App 1.4.2 31/08/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -23,17 +23,16 @@ package net.algem.planning;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.0
+ * @version 1.4.2
  * @since 1.4.0 28/06/2016
  */
 public class FollowUp {
-  
+
   private int id;
   private int scheduleId;
   private String content;
   private String note;
-  private boolean absent;
-  private boolean excused;
+  private short status;
   private boolean collective;
 
   public FollowUp() {
@@ -71,20 +70,20 @@ public class FollowUp {
     this.note = note;
   }
 
-  public boolean isAbsent() {
-    return absent;
+  public short getStatus() {
+    return status;
   }
 
-  public void setAbsent(boolean absent) {
-    this.absent = absent;
+  public void setStatus(short status) {
+    this.status = status;
+  }
+
+  public boolean isAbsent() {
+    return FollowUpStatus.ABS.getId() == status;
   }
 
   public boolean isExcused() {
-    return excused;
-  }
-
-  public void setExcused(boolean excused) {
-    this.excused = excused;
+    return FollowUpStatus.EXC.getId() == status;
   }
 
   public boolean isCollective() {
@@ -97,7 +96,19 @@ public class FollowUp {
 
   @Override
   public String toString() {
-    return "FollowUp{" + "id=" + id + ", scheduleId=" + scheduleId + ", content=" + content + ", note=" + note + ", absent=" + absent + ", excused=" + excused + ", collective=" + collective + '}';
+    return "FollowUp{" + "id=" + id + ", scheduleId=" + scheduleId + ", content=" + content + ", note=" + note + ", status = " + status + ", collective=" + collective + '}';
+  }
+
+
+  public static FollowUpStatus getStatusFromResult(short status) {
+    switch(status) {
+      case 1:
+        return FollowUpStatus.ABS;
+      case 2:
+        return FollowUpStatus.EXC;
+      default:
+        return FollowUpStatus.PRE;
+    }
   }
 
 }
