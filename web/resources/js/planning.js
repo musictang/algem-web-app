@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.4.0 22/06/16
+ * @(#)planning.js	1.4.1 29/08/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -23,7 +23,7 @@
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @since 09/05/15
- * @version 1.3.0
+ * @version 1.4.1
  * @returns {void}
  */
 //var isMobileAndWebkit = isMobile() && 'WebkitAppearance' in document.documentElement.style;
@@ -36,16 +36,6 @@
 function Group(id, name) {
   this.id = id;
   this.name = name;
-}
-
-function logVars() {
-  var l = arguments.length;
-  if (l == 0) {return;}
-  for (var i = 0 ;i < l; i++) {
-    $.each(arguments[i], function (key, value) {
-      console.log(key, value);
-    });
-  }
 }
 
 function setUI() {
@@ -134,25 +124,6 @@ function weeklyDatePicker(date, idper) {
     //console.log(arg);
     window.location = 'weekly.html?d=' + arg + '&id=' + idper;
   });
-}
-
-/**
- * Convert a date to format dd-mm-yyyy.
- * date.toLocaleDateString('fr') is not compatible with most of browsers.
- * @param {type} d date
- * @returns {string}
- */
-function dateFormatFR(d) {
-  if (!d instanceof Date) {
-    console.log("erreur date");
-  }
-  //var arg = first.toLocaleString().replace(/\//g, "-");
-  var s = d.toISOString().slice(0, 10);//2016-06-12 yyyy-mm-dd
-  var dd = s.slice(8, 10);
-  var mm = s.slice(5, 7);
-  var y = s.slice(0, 4);
-  var sep = "-";
-  return dd.concat(sep, mm, sep, y);
 }
 
 function logDate(d) {

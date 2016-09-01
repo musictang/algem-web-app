@@ -1,5 +1,5 @@
 /*
- * @(#) util.js Algem Web App 1.4.0 26/08/16
+ * @(#) util.js Algem Web App 1.4.1 29/08/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -45,6 +45,7 @@ Number.prototype.pad = function (size) {
 /**
  * Returns a string representation of the date in argument.
  * Format matches French locale : dd-mm-yyyy
+ * date.toLocaleDateString('fr') is not compatible with most of browsers.
  * @param {Date} d
  * @returns {String}
  */
