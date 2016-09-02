@@ -187,7 +187,6 @@ function getFollowUp(url, id, co) {
 function getFollowUpSubContent(followUp) {
   var note = followUp.note;
   var abs = (followUp.status == 1);
-  //console.log("typeof abs " + typeof abs);
   var exc = (followUp.status == 2);
   var sub = (followUp.id > 0 && note !== null && note.length > 0) ? "<span class=\"follow-up-note\">NOTE : " + note + "</span>" : "";
   sub += abs ? "<span class=\"absent\">ABS</span>" : "";
@@ -358,4 +357,37 @@ function setStudentWeekChange(url, idper) {
   });
 }
 
+function setTeacherDateNavigation(url, userId, weekDates) {
+  $("#follow-d").click(function () {
+    var now = new Date();
+    getFollowUpSchedules(url, userId, dateFormatFR(now), dateFormatFR(now));
+    setWeekDates(dateFormatFR(now), dateFormatFR(now));
+  });
+  $("#follow-m").click(function () {
+    var cmd = getCurrentMonthDates();
+    getFollowUpSchedules(url, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+    setWeekDates(dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+  });
+  $("#follow-w").click(function () {
+    getFollowUpSchedules(url, userId, dateFormatFR(weekDates.first), dateFormatFR(weekDates.last));
+    setWeekDates(dateFormatFR(weekDates.first), dateFormatFR(weekDates.last));
+  });
+}
+
+function setStudentDateNavigation(url, userId, weekDates) {
+  $("#student-follow-d").click(function () {
+    var now = new Date();
+    getFollowUpStudent(url, userId, dateFormatFR(now), dateFormatFR(now));
+    setStudentWeekDates(dateFormatFR(now), dateFormatFR(now));
+  });
+  $("#student-follow-m").click(function () {
+    var cmd = getCurrentMonthDates();
+    getFollowUpStudent(url, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+    setStudentWeekDates(dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+  });
+  $("#student-follow-w").click(function () {
+    getFollowUpStudent(url, userId, dateFormatFR(weekDates.first), dateFormatFR(weekDates.last));
+    setStudentWeekDates(dateFormatFR(weekDates.first), dateFormatFR(weekDates.last));
+  });
+}
 

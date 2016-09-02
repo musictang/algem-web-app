@@ -44,6 +44,7 @@
         <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
         <li th:replace="fragments/menu :: cnx"></li>
+        <li><a id="help" href="#help-panel" th:title="#{help.label}"><i class="fa fa-question-circle"></i></a></li>
       </ul>
     </div>
     <header>
@@ -167,6 +168,7 @@
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>
     <div id="busy"></div>
+    <aside id="help-panel" class="closeable" th:include="fragments/help :: perso"></aside>
   </body>
   <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
@@ -200,35 +202,8 @@
         e.preventDefault();
       }
     );
-    $("#follow-d").click(function () {
-      var now = new Date();
-      getFollowUpSchedules(url1, userId, dateFormatFR(now), dateFormatFR(now));
-      setWeekDates(dateFormatFR(now), dateFormatFR(now));
-    });
-    $("#follow-m").click(function () {
-      var cmd = getCurrentMonthDates();
-      getFollowUpSchedules(url1, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
-      setWeekDates(dateFormatFR(cmd.first), dateFormatFR(cmd.last));
-    });
-    $("#follow-w").click(function () {
-      getFollowUpSchedules(url1, userId, dateFormatFR(cwd.first), dateFormatFR(cwd.last));
-      setWeekDates(dateFormatFR(cwd.first), dateFormatFR(cwd.last));
-    });
-
-    $("#student-follow-d").click(function () {
-      var now = new Date();
-      getFollowUpStudent(url2, userId, dateFormatFR(now), dateFormatFR(now));
-      setStudentWeekDates(dateFormatFR(now), dateFormatFR(now));
-    });
-    $("#student-follow-m").click(function () {
-      var cmd = getCurrentMonthDates();
-      getFollowUpStudent(url2, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
-      setStudentWeekDates(dateFormatFR(cmd.first), dateFormatFR(cmd.last));
-    });
-    $("#student-follow-w").click(function () {
-      getFollowUpStudent(url2, userId, dateFormatFR(cwd.first), dateFormatFR(cwd.last));
-      setStudentWeekDates(dateFormatFR(cwd.first), dateFormatFR(cwd.last));
-    });
+    setTeacherDateNavigation(url1, userId, cwd);
+    setStudentDateNavigation(url2, userId, cwd);
     //manage ajax loaded content
     $(document).on("click", ".expand", function () {
       $(this).next().toggle();

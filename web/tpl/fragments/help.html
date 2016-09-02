@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+ * @(#) login.html Algem Web App 1.4.0 22/07/16
+ *
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title></title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div th:fragment="perso">
+      <div class="closing-bar"><a class="close-link" href="#"><i class="fa fa-close"></i></a></div>
+      <div>
+        <h3>Aide sur ma page perso</h3>
+        <p>Ma page perso est composée de quatre sections principales :</p>
+        <ol>
+          <li><a href="#account-help">Informations sur mon compte</a></li>
+          <li><a href="#weekly-help">Planning</a></li>
+          <li><a href="#booking-help">Réservations</a></li>
+          <li sec:authorize="hasAnyRole('1','2','4','11')"><a href="#followup-help">Suivi pédagogique</a></li>
+        </ol>
+        <h4 id="account-help">Informations</h4>
+        <p>Trois éléments nous permettent de vous identifier :</p>
+        <ul class="disc"><li>Votre nom d'utilisateur</li><li>Vos emails</li><li>Votre profil</li></ul>
+        <p>Suivant votre profil, certaines informations pourront ne pas être visibles dans les plannings.
+          Les options de menu dépendront également du profil de la personne.<br />
+          Les &laquo;&nbsp;Utilisateurs&nbsp;&raquo;, par exemple, peuvent voir le nom des groupes dans les plannings, contrairement aux simples &laquo;&nbsp;Adhérents&nbsp;&raquo;.
+        </p>
+        <h4 id="weekly-help">Planning</h4>
+        <h5 style="display:block"><i class="fa fa-calendar-plus-o"></i> Réserver</h5>
+        <p> Ce lien est destiné à la réservation d'une salle pour une répétition individuelle ou de groupe.<br />Cliquez sur <strong>Réserver</strong> pour accéder au planning du jour et choisir un horaire.</p>
+        <h5><i class="fa fa-calendar"></i> Mon planning hebdo</h5>
+        <p>En cliquant sur cette option, vous accédez à votre planning de la semaine. Une fois sur la page, vous pouvez vous déplacer de semaine en semaine en cliquant sur les flèches de gauche et de droite de part et autre des champs <strong>Date</strong>. Vous pouvez aussi cliquer sur l'une des dates pour faire apparaître un calendrier et sélectionner la semaine de votre choix.
+        Pour revenir à votre page perso, ouvrez le menu à 3 barres <i class="fa fa-bars"></i>, puis cliquez sur l'icone <i class="fa fa-user-plus"></i>, en-dessous de laquelle figure votre nom d'utilisateur.</p>
+        <h4 id="booking-help">Réservations</h4>
+        <p>Vous pouvez consulter ici l'historique de vos réservations. Les réservations peuvent être en &laquo;&nbsp;attente de confirmation&nbsp;&raquo; ou &laquo;&nbsp;confirmées&nbsp;&raquo;.<br />
+          Cliquez sur la date de réservation pour accéder au planning au jour indiqué.<br />
+          Un mail vous est envoyé lorsque la réservation est confirmée. Si vous êtes encore dans les délais, vous pouvez annuler vous-même une réservation en cliquant sur <strong>Annuler</strong>.<br />
+          Enfin, vous pouvez recharger l'historique en cliquant sur l'icone <i class="fa fa-refresh"></i>.</p>
+        <h4 id="followup-help">Suivi pédagogique</h4>
+        <h5 style="display:block">Suivi élève</h5>
+        <p>Si vous êtes inscrit en tant qu'élève dans la structure, vous pouvez consulter votre propre suivi pédagogique : appréciations des professeurs, notes, contenu des séances de cours, morceaux et techniques abordées, etc.<br />
+        Cliquez respectivement sur <strong>Aujourd'hui</strong>, <strong>Cette semaine</strong>, <strong>Ce mois</strong> pour afficher les séances du jour, de la semaine ou du mois courants.<br />
+        Vous pouvez également choisir n'importe quelle semaine dans l'année en cliquant sur l'une des dates et en vous déplaçant dans le calendrier.<br />
+        Vos absences sont signalées par les mentions <strong>ABS</strong> ou <strong>EXC</strong> (si le motif de l'absence a été donné).</p>
+        <div sec:authorize="hasAnyRole('1','2','4')">
+        <h5>Suivi enseignant</h5>
+        <p>Si vous êtes enregistré en tant qu'enseignant, c'est ici que vous pouvez éditer et consulter le suivi de vos élèves.
+        Cliquez respectivement sur <strong>Aujourd'hui</strong>, <strong>Cette semaine</strong>, <strong>Ce mois</strong> pour afficher vos séances du jour, de la semaine ou du mois courants.<br />
+        Vous pouvez également choisir n'importe quelle semaine dans l'année en cliquant sur l'une des dates et en vous déplaçant dans le calendrier.<br />
+        Les absences de vos élèves sont signalées par les mentions <strong>ABS</strong> ou <strong>EXC</strong> (si le motif de l'absence a été donné).
+        </p>
+        <h6>Edition du suivi individuel</h6>
+        <p>Dans le tableau, cliquez sur le nom de l'élève à l'intérieur de la colonne <strong>Suivi indivuel</strong>. Une fenêtre de dialogue vous permet de saisir votre appréciation ou d'évaluer l'élève en lui donnant une note. Par défaut, l'élève est considéré comme &laquo;&nbsp;Présent&nbsp;&raquo;. S'il est absent, marquez-le comme tel en choisissant la mention &laquo;&nbsp;Absent(e)&nbsp;&raquo;. Si l'élève s'est excusé pour son absence ou si le motif de l'absence vous a été signalé, vous pouvez alternativement le marquer comme &laquo;&nbsp;Excusé(e)&nbsp;&raquo;. N'oubliez pas de <strong>Valider</strong> pour enregistrer votre saisie.</p>
+        <p>La liste des élèves composant un cours collectif peut être pliée ou dépliée si nécessaire. Cliquez pour cela sur <i>Liste des élèves...</i>.</p>
+        <h6>Edition du suivi collectif</h6>
+        <p>Bien que cela soit plus rare, il est également possible d'éditer une appréciation de suivi collective. Cette appréciation est visible de tous les élèves ayant participé au cours et permet généralement de rappeler les notions ou les morceaux abordés durant la séance.<br />
+          Cliquez à l'intérieur de la colonne <strong>Suivi collectif</strong> pour ouvrir la fenêtre de saisie.<br />
+        <strong>Info</strong> : contrairement au suivi individuel, vous ne pouvez pas mettre ici de note (le champ est désactivé par défaut). Mais vous pouvez éventuellement déclarer votre propre absence, dans le cas où cette séance n'a pas été remplacée ou rattrapée.</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
