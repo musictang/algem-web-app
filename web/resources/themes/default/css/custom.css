@@ -29,22 +29,16 @@ body {
   color: white;
 }
 
-.main-text-color {
-  color: #ff5719;
-}
+.main-text-color {color: #ff5719;}
 
 .global {
   color: #444;
   background-color: white;
 }
 
-header nav select, #datepicker {
-  color: #444;
-}
+header nav select, #datepicker {color: #444;}
 
-header nav #previous, header nav #next {
-  color: white;
-}
+header nav #previous, header nav #next {color: white;}
 
 footer {
 /*  background-image:url('../img/personas-header-1280x1024.png');
@@ -52,40 +46,24 @@ footer {
   background-repeat: no-repeat;*/
 }
 
-h1 {
-  color: #FFC170;
-}
+h1 {color: #FFC170;}
 
-h2, h3, h4, h5, h6, h7, fieldset > legend {
-  color: #FF9770;
-}
-h2, h3, h4, fieldset > legend {
-  border-color: #FF9770;
-}
-
+h2, h3, h4, h5, h6, h7, fieldset > legend {color: #FF9770;}
+h2, h3, h4, fieldset > legend {border-color: #FF9770;}
+ul.disc{list-style-image: url('../img/puce-green.png');}
 a:link,a:visited, a:hover, a:active,
 .pure-menu, .pure-menu-heading, #menu
 {
   color: #D33900;
 }
-.closing-bar {
-  background-color: #D33900;
-}
+.closing-bar {background-color: #D33900;}
 
-a:link,a:visited, a:active {
-  border-bottom-color: #FFC170;
-}
-a:hover {
-  border-bottom-color: #666;
-}
+a:link,a:visited, a:active {border-bottom-color: #FFC170;}
+a:hover {border-bottom-color: #666;}
 
-footer a:link,footer a:visited, footer a:hover, footer a:active {
-  color: #FFF;
-}
+footer a:link,footer a:visited, footer a:hover, footer a:active {color: #FFF;}
 
-#menu {
-  background: #D33900;
-}
+#menu {background: #D33900;}
 
 .pure-menu-link:hover {
   color: #FFC170;
@@ -96,9 +74,7 @@ footer a:link,footer a:visited, footer a:hover, footer a:active {
   background-color: #FFEFDD;
   color: #444;
 }
-.title_col, #title_col {
-  background-color: #ff5719;
-}
+.title_col, #title_col {background-color: #ff5719;}
 
 #accordion h3.ui-state-active {background: #ff5719}
 #accordion .ui-widget-content a {color: #D33900}

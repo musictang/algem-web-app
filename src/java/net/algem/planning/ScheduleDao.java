@@ -1,5 +1,5 @@
 /*
- * @(#)ScheduleDao.java	1.2.0 18/04/16
+ * @(#)ScheduleDao.java	1.4.2 06/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -47,7 +47,7 @@ import org.springframework.stereotype.Repository;
  * IO methods for class {@link net.algem.planning.Schedule}.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.2.0
+ * @version 1.4.2
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -123,7 +123,9 @@ public class ScheduleDao
         d.setId(rs.getInt(1));
         d.setDateFr(new DateFr(rs.getString(2)));
         d.setStart(new Hour(rs.getString(3)));
-        d.setEnd(new Hour(rs.getString(4)));
+        String end = rs.getString(4);
+        d.setEnd("00:00:00".equals(end) ? new Hour("24:00") : new Hour(end));
+        //d.setEnd(new Hour(rs.getString(4)));
         d.setType(rs.getInt(5));
         d.setIdPerson(rs.getInt(6));
         d.setIdAction(rs.getInt(7));
@@ -193,7 +195,9 @@ public class ScheduleDao
         r.setId(rs.getInt(1));
         r.setScheduleId(rs.getInt(2));
         r.setStart(new Hour(rs.getString(3)));
-        r.setEnd(new Hour(rs.getString(4)));
+        String end = rs.getString(4);
+        r.setEnd("00:00:00".equals(end) ? new Hour("24:00") : new Hour(end));
+        //r.setEnd(new Hour(rs.getString(4)));
         r.setMemberId(rs.getInt(5));
         r.setNote(rs.getInt(6));
 
@@ -281,14 +285,15 @@ public class ScheduleDao
       final PreparedStatementSetter setter = new PreparedStatementSetter() {
         @Override
         public void setValues(PreparedStatement ps) throws SQLException {
+          String end = "24:00".equals(booking.getEndTime().toString()) ? "23:59:59" : booking.getEndTime().toString() + ":00";
           ps.setDate(1, new java.sql.Date(d.getTime()));
           ps.setInt(2, booking.getRoom());
           ps.setTime(3, Time.valueOf(booking.getStartTime().toString() + ":00"));
-          ps.setTime(4, Time.valueOf(booking.getEndTime().toString() + ":00"));
+          ps.setTime(4, Time.valueOf(end));
           ps.setTime(5, Time.valueOf(booking.getStartTime().toString() + ":00"));
-          ps.setTime(6, Time.valueOf(booking.getEndTime().toString() + ":00"));
+          ps.setTime(6, Time.valueOf(end));
           ps.setTime(7, Time.valueOf(booking.getStartTime().toString() + ":00"));
-          ps.setTime(8, Time.valueOf(booking.getEndTime().toString() + ":00"));
+          ps.setTime(8, Time.valueOf(end));
         }
       };
       conflicts = jdbcTemplate.query(query, setter, new RowMapper<ScheduleElement>() {
@@ -318,14 +323,15 @@ public class ScheduleDao
       final PreparedStatementSetter setter = new PreparedStatementSetter() {
         @Override
         public void setValues(PreparedStatement ps) throws SQLException {
+          String end = "24:00".equals(booking.getEndTime().toString()) ? "23:59:59" : booking.getEndTime().toString() + ":00";
           ps.setDate(1, new java.sql.Date(d.getTime()));
           ps.setInt(2, booking.getType() == Schedule.BOOKING_GROUP ? booking.getGroup() : booking.getPerson());
           ps.setTime(3, Time.valueOf(booking.getStartTime().toString() + ":00"));
-          ps.setTime(4, Time.valueOf(booking.getEndTime().toString() + ":00"));
+          ps.setTime(4, Time.valueOf(end));
           ps.setTime(5, Time.valueOf(booking.getStartTime().toString() + ":00"));
-          ps.setTime(6, Time.valueOf(booking.getEndTime().toString() + ":00"));
+          ps.setTime(6, Time.valueOf(end));
           ps.setTime(7, Time.valueOf(booking.getStartTime().toString() + ":00"));
-          ps.setTime(8, Time.valueOf(booking.getEndTime().toString() + ":00"));
+          ps.setTime(8, Time.valueOf(end));
         }
       };
       conflicts = jdbcTemplate.query(query, setter, new RowMapper<ScheduleElement>() {
@@ -383,7 +389,8 @@ public class ScheduleDao
         b.setIdPerson(rs.getInt(3));
         b.setDateFr(rs.getDate(4));
         b.setStart(new Hour(rs.getString(5)));
-        b.setEnd(new Hour(rs.getString(6)));
+        String end = rs.getString(6);
+        b.setEnd("00:00:00".equals(end) ? new Hour("24:00") : new Hour(end));
         b.setType(rs.getInt(7));
         b.setDetail("room" , new NamedModel(rs.getInt(8) , rs.getString(9)));
         b.setDetail("estab" , new NamedModel(rs.getInt(10) , rs.getString(11)));
@@ -501,7 +508,9 @@ public class ScheduleDao
         d.setId(rs.getInt(1));
         d.setDateFr(new DateFr(rs.getString(2)));
         d.setStart(new Hour(rs.getString(3)));
-        d.setEnd(new Hour(rs.getString(4)));
+        String end = rs.getString(4);
+        d.setEnd("00:00:00".equals(end) ? new Hour("24:00") : new Hour(end));
+        //d.setEnd(new Hour(rs.getString(4)));
         d.setType(rs.getInt(5));
         d.setIdPerson(rs.getInt(6));
         d.setIdAction(rs.getInt(7));
@@ -531,7 +540,9 @@ public class ScheduleDao
         d.setId(rs.getInt(1));
         d.setDateFr(new DateFr(rs.getString(2)));
         d.setStart(new Hour(rs.getString(3)));
-        d.setEnd(new Hour(rs.getString(4)));
+        String end = rs.getString(4);
+        d.setEnd("00:00:00".equals(end) ? new Hour("24:00") : new Hour(end));
+        //d.setEnd(new Hour(rs.getString(4)));
         d.setType(rs.getInt(5));
         d.setIdPerson(rs.getInt(6));
         d.setIdAction(rs.getInt(7));
@@ -568,7 +579,9 @@ public class ScheduleDao
         d.setId(rs.getInt(1));
         d.setDateFr(new DateFr(rs.getString(2)));
         d.setStart(new Hour(rs.getString(3)));
-        d.setEnd(new Hour(rs.getString(4)));
+        String end = rs.getString(4);
+        d.setEnd("00:00:00".equals(end) ? new Hour("24:00") : new Hour(end));
+        //d.setEnd(new Hour(rs.getString(4)));
         d.setType(rs.getInt(5));
         d.setIdPerson(rs.getInt(6));
         d.setIdAction(rs.getInt(7));
@@ -604,7 +617,9 @@ public class ScheduleDao
         d.setId(rs.getInt(1));
         d.setDateFr(new DateFr(rs.getString(2)));
         d.setStart(new Hour(rs.getString(3)));
-        d.setEnd(new Hour(rs.getString(4)));
+        String end = rs.getString(4);
+        d.setEnd("00:00:00".equals(end) ? new Hour("24:00") : new Hour(end));
+        //d.setEnd(new Hour(rs.getString(4)));
         d.setType(rs.getInt(5));
         d.setIdPerson(rs.getInt(6));
         d.setIdAction(rs.getInt(7));

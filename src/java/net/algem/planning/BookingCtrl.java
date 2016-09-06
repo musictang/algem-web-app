@@ -1,7 +1,7 @@
 /*
- * @(#) BookingCtrl.java Algem Web App 1.1.0 26/02/16
+ * @(#) BookingCtrl.java Algem Web App 1.4.2 06/09/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -55,7 +55,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.1.0
+ * @version 1.4.2
  * @since 1.0.6 20/01/2016
  */
 @Controller
@@ -130,7 +130,15 @@ public class BookingCtrl
     try {
       // end time is disabled in form
       Hour hEnd = new Hour(booking.getStartTime());
-      hEnd.incMinute((int) (booking.getTimeLength() * 60));
+      int tl = (int) booking.getTimeLength() * 60;
+      // change end time if after midnight
+      if (hEnd.toMinutes() + tl > 1440) {
+        tl = 1440 - hEnd.toMinutes();
+      }
+      hEnd.incMinute(tl);
+      if (Hour.NULL_HOUR.equals(hEnd.toString())) {
+        hEnd = new Hour("24:00");
+      }
       booking.setEndTime(hEnd);
       Date date = Constants.DATE_FORMAT.parse(booking.getDate());
       Calendar cal = Calendar.getInstance();

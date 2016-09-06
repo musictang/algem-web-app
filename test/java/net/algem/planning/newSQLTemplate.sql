@@ -163,3 +163,10 @@ WHERE p.ptype IN (1,5,6)
 AND pl.adherent = 13858
 AND p.jour BETWEEN '06-06-2016' AND '12-06-2016'
 ORDER BY p.jour,pl.debut;
+
+SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.lieux,s.nom FROM planning p JOIN salle s ON(p.lieux = s.id)
+WHERE p.jour = '2016-09-06'
+AND p.idper = 16094
+AND ((p.debut >= '23:00:00' AND p.debut < '24:00:00')-- // start //end
+OR (p.fin > '23:00:00' AND p.fin <= '24:00:00')
+OR (p.debut <= '23:00:00' AND p.fin >= '24:00:00'));

@@ -1,0 +1,14 @@
+Algem web app 1.4.2
+CORRECTIFS
+* La détection des conflits ne fonctionnait pas correctement lorsqu'une réservation s'étendait au delà de 24:00.
+* Aucune erreur n'était détectée lorsqu'une réservation s'étendait au-delà de 24:00.
+* Les séances se terminant à 24:00 n'étaient pas correctement affichées sur les plannings.
+* Dans la version Android de Firefox, les dates de séance étaient affichées en anglais. Le jour de la séance ne s'affiche correctement que sous Chrome.
+
+AMELIORATIONS
+Une personne "Excusée" étant forcément "Absente", il était inutile d'en faire deux champs séparés dans la fenêtre de saisie du suivi pédagogique.
+Par défaut, une personne est "Présente". En cas d'absence, le professeur peut sélectionner l'une des deux mentions "Absent(e)" ou "Excusé(e)".
+
+Une aide est maintenant disponible sur la page perso d'une personne connectée. Cliquez sur le point d'interrogation dans le menu (menu à 3 barres sur la gauche) pour ouvrir la page.
+
+Afin de revenir plus facilement à sa page perso ou à l'accueil, la personne peut cliquer sur l'un des liens en bas de page dans son planning hebdo.

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) weekly.html Algem Web App 1.4.1 29/08/16
+ * @(#) weekly.html Algem Web App 1.4.2 06/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -44,7 +44,7 @@
         <li><a href="#" class="close-link" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
         <li th:replace="fragments/menu :: cnx"></li>
-        <li><a id="help" href="#help-panel" th:title="#{help.label}"><i class="fa fa-question-circle"></a></i></li>
+        <li><a id="info" href="#info-panel" th:title="#{informations.label}"><i class="fa fa-info-circle"></a></i></li>
       </ul>
     </div>
     <section id="login-panel" class="closeable" th:include="fragments/user :: login"></section>
@@ -94,8 +94,14 @@
         </div>
       </div>
     </section>
-    <aside id="help-panel" class="closeable" th:include="fragments/layout :: color-help"></aside>
-    <footer th:replace="fragments/layout :: footer"></footer>
+    <aside id="info-panel" class="closeable" th:include="fragments/layout :: color-help"></aside>
+    <!--<footer th:replace="fragments/layout :: footer"></footer>-->
+    <aside id="bottom-menu">
+      <ul class="horizontal-panel-menu">
+        <li><i class="fa fa-home"></i>&nbsp;<a th:href="@{/index.html}" th:title="${hl}" th:text="#{home.label}"></a></li>
+        <li sec:authorize="not isAnonymous()" ><i class="fa fa-rotate-left"></i>&nbsp;<a th:href="@{/perso/home.html}" th:title="#{my.account.label}" sec:authentication="name"></a></li>
+      </ul>
+    </aside>
     <div id="errorDialog" title="Avertissement"></div>
     <script type="text/javascript" th:inline="javascript">
        /*<![CDATA[*/

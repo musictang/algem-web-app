@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.4.2 31/08/2016
+ * @(#) dossier.html Algem Web App 1.4.2 06/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -44,7 +44,7 @@
         <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
         <li th:replace="fragments/menu :: cnx"></li>
-        <li><a id="help" href="#help-panel" th:title="#{help.label}"><i class="fa fa-question-circle"></i></a></li>
+        <li><a id="help" th:href="@{/help.html#chapter-perso}" th:title="#{help.label}"><i class="fa fa-question-circle"></i></a></li>
       </ul>
     </div>
     <header>
@@ -168,7 +168,7 @@
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>
     <div id="busy"></div>
-    <aside id="help-panel" class="closeable" th:include="fragments/help :: perso"></aside>
+    <!--<aside id="help-panel" class="closeable" th:include="fragments/help :: perso"></aside>-->
   </body>
   <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/

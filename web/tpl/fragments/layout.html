@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) layout.html Algem Web App 1.4.0 16/07/16
+ * @(#) layout.html Algem Web App 1.4.2 06/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -74,7 +74,7 @@
         <table class="pure-table pure-table-horizontal mobile">
           <tr th:each="estab:${@hotline}">
             <th th:text="${estab.key}"></th>
-            <td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a><ul><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul>
+            <td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a><ul class="disc"><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul>
             </td>
           </tr>
         </table>

@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.4.0 22/07/16
+ * @(#) common.css Algem Web App 1.4.2 06/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -277,10 +277,9 @@ input[type=submit] {margin: 1em 0;}
   width: 85%;
   border: 1px solid #444;
   border-radius: 4px;
-  padding: 1em;
+  padding: 0.5em;
 }
 .note {
-  margin: 0 0 1em 0;
   font-size: smaller;
 }
 .warning {background-color: lightpink;}
@@ -336,6 +335,15 @@ select {font-size: small;}
   text-decoration: none;
   border: none;
 }
+#bottom-menu {
+  position:fixed;
+  bottom:0;
+  width:100%;
+  color: gray;
+  background-color: white;
+  border-top:1px solid gray;
+  z-index: 2001; /* above footer */
+}
 #help-panel, #info-panel, #login-panel {
   position: absolute;
   top:6%;
@@ -350,7 +358,7 @@ select {font-size: small;}
 }
 #login-panel {width: 20em;}
 
-#help-panel ul {list-style-type: none;}
+#help-panel ul, #info-panel ul {list-style-type: none;}
 
 .info table th {width: 8em}
 
@@ -456,7 +464,7 @@ form legend + label {
 
 ul.disc{
   list-style: disc;
-  list-style-image: url('../img/puce-green.png');
+  margin:0;
   list-style-position: inside
 }
 
@@ -465,7 +473,7 @@ ul.simple {
   margin: 0;
 }
 
-ul.simple li {
+ul.simple li, ul.disc li {
   margin: 0.5em 0;
 }
 ul.simple li:first-child {

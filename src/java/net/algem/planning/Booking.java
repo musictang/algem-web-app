@@ -34,6 +34,7 @@ public class Booking
   private int group;
   private int room;
   private int action;
+  /** Time length in hours. Decimal format : 1.5 = 90 min. */
   private float timeLength;
   private String date;
   private Hour startTime;
