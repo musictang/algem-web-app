@@ -1,5 +1,5 @@
 /*
- * @(#) custom.css Algem Web App 1.4.0 16/07/16
+ * @(#) custom.css Algem Web App 1.4.2 07/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -20,7 +20,7 @@
 /*
     Created on : 05/12/2015, 10:29:34
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Version    : 1.1.1 02/03/16
+    Version    : 1.4.2 07/09/16
 */
 /*Personnalisation*/
 
@@ -64,6 +64,13 @@ a:hover {border-bottom-color: #666;}
 footer a:link,footer a:visited, footer a:hover, footer a:active {color: #FFF;}
 
 #menu {background: #D33900;}
+#bottom-menu {
+  color: white;
+  background-color: #ff5719;
+}
+#bottom-menu a:link, #bottom-menu a:visited, #bottom-menu a:hover, #bottom-menu a:active
+{color: white;}
+#bottom-menu a:hover {background-color: white;color: #ff5719;}
 
 .pure-menu-link:hover {
   color: #FFC170;

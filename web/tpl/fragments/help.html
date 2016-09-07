@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.4.2 06/09/16
+ * @(#) login.html Algem Web App 1.4.2 07/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -32,7 +32,7 @@
           <li><a href="#account-info-help">Informations</a></li>
           <li><a href="#weekly-help" th:text="#{schedule.label}">Planning</a></li>
           <li><a href="#book-help" th:text="#{my.bookings.label}">Réservations</a></li>
-          <li sec:authorize="hasAnyRole('1','2','4','11')"><a href="#followup-help" th:text="#{student.monitoring.label}">Suivi pédagogique</a></li>
+          <li><a href="#followup-help" th:text="#{student.monitoring.label}">Suivi pédagogique</a></li>
         </ol>
         <h4 id="account-info-help"><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;Informations</h4>
         <p>Trois éléments nous permettent de vous identifier :</p>
@@ -74,7 +74,7 @@
         <h6>Edition du suivi collectif</h6>
         <p>Bien que cela soit plus rare, il est également possible d'entrer une appréciation de suivi collective. Cette appréciation est visible de tous les élèves ayant participé au cours et permet généralement de rappeler les notions ou les morceaux abordés durant la séance.<br />
           Cliquez sur la ligne qui vous intéresse en-dessous de la colonne <strong>Suivi co.</strong> pour ouvrir la fenêtre de saisie.<br />
-        <strong>Info</strong> : contrairement au suivi individuel, vous ne pouvez pas mettre ici de note (le champ est désactivé par défaut). Mais vous pouvez éventuellement déclarer votre propre absence, dans le cas où cette séance n'a pas été remplacée ou rattrapée.</p>       
+        <strong>Info</strong> : contrairement au suivi individuel, vous ne pouvez pas mettre ici de note (le champ est désactivé par défaut). Mais vous pouvez éventuellement déclarer votre propre absence, dans le cas où cette séance n'a pas été remplacée ou rattrapée.</p>
         </div>
       </div>
     </div>

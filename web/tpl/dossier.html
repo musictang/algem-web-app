@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.4.2 06/09/16
+ * @(#) dossier.html Algem Web App 1.4.2 07/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -116,7 +116,7 @@
           </header>
           <table id="follow-up-student" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
             <thead>
-              <tr><th>Jour</th><th>Horaire</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Professeur</th><th>Suivi individuel</th><th>Suivi co.</th></tr>
+              <tr><th th:text="#{day.label}">Jour</th><th th:text="#{time.label}">Horaire</th><th th:text="#{time.length.label}">Durée</th><th th:text="#{room.label}">Salle</th><th th:text="#{course.label}">Cours</th><th th:text="#{teacher.label}">Professeur</th><th th:text="#{individual.monitoring.label}">Suivi individuel</th><th th:text="#{collective.monitoring.label}">Suivi co.</th></tr>
             </thead>
             <tbody>
             </tbody>
@@ -137,7 +137,7 @@
           </header>
           <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
             <thead>
-              <tr><th>Jour</th><th>Horaire</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Suivi individuel</th><th>Suivi co.</th></tr>
+              <tr><th th:text="#{day.label}">Jour</th><th th:text="#{time.label}">Horaire</th><th th:text="#{time.length.label}">Durée</th><th th:text="#{room.label}">Salle</th><th th:text="#{course.label}">Cours</th><th th:text="#{individual.monitoring.label}">Suivi individuel</th><th th:text="#{collective.monitoring.label}">Suivi co.</th></tr>
             </thead>
             <tbody>
             </tbody>
@@ -164,7 +164,7 @@
           <input id="noteType" type="hidden" th:name="collective" />
         </fieldset>
       </form>
-      <p class="error">Erreur</p>
+      <p class="error" th:text="#{error.label}">Erreur</p>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>
     <div id="busy"></div>

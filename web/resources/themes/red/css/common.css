@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.4.2 06/09/16
+ * @(#) common.css Algem Web App 1.4.2 07/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -339,11 +339,9 @@ select {font-size: small;}
   position:fixed;
   bottom:0;
   width:100%;
-  color: gray;
-  background-color: white;
-  border-top:1px solid gray;
   z-index: 2001; /* above footer */
 }
+#bottom-menu a:hover {border: none;border-radius: 4px;padding:0.2em 0}
 #help-panel, #info-panel, #login-panel {
   position: absolute;
   top:6%;
