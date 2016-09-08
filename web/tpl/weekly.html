@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) weekly.html Algem Web App 1.4.2 06/09/16
+ * @(#) weekly.html Algem Web App 1.4.2 08/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -97,10 +97,7 @@
     <aside id="info-panel" class="closeable" th:include="fragments/layout :: color-help"></aside>
     <!--<footer th:replace="fragments/layout :: footer"></footer>-->
     <aside id="bottom-menu">
-      <ul class="horizontal-panel-menu">
-        <li><i class="fa fa-home"></i>&nbsp;<a th:href="@{/index.html}" th:title="${hl}" th:text="#{home.label}"></a></li>
-        <li sec:authorize="not isAnonymous()" ><i class="fa fa-rotate-left"></i>&nbsp;<a th:href="@{/perso/home.html}" th:title="#{my.account.label}" sec:authentication="name"></a></li>
-      </ul>
+      <ul class="horizontal-panel-menu"><li th:replace="fragments/menu :: secondary"></li></ul>
     </aside>
     <div id="errorDialog" title="Avertissement"></div>
     <script type="text/javascript" th:inline="javascript">
