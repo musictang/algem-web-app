@@ -82,7 +82,7 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
         var noteCo = value.followUp.content || "";
         total += length;
 
-        result += "<tr class=\"" + value.id + "\">"// id planning
+        result += "<tr class=\"" + value.id + " " + (value.collective ? "co" : "notco") +"\">"// id planning
           + "<td>" + dateInfo + "</td>"
           + "<td>" + timeInfo + "</td>"
           + "<td>" + getTimeFromMinutes(length) + "</td>"
@@ -236,6 +236,8 @@ function resetFollowUpDialog() {
 
 function updateFollowUp(form) {
   var url = $(form).attr("action");
+  //update hidden field before sending
+  $("#status").val($("#follow-status").val());
   $.post(url, form.serialize(), function (data) {
     if (data && data.success) {
       var content = $("#follow-content").val();

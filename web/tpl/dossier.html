@@ -153,11 +153,13 @@
           <label for="follow-content" th:text="#{follow-up.label}">Suivi</label><textarea style="display: block;width: 98%" rows="3" id="follow-content" th:name="content" maxlength="512"></textarea>
           <div style="margin-top: 1em">
             <label for="note" th:text="#{note.label}" style="margin-right: 0.5em">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="display: inline-block;width: 4em" />
-            <select id="follow-status" th:name="status" style="margin-left: 1em">
+            <select id="follow-status" style="margin-left: 1em" >
               <option th:value="0" th:text="#{present.label}"></option>
               <option th:value="1" th:text="#{absent.label}"></option>
               <option th:value="2" th:text="#{excused.label}"></option>
             </select>
+            <!--Force sending status val when select is readonly-->
+            <input id="status" type="hidden" th:name="status" value="0" />
           </div>
           <input id="noteId" type="hidden" th:name="id" />
           <input id="scheduleId" type="hidden" th:name="scheduleId" />
@@ -174,14 +176,16 @@
     /*<![CDATA[*/
     var userId = /*[[${user.id}]]*/ 1234;
     var dlg = $("#follow-up-dlg");
-    var followUpURL = /*[[@{/perso/xFollowUp}]]*/ '';
+    var followUpURL = /*[[@{/perso/xFollowUp}]]*/ "";
     var url1 = $("#follow-d").attr("formaction");
     var url2 = $("#student-follow-d").attr("formaction");
+    var coMonitoringTitle = /*[[#{collective.monitoring.title}]]*/ "";
     var labels = {
-      "individual_monitoring_action": /*[[#{individual.monitoring.action.title}]]*/ '',
-      "collective_monitoring_action": /*[[#{collective.monitoring.action.title}]]*/ '',
-      "student_list": /*[[#{student.list.label}]]*/ '',
-      "expand_collapse": /*[[#{expand.collapse.label}]]*/ '',
+      "individual_monitoring_action": /*[[#{individual.monitoring.action.title}]]*/ "",
+      "collective_monitoring_action": /*[[#{collective.monitoring.action.title}]]*/ "",
+      "collective_monitoring_title": /*[[#{collective.monitoring.title}]]*/ "",
+      "student_list": /*[[#{student.list.label}]]*/ "",
+      "expand_collapse": /*[[#{expand.collapse.label}]]*/ "",
     };
     setCommonEvents();
     initFollowUpDialog(dlg);
@@ -211,29 +215,32 @@
 
     $(document).on("click", ".dlg", function () {
       resetFollowUpDialog();
-      var isCo = $(this).attr("accessKey") === "C";
-      getFollowUp(followUpURL, $(this).attr("id"), isCo);
+      var isCoCell = $(this).attr("accessKey") === "C";
+      getFollowUp(followUpURL, $(this).attr("id"), isCoCell);
       var row = $(this).closest('tr');
       var course = row.find(':nth-child(5)').contents().get(0).nodeValue;
       var dateTime = row.find(':nth-child(1)').contents().get(0).nodeValue;
       dateTime += " " + row.find(':nth-child(2)').contents().get(0).nodeValue;
       var legendInfo = course + "<br />" + dateTime;
       var legend = $(dlg).find("legend");
-      var t = isCo ? "Suivi collectif" : $(this).html();
+      var t = isCoCell ?  labels.collective_monitoring_title : $(this).html();
+      var isCo = row.hasClass("co");
       $(legend).html(legendInfo);
       // complete form
-      if (isCo) {
-//        $("#exc-check").prop("readonly", true);//readonly is sent by form.serialize
+      if (isCoCell) {
         $("#note").prop("readonly", true);
+        $("#follow-status").prop("disabled", "disabled");
       } else {
-//        $("#exc-check").prop("readonly", false);
         $("#note").prop("readonly", false);
+        $("#follow-status").prop("disabled", false);
       }
       $("#noteId").val($(this).attr("id"));
-      $("#scheduleId").val(isCo ? row.attr("class") : $(this).closest("li").attr("id"));
-      $("#noteType").val(isCo);
-      $(dlg).dialog({title: t}).dialog("open");
-
+      var strClass = row.attr("class");
+      $("#scheduleId").val(isCoCell ? strClass.substr(0, strClass.indexOf(' ')) : $(this).closest("li").attr("id"));
+      $("#noteType").val(isCoCell);
+      if (!isCoCell || (isCo && isCoCell)) {
+        $(dlg).dialog({title: t}).dialog("open");
+      }
     });
     /*]]>*/
   </script>
