@@ -1,4 +1,5 @@
 Algem web app 1.4.3
 CORRECTIFS
-* Le statut d'absence est maintenant désactivé pour les notes de suivi collectif.
 * Le suivi collectif est désactivé pour les cours de type individuel.
+* Le statut d'absence est maintenant désactivé pour les notes de suivi collectif.
+

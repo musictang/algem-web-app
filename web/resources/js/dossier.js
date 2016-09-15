@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.4.2 31/08/2016
+ * @(#) dossier.js Algem Web App 1.4.3 15/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *

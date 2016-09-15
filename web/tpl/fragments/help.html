@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.4.2 07/09/16
+ * @(#) login.html Algem Web App 1.4.3 15/09/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -46,7 +46,7 @@
         <p> Ce lien est destiné à la réservation d'une salle pour une répétition individuelle ou de groupe.<br />Cliquez sur <strong>Réserver</strong> pour accéder au planning du jour et choisir un horaire.</p>
         <h5><i class="fa fa-calendar"></i> Mon planning hebdo</h5>
         <p>En cliquant sur cette option, vous accédez à votre planning de la semaine. Une fois sur la page *, vous pouvez vous déplacer de semaine en semaine en cliquant sur les flèches de gauche&nbsp;<i class="fa fa-chevron-circle-left"></i> et de droite&nbsp;<i class="fa fa-chevron-circle-right"></i>, de part et d'autre des dates de début et de fin de semaine. <strong>Vous pouvez aussi cliquer sur l'une des dates pour faire apparaître un calendrier et sélectionner la semaine de votre choix</strong> **.</p>
-        <p class="note">* Pour revenir à votre page perso, ouvrez le menu à 3 barres <i class="fa fa-bars"></i>, puis cliquez sur l'icone <i class="fa fa-user-plus"></i>, en-dessous de laquelle figure votre nom d'utilisateur.<br />
+        <p class="note">* Pour revenir à votre page perso, ouvrez le menu à 3 barres <i class="fa fa-bars"></i>, puis cliquez sur l'icone <i class="fa fa-user-plus"></i>, en-dessous de laquelle figure votre nom d'utilisateur. Un lien est également disponible en bas de page.<br />
           ** Dans le calendrier, peu importe le jour de la semaine sur lequel vous cliquez. Les dates se placeront sur la semaine adéquate.</p>
         <h4 id="book-help"><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{my.bookings.label}]]</h4>
         <p>Vous pouvez consulter ici l'historique de vos réservations. Les réservations peuvent être en <strong>&laquo;&nbsp;attente de confirmation&nbsp;&raquo;</strong> ou <strong>&laquo;&nbsp;confirmées&nbsp;&raquo;</strong>.<br />
@@ -60,7 +60,7 @@
         Vous pouvez également choisir n'importe quelle semaine dans l'année en cliquant sur l'une des dates et en vous déplaçant dans le calendrier.<br />
         Vos absences sont signalées par les mentions <span class="absent">ABS</span> ou <span class="excused">EXC</span> (si le motif de l'absence a été donné).</p>
         <div sec:authorize="hasAnyRole('1','2','4')">
-          <h5><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{teacher.monitoring.label}]]</h5>
+          <h4><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{teacher.monitoring.label}]]</h4>
         <p>Si vous êtes enregistré en tant qu'enseignant, c'est ici que vous pouvez éditer et consulter le suivi de vos élèves.
         Cliquez respectivement sur <strong>Aujourd'hui</strong>, <strong>Cette semaine</strong>, <strong>Ce mois</strong> pour afficher vos séances du jour, de la semaine ou du mois courants.<br />
         Vous pouvez également choisir n'importe quelle semaine dans l'année en cliquant sur l'une des dates et en vous déplaçant dans le calendrier.<br />
