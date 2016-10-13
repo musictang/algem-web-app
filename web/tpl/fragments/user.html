@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.4.0 22/07/16
+ * @(#) login.html Algem Web App 1.5.0 12/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -61,7 +61,7 @@
             </div>
             <div class="row-form">
               <label class="pure-u-6-24" for="startTime" th:text="#{hour.label}">Heure</label>
-              <select class="pure-u-9-24" id="startTime" th:field="*{startTime}"> 
+              <select class="pure-u-9-24" id="startTime" th:field="*{startTime}">
                 <option th:each="half,dv : ${#numbers.sequence(offset, 1410, 30)}"
                         th:with="hh=${half < 600 ? '0' + half/60 : half/60}, hm=(${timeOffset%60 == 0} ?
                         (${hh} + ':' + (${dv.odd} ? '00':'30')) :
@@ -102,7 +102,7 @@
             </div>
             <label class="pure-u-6-24" for="room" th:text="#{room.label}"></label>
             <select class="pure-u-18-24" id="room" th:field="*{room}">
-              <option th:each="entry : ${planning}" th:value="${entry.key}" th:text="${entry.value[0].detail['room']}"></option>
+              <option th:each="entry : ${planning}" th:value="${entry.value[0].detail['room'].id}" th:text="${entry.key}"></option>
               <option th:each="entry : ${freeplace}" th:value="${entry.key.id}" th:text="${entry.key.name}"></option>
             </select>
             <p class="pure-u-1-1" id="passInfo">

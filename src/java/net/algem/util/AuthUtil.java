@@ -1,7 +1,7 @@
 /*
- * @(#) Constants.java Algem Web App 1.0.6 25/01/2016
+ * @(#) AuthUtil.java Algem Web App 1.5.0 12/10/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -20,16 +20,30 @@
 
 package net.algem.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import net.algem.security.Profile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.6
- * @since 1.0.6 25/01/2016
+ * @version 1.5.0
+ * @since 1.5.0 12/10/16
  */
-public class Constants {
+public class AuthUtil {
 
-  public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
+  public static boolean isAdministrativeMember() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth != null) {
+      for (GrantedAuthority a : auth.getAuthorities()) {
+        if (String.valueOf(Profile.User.getId()).equals(a.toString())
+          || String.valueOf(Profile.Admin.getId()).equals(a.toString())) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 }

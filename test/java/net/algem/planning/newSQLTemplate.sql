@@ -170,3 +170,33 @@ AND p.idper = 16094
 AND ((p.debut >= '23:00:00' AND p.debut < '24:00:00')-- // start //end
 OR (p.fin > '23:00:00' AND p.fin <= '24:00:00')
 OR (p.debut <= '23:00:00' AND p.fin >= '24:00:00'));
+
+-- planning du jour
+SELECT p.*, c.id, c.titre, c.collectif, c.code, s.nom, per.prenom, per.nom, g.nom
+FROM planning p INNER JOIN action a ON (p.action = a.id) LEFT OUTER JOIN cours c ON (a.cours = c.id)
+LEFT OUTER JOIN personne per ON (p.idper = per.id)
+LEFT OUTER JOIN groupe g ON (p.idper = g.id)
+JOIN salle s ON (p.lieux = s.id)
+WHERE jour = '2016-10-12'
+AND s.etablissement = 3501
+AND s.public = TRUE
+ORDER BY s.nom, p.debut;
+
+-- etablissements
+SELECT DISTINCT p.id, p.nom FROM personne p
+JOIN etablissement e ON (p.id = e.id)
+WHERE p.ptype = 5
+AND e.actif = TRUE;
+
+SELECT p.id,p.nom FROM personne p WHERE p.ptype = 5 AND p.id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)
+
+SELECT p.*, c.id, c.titre, c.collectif, c.code, s.nom, per.prenom, per.nom, g.nom
+FROM planning p INNER JOIN action a ON (p.action = a.id) LEFT OUTER JOIN cours c ON (a.cours = c.id)
+LEFT OUTER JOIN personne per ON (p.idper = per.id)
+LEFT OUTER JOIN groupe g ON (p.idper = g.id)
+JOIN salle s ON (p.lieux = s.id)
+WHERE jour = '2016-10-12'
+AND s.etablissement = 3501
+ORDER BY s.nom, p.debut;
+--       if (!adminAccess) {query += " AND s.public = TRUE";}
+--       query += "

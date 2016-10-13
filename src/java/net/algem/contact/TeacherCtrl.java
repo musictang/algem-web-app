@@ -29,7 +29,7 @@ import javax.annotation.Resource;
 import net.algem.planning.FollowUp;
 import net.algem.planning.FollowUpException;
 import net.algem.planning.ScheduleElement;
-import static net.algem.util.Constants.DATE_FORMAT;
+import static net.algem.util.GemConstants.DATE_FORMAT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;

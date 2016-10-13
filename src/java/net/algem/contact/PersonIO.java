@@ -24,6 +24,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import net.algem.util.AbstractGemDao;
+import net.algem.util.AuthUtil;
+import net.algem.util.GemConstants;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -39,20 +41,44 @@ public class PersonIO
 
   public static final String TABLE = "personne";
 
-  public List<Person> findEstablishments(String where) {
-    String query = "SELECT id, nom FROM " + TABLE + " WHERE ptype = " + Person.ESTABLISHMENT;
+
+  public List<Person> findEstablishments(String where, String login) {
+    boolean adminAccess = AuthUtil.isAdministrativeMember();
+    String query = "SELECT p.id, p.nom FROM " + TABLE + " p";
+
+    if (adminAccess) {
+      query += " JOIN " + GemConstants.ESTAB_TABLE + " e ON (p.id = e.id) "
+        + " JOIN login l ON (e.idper = l.idper)"
+        + " WHERE p.ptype = " + Person.ESTABLISHMENT
+        + " AND e.actif = TRUE"
+        + " AND l.login = ?";
+    } else {
+      query += " WHERE p.ptype = " + Person.ESTABLISHMENT;
+    }
     if (where != null && !where.isEmpty()) {
       query += where;
     }
-    return jdbcTemplate.query(query, new RowMapper<Person>() {
-
+    if (adminAccess) {
+      return jdbcTemplate.query(query, new RowMapper<Person>() {
       @Override
       public Person mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Person p = new Person();
-        p.setId(rs.getInt(1));
-        p.setName(rs.getString(2));
-        return p;
+        return getEstabFromResult(rs);
+      }
+    }, login);
+    } else {
+      return jdbcTemplate.query(query, new RowMapper<Person>() {
+      @Override
+      public Person mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return getEstabFromResult(rs);
       }
     });
+    }
+  }
+
+  private Person getEstabFromResult(ResultSet rs) throws SQLException {
+    Person p = new Person();
+    p.setId(rs.getInt(1));
+    p.setName(rs.getString(2));
+    return p;
   }
 }

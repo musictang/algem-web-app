@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningServiceImpl.java	1.2.1 06/05/16
+ * @(#)PlanningServiceImpl.java	1.5.0 12/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -43,7 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Service class for schedule operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.2.1
+ * @version 1.5.0
  * @since 1.0.0 11/02/13
  */
 @Service
@@ -116,8 +116,8 @@ public class PlanningServiceImpl
   }
 
   @Override
-  public List<Person> getEstablishments(String where) {
-    return personIO.findEstablishments(where);
+  public List<Person> getEstablishments(String where, String login) {
+    return personIO.findEstablishments(where, login);
   }
 
   /**
@@ -128,14 +128,15 @@ public class PlanningServiceImpl
    * @return a map
    */
   @Override
-  public Map<Integer, Collection<ScheduleElement>> getDaySchedule(Date date, int estab) {
-    Map<Integer, Collection<ScheduleElement>> map = new HashMap<Integer, Collection<ScheduleElement>>();
+  public Map<String, Collection<ScheduleElement>> getDaySchedule(Date date, int estab, boolean adminAccess) {
+    SortedMap<String, Collection<ScheduleElement>> map = new TreeMap<String, Collection<ScheduleElement>>();
     int place = -1;
-    for (ScheduleElement d : scheduleDao.find(date, estab)) {
+    for (ScheduleElement d : scheduleDao.find(date, estab, adminAccess)) {
       d.setLabel(getHtmlTitle(d));
       d.setTimeLabel(d.getStart() + "-" + d.getEnd());
       d.setColor(ScheduleColorizer.colorToHex(COLORIZER.getColor(d)));
       d.setLabelColor(ScheduleColorizer.colorToHex(COLORIZER.getTextColor(d)));
+      String key = d.getDetail().get("room").getName();
       if (d.getPlace() != place) {
         place = d.getPlace();
         List<ScheduleElement> elements = new ArrayList<ScheduleElement>();
@@ -145,9 +146,9 @@ public class PlanningServiceImpl
         if (closed.size() > 0) {
           elements.addAll(closed);
         }
-        map.put(place, elements);
+        map.put(key, elements);
       } else {
-        map.get(place).add(d);
+        map.get(key).add(d);
       }
     }
     return map;

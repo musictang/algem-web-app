@@ -1,5 +1,5 @@
 /*
- * @(#) BookingCtrl.java Algem Web App 1.4.2 06/09/16
+ * @(#) BookingCtrl.java Algem Web App 1.5.0 12/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -32,7 +32,7 @@ import net.algem.group.Group;
 import net.algem.room.Room;
 import net.algem.security.User;
 import net.algem.security.UserService;
-import net.algem.util.Constants;
+import net.algem.util.GemConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -55,7 +55,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.2
+ * @version 1.5.0
  * @since 1.0.6 20/01/2016
  */
 @Controller
@@ -140,7 +140,7 @@ public class BookingCtrl
         hEnd = new Hour("24:00");
       }
       booking.setEndTime(hEnd);
-      Date date = Constants.DATE_FORMAT.parse(booking.getDate());
+      Date date = GemConstants.DATE_FORMAT.parse(booking.getDate());
       Calendar cal = Calendar.getInstance();
       cal.setTime(date);
       int dow = cal.get(Calendar.DAY_OF_WEEK);
@@ -190,7 +190,7 @@ public class BookingCtrl
     try {
       String info = action + " " + date + " " + start;
       Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, info);
-      Date d = Constants.DATE_FORMAT.parse(date);
+      Date d = GemConstants.DATE_FORMAT.parse(date);
       Calendar cal = Calendar.getInstance();
       cal.setTime(d);
       Date now = new Date();
@@ -250,7 +250,7 @@ public class BookingCtrl
       Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);
     }
     Room room = planningService.getRoom(booking.getRoom());
-    String now = Constants.DATE_FORMAT.format(new Date());
+    String now = GemConstants.DATE_FORMAT.format(new Date());
     Object[] args = new Object[]{room.getName(), p == null ? "Anonymous" : p.toString(), now, booking.getDate()};
     String msg = messageSource.getMessage(msgKey, args, LocaleContextHolder.getLocale());
 

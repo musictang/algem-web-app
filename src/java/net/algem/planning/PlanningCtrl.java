@@ -20,6 +20,7 @@
  */
 package net.algem.planning;
 
+import java.security.Principal;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -30,6 +31,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import net.algem.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +50,6 @@ public class PlanningCtrl
 {
 
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
-  private final String estabFilter = " AND id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)";
 
   @Autowired
   private PlanningService service;
@@ -66,18 +67,19 @@ public class PlanningCtrl
    * @throws ParseException
    */
   @RequestMapping(method = RequestMethod.GET, value = "/daily.html")
-  String loadDaySchedule(HttpServletRequest request, Model model, Booking booking) throws ParseException {
+  String loadDaySchedule(HttpServletRequest request, Model model, Booking booking, Principal p) throws ParseException {
     SimpleDateFormat dayNameFormat = new SimpleDateFormat("EEE");
     Date date = DATE_FORMAT.parse(request.getParameter("d"));
     String dayName = dayNameFormat.format(date);
     int estab = Integer.parseInt(request.getParameter("e"));
     booking.setTimeLength(1);
+    boolean onlyPublic = AuthUtil.isAdministrativeMember();
 
-    Map<Integer, Collection<ScheduleElement>> schedules = service.getDaySchedule(date, estab);
+    Map<String, Collection<ScheduleElement>> schedules = service.getDaySchedule(date, estab, onlyPublic);
 
     model.addAttribute("dayName", dayName);
     model.addAttribute("planning", schedules);
-    model.addAttribute("estabList", service.getEstablishments(estabFilter));
+    model.addAttribute("estabList", service.getEstablishments(getEstabFilter(),  p == null ? "": p.getName()));
     model.addAttribute("freeplace", service.getFreePlace(date, estab));
 
     model.addAttribute("conf", service.getConf());
@@ -95,9 +97,9 @@ public class PlanningCtrl
    * @param model
    */
   @RequestMapping(method = RequestMethod.GET, value={ "/", "index.html"})
-  String loadEstablishment(Model model) {
+  String loadEstablishment(Model model, Principal p) {
     model.addAttribute("now", DATE_FORMAT.format(new Date()));
-    model.addAttribute("estabList", service.getEstablishments(estabFilter));
+    model.addAttribute("estabList", service.getEstablishments(getEstabFilter(), p == null ? "": p.getName()));
     return "index";
   }
 
@@ -130,6 +132,11 @@ public class PlanningCtrl
     model.addAttribute("timeOffset", service.getTimeOffset());
     model.addAttribute("colorDefs", service.getDefaultColorCodes());
     return "weekly";
+  }
+
+  private String getEstabFilter() {
+    return AuthUtil.isAdministrativeMember() ? ""
+      : " AND p.id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)";
   }
 
 }

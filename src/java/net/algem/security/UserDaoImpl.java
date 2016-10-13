@@ -49,7 +49,7 @@ import net.algem.planning.ScheduleElement;
 import net.algem.planning.ScheduleRangeElement;
 import net.algem.planning.ScheduleRangeIO;
 import net.algem.util.AbstractGemDao;
-import net.algem.util.Constants;
+import net.algem.util.GemConstants;
 import net.algem.util.NamedModel;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,8 +193,8 @@ public class UserDaoImpl
     try {
       MapSqlParameterSource params = new MapSqlParameterSource();
       params.addValue("login", login);
-      params.addValue("start", new java.sql.Date(Constants.DATE_FORMAT.parse(start).getTime()));
-      params.addValue("end", new java.sql.Date(Constants.DATE_FORMAT.parse(end).getTime()));
+      params.addValue("start", new java.sql.Date(GemConstants.DATE_FORMAT.parse(start).getTime()));
+      params.addValue("end", new java.sql.Date(GemConstants.DATE_FORMAT.parse(end).getTime()));
       params.addValue("accounts", getMemberShipAccounts());
 //      String debug = login +","+start+","+end+","+getMemberShipAccounts();
 //      Logger.getLogger(UserDaoImpl.class.getName()).log(Level.INFO, debug);

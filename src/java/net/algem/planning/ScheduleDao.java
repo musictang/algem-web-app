@@ -34,7 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.algem.room.Room;
 import net.algem.util.AbstractGemDao;
-import net.algem.util.Constants;
+import net.algem.util.GemConstants;
 import net.algem.util.NamedModel;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -104,17 +104,16 @@ public class ScheduleDao
    * @param estab establishment number
    * @return a list of schedule elements
    */
-  public List<ScheduleElement> find(Date date, int estab) {
-    String query = " SELECT p.*, c.id, c.titre, c.collectif, c.code, s.nom, t.prenom, t.nom, g.nom"
-      + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
-      + " ON (p.action = a.id) LEFT OUTER JOIN personne t ON (p.idper = t.id)"
+  public List<ScheduleElement> find(Date date, int estab, boolean adminAccess) {
+    String query = " SELECT p.*, c.id, c.titre, c.collectif, c.code, s.nom, per.prenom, per.nom, g.nom"
+      + " FROM " + TABLE + " p INNER JOIN action a ON (p.action = a.id) LEFT OUTER JOIN cours c ON (a.cours = c.id)"
+      + " LEFT OUTER JOIN personne per ON (p.idper = per.id)"
       + " LEFT OUTER JOIN groupe g ON (p.idper = g.id)"
-      + ", salle s"
-      + " where p.lieux = s.id"
-      + " AND s.public = true"
-      + " AND jour = ?"
-      + " AND s.etablissement = ?"
-      + " ORDER BY s.nom, p.debut";
+      + " JOIN salle s ON (p.lieux = s.id)"
+      + " WHERE jour = ?"
+      + " AND s.etablissement = ?";
+      if (!adminAccess) {query += " AND s.public = TRUE";}
+      query += " ORDER BY s.nom, p.debut";
     return jdbcTemplate.query(query, new RowMapper<ScheduleElement>() {
 
       @Override
@@ -143,7 +142,7 @@ public class ScheduleDao
           String firstName = rs.getString(15);
           String lastName = rs.getString(16);
           name = firstName == null ? (lastName == null ? "" : lastName) : firstName + " " + lastName;
-        } 
+        }
         d.setDetail("person", new NamedModel(d.getIdPerson(), name));
         if (d.type == Schedule.COURSE && !d.isCollective()) {
           d.setRanges(getTimeSlots(d.getId()));
@@ -281,7 +280,7 @@ public class ScheduleDao
       + " OR (p.fin > ? AND p.fin <= ?)"
       + " OR (p.debut <= ? AND p.fin >= ?))";
     try {
-      final Date d = Constants.DATE_FORMAT.parse(booking.getDate());
+      final Date d = GemConstants.DATE_FORMAT.parse(booking.getDate());
       final PreparedStatementSetter setter = new PreparedStatementSetter() {
         @Override
         public void setValues(PreparedStatement ps) throws SQLException {
@@ -319,7 +318,7 @@ public class ScheduleDao
       + " OR (p.fin > ? AND p.fin <= ?)"
       + " OR (p.debut <= ? AND p.fin >= ?))";
     try {
-      final Date d = Constants.DATE_FORMAT.parse(booking.getDate());
+      final Date d = GemConstants.DATE_FORMAT.parse(booking.getDate());
       final PreparedStatementSetter setter = new PreparedStatementSetter() {
         @Override
         public void setValues(PreparedStatement ps) throws SQLException {
@@ -363,7 +362,7 @@ public class ScheduleDao
         b.setPerson(rs.getInt(2));
         b.setAction(rs.getInt(3));
         java.sql.Timestamp t = rs.getTimestamp(4);
-        b.setDate(Constants.DATE_FORMAT.format(new java.util.Date(t.getTime())));
+        b.setDate(GemConstants.DATE_FORMAT.format(new java.util.Date(t.getTime())));
         b.setPass(rs.getBoolean(5));
         b.setStatus(rs.getByte(6));
         return b;
@@ -418,7 +417,7 @@ public class ScheduleDao
   }
 
   public void book(final Booking booking) throws ParseException {
-    final Date date = Constants.DATE_FORMAT.parse(booking.getDate());
+    final Date date = GemConstants.DATE_FORMAT.parse(booking.getDate());
     final int action = createEmptyAction();
     booking.setAction(action);
     final int booked = createBooking(booking);
@@ -451,7 +450,7 @@ public class ScheduleDao
   }
 
   private int createBooking(final Booking booking) throws ParseException {
-    final Date date = Constants.DATE_FORMAT.parse(booking.getDate());
+    final Date date = GemConstants.DATE_FORMAT.parse(booking.getDate());
     final String sql = "INSERT INTO reservation(idper,idaction,dateres,pass,statut) VALUES(?,?,?,?,?)";
     KeyHolder keyHolder = new GeneratedKeyHolder();
     jdbcTemplate.update(new PreparedStatementCreator() {
@@ -557,7 +556,7 @@ public class ScheduleDao
         String lastName = rs.getString(16);
         String name = firstName == null ? (lastName == null ? "" : lastName) : firstName + " " + lastName;
         d.setDetail("person",new NamedModel(d.getIdPerson(), name));
-        
+
         return d;
       }
     }, idper, start, end);
@@ -592,7 +591,7 @@ public class ScheduleDao
         d.setCode(rs.getInt(13));
         d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(14)));
         d.setDetail("estab", null);
-        
+
         if (d.type == Schedule.COURSE && !d.isCollective()) {
           d.setRanges(getTimeSlots(d.getId()));
         }

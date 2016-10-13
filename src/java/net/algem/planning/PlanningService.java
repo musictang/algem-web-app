@@ -1,5 +1,5 @@
 /*
- * @(#) PlanningService.java Algem Web App 1.2.0 06/04/16
+ * @(#) PlanningService.java Algem Web App 1.5.0 12/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -31,7 +31,7 @@ import net.algem.room.Room;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.2.0
+ * @version 1.5.0
  * @since 1.0.6 27/01/2016
  */
 public interface PlanningService
@@ -89,7 +89,7 @@ public interface PlanningService
    * @param where
    * @return a list of persons' instances of type {@value Person#ESTABLISHMENT}
    */
-  List<Person> getEstablishments(String where);
+  List<Person> getEstablishments(String where, String login);
 
   /**
    * Returns a map associating room's id with the list of the date's schedules.
@@ -98,7 +98,7 @@ public interface PlanningService
    * @param estab establishment number
    * @return a map
    */
-  Map<Integer, Collection<ScheduleElement>> getDaySchedule(Date date, int estab);
+  Map<String, Collection<ScheduleElement>> getDaySchedule(Date date, int estab, boolean adminAccess);
 
   Map<Integer, Collection<ScheduleElement>> getWeekSchedule(Date start, Date end, int idper);
 

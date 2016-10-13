@@ -1,7 +1,7 @@
 /*
- * @(#)UserCtrl.java	1.4.0 20/07/16
+ * @(#)UserCtrl.java	1.5.0 12/10/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -43,7 +43,7 @@ import net.algem.contact.TeacherCtrl;
 import net.algem.planning.BookingScheduleElement;
 import net.algem.planning.PlanningService;
 import net.algem.planning.ScheduleElement;
-import static net.algem.util.Constants.DATE_FORMAT;
+import static net.algem.util.GemConstants.DATE_FORMAT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
