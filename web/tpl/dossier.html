@@ -168,6 +168,11 @@
       </form>
       <p class="error" th:text="#{error.label}">Erreur</p>
     </div>
+    <!--contact dialog test-->
+    <div id="contact-dlg">
+      <span class='contact-panel'><a class="img-link" href="mailto:"><i class="fa fa-envelope"></i></a>" + "<a class="img-link" href="tel:"><i class="fa fa-phone-square"></i></a></span>
+    </div>
+    
     <footer th:replace="fragments/layout :: footer"></footer>
     <div id="busy"></div>
     <!--<aside id="help-panel" class="closeable" th:include="fragments/help :: perso"></aside>-->
@@ -225,7 +230,7 @@
       var legend = $(dlg).find("legend");
       var t = isCoCell ?  labels.collective_monitoring_title : $(this).html();
       var isCo = row.hasClass("co");
-      $(legend).html(legendInfo);
+      $(legend).html(legendInfo  + " <i class='fa fa-mail'></i>");
       // complete form
       if (isCoCell) {
         $("#note").prop("readonly", true);
@@ -241,6 +246,9 @@
       if (!isCoCell || (isCo && isCoCell)) {
         $(dlg).dialog({title: t}).dialog("open");
       }
+    });
+    $(document).on("click", ".contact-dlg", function () {
+      $("#contact-dlg").dialog({title: "Contact"}).dialog("open");
     });
     /*]]>*/
   </script>

@@ -97,12 +97,18 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
           firstNameName = value.ranges[i].person.firstName + " " + value.ranges[i].person.name;
           var nc = value.ranges[i].followUp.content || "";
           var sub = getFollowUpSubContent(value.ranges[i].followUp);
-          result += "<li id=\"" + value.ranges[i].id + "\"><a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\"" + indTitle + "\" accessKey=\"D\">" + firstNameName + "</a>";
+          result += " <a class='contact-dlg img-link'><i class='fa fa-ellipsis-h'></i></a>";
+          result += "<li id=\"" + value.ranges[i].id + "\">"
+         
+//                  + "<span class='contact-panel'><a class=\"img-link\" href=\"mailto:\"><i class=\"fa fa-envelope\"></i></a>" + "<a class=\"img-link\" href=\"tel:\"><i class=\"fa fa-phone-square\"></i></a></span>"
+                  + "<a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\"" + indTitle + "\" accessKey=\"D\">" 
+                  + firstNameName + "</a>";
           result += "<p class=\"follow-up-content\">" + $('<div />').text(nc).html() + "</p>"; // encode entities
           result += "<p class=\"subContent\">" + sub + "</p>";
           result += "</li>";
         }
         result += "</ul>";
+        
         result += "</td><td id=\"" + value.note + "\" class=\"dlg\" accessKey=\"C\" title=\"" + coTitle + "\"><p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + getFollowUpSubContent(value.followUp) + "</p></td></tr>\n";
       });
       result += "<tr><th colspan=\"2\">Total</th><td colspan=\"5\"><b>" + getTimeFromMinutes(total) + "</b></td></tr>";
@@ -211,6 +217,19 @@ function initFollowUpDialog(element) {
       },
       Enregistrer: function () {
         updateFollowUp($("#follow-up-form"));
+      }
+    }
+  });
+}
+
+function initContactDialog() {
+  $("#contact-dlg").dialog({
+    modal: false,
+    autoOpen: false,
+    maxWidth: 320,
+    buttons: {
+      Abandonner: function () {
+        $(this).dialog("close");
       }
     }
   });
