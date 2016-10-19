@@ -200,3 +200,10 @@ AND s.etablissement = 3501
 ORDER BY s.nom, p.debut;
 --       if (!adminAccess) {query += " AND s.public = TRUE";}
 --       query += "
+
+SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.statut,e.email,t.numero
+FROM plage pl JOIN personne p ON (pl.adherent = p.id)
+LEFT JOIN suivi s ON (pl.note = s.id)
+LEFT JOIN email e ON (p.id = e.idper AND e.idx = 0)
+LEFT JOIN telephone t ON (p.id = t.idper AND t.idx = 0)
+WHERE pl.idplanning = 105266 AND pl.jour = '05-10-2016' ORDER BY pl.debut;

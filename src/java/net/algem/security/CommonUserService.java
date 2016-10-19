@@ -131,7 +131,7 @@ public class CommonUserService
   public Person getPersonFromUser(int u) {
     Person p = dao.getPersonFromUser(u);
     if (p != null) {
-      p.setEmail(dao.getEmailsFromContact(u));
+      p.setEmails(dao.getEmailsFromContact(u));
     }
     return p;
   }

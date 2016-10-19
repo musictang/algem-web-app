@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherDaoImpl.java Algem Web App 1.4.2 31/08/2016
+ * @(#) TeacherDaoImpl.java Algem Web App 1.5.0 19/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +37,10 @@ import net.algem.planning.ScheduleElement;
 import net.algem.planning.ScheduleRangeElement;
 import net.algem.planning.ScheduleRangeIO;
 import net.algem.util.AbstractGemDao;
+import net.algem.util.CommonDao;
 import net.algem.util.NamedModel;
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -44,7 +48,7 @@ import org.springframework.stereotype.Repository;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.2
+ * @version 1.5.0
  * @since 1.0.6 06/01/2016
  */
 @Repository
@@ -55,6 +59,9 @@ public class TeacherDaoImpl
   public static final String TABLE = "prof";
   public static final String FOLLOW_UP_T = "suivi";
   public static final String FOLLOW_UP_SEQ = "idsuivi";
+
+  @Autowired
+  private CommonDao commonDao;
 
   private final static String FOLLOWUP_STATEMENT = "SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom,v.texte,v.statut"
     + " FROM " + ScheduleDao.TABLE + " p"
@@ -116,9 +123,11 @@ public class TeacherDaoImpl
   }
 
   private Collection<ScheduleRangeElement> getRanges(final int id, String start) {
-    String query = " SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.statut"
+    String query = " SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.statut,e.email,t.numero"
       + " FROM " + ScheduleRangeIO.TABLE + " pl JOIN " + PersonIO.TABLE + " p ON (pl.adherent = p.id)"
       + " LEFT JOIN suivi s ON (pl.note = s.id)"
+      + " LEFT JOIN email e ON (p.id = e.idper AND e.idx = 0)"
+      + " LEFT JOIN telephone t ON (p.id = t.idper AND t.idx = 0)"
       + " WHERE pl.idplanning = ? AND pl.debut = ? ORDER BY pl.debut";
 //    System.out.println(query);
     return jdbcTemplate.query(query, new RowMapper<ScheduleRangeElement>() {
@@ -136,6 +145,19 @@ public class TeacherDaoImpl
         p.setName(rs.getString(6));
         p.setFirstName(rs.getString(7));
         p.setNickName(rs.getString(8));
+        p.setPhoto(commonDao.findPhoto(r.getMemberId()));
+
+        List<Email> emails = new ArrayList<Email>();
+        if (rs.getString(13) != null) {
+          emails.add(new Email(rs.getString(13)));
+        }
+        p.setEmails(emails);
+        List<Tel> tels = new ArrayList<Tel>();
+        if (rs.getString(14) != null) {
+          tels.add(new Tel(rs.getString(14)));
+        }
+        p.setEmails(emails);
+        p.setTels(tels);
         r.setPerson(p);
         FollowUp up = new FollowUp();
         up.setId(rs.getInt(9));
@@ -143,6 +165,7 @@ public class TeacherDaoImpl
         up.setNote(rs.getString(11));
         up.setStatus(rs.getShort(12));
         r.setFollowUp(up);
+
 
         return r;
       }

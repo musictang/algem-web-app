@@ -243,8 +243,8 @@ public class BookingCtrl
     Person p = service.getPersonFromUser(booking.getPerson());
     String from = "info@localhost";
     try {
-      if (p != null && p.getEmail().size() > 0) {
-        from = p.getEmail().get(0).getEmail();
+      if (p != null && p.getEmails().size() > 0) {
+        from = p.getEmails().get(0).getEmail();
       }
     } catch (EmptyResultDataAccessException ex) {
       Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);

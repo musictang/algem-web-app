@@ -1,5 +1,5 @@
 /*
- * @(#) Email.java Algem Web App 1.5.0 19/10/16
+ * @(#) CommonDao.java Algem Web App 1.5.0 19/10/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -18,58 +18,36 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.algem.contact;
+package net.algem.util;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @version 1.5.0
- * @since 1.0.6 06/01/2016
+ * @since 1.5.0 19/10/2016
  */
-public class Email {
+@Repository
+public class CommonDao
+  extends AbstractGemDao
+{
+  private final static String PHOTO_TABLE = "personne_photo";
 
-  private int idper;
-  private String email;
-  private boolean archive;
-  private int index;
+  public String findPhoto(int idper) {
+    String query = "SELECT photo FROM " + PHOTO_TABLE + " WHERE idper = ?";
+    return jdbcTemplate.queryForObject(query, new RowMapper<String>() {
+      @Override
+      public String mapRow(ResultSet rs, int i) throws SQLException {
+        byte[] data = rs.getBytes(1);
+        return Base64.encodeBase64String(data);
+      }
 
-  public Email() {
+    }, idper);
+
   }
-
-  public Email(String email) {
-    this.email = email;
-  }
-
-  public int getIdper() {
-    return idper;
-  }
-
-  public void setIdper(int idper) {
-    this.idper = idper;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public boolean isArchive() {
-    return archive;
-  }
-
-  public void setArchive(boolean archive) {
-    this.archive = archive;
-  }
-
-  public int getIndex() {
-    return index;
-  }
-
-  public void setIndex(int index) {
-    this.index = index;
-  }
-
 }

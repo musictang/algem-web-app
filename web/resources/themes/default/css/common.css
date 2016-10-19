@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.4.2 07/09/16
+ * @(#) common.css Algem Web App 1.5.0 19/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.4.0 21/07/16
+    Last: 1.5.0 19/10/16
 */
 
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
@@ -352,6 +352,7 @@ select {font-size: small;}
   line-height: 1.5em;
   height:auto;
   max-width: 100%;
+  padding: 0 0 1em 0;
   z-index:3001;
 }
 #login-panel {width: 20em;}
@@ -365,7 +366,7 @@ select {font-size: small;}
   font-size: larger;
   font-weight: bold
 }
-.panel, #xlogin-panel {padding: 1em;}
+.panel, #xlogin-panel {padding: 0 1em;}
 .ui-dialog {z-index: 2002 !important ;}
 .ui-dialog-title {font-family: ubuntu,ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;}
 .ui-widget,#datepicker,.week-date {font-family: ubuntu,Verdana,sans-serif}
@@ -526,6 +527,11 @@ table.condensed th, table.condensed td {padding: 0 0.5em}
 
 .dlg {cursor: pointer}
 
+a.dlg ~ a {
+  display: inline-block;
+  margin-left: 0.5em;
+}
+
 #follow-up-form legend {
   margin:0;
   font-size: smaller;
@@ -575,13 +581,18 @@ table.mobile {
   display: block;
 }
 .contact-panel {
-  font-size: x-large;
   display: inline-block;
-  margin-right: 0.5em;
-  /*padding: 0.2em;*/
-  /*background-color: blue;*/
+  margin-left: 0.5em;
+  border-radius: 4px;
+  /*border: 1px dashed #D33900;*/
 }
 
 .contact-panel a:nth-child(2) {
   margin-left: 0.5em;
+}
+
+.photo-id-thumbnail {
+  float: left;
+  margin-right: 0.5em;
+  max-width: 50px;
 }

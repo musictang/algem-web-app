@@ -383,7 +383,7 @@ public class UserCtrl
   }
 
   private boolean isEmailValid(Person p, String email) {
-    for (Email e : p.getEmail()) {
+    for (Email e : p.getEmails()) {
       if (e.getEmail().equals(email)) {
         return true;
       }

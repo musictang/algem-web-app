@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.4.3 15/09/16
+ * @(#) dossier.html Algem Web App 1.5.0 19/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -60,7 +60,7 @@
               <th th:text="#{email.label}"></th>
               <td>
                 <ul class="simple">
-                  <li th:each="em:${person.email}"><a th:href="@{'mailto:'+${em.email}}" th:text="${em.email}"></a></li>
+                  <li th:each="em:${person.emails}"><a th:href="@{'mailto:'+${em.email}}" th:text="${em.email}"></a></li>
                 </ul>
               </td>
             </tr>
@@ -168,13 +168,10 @@
       </form>
       <p class="error" th:text="#{error.label}">Erreur</p>
     </div>
-    <!--contact dialog test-->
-    <div id="contact-dlg">
-      <span class='contact-panel'><a class="img-link" href="mailto:"><i class="fa fa-envelope"></i></a>" + "<a class="img-link" href="tel:"><i class="fa fa-phone-square"></i></a></span>
-    </div>
-    
+
     <footer th:replace="fragments/layout :: footer"></footer>
     <div id="busy"></div>
+    <div id="errorDialog" th:title="#{warning.label}"></div>
     <!--<aside id="help-panel" class="closeable" th:include="fragments/help :: perso"></aside>-->
   </body>
   <script type="text/javascript" th:inline="javascript">
@@ -191,9 +188,12 @@
       "collective_monitoring_title": /*[[#{collective.monitoring.title}]]*/ "",
       "student_list": /*[[#{student.list.label}]]*/ "",
       "expand_collapse": /*[[#{expand.collapse.label}]]*/ "",
+      "mailto_all_in_course_title" : /*[[#{mailto.all.in.course.tip}]]*/ "",
+      "collective_monitoring_warning" : /*[[#{collective.monitoring.warning}]]*/ ""
     };
     setCommonEvents();
     initFollowUpDialog(dlg);
+    initErrorDialog();
     initWeekDates(new Date());
     setWeekChange(url1, userId);
     setStudentWeekChange(url2, userId);
@@ -221,9 +221,9 @@
     $(document).on("click", ".dlg", function () {
       resetFollowUpDialog();
       var isCoCell = $(this).attr("accessKey") === "C";
-      getFollowUp(followUpURL, $(this).attr("id"), isCoCell);
+      getAndFillFollowUp(followUpURL, $(this).attr("id"), isCoCell);
       var row = $(this).closest('tr');
-      var course = row.find(':nth-child(5)').contents().get(0).nodeValue;
+      var course = row.find(':nth-child(5)').attr("title");
       var dateTime = row.find(':nth-child(1)').contents().get(0).nodeValue;
       dateTime += " " + row.find(':nth-child(2)').contents().get(0).nodeValue;
       var legendInfo = course + "<br />" + dateTime;
@@ -245,11 +245,11 @@
       $("#noteType").val(isCoCell);
       if (!isCoCell || (isCo && isCoCell)) {
         $(dlg).dialog({title: t}).dialog("open");
+      } else {
+        $("#errorDialog").text(labels.collective_monitoring_warning).dialog("open");
       }
     });
-    $(document).on("click", ".contact-dlg", function () {
-      $("#contact-dlg").dialog({title: "Contact"}).dialog("open");
-    });
+
     /*]]>*/
   </script>
 </html>

@@ -1,5 +1,5 @@
 /*
- * @(#) Email.java Algem Web App 1.5.0 19/10/16
+ * @(#) Tel.java Algem Web App 1.5.0 19/10/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -24,20 +24,26 @@ package net.algem.contact;
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @version 1.5.0
- * @since 1.0.6 06/01/2016
+ * @since 1.5.0 19/10/2016
  */
-public class Email {
-
-  private int idper;
-  private String email;
-  private boolean archive;
+public class Tel {
   private int index;
+  private int idper;
+  private String number;
 
-  public Email() {
+  public Tel() {
   }
 
-  public Email(String email) {
-    this.email = email;
+  public Tel(String number) {
+    this.number = number;
+  }
+
+  public int getIndex() {
+    return index;
+  }
+
+  public void setIndex(int index) {
+    this.index = index;
   }
 
   public int getIdper() {
@@ -48,28 +54,13 @@ public class Email {
     this.idper = idper;
   }
 
-  public String getEmail() {
-    return email;
+  public String getNumber() {
+    return number;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setNumber(String number) {
+    this.number = number;
   }
 
-  public boolean isArchive() {
-    return archive;
-  }
-
-  public void setArchive(boolean archive) {
-    this.archive = archive;
-  }
-
-  public int getIndex() {
-    return index;
-  }
-
-  public void setIndex(int index) {
-    this.index = index;
-  }
 
 }

@@ -1,5 +1,5 @@
 /*
- * @(#) custom.css Algem Web App 1.4.2 07/09/16
+ * @(#) custom.css Algem Web App 1.5.0 19/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -20,7 +20,7 @@
 /*
     Created on : 05/12/2015, 10:29:34
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Version    : 1.4.2 07/09/16
+    Last    : 1.5.0 19/10/16
 */
 /*Personnalisation*/
 
@@ -50,6 +50,7 @@ h1 {color: #FFC170;}
 
 h2, h3, h4, h5, h6, h7, fieldset > legend {color: #FF9770;}
 h2, h3, h4, fieldset > legend {border-color: #FF9770;}
+#follow-up-form fieldset > legend {color:  #D33900}
 ul.disc{list-style-image: url('../img/puce-green.png');}
 a:link,a:visited, a:hover, a:active,
 .pure-menu, .pure-menu-heading, #menu
@@ -84,5 +85,6 @@ footer a:link,footer a:visited, footer a:hover, footer a:active {color: #FFF;}
 .title_col, #title_col {background-color: #ff5719;}
 
 #accordion h3.ui-state-active {background: #ff5719}
-#accordion .ui-widget-content a {color: #D33900}
+#accordion .ui-widget-content a {color: #D33900;}
+#accordion .ui-widget-content a.dlg {font-weight: bold}
 .ui-dialog-titlebar {background: #ff5719}

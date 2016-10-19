@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.4.3 15/09/16
+ * @(#) dossier.js Algem Web App 1.5.0 19/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -82,12 +82,12 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
         var noteCo = value.followUp.content || "";
         total += length;
 
-        result += "<tr class=\"" + value.id + " " + (value.collective ? "co" : "notco") +"\">"// id planning
+        result += "<tr class=\"" + value.id + " " + (value.collective ? "co" : "notco") +"\">"// scheduleId
           + "<td>" + dateInfo + "</td>"
           + "<td>" + timeInfo + "</td>"
           + "<td>" + getTimeFromMinutes(length) + "</td>"
           + "<td>" + roomInfo + "</td>"
-          + "<td>" + courseInfo + "</td><td style=\"min-width: 8em\">";
+          + "<td title=\""+ courseInfo + "\">" + (value.collective ? getMailtoLinkFromRanges(value.ranges, labels.mailto_all_in_course_title, courseInfo) : courseInfo) + "</td><td style=\"min-width: 8em\">";
         if (value.collective) {
           result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.expand_collapse+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
         } else {
@@ -97,24 +97,66 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
           firstNameName = value.ranges[i].person.firstName + " " + value.ranges[i].person.name;
           var nc = value.ranges[i].followUp.content || "";
           var sub = getFollowUpSubContent(value.ranges[i].followUp);
-          result += " <a class='contact-dlg img-link'><i class='fa fa-ellipsis-h'></i></a>";
-          result += "<li id=\"" + value.ranges[i].id + "\">"
-         
-//                  + "<span class='contact-panel'><a class=\"img-link\" href=\"mailto:\"><i class=\"fa fa-envelope\"></i></a>" + "<a class=\"img-link\" href=\"tel:\"><i class=\"fa fa-phone-square\"></i></a></span>"
-                  + "<a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\"" + indTitle + "\" accessKey=\"D\">" 
-                  + firstNameName + "</a>";
+var photo = value.ranges[i].person.photo;
+          result += "<li id=\"" + value.ranges[i].id + "\"><div style='clear:both'>";// scheduleRange Id
+
+          if (photo != null) {
+            result += "<img class=\"photo-id-thumbnail\" src=\"data:image/png;base64,"+photo+"\"/>";
+          }
+          // RANGE ID AND NAME
+          result += "<a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\"" + indTitle + "\" accessKey=\"D\">" + firstNameName + "</a>";
+          //CONTACT INFO
+          var emails = value.ranges[i].person.emails;
+          var tels = value.ranges[i].person.tels;
+
+          if (emails.length > 0 || tels.length > 0) {
+            var email = emails.length > 0 ? "<a href=\"mailto:" + emails[0].email + "\">" + emails[0].email + "</a> " : "";
+            var tel = tels.length > 0 ? "<a href=\"tel:" + tels[0].number + "\">" + tels[0].number + "</a>" : "";
+            result += email + tel;
+          //result += " <span class=\"contact-panel\">" + email + tel + "</span>";
+
+        }
+          // CONTENT
           result += "<p class=\"follow-up-content\">" + $('<div />').text(nc).html() + "</p>"; // encode entities
           result += "<p class=\"subContent\">" + sub + "</p>";
-          result += "</li>";
+          result += "</div></li>";
         }
         result += "</ul>";
-        
+
         result += "</td><td id=\"" + value.note + "\" class=\"dlg\" accessKey=\"C\" title=\"" + coTitle + "\"><p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + getFollowUpSubContent(value.followUp) + "</p></td></tr>\n";
       });
       result += "<tr><th colspan=\"2\">Total</th><td colspan=\"5\"><b>" + getTimeFromMinutes(total) + "</b></td></tr>";
       $("#follow-up-result tbody").html(result);
     }
   }, "json");
+}
+
+function getMailtoLinkFromRanges(ranges, title, label) {
+  var mailto = null;
+  var emails = [];
+  for (var i = 0, len = ranges.length; i < len; i++) {
+    var e = getFirstMailFromRange(ranges[i]);
+    if (e != null) {
+      emails.push(e);
+    }
+  }
+  if (emails.length == 0) {
+    return "";
+  }
+  mailto = "<a href=\"mailto:" + emails[0] + (emails.length > 1 ? "?bcc=" : "");
+  for (var i = 1, len = emails.length; i < len; i++) {
+    mailto += emails[i] + ";";
+  }
+  mailto += "\" title=\""+title+"\"><i class=\"fa fa-envelope\"></i>&nbsp;"+label+"</a>";
+  return mailto;
+}
+
+function getFirstMailFromRange(range) {
+  var emails = range.person.emails;
+  if (emails.length > 0) {
+    return emails[0].email;
+  }
+  return null;
 }
 
 function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
@@ -168,7 +210,7 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
  * @param {Boolean} co collective
  * @returns {FollowUpObject}
  */
-function getFollowUp(url, id, co) {
+function getAndFillFollowUp(url, id, co) {
   if (id === 0) {
     return;
   }
@@ -222,13 +264,11 @@ function initFollowUpDialog(element) {
   });
 }
 
-function initContactDialog() {
-  $("#contact-dlg").dialog({
-    modal: false,
+function initErrorDialog() {
+  $("#errorDialog").dialog({
     autoOpen: false,
-    maxWidth: 320,
     buttons: {
-      Abandonner: function () {
+      Fermer: function () {
         $(this).dialog("close");
       }
     }
@@ -288,15 +328,15 @@ function refreshFollowContent(operation, followUp) {
   } else {
     if (operation == 2) {
       //console.log("creation " + creation)
-      var ref = $("#" + followUp.scheduleId);
-      $(ref).children('p').first().text(followUp.content);
-      $(ref).find(".subContent").html(subContent);
+      var ref = $("#" + followUp.scheduleId); // <li> element
+      $(ref).find('p.follow-up-content').text(followUp.content);
+      $(ref).find("p.subContent").html(subContent);
       $(ref).children('a').first().attr("id", followUp.id);
     } else {
-      var parent = $("#" + id).closest("li");
-      var p1 = $(parent).children('p').first();
+      var parent = $("#" + id).closest("li");// <li> element
+      var p1 = $(parent).find('p.follow-up-content');
       $(p1).text(followUp.content);
-      $(parent).find(".subContent").html(subContent);
+      $(parent).find("p.subContent").html(subContent);
       if (operation == 0) {
         $("#" + id).attr("id",0);
       }
