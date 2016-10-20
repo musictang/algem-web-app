@@ -23,18 +23,18 @@
     <title th:text="|${@organization['name.label']} : ${user.firstName} ${user.name}|">TODO supply a title</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" th:href="@{/resources/themes/css/pure-min.css}" />
-    <link rel="stylesheet" th:href="@{/resources/themes/css/jquery-ui.css}" />
-    <link rel="stylesheet" th:href="@{/resources/themes/css/common.css}" />
+    <link rel="stylesheet" th:href="@{/resources/common/css/pure-min.css}" />
+    <link rel="stylesheet" th:href="@{/resources/common/css/jquery-ui.css}" />
+    <link rel="stylesheet" th:href="@{/resources/common/css/common.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
-    <link rel="stylesheet" th:href="@{/resources/themes/css/mediaqueries.css}" />
-    <link rel="stylesheet" th:href="@{/resources/themes/css/font-awesome.min.css}" />
-    <script type="text/javascript" th:src="@{/resources/js/jquery-1.9.0.min.js}"></script>
-    <script type="text/javascript" th:src="@{/resources/js/jquery-ui-1.11.4.min.js}"></script>
-    <script type="text/javascript" th:src="@{/resources/js/jquery-ui.datepicker-fr.js}"></script>
-    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/util.js}"></script>
-    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/common.js}"></script>
-    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/js/dossier.js}"></script>
+    <link rel="stylesheet" th:href="@{/resources/common/css/mediaqueries.css}" />
+    <link rel="stylesheet" th:href="@{/resources/common/css/font-awesome.min.css}" />
+    <script type="text/javascript" th:src="@{/resources/common/js/jquery-1.9.0.min.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/common/js/jquery-ui-1.11.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/common/js/jquery-ui.datepicker-fr.js}"></script>
+    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/common/js/util.js}"></script>
+    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/common/js/common.js}"></script>
+    <script charset="UTF-8" type="text/javascript" th:src="@{/resources/common/js/dossier.js}"></script>
 
   </head>
   <body>
@@ -123,7 +123,7 @@
             <tfoot></tfoot>
           </table>
         </section>
-        <h3 th:if="${user.teacher}" th:text="#{teacher.monitoring.label}">Suivi</h3>
+        <h3 id="kkkkk" th:if="${user.teacher}" th:text="#{teacher.monitoring.label}">Suivi</h3>
         <section th:if="${user.teacher}">
           <header>
             <nav class="horizontal-panel-menu">
@@ -177,6 +177,7 @@
   <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
     var userId = /*[[${user.id}]]*/ 1234;
+    var userProfile = /*[[${user.profile.id}]]*/ 11;
     var dlg = $("#follow-up-dlg");
     var followUpURL = /*[[@{/perso/xFollowUp}]]*/ "";
     var url1 = $("#follow-d").attr("formaction");
@@ -197,14 +198,16 @@
     initWeekDates(new Date());
     setWeekChange(url1, userId);
     setStudentWeekChange(url2, userId);
-    setPersonalHomePageLabels(labels);
+    setDefaultVars(labels, /*[[@{/resources/img/idphoto.png}]]*/ "");
     var cwd = getCurrentWeekDates(new Date());
+    //var aidx = $("#accordion h3:last").index();
+    
     $("#accordion").accordion({
       heightStyle: "content",
       collapsible: "true",
-      active: 1,
+      active: (userProfile === 2) ? $(this).children("h3:last").index() : 1,
       animate: false
-//      animate: {easing: "linear",duration: 200}
+      //animate: {easing: "linear",duration: 200}
     });
     //unactive ENTER key on dialog submit
     $("#follow-up-form").submit(function (e) {

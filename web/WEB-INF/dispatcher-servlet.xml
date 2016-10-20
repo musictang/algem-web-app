@@ -24,8 +24,8 @@
   On utilisera @{/resources/themes/css/common.css} et non @{/resources/themes/css/default/common.css}
   L'interface est ainsi facilement thémable : il suffit de remplacer default par le nouveau thème.
   Ce comportement ne semble pas fonctionner avec spring 3.0.6-->
-  <mvc:resources mapping="/resources/themes/**" location="/resources/themes/default/"/>
-  <mvc:resources mapping="/resources/js/**" location="/resources/js/"/>
+  <mvc:resources mapping="/resources/common/**" location="/resources/common/"/>
+  <mvc:resources mapping="/resources/themes/**" location="/resources/themes/blue/"/>
   <!-- Localization of hibernate messages during validation!-->
   <bean id="validationMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
     <property name="basename" value="/WEB-INF/resources/validation" />

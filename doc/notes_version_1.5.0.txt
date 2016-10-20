@@ -1,0 +1,14 @@
+Algem web app 1.5.0
+
+PLANNING
+Les salles 'non publiques' sont désormais disponibles en consultation pour les profils "Administrateur" et "Utilisateur". Si l'organisation comporte plusieurs établissements, ils apparaîtront dans la liste (s'ils sont actifs pour la personne). Les profils "Adhérent", "Professeur" ou "Visiteur" continuent de ne voir que les salles "publiques".
+
+SUIVI PEDAGOGIQUE ENSEIGNANT
+Les élèves sont accompagnés de leur photo (si elle existe).
+Le professeur peut également consulter l'email et le téléphone de chaque élève. Il peut ainsi appeler directement chacun de ses élèves (s'il consulte à partir d'un smartphone) ou leur envoyer un mail.
+S'il veut envoyer un email à tous les élèves d'un cours collectif, il peut cliquer sur le nom du cours en face de la liste.
+
+OPTIMISATIONS
+Optimisations css diverses (couleurs de liens dans les dialogues, marges, etc.)
+
+

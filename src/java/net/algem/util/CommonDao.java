@@ -23,6 +23,7 @@ package net.algem.util;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -38,7 +39,7 @@ public class CommonDao
 {
   private final static String PHOTO_TABLE = "personne_photo";
 
-  public String findPhoto(int idper) {
+  public String findPhoto(int idper) throws DataAccessException {
     String query = "SELECT photo FROM " + PHOTO_TABLE + " WHERE idper = ?";
     return jdbcTemplate.queryForObject(query, new RowMapper<String>() {
       @Override

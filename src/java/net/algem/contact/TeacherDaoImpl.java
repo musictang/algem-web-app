@@ -26,7 +26,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.algem.planning.DateFr;
@@ -39,8 +41,8 @@ import net.algem.planning.ScheduleRangeIO;
 import net.algem.util.AbstractGemDao;
 import net.algem.util.CommonDao;
 import net.algem.util.NamedModel;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -60,9 +62,6 @@ public class TeacherDaoImpl
   public static final String FOLLOW_UP_T = "suivi";
   public static final String FOLLOW_UP_SEQ = "idsuivi";
 
-  @Autowired
-  private CommonDao commonDao;
-
   private final static String FOLLOWUP_STATEMENT = "SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom,v.texte,v.statut"
     + " FROM " + ScheduleDao.TABLE + " p"
     + " JOIN " + ScheduleRangeIO.TABLE + " pl ON (p.id = pl.idplanning)"
@@ -73,6 +72,11 @@ public class TeacherDaoImpl
     + " WHERE p.idper = ?"
     + " AND jour BETWEEN ? AND ?"
     + " ORDER BY p.jour,pl.debut";
+  
+  @Autowired
+  private CommonDao commonDao;
+  
+  private Map<Integer,String> photoCache = new HashMap<>();
 
   @Override
   public List<ScheduleElement> findFollowUpSchedules(final int teacher, Date from, Date to) {
@@ -145,7 +149,7 @@ public class TeacherDaoImpl
         p.setName(rs.getString(6));
         p.setFirstName(rs.getString(7));
         p.setNickName(rs.getString(8));
-        p.setPhoto(commonDao.findPhoto(r.getMemberId()));
+        p.setPhoto(getPhotoAsBase64(r.getMemberId()));
 
         List<Email> emails = new ArrayList<Email>();
         if (rs.getString(13) != null) {
@@ -170,6 +174,20 @@ public class TeacherDaoImpl
         return r;
       }
     }, id, java.sql.Time.valueOf(start + ":00"));
+  }
+  
+  private String getPhotoAsBase64(int idper) {
+    String data = photoCache.get(idper);
+    try {
+      if (data == null) {
+        data = commonDao.findPhoto(idper);
+        photoCache.put(idper, data);
+      }
+    } catch (DataAccessException ex) {
+      Logger.getLogger(TeacherDaoImpl.class.getName()).log(Level.WARNING, ex.getMessage());
+      return null;
+    }
+    return data;
   }
 
   @Override
