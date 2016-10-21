@@ -144,7 +144,7 @@ function getMailtoLinkFromRanges(ranges, title, label) {
   }
   mailto = "<a href=\"mailto:" + emails[0] + (emails.length > 1 ? "?bcc=" : "");
   for (var i = 1, len = emails.length; i < len; i++) {
-    mailto += emails[i] + ";";
+    mailto += emails[i] + ","; // comma delimiter
   }
   mailto += "\" title=\""+title+"\"><i class=\"fa fa-envelope\"></i>&nbsp;"+label+"</a>";
   return mailto;
@@ -218,11 +218,17 @@ function getAndFillFollowUp(url, id, co) {
       console.log("no data");
     } else {
       var up = new FollowUpObject(data.id, 0, data.content, data.note, data.status, co);
-//      console.log(up);
+     
       $("#follow-content").val(up.content);
       $("#note").val(up.note);
       $("#follow-status").val(up.status);
     }
+     if (!co) {
+        var parent = $("#" + id).closest("li");// <li> element
+        $("#follow-up-photo").attr("src", $(parent).find("img").attr("src"));
+      } else {
+        $("#follow-up-photo").attr("src", defPhotoPath);
+      }
   });
 }
 

@@ -1,5 +1,5 @@
 /*
- * @(#) BookingCtrl.java Algem Web App 1.5.0 12/10/16
+ * @(#) BookingCtrl.java Algem Web App 1.5.0 21/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -61,7 +61,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class BookingCtrl
 {
-
+  private final static Logger LOGGER = Logger.getLogger(BookingCtrl.class.getName());
+  
   @Autowired
   private UserService service;
 
@@ -149,7 +150,7 @@ public class BookingCtrl
         String msg = messageSource.getMessage("booking.room.closed.error",
                 new Object[]{dt.getOpening().toString(), dt.getClosing().toString()},
                 LocaleContextHolder.getLocale());
-        Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, msg);
+        LOGGER.log(Level.INFO, msg);
         model.addAttribute("message", msg);
         return "error";
       }
@@ -170,11 +171,11 @@ public class BookingCtrl
         return "error";
       }
 
-      Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, booking.toString());
+      LOGGER.log(Level.INFO, booking.toString());
       planningService.book(booking);
       sendMessage(booking, "booking.send.info", bookingMessage);
     } catch (ParseException ex) {
-      Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
       model.addAttribute("message", messageSource.getMessage("date.format.error", null, LocaleContextHolder.getLocale()));
       return "error";
     } catch (DataAccessException ex) {
@@ -189,7 +190,7 @@ public class BookingCtrl
   public String cancelBooking(Model model, @RequestParam int id, @RequestParam int action, @RequestParam String date, @RequestParam String start) {
     try {
       String info = action + " " + date + " " + start;
-      Logger.getLogger(BookingCtrl.class.getName()).log(Level.INFO, info);
+      LOGGER.log(Level.INFO, info);
       Date d = GemConstants.DATE_FORMAT.parse(date);
       Calendar cal = Calendar.getInstance();
       cal.setTime(d);
@@ -218,10 +219,10 @@ public class BookingCtrl
         return "error";
       }
     } catch (ParseException ex) {
-      Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
       return "error";
     } catch (DataAccessException de) {
-      Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, de);
+      LOGGER.log(Level.SEVERE, null, de);
       if (de instanceof EmptyResultDataAccessException) {
         model.addAttribute("message", messageSource.getMessage("booking.not.found.warning", null, LocaleContextHolder.getLocale()));
       } else {
@@ -247,7 +248,7 @@ public class BookingCtrl
         from = p.getEmails().get(0).getEmail();
       }
     } catch (EmptyResultDataAccessException ex) {
-      Logger.getLogger(BookingCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
     }
     Room room = planningService.getRoom(booking.getRoom());
     String now = GemConstants.DATE_FORMAT.format(new Date());

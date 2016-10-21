@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.5.0 19/10/16
+ * @(#) dossier.html Algem Web App 1.5.0 21/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -24,7 +24,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" th:href="@{/resources/common/css/pure-min.css}" />
-    <link rel="stylesheet" th:href="@{/resources/common/css/jquery-ui.css}" />
+    <link rel="stylesheet" th:href="@{/resources/themes/css/jquery-ui.css}" />
     <link rel="stylesheet" th:href="@{/resources/common/css/common.css}" />
     <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
     <link rel="stylesheet" th:href="@{/resources/common/css/mediaqueries.css}" />
@@ -149,8 +149,11 @@
     <div id="follow-up-dlg">
       <form id="follow-up-form" th:action="@{/perso/xEditFollowUp}">
         <fieldset>
+          <div>
+            <img id="follow-up-photo" th:src="@{/resources/common/img/idphoto.png}" style="float: left;margin:0 0.5em 0.5em 0"/>
           <legend>PIANO<br />mercredi 01-06-2016 17:00-17:30</legend>
           <label for="follow-content" th:text="#{follow-up.label}">Suivi</label><textarea style="display: block;width: 98%" rows="3" id="follow-content" th:name="content" maxlength="512"></textarea>
+          </div>
           <div style="margin-top: 1em">
             <label for="note" th:text="#{note.label}" style="margin-right: 0.5em">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="display: inline-block;width: 4em" />
             <select id="follow-status" style="margin-left: 1em" >
@@ -182,15 +185,14 @@
     var followUpURL = /*[[@{/perso/xFollowUp}]]*/ "";
     var url1 = $("#follow-d").attr("formaction");
     var url2 = $("#student-follow-d").attr("formaction");
-    var coMonitoringTitle = /*[[#{collective.monitoring.title}]]*/ "";
     var labels = {
       "individual_monitoring_action": /*[[#{individual.monitoring.action.title}]]*/ "",
       "collective_monitoring_action": /*[[#{collective.monitoring.action.title}]]*/ "",
       "collective_monitoring_title": /*[[#{collective.monitoring.title}]]*/ "",
+      "collective_monitoring_warning" : /*[[#{collective.monitoring.warning}]]*/ "",
       "student_list": /*[[#{student.list.label}]]*/ "",
       "expand_collapse": /*[[#{expand.collapse.label}]]*/ "",
-      "mailto_all_in_course_title" : /*[[#{mailto.all.in.course.tip}]]*/ "",
-      "collective_monitoring_warning" : /*[[#{collective.monitoring.warning}]]*/ ""
+      "mailto_all_in_course_title" : /*[[#{mailto.all.in.course.tip}]]*/ ""
     };
     setCommonEvents();
     initFollowUpDialog(dlg);
@@ -198,10 +200,9 @@
     initWeekDates(new Date());
     setWeekChange(url1, userId);
     setStudentWeekChange(url2, userId);
-    setDefaultVars(labels, /*[[@{/resources/img/idphoto.png}]]*/ "");
+    setDefaultVars(labels, /*[[@{/resources/common/img/idphoto.png}]]*/ "");
     var cwd = getCurrentWeekDates(new Date());
-    //var aidx = $("#accordion h3:last").index();
-    
+
     $("#accordion").accordion({
       heightStyle: "content",
       collapsible: "true",

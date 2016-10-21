@@ -1,5 +1,5 @@
 /*
- * @(#)UserDaoImpl.java	1.4.2 31/08/2016
+ * @(#)UserDaoImpl.java	1.5.0 21/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -64,7 +64,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.2
+ * @version 1.5.0
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -74,6 +74,7 @@ public class UserDaoImpl
   public static final String TABLE = "login";
   public static final String T_TOKEN = "jeton_login";
   public static final String T_PASSCARD = "carteabopersonne";
+  private final static Logger LOGGER = Logger.getLogger(UserDaoImpl.class.getName());
   private static final String FOLLOWUP_STATEMENT
     = "SELECT p.id,p.jour,pl.id,pl.debut,pl.fin,p.idper,per.nom,per.prenom,p.lieux,s.nom,c.id,c.titre,n1.id,n1.texte,n1.note,n1.statut,n2.id,n2.texte,n2.statut"
     + " FROM " + ScheduleDao.TABLE + " p"
@@ -197,7 +198,7 @@ public class UserDaoImpl
       params.addValue("end", new java.sql.Date(GemConstants.DATE_FORMAT.parse(end).getTime()));
       params.addValue("accounts", getMemberShipAccounts());
 //      String debug = login +","+start+","+end+","+getMemberShipAccounts();
-//      Logger.getLogger(UserDaoImpl.class.getName()).log(Level.INFO, debug);
+//      LOGGER.log(Level.INFO, debug);
       String query = "SELECT e.paye FROM echeancier2 e JOIN " + TABLE + " l ON (e.adherent = l.idper)"
         + " WHERE l.login = :login AND e.echeance BETWEEN :start AND :end AND e.compte IN(:accounts)";
       List<Boolean> result = namedJdbcTemplate.query(query, params, new RowMapper<Boolean>() {
@@ -214,7 +215,7 @@ public class UserDaoImpl
       }
       return false;
     } catch (ParseException | DataAccessException ex) {
-      Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
       return false;
     }
 

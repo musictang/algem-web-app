@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.4.2 31/08/2016
+ * @(#) TeacherCtrl.java Algem Web App 1.5.0 21/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -35,7 +35,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,7 +43,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.2
+ * @version 1.5.0
  * @since 1.4.0 21/06/2016
  */
 @Controller
@@ -52,6 +51,7 @@ public class TeacherCtrl
 {
 
   private final static int NOTE_LENGTH = 8;
+  private final static Logger LOGGER = Logger.getLogger(TeacherCtrl.class.getName());
   @Autowired
   private TeacherService service;
 
@@ -75,9 +75,9 @@ public class TeacherCtrl
       Date dateTo = DATE_FORMAT.parse(to);
       f = service.getFollowUpSchedules(Integer.parseInt(userId), dateFrom, dateTo);
     } catch (DataAccessException ex) {
-      Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
     } catch (ParseException ex) {
-      Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
     }
     return f;
   }
@@ -117,10 +117,10 @@ public class TeacherCtrl
     } catch (FollowUpException ex) {
       return getErrorResponse(ex.getMessage(), ex.getArgs());
     } catch (IllegalArgumentException ex) {
-      Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, ex.getMessage());
+      LOGGER.log(Level.SEVERE, ex.getMessage());
       return getErrorResponse(ex.getMessage());
     }
-    Logger.getLogger(TeacherCtrl.class.getName()).log(Level.INFO, up.toString());
+    LOGGER.log(Level.INFO, up.toString());
     int result = service.updateFollowUp(up);
     if (result < 0) {
       return getErrorResponse("error.has.occurred");

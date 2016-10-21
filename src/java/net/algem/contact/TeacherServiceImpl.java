@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherServiceImpl.java Algem Web App 1.4.2 31/08/2016
+ * @(#) TeacherServiceImpl.java Algem Web App 1.5.0 21/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.2
+ * @version 1.5.0
  * @since 1.4.0 21/06/2016
  */
 @Service
@@ -42,6 +42,8 @@ public class TeacherServiceImpl
     implements TeacherService
 {
 
+  private final static Logger LOGGER = Logger.getLogger(TeacherServiceImpl.class.getName());
+  
   @Autowired
   private TeacherDaoImpl dao;
 
@@ -64,7 +66,7 @@ public class TeacherServiceImpl
     try {
       return dao.updateFollowUp(up);
     } catch(DataAccessException ex) {
-      Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+      LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
       return -1;
     }
   }

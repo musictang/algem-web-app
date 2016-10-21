@@ -1,5 +1,5 @@
 /*
- * @(#)ScheduleDao.java	1.4.2 06/09/16
+ * @(#)ScheduleDao.java	1.5.0 21/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -47,7 +47,7 @@ import org.springframework.stereotype.Repository;
  * IO methods for class {@link net.algem.planning.Schedule}.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.2
+ * @version 1.5.0
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -61,6 +61,8 @@ public class ScheduleDao
   public final static String T_ROOM_TIMES = "horaires";
   public final static String SEQUENCE = "planning_id_seq";
   public final static String COLUMNS = "p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.action,p.lieux,p.note";
+  
+  private final static Logger LOGGER = Logger.getLogger(ScheduleDao.class.getName());
 
   public void insert(Schedule p) throws SQLException {
 
@@ -303,7 +305,7 @@ public class ScheduleDao
         }
       });
     } catch (ParseException ex) {
-      Logger.getLogger(ScheduleDao.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
     }
 
     return conflicts;
@@ -341,7 +343,7 @@ public class ScheduleDao
         }
       });
     } catch (ParseException ex) {
-      Logger.getLogger(ScheduleDao.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
     }
 
     return conflicts;

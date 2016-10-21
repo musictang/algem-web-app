@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningServiceImpl.java	1.5.0 12/10/16
+ * @(#)PlanningServiceImpl.java	1.5.0 21/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -52,6 +52,7 @@ public class PlanningServiceImpl
 {
 
   private static final ScheduleColorizer COLORIZER = new ScheduleColorizer(new ColorPref());
+  private final static Logger LOGGER = Logger.getLogger(PlanningServiceImpl.class.getName());
 
   @Autowired
   private ScheduleDao scheduleDao;
@@ -229,7 +230,7 @@ public class PlanningServiceImpl
       scheduleDao.cancelBooking(action);
       return true;
     } catch (DataAccessException e) {
-      Logger.getLogger(PlanningServiceImpl.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+      LOGGER.log(Level.SEVERE, e.getMessage(), e);
       return false;
     }
   }

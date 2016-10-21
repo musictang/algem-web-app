@@ -1,7 +1,7 @@
 /*
- * @(#)CommonUserService.java	1.4.0 20/07/16
+ * @(#)CommonUserService.java	1.5.0 21/10/16
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -39,13 +39,14 @@ import org.springframework.stereotype.Service;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.0
+ * @version 1.5.0
  * @since 1.0.6 18/11/15
  */
 @Service
 public class CommonUserService
   implements UserService {
 
+  private final static Logger LOGGER = Logger.getLogger(CommonUserService.class.getName());
   private EncryptionService encryptionService;
 
   @Autowired
@@ -85,7 +86,7 @@ public class CommonUserService
       u.setPass(pass);
       dao.createAccount(u);
     } catch (UserException ex) {
-      Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
     }
   }
 
@@ -146,7 +147,7 @@ public class CommonUserService
     try {
     return dao.getTeacher(id) > 0;
     } catch(DataAccessException ex) {
-      Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, ex.getMessage());
+      LOGGER.log(Level.SEVERE, ex.getMessage());
       return false;
     }
   }
@@ -192,7 +193,7 @@ public class CommonUserService
       UserPass pass = getEncryptionService().createPassword(password);
       dao.updatePassword(userId, pass);
     } catch (UserException ex) {
-      Logger.getLogger(CommonUserService.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
     }
   }
 

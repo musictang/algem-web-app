@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherDaoImpl.java Algem Web App 1.5.0 19/10/16
+ * @(#) TeacherDaoImpl.java Algem Web App 1.5.0 21/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -73,6 +73,8 @@ public class TeacherDaoImpl
     + " AND jour BETWEEN ? AND ?"
     + " ORDER BY p.jour,pl.debut";
   
+  private final static Logger LOGGER = Logger.getLogger(TeacherDaoImpl.class.getName());
+  
   @Autowired
   private CommonDao commonDao;
   
@@ -127,11 +129,15 @@ public class TeacherDaoImpl
   }
 
   private Collection<ScheduleRangeElement> getRanges(final int id, String start) {
-    String query = " SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.statut,e.email,t.numero"
-      + " FROM " + ScheduleRangeIO.TABLE + " pl JOIN " + PersonIO.TABLE + " p ON (pl.adherent = p.id)"
+    String query = " SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.statut,COALESCE(em1.email, em2.email),COALESCE(t1.numero, t2.numero)"
+      + " FROM " + ScheduleRangeIO.TABLE 
+      + " pl JOIN " + PersonIO.TABLE + " p ON (pl.adherent = p.id)"
+      + " JOIN eleve e ON (p.id = e.idper)"
+      + " LEFT JOIN email em1 ON (e.idper = em1.idper AND em1.idx = 0)"
+      + " LEFT JOIN email em2 ON (e.payeur = em2.idper AND em2.idx = 0)"
+      + " LEFT JOIN telephone t1 ON (e.idper = t1.idper AND t1.idx = 0)"
+      + " LEFT JOIN telephone t2 ON (e.payeur = t2.idper AND t2.idx = 0)"
       + " LEFT JOIN suivi s ON (pl.note = s.id)"
-      + " LEFT JOIN email e ON (p.id = e.idper AND e.idx = 0)"
-      + " LEFT JOIN telephone t ON (p.id = t.idper AND t.idx = 0)"
       + " WHERE pl.idplanning = ? AND pl.debut = ? ORDER BY pl.debut";
 //    System.out.println(query);
     return jdbcTemplate.query(query, new RowMapper<ScheduleRangeElement>() {
@@ -184,7 +190,7 @@ public class TeacherDaoImpl
         photoCache.put(idper, data);
       }
     } catch (DataAccessException ex) {
-      Logger.getLogger(TeacherDaoImpl.class.getName()).log(Level.WARNING, ex.getMessage());
+      LOGGER.log(Level.WARNING, ex.getMessage());
       return null;
     }
     return data;
@@ -202,7 +208,7 @@ public class TeacherDaoImpl
       updateFollowUpContent(follow);
       return 1;
     } else {
-//      Logger.getLogger(getClass().getName()).log(Level.INFO, follow.toString());
+//      LOG.log(Level.INFO, follow.toString());
       createFollowUp(follow);
       updateSchedule(follow.getScheduleId(), follow.getId(), follow.isCollective());
       return 2;
@@ -214,7 +220,7 @@ public class TeacherDaoImpl
   public void createFollowUp(final FollowUp follow) {
     final int id = nextId(FOLLOW_UP_SEQ);
     follow.setId(id);
-    Logger.getLogger(getClass().getName()).log(Level.INFO, follow.toString());
+    LOGGER.log(Level.INFO, follow.toString());
     final String sql = "INSERT INTO suivi(id,texte,note,statut) VALUES(?,?,?,?)";
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override

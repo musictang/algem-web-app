@@ -231,6 +231,13 @@ table.vertical-header th, table.vertical-header td {
   -moz-box-shadow: inset 0px 0px 8px 3px rgba(0,0,0,0.8);
   box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.8);
 }
+
+.photo-id-thumbnail {
+  float: left;
+  margin-right: 0.5em;
+  max-width: 50px;
+}
+
 #busy {display:none;position: fixed;top:50%;left:50%;margin-left: -32px;margin-top: -32px;z-index: 20000;width:64px;height:64px;background:url(../img/loader.svg) no-repeat center transparent;}
 /*Espacement en bas de page avant le footer*/
 .last-block {height: 2em;}
@@ -382,7 +389,6 @@ select {font-size: small;}
 #accordion .ui-state-active .ui-icon {background-image: url("images/ui-icons_ffffff_256x240.png")}
 #accordion .ui-accordion-header {font-size: larger; font-weight: normal; color: #666}
 #accordion h3.ui-state-default {background: #ddd;border: 1px solid #8e846b;}
-
 #accordion h3.ui-state-active {color: white}
 
 /*#bookdate {display: inline-block;width: 6em;padding:0 0.25em;text-align: center}*/
@@ -407,9 +413,7 @@ select {font-size: small;}
   border: none;
 }
 
-.closing-bar ~ div {
-  padding: 0 1em;
-}
+.closing-bar ~ div {padding: 0 1em;}
 .closeable{}
 
 form input[type='text'], input[type='password'], form input[type='button'], form input[type='submit']{
@@ -437,7 +441,6 @@ form legend + label {
 #booking input[type='radio'] + label {
   padding: 0 0.5em;
 }
-
 .pending {color: red;}
 .confirmed {color: green;}
 
@@ -472,12 +475,8 @@ ul.simple {
   margin: 0;
 }
 
-ul.simple li, ul.disc li {
-  margin: 0.5em 0;
-}
-ul.simple li:first-child {
-  margin-top: 0;
-}
+ul.simple li, ul.disc li { margin: 0.5em 0;}
+ul.simple li:first-child { margin-top: 0;}
 
 ul.horizontal-panel-menu {
   list-style-type: none;
@@ -488,13 +487,9 @@ ul.horizontal-panel-menu li {
   margin: 0 0.5em 0 0;
 }
 
-nav.horizontal-panel-menu {
-  margin: 0; padding: 0
-}
+nav.horizontal-panel-menu {margin: 0; padding: 0}
 
-table.simple th, table.simple td {
-  padding: 0 0.5em;
-}
+table.simple th, table.simple td {padding: 0 0.5em;}
 
 .pseudo {
   display: block;
@@ -504,12 +499,6 @@ table.simple th, table.simple td {
   font-stretch: condensed;
 }
 
-.condensed {
-  font-size: smaller;
-}
-
-table.condensed th, table.condensed td {padding: 0 0.5em}
-
 .ellipsed {
   display: block;
   overflow: hidden;
@@ -517,20 +506,18 @@ table.condensed th, table.condensed td {padding: 0 0.5em}
   text-overflow: ellipsis;
 }
 
-.wrapped {
-  display: block;
-}
-
+.wrapped {display: block;}
 .collapse {display: none}
-
+.condensed {font-size: smaller;}
+table.condensed th, table.condensed td {padding: 0 0.5em}
 .expand {}
 
 .dlg {cursor: pointer}
-
 a.dlg ~ a {
   display: inline-block;
   margin-left: 0.5em;
 }
+.monitoring-element {clear: left;}
 
 #follow-up-form legend {
   margin:0;
@@ -539,9 +526,7 @@ a.dlg ~ a {
 }
 
 #follow-up-result tbody tr td:first-child {text-align: right}
-
 .follow-up-content, .subContent {padding: 0;}
-
 .follow-up-note, .absent, .excused {
   display: inline-block;
   padding: 0 0.2em;
@@ -556,7 +541,6 @@ a.dlg ~ a {
   position: relative;
   z-index: 3000;
 }
-
 #datepicker, .week-date {
   font-size: small;
   text-align: center;
@@ -569,32 +553,4 @@ a.dlg ~ a {
 table.mobile {
   display: table;
   width: 100%;
-}
-.contact-dlg {
-  font-size: x-large;
-  position: relative;
-  bottom:0;
-  /*left:90%;*/
-  background-color: threeddarkshadow;
-  opacity: 0.6;
-  border: 1px dashed black;
-  display: block;
-}
-.contact-panel {
-  display: inline-block;
-  margin-left: 0.5em;
-  border-radius: 4px;
-}
-
-.contact-panel a:nth-child(2) {
-  margin-left: 0.5em;
-}
-
-.photo-id-thumbnail {
-  float: left;
-  margin-right: 0.5em;
-  max-width: 50px;
-}
-.monitoring-element {
-  clear: left;
 }

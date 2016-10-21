@@ -1,7 +1,7 @@
 /*
- * @(#)UserCtrl.java	1.5.0 12/10/16
+ * @(#)UserCtrl.java	1.5.0 21/10/16
  *
- * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -73,7 +73,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Controller for login operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.0
+ * @version 1.5.0
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -81,6 +81,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserCtrl
 {
 
+  private final static Logger LOGGER = Logger.getLogger(UserCtrl.class.getName());
+  
   @Autowired
   @Qualifier("authenticationManager")
   AuthenticationManager authenticationManager;
@@ -168,7 +170,7 @@ public class UserCtrl
     } catch (BadCredentialsException ex) {
       return "{\"status\": \"" + ex.getMessage() + "\"}";
     } catch (Exception other) {
-      Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, other);
+      LOGGER.log(Level.SEVERE, null, other);
       return "{\"status\": \"" + other.getMessage() + "\"}";
     }
   }
@@ -217,7 +219,7 @@ public class UserCtrl
       try {
         p = service.getPersonFromUser(user.getId());
       } catch (EmptyResultDataAccessException e) {
-        Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, e);
+        LOGGER.log(Level.SEVERE, null, e);
         bindingResult.rejectValue("id", "user.person.error", new Object[]{user.getId()}, "");
         return "signup";
       }
@@ -250,7 +252,7 @@ public class UserCtrl
       user.setTeacher(service.isTeacher(user.getId())); // detect user status
       service.create(user);
     } catch (DataAccessException ex) {
-      Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
       bindingResult.rejectValue("id", "data.exception", new Object[]{ex.getLocalizedMessage()}, ex.getMessage());
       return "signup";
     } catch (SQLException ex) {
@@ -288,7 +290,7 @@ public class UserCtrl
       sendRecoverMessage(url, token, found);
       model.addAttribute("message", messageSource.getMessage("recover.send.info", null, LocaleContextHolder.getLocale()));
     } catch (MailException | DataAccessException ex) {
-      Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
       model.addAttribute("errorMessage", messageSource.getMessage("recover.send.exception", new Object[]{ex.getMessage()}, LocaleContextHolder.getLocale()));
     }
 
@@ -318,7 +320,7 @@ public class UserCtrl
       model.addAttribute("message", messageSource.getMessage("recover.invalid.token", new Object[]{ex.getMessage()}, locale));
       return "error";
     } catch (DataAccessException ex) {
-      Logger.getLogger(UserCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
       model.addAttribute("message", messageSource.getMessage("data.exception", new Object[]{ex.getMessage()}, locale));
       return "error";
     }
@@ -326,7 +328,7 @@ public class UserCtrl
     Calendar cal = Calendar.getInstance();
     cal.setTime(new Date(resetToken.getCreation()));
     cal.add(Calendar.DAY_OF_MONTH, 1);// 24h delay
-    Logger.getLogger(UserCtrl.class.getName()).log(Level.INFO, "today" + new Date() + " token " + cal.getTime());
+    LOGGER.log(Level.INFO, "today" + new Date() + " token " + cal.getTime());
     if (new Date().after(cal.getTime())) {
       model.addAttribute("message", messageSource.getMessage("recover.expired.token", null, locale));
       return "error";
