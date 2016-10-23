@@ -519,10 +519,9 @@ a.dlg ~ a {
 }
 .monitoring-element {clear: left;}
 
-#follow-up-form legend {
+#follow-up-form div > legend {
   margin:0;
   font-size: smaller;
-  border-bottom-width: 2px;
 }
 
 #follow-up-result tbody tr td:first-child {text-align: right}

@@ -18,7 +18,7 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
 var labels = {};
-var defPhotoPath = "";
+var paths = {};
 /**
  * FollowUpSchedule constructor.
  * @param {Number} id
@@ -105,7 +105,7 @@ var photo = value.ranges[i].person.photo;
           if (photo != null) {
             result += "<img class=\"photo-id-thumbnail\" src=\"data:image/jpg;base64,"+photo+"\"/>";
           } else {
-            result += "<img class=\"photo-id-thumbnail\" src=\""+ defPhotoPath + "\" />";
+            result += "<img class=\"photo-id-thumbnail\" src=\""+ paths["def_photo_id"] + "\" />";
           }
           // RANGE ID AND NAME
           result += "<a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\"" + indTitle + "\" accessKey=\"D\">" + firstNameName + "</a>";
@@ -205,11 +205,18 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
 /**
  * Ajax function to get some followUp.
  * @param {String} url xhttp url
- * @param {Number} id followUp id
+ * @param {Object} element node clicked
  * @param {Boolean} co collective
  * @returns {FollowUpObject}
  */
-function getAndFillFollowUp(url, id, co) {
+function getAndFillFollowUp(url, element, co) {
+  var id = $(element).attr("id");
+  if (!co) {
+      var parent = $(element).closest("li");// <li> element
+      $("#follow-up-photo").attr("src", $(parent).find("img").attr("src"));
+  } else {
+    $("#follow-up-photo").attr("src", paths["def_photo_co"]);
+  }
   if (id === 0) {
     return;
   }
@@ -218,17 +225,12 @@ function getAndFillFollowUp(url, id, co) {
       console.log("no data");
     } else {
       var up = new FollowUpObject(data.id, 0, data.content, data.note, data.status, co);
-     
+
       $("#follow-content").val(up.content);
       $("#note").val(up.note);
       $("#follow-status").val(up.status);
     }
-     if (!co) {
-        var parent = $("#" + id).closest("li");// <li> element
-        $("#follow-up-photo").attr("src", $(parent).find("img").attr("src"));
-      } else {
-        $("#follow-up-photo").attr("src", defPhotoPath);
-      }
+
   });
 }
 
@@ -291,7 +293,8 @@ function showDialog(f) {
   $(dlg).dialog({title: f.course + " " + f.date}).dialog("open");
 }
 
-function resetFollowUpDialog() {
+function resetFollowUpDialog(defPhoto) {
+  $("#follow-up-photo").attr("src", defPhoto);
   $("#follow-content").val('');
   $("#follow-status").val('0');
   $("#note").val('');

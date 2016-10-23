@@ -151,8 +151,9 @@
         <fieldset>
           <div>
             <img id="follow-up-photo" th:src="@{/resources/common/img/idphoto.png}" style="float: left;margin:0 0.5em 0.5em 0"/>
-          <legend>PIANO<br />mercredi 01-06-2016 17:00-17:30</legend>
-          <label for="follow-content" th:text="#{follow-up.label}">Suivi</label><textarea style="display: block;width: 98%" rows="3" id="follow-content" th:name="content" maxlength="512"></textarea>
+          <legend>PIANO<br />mercredi 01-06-2016<br />17:00-17:30</legend>
+          <!--<label for="follow-content" th:text="#{follow-up.label}">Suivi</label>-->
+          <textarea style="display: block;width: 98%" rows="3" id="follow-content" th:name="content" maxlength="512" th:placeholder="#{follow-up.label}"></textarea>
           </div>
           <div style="margin-top: 1em">
             <label for="note" th:text="#{note.label}" style="margin-right: 0.5em">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="display: inline-block;width: 4em" />
@@ -194,13 +195,17 @@
       "expand_collapse": /*[[#{expand.collapse.label}]]*/ "",
       "mailto_all_in_course_title" : /*[[#{mailto.all.in.course.tip}]]*/ ""
     };
+    var paths = {
+      "def_photo_id": /*[[@{/resources/common/img/idphoto.png}]]*/ "",
+      "def_photo_co":/*[[@{/resources/common/img/groupe_trans.png}]]*/ ""
+    }
     setCommonEvents();
     initFollowUpDialog(dlg);
     initErrorDialog();
     initWeekDates(new Date());
     setWeekChange(url1, userId);
     setStudentWeekChange(url2, userId);
-    setDefaultVars(labels, /*[[@{/resources/common/img/idphoto.png}]]*/ "");
+    setDefaultVars(labels, paths);
     var cwd = getCurrentWeekDates(new Date());
 
     $("#accordion").accordion({
@@ -223,14 +228,14 @@
     });
 
     $(document).on("click", ".dlg", function () {
-      resetFollowUpDialog();
+      resetFollowUpDialog(paths["def_photo_id"]);
       var isCoCell = $(this).attr("accessKey") === "C";
-      getAndFillFollowUp(followUpURL, $(this).attr("id"), isCoCell);
+      getAndFillFollowUp(followUpURL, $(this), isCoCell);
       var row = $(this).closest('tr');
       var course = row.find(':nth-child(5)').attr("title");
-      var dateTime = row.find(':nth-child(1)').contents().get(0).nodeValue;
-      dateTime += " " + row.find(':nth-child(2)').contents().get(0).nodeValue;
-      var legendInfo = course + "<br />" + dateTime;
+      var date = row.find(':nth-child(1)').contents().get(0).nodeValue;
+      var time = " " + row.find(':nth-child(2)').contents().get(0).nodeValue;
+      var legendInfo = course + "<br />" + date + "<br />" + time;
       var legend = $(dlg).find("legend");
       var t = isCoCell ?  labels.collective_monitoring_title : $(this).html();
       var isCo = row.hasClass("co");

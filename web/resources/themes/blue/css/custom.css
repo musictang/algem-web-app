@@ -45,6 +45,7 @@ footer {
 h1 {color: #f5f5f5;}
 
 h2, h3, h4, h5, h6, h7, fieldset > legend {color: #013D76;}
+#follow-up-form fieldset div > legend {color: #013D76}
 h2, h3, h4, fieldset > legend {border-color: #013D76;}
 ul.disc{list-style-image: url('../img/puce-blue.png');}
 a:link,a:visited, a:active, a:hover,
