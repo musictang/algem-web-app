@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) weekly.html Algem Web App 1.5.0 26/10/16
+ * @(#) weekly.html Algem Web App 1.5.0 27/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -74,18 +74,19 @@
         <!--Schedules-->
         <div th:each="p : ${entry.value}"
              th:id="${p.id}"
-             data-person=""
-             th:data-label="${p.label}"
-             th:data-type="${p.type}"
-             th:data-co="${p.collective}"
-             th:data-time="${p.timeLabel}"
-             th:data-room="${p.detail['room']}"
+             th:data-algem-id="${p.id}"
+             data-algem-person=""
+             th:data-algem-label="${p.label}"
+             th:data-algem-type="${p.type}"
+             th:data-algem-co="${p.collective}"
+             th:data-algem-time="${p.timeLabel}"
+             th:data-algem-room="${p.detail['room']}"
              th:class="'schedule' + ${p.label == null ? ' closed' :''}"
              th:with="pos=${p.minutes - timeOffset},h=${p.length}"
              th:style="'top:'+${pos}+'px;height:'+${h}+'px;background-color:'+${p.htmlColor}+';color:'+${p.labelColor}">
         </div>
         <div th:each="p : ${entry.value}" class="labels"
-             th:data-id="${p.id}"
+             th:data-algem-id="${p.id}"
              th:if="${p.label} != null"
              th:title="|${p.label};${p.timeLabel};${'Salle ' + p.detail['room']};${p.detail['person'] ?: ''}|"
              th:with="pos=${p.minutes - timeOffset}"
@@ -97,7 +98,7 @@
         </div>
         <div th:each="p : ${entry.value}" th:remove="tag">
           <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
-               th:data-id="${p.id}"
+               th:data-algem-id="${p.id}"
                th:with="pos=${r.minutes - timeOffset},h=${r.length}"
                class="schedule range" th:style="'top:'+${pos}+'px;height:'+${h}+'px'"></div>
         </div>
@@ -143,34 +144,20 @@
         $("div.schedule, div.labels").click(function() {
             console.log("click schedule");
             var detail = null;
-            if ($(this).hasClass("range") || $(this).hasClass("labels")) {
-              var dataId = $(this).attr("data-id")
-//              console.log("dataId", dataId);
-              var e = $("#"+dataId);
-              detail = new ScheduleDetail(
-                dataId,
-                $(e).attr("data-person"),
-                $(e).attr("data-label"),
-                $(e).attr("data-type"),
-                $(e).attr("data-co"),
-                $(e).attr("data-time"),
-                $(e).attr("data-room")
-              );
-            }
-            else {
-              detail = new ScheduleDetail(
-              $(this).attr("id"),
-              $(this).attr("data-person"),
-              $(this).attr("data-label"),
-              $(this).attr("data-type"),
-              $(this).attr("data-co"),
-              $(this).attr("data-time"),
-              $(this).attr("data-room")
+            var dataId = $(this).attr("data-algem-id")
+            var e = $("#"+dataId);
+            detail = new ScheduleDetail(
+              dataId,
+              $(e).attr("data-algem-person"),
+              $(e).attr("data-algem-label"),
+              $(e).attr("data-algem-type"),
+              $(e).attr("data-algem-co"),
+              $(e).attr("data-algem-time"),
+              $(e).attr("data-algem-room")
             );
-            }
-            displayScheduleDetail(detailURL, detail);
-          }
-        );
+          displayScheduleDetail(detailURL, detail);
+        });
+        
       });
       /*]]>*/
     </script>

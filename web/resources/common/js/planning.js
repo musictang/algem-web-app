@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.5.0 26/10/16
+ * @(#)planning.js	1.5.0 27/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -288,7 +288,7 @@ function setBookingDialog() {
     modal: false,
     autoOpen: false,
     maxHeight: 440,
-    position: { my: "top", at: "top+25%", of: window }
+    position: { my: "top", at: "top", of: window }
   });
 }
 
@@ -555,17 +555,20 @@ function ScheduleDetail(id, person, label, type, collective, time, room) {
   this.room = room;
 }
 
-function displayScheduleDetail(url, scheduleDetail) {
-  console.log(url, scheduleDetail);
-  $.get(url, {id: scheduleDetail.id, type: scheduleDetail.type}, function (data) {
+function displayScheduleDetail(url, detail) {
+  console.log(url, detail);
+  $.get(url, {id: detail.id, type: detail.type}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("empty detail");
     } else {
       console.log(data);
-      var d = "<p>"+scheduleDetail.person+"</p>";
+      var d = "";
+      if (detail.type != 4) {
+        d += "<p><strong>" + detail.person + "</strong></p>";
+      }
       d += "<ul class=\"disc\">";
       data.forEach(function (value, index) {
-        if (scheduleDetail.collective === "true" || scheduleDetail.type != 1 ) {
+        if (detail.collective === "true" || detail.type != 1) {
           d += "<li id=\"" + value.id + "\">" + value.person.firstName + " " + value.person.name + "</li>";
         } else {
           var st = value.start.hour + ":" + (value.start.minute == 0 ? "00" : value.start.minute);
@@ -576,7 +579,7 @@ function displayScheduleDetail(url, scheduleDetail) {
       d += "</ul>";
       console.log(d);
       $("#schedule-detail-dlg").html(d);
-      $("#schedule-detail-dlg").dialog({title:  scheduleDetail.label + " " + scheduleDetail.time}).dialog("open");
+      $("#schedule-detail-dlg").dialog({title: detail.label + " " + detail.time}).dialog("open");
     }
 
   }, "json");
