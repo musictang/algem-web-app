@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.5.0 12/10/16
+ * @(#) daily.html Algem Web App 1.5.0 26/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -40,13 +40,14 @@
       /*<![CDATA[*/
       var tOffset = /*[[${timeOffset}]]*/ '720';
       var debug = false;
-      var logged = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
+//      var logged = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
       var offPeakTime = /*[[${conf['offPeakTime']}]]*/ '0';
       //console.log("offPeakTime " + offPeakTime);
       var commonParams = {
         estab: /*[[${param.e[0]}]]*/ 3501,
 //        auth: /*[[${#authorization.expression('isAuthenticated()')}]]*/ false,
         auth: /*[[${#authorization.expression(\"hasAnyRole('1','2','3','4','11')\")}]]*/ false,
+        hasDetailAccess: /*[[${#authorization.expression(\"hasAnyRole('1','4')\")}]]*/ false,
         date: /*[[${param.d[0]}]]*/ '29-12-2015'
       };
       var bookingParams = {
@@ -68,14 +69,45 @@
         height: 1440 - tOffset, //720,//Canvas height
         max: 8 //Max booking length (in hours)
       };
+      var detailURL =  /*[[@{/perso/xScheduleDetail}]]*/ "";
       if (debug) console.log(logVars(commonParams, bookingParams, steps));
       $(document).ready(function () {
         setCommonEvents();
         setDatePicker(commonParams);
         initBookingDate(commonParams.date);
-        setUI();
+        setUI(commonParams);
         setBooking(bookingParams, steps);
         setViewPortSize(tOffset);
+        $("#schedule-detail-dlg").dialog({
+          autoOpen: false,
+          modal: false,
+          buttons: {
+            Fermer: function () {
+              $(this).dialog("close");
+            }
+          }
+        });
+        $("div.schedule, div.labels").click(function() {
+            var dataId = $(this).attr("data-id");
+            if (dataId == 0) return;
+            console.log("click schedule");
+            var detail = new ScheduleDetail(
+              dataId,
+              $(this).attr("data-person"),
+              $(this).attr("data-label"),
+              $(this).attr("data-type"),
+              $(this).attr("data-co"),
+              $(this).attr("data-time"),
+              $(this).attr("data-room")
+            );
+            if (commonParams.hasDetailAccess) {
+              displayScheduleDetail(detailURL, detail);
+            } else {
+              $("#errorDialog").html("<p>Accès interdit.<br />Seuls les profils \"Utilisateur\" ou \"Administrateur\" peuvent consulter le détail d'un planning.</p>").dialog("open");
+            }
+          }
+        );
+
       });
       /*]]>*/
     </script>
@@ -120,6 +152,13 @@
         <p class="title_col" th:text="${entry.key}"></p>
         <!--Schedules-->
         <div th:each="p : ${entry.value}"
+             th:data-id="${p.id}"
+             th:data-person="${p.detail['person']}"
+             th:data-label="${p.label}"
+             th:data-type="${p.type}"
+             th:data-co="${p.collective}"
+             th:data-time="${p.timeLabel}"
+             th:data-room="${p.detail['room']}"
              th:class="'schedule' + ${p.label == null ? ' closed' :''}"
              th:with="pos=${p.minutes - timeOffset},h=${p.length}"
              th:style="'top:'+${pos == 0 ? 1 : pos}+'px;height:'+${p.label == null ? h-1 : h}+'px;background-color:'+${p.htmlColor}"
@@ -128,7 +167,14 @@
         <div th:each="p : ${entry.value}" class="labels"
              th:if="${p.label} != null"
              th:with="pos=${p.minutes - timeOffset},h=${p.length - 1},wl=${p.type == T(net.algem.planning.Schedule).COURSE || p.type == T(net.algem.planning.Schedule).WORKSHOP || p.type == T(net.algem.planning.Schedule).TRAINING}"
-             th:style="'color:'+${p.labelColor}+';top:'+${pos}+'px'">
+             th:style="'color:'+${p.labelColor}+';top:'+${pos}+'px'"
+             th:data-id="${p.id}"
+             th:data-person="${p.detail['person']}"
+             th:data-label="${p.label}"
+             th:data-type="${p.type}"
+             th:data-co="${p.collective}"
+             th:data-time="${p.timeLabel}"
+             th:data-room="${p.detail['room']}">
           <span th:utext="|${p.label}<br />${p.timeLabel}|" th:class="${p.length >= 45 ? 'wrapped' : 'ellipsed'}"></span>
           <span th:class="${p.length >= 45 ? 'wrapped' : 'ellipsed'}" th:if="${p.length >= 30}" sec:authorize="${hasAnyRole('1','4')}"
                 th:text="${p.detail['person']}"></span>
@@ -140,7 +186,14 @@
         <div th:each="p : ${entry.value}" th:remove="tag">
           <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
                th:with="pos=${r.minutes - timeOffset},h=${r.length}"
-               class="schedule range" th:style="'top:'+${pos}+'px;height:'+${h}+'px'"></div>
+               class="schedule range" th:style="'top:'+${pos}+'px;height:'+${h}+'px'"
+               th:data-id="${p.id}"
+               th:data-person="${p.detail['person']}"
+               th:data-label="${p.label}"
+               th:data-type="${p.type}"
+               th:data-co="${p.collective}"
+               th:data-time="${p.timeLabel}"
+               th:data-room="${p.detail['room']}"></div>
         </div>
       </div>
       <!--Free rooms-->
@@ -173,6 +226,7 @@
       </div>
     </div>
     <div id="dialog"></div>
+    <div id="schedule-detail-dlg" title="Détail planning"></div>
     <div id="errorDialog" th:title="#{warning.label}"></div>
     <div id="busy"></div>
   </body>

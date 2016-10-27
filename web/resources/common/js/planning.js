@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.4.1 29/08/16
+ * @(#)planning.js	1.5.0 26/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -23,7 +23,7 @@
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @since 09/05/15
- * @version 1.4.1
+ * @version 1.5.0
  * @returns {void}
  */
 //var isMobileAndWebkit = isMobile() && 'WebkitAppearance' in document.documentElement.style;
@@ -38,11 +38,11 @@ function Group(id, name) {
   this.name = name;
 }
 
-function setUI() {
+function setUI(commonParams) {
   setWidth();
   setScroll();
   setResize();
-  setHoverStyle();
+  setHoverStyle(commonParams);
   setDialog();
   setBookingDialog();
 }
@@ -202,47 +202,51 @@ function getMarginGrid() {
  * Set the style of hovered schedules.
  * @returns {undefined}
  */
-function setHoverStyle() {
+function setHoverStyle(commonParams) {
   $('div.labels,div.schedule,p.title_col').hover(
     function () {
+      if (commonParams.hasDetailAccess) {
+        $(this).css({cursor: "zoom-in"});
+      } else {
+        $(this).css({cursor: "not-allowed"});
+      }
+
       $(this).css({
-        cursor: "not-allowed",
 //        'box-shadow': 'inset 0px 0px 1px 1px rgba(0,0,0,1)',
-//        opacity: "0.8"
+        opacity: "0.8"
       });
     },
     function () {
       $(this).css({
         cursor: "default",
 //        'box-shadow': 'none',
-//        opacity: "1"
+        opacity: "1"
       });
     }
   );
   $('div.schedule_col').hover(
-      function () {
-        $(this).css({
-          cursor: "pointer"
-//          cursor: "cell"
-        });
-      },
-      function () {
-        $(this).css({
-          cursor: "default"
-        });
-      }
+    function () {
+      $(this).css({
+        cursor: "pointer"
+      });
+    },
+    function () {
+      $(this).css({
+        cursor: "default"
+      });
+    }
   );
   $('div.closed').hover(
-      function () {
-        $(this).css({
-          cursor: "not-allowed",
-        });
-      },
-      function () {
-        $(this).css({
-          cursor: "default"
-        });
-      }
+    function () {
+      $(this).css({
+        cursor: "not-allowed",
+      });
+    },
+    function () {
+      $(this).css({
+        cursor: "default"
+      });
+    }
   );
 }
 
@@ -529,4 +533,51 @@ function initBookingDate(date) {
 
   bookDatePicker.datepicker('setDate', date);
   bookDatePicker.blur();
+}
+
+/**
+ * ScheduleDetail function constructor
+ * @param {type} id schedule id
+ * @param {type} label schedule label
+ * @param {type} type schedule type
+ * @param {type} collective
+ * @param {type} time time label
+ * @param {type} room room label
+ * @returns {ScheduleDetail}
+ */
+function ScheduleDetail(id, person, label, type, collective, time, room) {
+  this.id = id;
+  this.person = person;
+  this.label = label;
+  this.type = type;
+  this.collective = collective;
+  this.time = time;
+  this.room = room;
+}
+
+function displayScheduleDetail(url, scheduleDetail) {
+  console.log(url, scheduleDetail);
+  $.get(url, {id: scheduleDetail.id, type: scheduleDetail.type}, function (data) {
+    if (typeof data === 'undefined' || !data.length) {
+      console.log("empty detail");
+    } else {
+      console.log(data);
+      var d = "<p>"+scheduleDetail.person+"</p>";
+      d += "<ul class=\"disc\">";
+      data.forEach(function (value, index) {
+        if (scheduleDetail.collective === "true" || scheduleDetail.type != 1 ) {
+          d += "<li id=\"" + value.id + "\">" + value.person.firstName + " " + value.person.name + "</li>";
+        } else {
+          var st = value.start.hour + ":" + (value.start.minute == 0 ? "00" : value.start.minute);
+          var et = value.end.hour + ":" + (value.end.minute == 0 ? "00" : value.end.minute);
+          d += "<li id=\"" + value.id + "\">" + st + "-" + et + " : " + value.person.firstName + " " + value.person.name + "</li>";
+        }
+      });
+      d += "</ul>";
+      console.log(d);
+      $("#schedule-detail-dlg").html(d);
+      $("#schedule-detail-dlg").dialog({title:  scheduleDetail.label + " " + scheduleDetail.time}).dialog("open");
+    }
+
+  }, "json");
 }

@@ -198,8 +198,8 @@ JOIN salle s ON (p.lieux = s.id)
 WHERE jour = '2016-10-12'
 AND s.etablissement = 3501
 ORDER BY s.nom, p.debut;
---       if (!adminAccess) {query += " AND s.public = TRUE";}
---       query += "
+--       if (!adminAccess) {query +=  AND s.public = TRUE;}
+--       query +=
 
 SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.statut,e.email,t.numero
 FROM plage pl JOIN personne p ON (pl.adherent = p.id)
@@ -207,3 +207,31 @@ LEFT JOIN suivi s ON (pl.note = s.id)
 LEFT JOIN email e ON (p.id = e.idper AND e.idx = 0)
 LEFT JOIN telephone t ON (p.id = t.idper AND t.idx = 0)
 WHERE pl.idplanning = 105266 AND pl.jour = '05-10-2016' ORDER BY pl.debut;
+
+-- detail planning liste des eleves
+SELECT pl.id,pl.adherent,pl.debut,pl.fin,pl.note,p.nom,p.prenom,p.pseudo,i.nom
+ from plage pl join personne p on (pl.adherent = p.id)
+  left join person_instrument pi on (p.id = pi.idper and pi.idx = 0)
+  join instrument i on (pi.instrument = i.id)
+where idplanning = 104302
+and pi.ptype = 1;
+
+-- cours
+SELECT pl.id,pl.adherent,pl.debut,pl.fin,pl.note,p.nom,p.prenom,p.pseudo,i.nom
+FROM plage pl JOIN personne p ON (pl.adherent = p.id)
+LEFT JOIN person_instrument pi ON (p.id = pi.idper AND pi.idx = 0 AND pi.ptype =  1)
+JOIN instrument i ON (pi.instrument = i.id)
+WHERE idplanning = 110489
+ORDER BY pl.debut,p.nom,p.prenom;
+-- groupe
+SELECT g.id,m.musicien,per.nom,per.prenom,per.pseudo,i.nom
+FROM groupe g JOIN planning p ON (g.id = p.idper)
+JOIN groupe_det m ON (g.id = m.id)
+JOIN personne per ON (m.musicien = per.id)
+LEFT JOIN person_instrument pi ON (m.musicien = pi.idper AND pi.idx = 0 AND pi.ptype =  3)
+JOIN instrument i ON (pi.instrument = i.id)
+WHERE p.id = 110499
+ORDER BY per.nom,per.prenom;
+--adherent
+-- 110491
+

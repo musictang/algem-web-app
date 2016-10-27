@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.5.0 12/10/16
+ * @(#) user.html Algem Web App 1.5.0 26/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -53,15 +53,16 @@
             <li><input id="member" type="radio" th:field="*{type}" th:value="${T(net.algem.planning.Schedule).BOOKING_MEMBER}" /><label class="inline" for="member" th:text="#{booking.member.label}"></label></li>
             <li><input id="group" type="radio" th:field="*{type}" th:value="${T(net.algem.planning.Schedule).BOOKING_GROUP}" /><label class="inline" for="group" th:text="#{booking.group.label}"></label></li>
           </ul>
-          <div class="pure-g">
-            <div id="groupPanel" class="pure-u-1-1"></div>
+          <!--<div class="pure-g">-->
+          <div>
+            <div id="groupPanel"></div>
             <div class="row-form">
-              <label class="pure-u-6-24" for="bookdate" th:text="#{date.label}">Date</label>
-              <input class="pure-u-9-24" type="text" id="bookdate" th:field="*{date}" readonly="readonly"/>
+              <label  style="width:20%" for="bookdate" th:text="#{date.label}">Date</label>
+              <input style="width:77%" type="text" id="bookdate" th:field="*{date}" readonly="readonly"/>
             </div>
             <div class="row-form">
-              <label class="pure-u-6-24" for="startTime" th:text="#{hour.label}">Heure</label>
-              <select class="pure-u-9-24" id="startTime" th:field="*{startTime}">
+              <label style="width:20%" for="startTime" th:text="#{hour.label}">Heure</label>
+              <select style="width:38%"  id="startTime" th:field="*{startTime}">
                 <option th:each="half,dv : ${#numbers.sequence(offset, 1410, 30)}"
                         th:with="hh=${half < 600 ? '0' + half/60 : half/60}, hm=(${timeOffset%60 == 0} ?
                         (${hh} + ':' + (${dv.odd} ? '00':'30')) :
@@ -69,7 +70,7 @@
                         th:value="${hm}"
                         th:text="${hm}" />
               </select>
-              <select class="pure-u-9-24" id="endTime" disabled="disabled" >
+              <select style="width:38%"  id="endTime" disabled="disabled" >
                 <option th:each="half,dv : ${#numbers.sequence(offset, 1440, 30)}"
                         th:with="hh=${half < 600 ? '0' + half/60 : half/60}, hm=(${timeOffset%60 == 0} ?
                         (${hh} + ':' + (${dv.odd} ? '00':'30')) :
@@ -80,8 +81,8 @@
             </div>
             <span class="error"></span>
             <div class="row-form">
-              <label class="pure-u-15-24" for="timelength" th:text="#{booking.length.label}">Durée</label>
-              <select class="pure-u-9-24" id="timelength" th:field="*{timeLength}" >
+              <label style="width:59%" for="timelength" th:text="#{booking.length.label}">Durée</label>
+              <select  style="width:38%" id="timelength" th:field="*{timeLength}" >
                 <option value="0.5">0:30</option>
                 <option value="1" selected="selected">1:00</option>
                 <option value="1.5">1:30</option>
@@ -100,15 +101,15 @@
                 <option value="8">8:00</option>
               </select>
             </div>
-            <label class="pure-u-6-24" for="room" th:text="#{room.label}"></label>
-            <select class="pure-u-18-24" id="room" th:field="*{room}">
+            <label style="width:20%"  for="room" th:text="#{room.label}"></label>
+            <select style="width:38%" id="room" th:field="*{room}">
               <option th:each="entry : ${planning}" th:value="${entry.value[0].detail['room'].id}" th:text="${entry.key}"></option>
               <option th:each="entry : ${freeplace}" th:value="${entry.key.id}" th:text="${entry.key.name}"></option>
             </select>
-            <p class="pure-u-1-1" id="passInfo">
+            <p  id="passInfo">
               <input id="pass" type="checkbox" th:field="*{pass}" /><label class="inline" style="padding: 0.5em" for="pass" th:text="#{booking.pass.label}">Pass</label>
             </p>
-            <p class="pure-u-1-1" style="text-align: center" >
+            <p  style="text-align: center" >
               <input style="display: inline-block;" type="submit" th:value="#{book.label}" class="pure-button pure-button-primary"/>
             </p>
           </div>

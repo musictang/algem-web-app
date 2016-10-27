@@ -1,5 +1,5 @@
 /*
- * @(#) PlanningService.java Algem Web App 1.5.0 12/10/16
+ * @(#) PlanningService.java Algem Web App 1.5.0 26/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -73,7 +73,7 @@ public interface PlanningService
    * @param roomId room id
    * @return an instance of Room
    */
-  public Room getRoom(int roomId);
+  Room getRoom(int roomId);
 
   /**
    * Gets the list of public rooms in {@code estab}.
@@ -127,6 +127,8 @@ public interface PlanningService
    */
   List<ScheduleElement> getPersonConflicts(Booking booking);
 
+  List<ScheduleRangeElement> getScheduleDetail(int id, int type);
+
   Booking getBooking(int id);
 
   /**
@@ -152,6 +154,7 @@ public interface PlanningService
    * @param action schedule action to cancel
    * @return true if no exception was thrown
    */
-  public boolean cancelBooking(int action);
+  boolean cancelBooking(int action);
+
 
 }

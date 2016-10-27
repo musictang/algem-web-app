@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningServiceImpl.java	1.5.0 21/10/16
+ * @(#)PlanningServiceImpl.java	1.5.0 26/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -208,6 +208,11 @@ public class PlanningServiceImpl
   }
 
   @Override
+  public List<ScheduleRangeElement> getScheduleDetail(int id, int type) {
+    return scheduleDao.findScheduleDetail(id, type);
+  }
+
+  @Override
   public Booking getBooking(int id) {
     return scheduleDao.getBooking(id);
   }
@@ -366,5 +371,6 @@ public class PlanningServiceImpl
     }
     return t.toUpperCase();// + "<br />" + e.getStart() + "-" + e.getEnd();
   }
+
 
 }

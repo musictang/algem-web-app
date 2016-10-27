@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningCtrl.java	1.2.0 14/04/16
+ * @(#)PlanningCtrl.java	1.5.0 26/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -37,12 +38,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * MVC Controller for planning view.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.2.0
+ * @version 1.5.0
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -137,6 +140,14 @@ public class PlanningCtrl
   private String getEstabFilter() {
     return AuthUtil.isAdministrativeMember() ? ""
       : " AND p.id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)";
+  }
+
+  @RequestMapping(method = RequestMethod.GET, value = "/perso/xScheduleDetail")
+  public @ResponseBody
+  List<ScheduleRangeElement> getScheduleDetail(
+    @RequestParam("id") String id,
+    @RequestParam("type") String type) {
+    return service.getScheduleDetail(Integer.parseInt(id), Integer.parseInt(type));
   }
 
 }

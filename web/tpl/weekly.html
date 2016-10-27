@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) weekly.html Algem Web App 1.4.2 08/09/16
+ * @(#) weekly.html Algem Web App 1.5.0 26/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -73,11 +73,19 @@
         <p class="title_col" th:text="${#strings.toUpperCase(weekDays[iterStat.index < 6 ? iterStat.index +2 :1])}"></p>
         <!--Schedules-->
         <div th:each="p : ${entry.value}"
+             th:id="${p.id}"
+             data-person=""
+             th:data-label="${p.label}"
+             th:data-type="${p.type}"
+             th:data-co="${p.collective}"
+             th:data-time="${p.timeLabel}"
+             th:data-room="${p.detail['room']}"
              th:class="'schedule' + ${p.label == null ? ' closed' :''}"
              th:with="pos=${p.minutes - timeOffset},h=${p.length}"
              th:style="'top:'+${pos}+'px;height:'+${h}+'px;background-color:'+${p.htmlColor}+';color:'+${p.labelColor}">
         </div>
         <div th:each="p : ${entry.value}" class="labels"
+             th:data-id="${p.id}"
              th:if="${p.label} != null"
              th:title="|${p.label};${p.timeLabel};${'Salle ' + p.detail['room']};${p.detail['person'] ?: ''}|"
              th:with="pos=${p.minutes - timeOffset}"
@@ -89,6 +97,7 @@
         </div>
         <div th:each="p : ${entry.value}" th:remove="tag">
           <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
+               th:data-id="${p.id}"
                th:with="pos=${r.minutes - timeOffset},h=${r.length}"
                class="schedule range" th:style="'top:'+${pos}+'px;height:'+${h}+'px'"></div>
         </div>
@@ -100,16 +109,68 @@
       <ul class="horizontal-panel-menu"><li th:replace="fragments/menu :: secondary"></li></ul>
     </aside>
     <div id="errorDialog" title="Avertissement"></div>
+    <div id="schedule-detail-dlg" title="Détail planning"></div>
     <script type="text/javascript" th:inline="javascript">
        /*<![CDATA[*/
       var h = /*[[${timeOffset}]]*/ '720';
       var fdow = /*[[${param.d[0]}]]*/ '04-01-2016';
       var idper = /*[[${param.id[0]}]]*/ '1234';
+      var detailURL =  /*[[@{/perso/xScheduleDetail}]]*/ "";
       $(function () {
         setCommonEvents();
         setViewPortSize(h);
         setScroll();
         weeklyDatePicker(fdow, idper);
+        $("#schedule-detail-dlg").dialog({
+          autoOpen: false,
+          modal: false,
+          buttons: {
+            Fermer: function () {
+              $(this).dialog("close");
+            }
+          }
+        });
+        //hover style
+        $('div.schedule, div.labels').hover(
+          function () {
+            $(this).css({cursor: "zoom-in",opacity: "0.8"});
+          },
+          function () {
+            $(this).css({cursor: "default",opacity: "1"});
+          }
+        );
+
+        $("div.schedule, div.labels").click(function() {
+            console.log("click schedule");
+            var detail = null;
+            if ($(this).hasClass("range") || $(this).hasClass("labels")) {
+              var dataId = $(this).attr("data-id")
+//              console.log("dataId", dataId);
+              var e = $("#"+dataId);
+              detail = new ScheduleDetail(
+                dataId,
+                $(e).attr("data-person"),
+                $(e).attr("data-label"),
+                $(e).attr("data-type"),
+                $(e).attr("data-co"),
+                $(e).attr("data-time"),
+                $(e).attr("data-room")
+              );
+            }
+            else {
+              detail = new ScheduleDetail(
+              $(this).attr("id"),
+              $(this).attr("data-person"),
+              $(this).attr("data-label"),
+              $(this).attr("data-type"),
+              $(this).attr("data-co"),
+              $(this).attr("data-time"),
+              $(this).attr("data-room")
+            );
+            }
+            displayScheduleDetail(detailURL, detail);
+          }
+        );
       });
       /*]]>*/
     </script>
