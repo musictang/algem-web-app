@@ -1,5 +1,5 @@
 /*
- * @(#) Instrument.java Algem Web App 1.5.0 26/10/2016
+ * @(#) Instrument.java Algem Web App 1.5.0 28/10/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -30,4 +30,44 @@ public class Instrument {
   public static final int MEMBER = 1;
   public static final int TEACHER = 2;
   public static final int MUSICIAN = 3;
+
+  private int id;
+  private int index;
+  private String name;
+
+  public Instrument(int id, String name) {
+    this(id,0,name);
+  }
+
+  public Instrument(int id, int idx, String name) {
+    this.id = id;
+    this.index = idx;
+    this.name = name;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public int getIndex() {
+    return index;
+  }
+
+  public void setIndex(int index) {
+    this.index = index;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+
 }

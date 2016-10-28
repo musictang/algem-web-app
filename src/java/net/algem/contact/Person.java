@@ -1,5 +1,5 @@
 /*
- * @(#)Person.java	1.5.0 19/10/16
+ * @(#)Person.java	1.5.0 28/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -20,7 +20,10 @@
  */
 package net.algem.contact;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import net.algem.config.Instrument;
 
 /**
  *
@@ -45,6 +48,8 @@ public class Person
   private List<Email> emails;
   private List<Tel> tels;
   private String photo;
+  private Instrument instrument;
+  private Map<Integer,List<Instrument>> instruments = new HashMap<Integer, List<Instrument>>();
 
   public Person() {
   }
@@ -116,6 +121,38 @@ public class Person
 
   public void setTels(List<Tel> tels) {
     this.tels = tels;
+  }
+
+  public Instrument getInstrument() {
+    return instrument;
+  }
+
+  public void setInstrument(Instrument instrument) {
+    this.instrument = instrument;
+  }
+
+  public Map<Integer, List<Instrument>> getInstruments() {
+    return instruments;
+  }
+
+  public void setInstruments(Map<Integer, List<Instrument>> instruments) {
+    this.instruments = instruments;
+  }
+
+  public Instrument getInstrument(int type, int id) {
+    List<Instrument> li = instruments.get(type);
+    if (li != null && li.size() > 0) {
+      for (Instrument i : li) {
+        if (i.getId() == id) {
+          return i;
+        }
+      }
+    }
+    return null;
+  }
+
+  public void setInstrument(int type, List<Instrument> li) {
+    this.instruments.put(type, li);
   }
 
   /**

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.5.0 27/10/16
+ * @(#) daily.html Algem Web App 1.5.0 28/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -77,6 +77,9 @@
         initBookingDate(commonParams.date);
         setUI(commonParams);
         setBooking(bookingParams, steps);
+        $("#booking-cancel-bt").click(function() {
+          $("#booking").dialog("close");
+        });
         setViewPortSize(tOffset);
         $("#schedule-detail-dlg").dialog({
           autoOpen: false,
@@ -102,7 +105,7 @@
                 $(e).attr("data-algem-room")
               );
             displayScheduleDetail(detailURL, detail);
-          } 
+          }
         });
 
       });
@@ -142,7 +145,6 @@
         <td></td>
       </tr>
     </table>
-<!--    <div id="title_col"><p th:each="entry : ${planning}" th:text="${entry.value[0].detail['room']}" th:title="${entry.value[0].detail['room']}"></p><p th:each="entry: ${freeplace}" th:text="${entry.key.name}" th:title="${entry.key.name}"></p></div>-->
     <section id="canvas" th:with="totalTime=${1440 - timeOffset}">
       <div th:id="${entry.value[0].detail['room'].id}" th:each="entry : ${planning}" class="schedule_col">
         <!--Column header : room names-->

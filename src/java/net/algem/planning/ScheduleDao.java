@@ -1,5 +1,5 @@
 /*
- * @(#)ScheduleDao.java	1.5.0 26/10/16
+ * @(#)ScheduleDao.java	1.5.0 28/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -652,7 +652,7 @@ public class ScheduleDao
   }
 
   private List<ScheduleRangeElement> findCourseScheduleDetail(int id, int ptype) {
-    String query = "SELECT pl.id,pl.adherent,pl.debut,pl.fin,pl.note,p.nom,p.prenom,p.pseudo,i.nom"
+    String query = "SELECT DISTINCT pl.id,pl.adherent,pl.debut,pl.fin,pl.note,p.nom,p.prenom,p.pseudo,i.id,i.nom"
       + " FROM plage pl JOIN personne p ON (pl.adherent = p.id)"
       + " LEFT JOIN person_instrument pi ON (p.id = pi.idper AND pi.idx = 0 "
       + " AND pi.ptype = " + getInstrumentFromScheduleType(ptype) + ")"
@@ -674,7 +674,7 @@ public class ScheduleDao
         p.setName(rs.getString(6));
         p.setFirstName(rs.getString(7));
         p.setNickName(rs.getString(8));
-
+        p.setInstrument(new Instrument(rs.getInt(9), 0, rs.getString(10)));
         r.setPerson(p);
         return r;
       }
@@ -682,7 +682,8 @@ public class ScheduleDao
   }
 
   private List<ScheduleRangeElement> findMemberScheduleDetail(int id, int ptype) {
-    String query = "SELECT p.id,per.id,p.debut,p.fin,p.note,per.nom,per.prenom,per.pseudo,i.nom"
+
+    String query = "SELECT DISTINCT p.id,per.id,p.debut,p.fin,p.note,per.nom,per.prenom,per.pseudo,i.id,i.nom"
       + " FROM planning p JOIN personne per ON (p.idper = per.id)"
       + " LEFT JOIN person_instrument pi ON (per.id = pi.idper AND pi.idx = 0"
       + " AND pi.ptype =  " + getInstrumentFromScheduleType(ptype) + ")"
@@ -703,7 +704,7 @@ public class ScheduleDao
         p.setName(rs.getString(6));
         p.setFirstName(rs.getString(7));
         p.setNickName(rs.getString(8));
-
+        p.setInstrument(new Instrument(rs.getInt(9), 0, rs.getString(10)));
         r.setPerson(p);
         return r;
       }
@@ -711,7 +712,7 @@ public class ScheduleDao
   }
 
   private List<ScheduleRangeElement> findGroupScheduleDetail(int id, int ptype) {
-    String query = "SELECT g.id,m.musicien,p.debut,p.fin,p.note,per.nom,per.prenom,per.pseudo,i.nom"
+    String query = "SELECT DISTINCT g.id,m.musicien,p.debut,p.fin,p.note,per.nom,per.prenom,per.pseudo,i.id,i.nom"
       + " FROM groupe g JOIN planning p ON (g.id = p.idper)"
       + " JOIN groupe_det m ON (g.id = m.id)"
       + " JOIN personne per ON (m.musicien = per.id)"
@@ -734,6 +735,7 @@ public class ScheduleDao
         p.setName(rs.getString(6));
         p.setFirstName(rs.getString(7));
         p.setNickName(rs.getString(8));
+        p.setInstrument(new Instrument(rs.getInt(9), 0, rs.getString(10)));
 
         r.setPerson(p);
         return r;

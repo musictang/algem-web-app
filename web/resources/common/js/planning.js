@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.5.0 27/10/16
+ * @(#)planning.js	1.5.0 28/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -566,18 +566,18 @@ function displayScheduleDetail(url, detail) {
       if (detail.type != 4) {
         d += "<p><strong>" + detail.person + "</strong></p>";
       }
-      d += "<ul class=\"disc\">";
+      d += "<table class=\"pure-table pure-table-horizontal pure-table-striped\" ><tbody>"
       data.forEach(function (value, index) {
         if (detail.collective === "true" || detail.type != 1) {
-          d += "<li id=\"" + value.id + "\">" + value.person.firstName + " " + value.person.name + "</li>";
+          d += "<tr><td id=\"" + value.id + "\">" + value.person.firstName + " " + value.person.name + "</td><td>" + value.person.instrument.name + "</td></tr>";
         } else {
           var st = value.start.hour + ":" + (value.start.minute == 0 ? "00" : value.start.minute);
           var et = value.end.hour + ":" + (value.end.minute == 0 ? "00" : value.end.minute);
-          d += "<li id=\"" + value.id + "\">" + st + "-" + et + " : " + value.person.firstName + " " + value.person.name + "</li>";
+          d += "<tr><td id=\"" + value.id + "\">" + st + "-" + et + "</td><td>" + value.person.firstName + " " + value.person.name + "</td></tr>";
         }
       });
-      d += "</ul>";
-      console.log(d);
+      d += "</tbody></table>"
+      //console.log(d);
       $("#schedule-detail-dlg").html(d);
       $("#schedule-detail-dlg").dialog({title: detail.label + " " + detail.time}).dialog("open");
     }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) user.html Algem Web App 1.5.0 27/10/16
+ * @(#) user.html Algem Web App 1.5.0 28/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -109,9 +109,9 @@
             <p  id="passInfo">
               <input id="pass" type="checkbox" th:field="*{pass}" /><label class="inline" style="padding: 0.5em" for="pass" th:text="#{booking.pass.label}">Pass</label>
             </p>
-            
+
             <div style="text-align: center;margin-top: 1em;padding-top: 1em;border-top: 1px solid gray">
-              <button type="button" th:text="#{cancel.label}" class="pure-button button-secondary" style="width:48%"/>
+              <button id="booking-cancel-bt" type="button" th:text="#{cancel.label}" class="pure-button button-secondary" style="width:48%"/>
               <button type="submit" th:value="#{book.label}" th:text="#{book.label}" class="pure-button pure-button-primary" style="width:48%"/>
             </div>
           </div>

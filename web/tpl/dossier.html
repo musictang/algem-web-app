@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.5.0 21/10/16
+ * @(#) dossier.html Algem Web App 1.5.0 28/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -237,7 +237,9 @@
       var time = " " + row.find(':nth-child(2)').contents().get(0).nodeValue;
       var legendInfo = course + "<br />" + date + "<br />" + time;
       var legend = $(dlg).find("legend");
-      var t = isCoCell ?  labels.collective_monitoring_title : $(this).html();
+      var isImage = $(this).is("img");
+      // set dialog's title
+      var t = isCoCell ?  labels.collective_monitoring_title : (isImage ? $(this).next().html() : $(this).html());
       var isCo = row.hasClass("co");
       $(legend).html(legendInfo  + " <i class='fa fa-mail'></i>");
       // complete form
@@ -248,9 +250,9 @@
         $("#note").prop("readonly", false);
         $("#follow-status").prop("disabled", false);
       }
-      $("#noteId").val($(this).attr("id"));
-      var strClass = row.attr("class");
-      $("#scheduleId").val(isCoCell ? strClass.substr(0, strClass.indexOf(' ')) : $(this).closest("li").attr("id"));
+      $("#noteId").val(isImage ? $(this).next().attr("id") : $(this).attr("id"));
+      // get rangeId if individual, scheduleId if collective
+      $("#scheduleId").val(isCoCell ? row.attr("id") : $(this).closest("li").attr("id"));
       $("#noteType").val(isCoCell);
       if (!isCoCell || (isCo && isCoCell)) {
         $(dlg).dialog({title: t}).dialog("open");

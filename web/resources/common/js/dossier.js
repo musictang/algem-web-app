@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.5.0 19/10/16
+ * @(#) dossier.js Algem Web App 1.5.0 28/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -84,7 +84,7 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
         var noteCo = value.followUp.content || "";
         total += length;
 
-        result += "<tr class=\"" + value.id + " " + (value.collective ? "co" : "notco") +"\">"// scheduleId
+        result += "<tr id=\"" + value.id + "\" class=\"" + (value.collective ? "co" : "notco") +"\">"// scheduleId
           + "<td>" + dateInfo + "</td>"
           + "<td>" + timeInfo + "</td>"
           + "<td>" + getTimeFromMinutes(length) + "</td>"
@@ -103,9 +103,9 @@ var photo = value.ranges[i].person.photo;
           result += "<li id=\"" + value.ranges[i].id + "\"><div class=\"monitoring-element\">";// scheduleRange Id
 
           if (photo != null) {
-            result += "<img class=\"photo-id-thumbnail\" src=\"data:image/jpg;base64,"+photo+"\"/>";
+            result += "<img data-algem-id=\""+ value.ranges[i].followUp.id +"\" class=\"photo-id-thumbnail dlg\" src=\"data:image/jpg;base64,"+photo+"\"/>";
           } else {
-            result += "<img class=\"photo-id-thumbnail\" src=\""+ paths["def_photo_id"] + "\" />";
+            result += "<img data-algem-id=\""+ value.ranges[i].followUp.id +"\" class=\"photo-id-thumbnail dlg\" src=\""+ paths["def_photo_id"] + "\" />";
           }
           // RANGE ID AND NAME
           result += "<a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\"" + indTitle + "\" accessKey=\"D\">" + firstNameName + "</a>";
@@ -210,7 +210,13 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
  * @returns {FollowUpObject}
  */
 function getAndFillFollowUp(url, element, co) {
-  var id = $(element).attr("id");
+  console.log("image " + element.is('img'));
+  var id = 0;
+  if (element.is("img")) {
+    id = $(element).attr("data-algem-id");
+  } else {
+    id = $(element).attr("id");
+  }
   if (!co) {
       var parent = $(element).closest("li");// <li> element
       $("#follow-up-photo").attr("src", $(parent).find("img").attr("src"));
@@ -225,7 +231,6 @@ function getAndFillFollowUp(url, element, co) {
       console.log("no data");
     } else {
       var up = new FollowUpObject(data.id, 0, data.content, data.note, data.status, co);
-
       $("#follow-content").val(up.content);
       $("#note").val(up.note);
       $("#follow-status").val(up.status);
@@ -326,27 +331,33 @@ function refreshFollowContent(operation, followUp) {
   var subContent = getFollowUpSubContent(followUp);
   var id = followUp.id;
   if (followUp.collective === 'true') {
-    $("." + followUp.scheduleId).each(function () {
+    $("#" + followUp.scheduleId).each(function () {
       var el = $(this).children("td").last();
-      $(el).children("p").first().text(followUp.content);
+      $(el).find("p").first().text(followUp.content);
       $(el).find(".subContent").html(subContent);
-      $(el).attr("id", followUp.id);
+      if (operation == 2) {// creation
+        $(el).attr("id", followUp.id);
+      } else if (operation == 0) {//suppression
+        $(el).attr("id", 0);
+      }
     });
-
   } else {
     if (operation == 2) {
       //console.log("creation " + creation)
       var ref = $("#" + followUp.scheduleId); // <li> element
       $(ref).find("p.follow-up-content").text(followUp.content);
       $(ref).find("p.subContent").html(subContent);
+      // refresh follow-up id
       $(ref).find("a.dlg").attr("id", followUp.id);
+      $(ref).find("img.dlg").attr("data-algem-id", followUp.id);
     } else {
       var parent = $("#" + id).closest("li");// <li> element
       var p1 = $(parent).find('p.follow-up-content');
       $(p1).text(followUp.content);
       $(parent).find("p.subContent").html(subContent);
-      if (operation == 0) {
+      if (operation == 0) {//suppression
         $("#" + id).attr("id",0);
+        parent.find("img.dlg").attr("data-algem-id", 0);
       }
     }
 
