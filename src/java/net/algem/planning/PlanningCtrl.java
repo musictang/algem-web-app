@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningCtrl.java	1.5.0 26/10/16
+ * @(#)PlanningCtrl.java	1.5.0 31/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -125,7 +125,7 @@ public class PlanningCtrl
     Date next = cal.getTime();
 
     model.addAttribute("planning", schedules);
-    DateFormatSymbols dfs = new DateFormatSymbols(Locale.FRANCE);
+    DateFormatSymbols dfs = DateFormatSymbols.getInstance();
     model.addAttribute("weekDays", dfs.getWeekdays());
     model.addAttribute("start", start);
     model.addAttribute("end", end);

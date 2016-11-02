@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.5.0 28/10/16
+ * @(#) dossier.html Algem Web App 1.5.0 02/11/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -88,7 +88,7 @@
               <th th:text="#{date.label}">Date</th>
               <th th:text="#{hour.label}">Heure</th>
               <th th:text="#{status.label}">Statut</th>
-              <th style="width: 10%;text-align: center"><a href="javascript:location.reload(true);" th:title="#{refresh.page.label}"><i class="fa fa-refresh"></i></a></th>
+              <th style="width: 10%;text-align: center"><a href="javascript:location.reload(true);" th:title="#{refresh.page.label}" class="img-link"><i class="fa fa-refresh"></i></a></th>
             </tr>
           </thead>
           <tbody><tr th:each="b:${bookings}">
@@ -156,7 +156,7 @@
           <textarea style="display: block;width: 98%" rows="3" id="follow-content" th:name="content" maxlength="512" th:placeholder="#{follow-up.label}"></textarea>
           </div>
           <div style="margin-top: 1em">
-            <label for="note" th:text="#{note.label}" style="margin-right: 0.5em">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="display: inline-block;width: 4em" />
+            <label for="note" th:text="#{score.label}" style="margin-right: 0.5em">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="display: inline-block;width: 4em" />
             <select id="follow-status" style="margin-left: 1em" >
               <option th:value="0" th:text="#{present.label}"></option>
               <option th:value="1" th:text="#{absent.label}"></option>
@@ -193,14 +193,17 @@
       "collective_monitoring_warning" : /*[[#{collective.monitoring.warning}]]*/ "",
       "student_list": /*[[#{student.list.label}]]*/ "",
       "expand_collapse": /*[[#{expand.collapse.label}]]*/ "",
-      "mailto_all_in_course_title" : /*[[#{mailto.all.in.course.tip}]]*/ ""
+      "mailto_all_in_course_title" : /*[[#{mailto.all.in.course.tip}]]*/ "",
+      "cancel_label": /*[[#{cancel.label}]]*/ "",
+      "abort_label": /*[[#{abort.label}]]*/ "",
+      "save_label": /*[[#{save.label}]]*/ "",
     };
     var paths = {
       "def_photo_id": /*[[@{/resources/common/img/idphoto.png}]]*/ "",
       "def_photo_co":/*[[@{/resources/common/img/groupe_trans.png}]]*/ ""
     }
     setCommonEvents();
-    initFollowUpDialog(dlg);
+    initFollowUpDialog(dlg, labels);
     initErrorDialog();
     initWeekDates(new Date());
     setWeekChange(url1, userId);

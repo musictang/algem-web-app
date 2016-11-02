@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.5.0 28/10/16
+ * @(#)planning.js	1.5.0 02/11/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -556,20 +556,20 @@ function ScheduleDetail(id, person, label, type, collective, time, room) {
 }
 
 function displayScheduleDetail(url, detail) {
-  console.log(url, detail);
   $.get(url, {id: detail.id, type: detail.type}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("empty detail");
     } else {
-      console.log(data);
       var d = "";
       if (detail.type != 4) {
         d += "<p><strong>" + detail.person + "</strong></p>";
       }
-      d += "<table class=\"pure-table pure-table-horizontal pure-table-striped\" ><tbody>"
+
+      d += "<table class=\"pure-table pure-table-horizontal\" ><tbody>"
       data.forEach(function (value, index) {
         if (detail.collective === "true" || detail.type != 1) {
-          d += "<tr><td id=\"" + value.id + "\">" + value.person.firstName + " " + value.person.name + "</td><td>" + value.person.instrument.name + "</td></tr>";
+          var instr = $.isEmptyObject(value.person.instrument.name);
+          d += "<tr><td id=\"" + value.id + "\">" + value.person.firstName + " " + value.person.name + "</td><td>" + (instr ? "" : value.person.instrument.name) + "</td></tr>";
         } else {
           var st = value.start.hour + ":" + (value.start.minute == 0 ? "00" : value.start.minute);
           var et = value.end.hour + ":" + (value.end.minute == 0 ? "00" : value.end.minute);

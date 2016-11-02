@@ -234,4 +234,12 @@ WHERE p.id = 110499
 ORDER BY per.nom,per.prenom;
 --adherent
 -- 110491
+-- plages élève (planning jardin musical - eleves sans instrument)
+SELECT DISTINCT pl.id,pl.adherent,pl.debut,pl.fin,pl.note,p.nom,p.prenom,p.pseudo,i.id, i.nom
+FROM plage pl JOIN personne p ON (pl.adherent = p.id)
+LEFT JOIN person_instrument pi ON (p.id = pi.idper AND pi.idx = 0
+AND pi.ptype =  1 )
+LEFT JOIN instrument i ON (pi.instrument = i.id)
+WHERE idplanning = 105073
+ORDER BY pl.debut,p.nom,p.prenom;
 

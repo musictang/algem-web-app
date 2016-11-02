@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.4.3 15/09/16
+ * @(#) login.html Algem Web App 1.5.0 02/11/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -45,8 +45,8 @@
         <h5 style="display:block"><i class="fa fa-calendar-plus-o"></i> Réserver</h5>
         <p> Ce lien est destiné à la réservation d'une salle pour une répétition individuelle ou de groupe.<br />Cliquez sur <strong>Réserver</strong> pour accéder au planning du jour et choisir un horaire.</p>
         <h5><i class="fa fa-calendar"></i> Mon planning hebdo</h5>
-        <p>En cliquant sur cette option, vous accédez à votre planning de la semaine. Une fois sur la page *, vous pouvez vous déplacer de semaine en semaine en cliquant sur les flèches de gauche&nbsp;<i class="fa fa-chevron-circle-left"></i> et de droite&nbsp;<i class="fa fa-chevron-circle-right"></i>, de part et d'autre des dates de début et de fin de semaine. <strong>Vous pouvez aussi cliquer sur l'une des dates pour faire apparaître un calendrier et sélectionner la semaine de votre choix</strong> **.</p>
-        <p class="note">* Pour revenir à votre page perso, ouvrez le menu à 3 barres <i class="fa fa-bars"></i>, puis cliquez sur l'icone <i class="fa fa-user-plus"></i>, en-dessous de laquelle figure votre nom d'utilisateur. Un lien est également disponible en bas de page.<br />
+        <p>En cliquant sur cette option, vous accédez à votre planning de la semaine. Une fois sur la page&nbsp;*, vous pouvez vous déplacer de semaine en semaine en cliquant sur les flèches de gauche&nbsp;<i class="fa fa-chevron-circle-left"></i> et de droite&nbsp;<i class="fa fa-chevron-circle-right"></i>, de part et d'autre des dates de début et de fin de semaine. <strong>Vous pouvez aussi cliquer sur l'une des dates pour faire apparaître un calendrier et sélectionner la semaine de votre choix</strong>&nbsp;**.</p>
+        <p class="note">* Pour revenir à votre page perso, ouvrez le menu à 3 barres <i class="fa fa-bars"></i>, puis cliquez sur l'icone <i class="fa fa-user-plus"></i>, en-dessous de laquelle figure votre nom d'utilisateur (pseudo). Un lien est également disponible en bas de page.<br />
           ** Dans le calendrier, peu importe le jour de la semaine sur lequel vous cliquez. Les dates se placeront sur la semaine adéquate.</p>
         <h4 id="book-help"><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{my.bookings.label}]]</h4>
         <p>Vous pouvez consulter ici l'historique de vos réservations. Les réservations peuvent être en <strong>&laquo;&nbsp;attente de confirmation&nbsp;&raquo;</strong> ou <strong>&laquo;&nbsp;confirmées&nbsp;&raquo;</strong>.<br />
@@ -66,15 +66,17 @@
         Vous pouvez également choisir n'importe quelle semaine dans l'année en cliquant sur l'une des dates et en vous déplaçant dans le calendrier.<br />
         Les absences de vos élèves sont signalées par les mentions <span class="absent">ABS</span> ou <span class="excused">EXC</span>  (si le motif de l'absence a été donné).
         </p>
+          <p>Chaque élève présent dans la liste est accompagné de sa photo (si elle existe) et de ses coordonnées de contact (<strong>email</strong> et <strong>téléphone</strong>). Cliquez sur l'adresse email pour ouvrir votre lecteur de courrier. Cliquez de même sur le numéro de téléphone pour passer directement un appel (uniquement sur smartphone).<br />
+          S'il s'agit d'un cours collectif, vous pouvez envoyer un email à tous les participants en cliquant sur le nom du cours à gauche de la liste des élèves.</p>
         <h6>Edition du suivi individuel</h6>
-        <p>Dans le tableau *, cliquez sur le nom de l'élève à l'intérieur de la colonne <strong>Suivi individuel</strong> **. Une fenêtre de dialogue vous permet de saisir votre appréciation ou d'évaluer l'élève en lui donnant une note.</p>
+        <p>Dans le tableau *, cliquez sur le nom ou la photo de l'élève à l'intérieur de la colonne <strong>Suivi individuel</strong> **. Une fenêtre de dialogue vous permet de saisir votre appréciation ou d'évaluer l'élève en lui donnant une note.</p>
         <p>Les notes ne sont pas restreintes au format numérique. Vous pouvez utiliser des lettres ou les signes <b>+</b> et <b>-</b>. Tout dépendra ici de la convention adoptée par l'école ou le centre de formation. Quelques exemples possibles : <tt><b>12; 12,5; 12.5; A; B+; B-; ++A;</b></tt> etc. Vous pouvez saisir jusqu'à <b>8</b> caractères.</p>
           <p>Par défaut, l'élève est considéré comme <strong>&laquo;&nbsp;Présent&nbsp;&raquo;</strong>. S'il est absent, marquez-le comme tel en choisissant la mention <strong>&laquo;&nbsp;Absent(e)&nbsp;&raquo;</strong>. Si l'élève s'est excusé pour son absence ou si le motif de l'absence vous a été signalé, vous pouvez alternativement le marquer comme <strong>&laquo;&nbsp;Excusé(e)&nbsp;&raquo;</strong>. N'oubliez pas de <strong>Valider</strong> pour enregistrer votre saisie.</p><p class="note">* Sur les smartphones (en particulier, en mode portrait), faites glisser le tableau de gauche à droite pour faire apparaître toutes les colonnes.
             <br />** La liste des élèves composant un cours collectif peut être pliée ou dépliée si nécessaire. Cliquez pour cela sur <i>Liste des élèves...</i>.</p>
         <h6>Edition du suivi collectif</h6>
         <p>Bien que cela soit plus rare, il est également possible d'entrer une appréciation de suivi collective. Cette appréciation est visible de tous les élèves ayant participé au cours et permet généralement de rappeler les notions ou les morceaux abordés durant la séance.<br />
           Cliquez sur la ligne qui vous intéresse en-dessous de la colonne <strong>Suivi co.</strong> pour ouvrir la fenêtre de saisie.<br />
-        <strong>Info</strong> : contrairement au suivi individuel, vous ne pouvez pas mettre ici de note (le champ est désactivé par défaut). Mais vous pouvez éventuellement déclarer votre propre absence, dans le cas où cette séance n'a pas été remplacée ou rattrapée.</p>
+        <strong>Info</strong> : contrairement au suivi individuel, vous ne pouvez pas mettre ici de note (le champ est désactivé par défaut). Le statut d'absence est également désactivé.</p>
         </div>
       </div>
     </div>

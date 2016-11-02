@@ -3,12 +3,23 @@ Algem web app 1.5.0
 PLANNING
 Les salles 'non publiques' sont désormais disponibles en consultation pour les profils "Administrateur" et "Utilisateur". Si l'organisation comporte plusieurs établissements, ils apparaîtront dans la liste (s'ils sont actifs pour la personne). Les profils "Adhérent", "Professeur" ou "Visiteur" continuent de ne voir que les salles "publiques".
 
+Dans le planning jour, les profils "Administrateur" et "Utilisateur" peuvent consulter la liste des élèves en cliquant sur une séance (horaires et noms des élèves pour les cours individuels - noms des élèves et instrument pour les cours collectifs).
+
+Les professeurs et les simples adhérents peuvent faire de même en cliquant sur une séance dans leur planning hebdomadaire.
+
 SUIVI PEDAGOGIQUE ENSEIGNANT
-Les élèves sont accompagnés de leur photo (si elle existe).
+Sur la page d'accueil des professeurs, l'onglet ouvert par défaut est maintenant le "Suivi enseignant".
+
+Les élèves sont accompagnés de leur photo (si elle existe). On peut accéder à la fiche de suivi en cliquant au choix sur la photo ou sur le nom de l'élève.
 Le professeur peut également consulter l'email et le téléphone de chaque élève. Il peut ainsi appeler directement chacun de ses élèves (s'il consulte à partir d'un smartphone) ou leur envoyer un mail.
 S'il veut envoyer un email à tous les élèves d'un cours collectif, il peut cliquer sur le nom du cours en face de la liste.
 
+Un avertissement vous empêche maintenant d'éditer le suivi collectif d'un cours "individuel".
+
+FORMULAIRE DE RESERVATION
+La présentation du formulaire de réservation a été revue. Un bouton "Annuler" est maintenant présent.
+La disposition et la taille des éléments ont été optimisées.
+
 OPTIMISATIONS
-Optimisations css diverses (couleurs de liens dans les dialogues, marges, etc.)
-
-
+Optimisations css diverses (couleurs de liens dans les dialogues, marges, etc.).
+Traductions manquantes en langue anglaise.

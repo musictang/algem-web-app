@@ -73,4 +73,14 @@
     <location>/404</location>
   </error-page>
 
+  <error-page>
+    <error-code>500</error-code>
+    <location>/error</location>
+  </error-page>
+
+  <error-page>
+    <error-code>503</error-code>
+    <location>/error</location>
+  </error-page>
+
 </web-app>

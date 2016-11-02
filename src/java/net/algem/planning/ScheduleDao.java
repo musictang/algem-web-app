@@ -656,7 +656,7 @@ public class ScheduleDao
       + " FROM plage pl JOIN personne p ON (pl.adherent = p.id)"
       + " LEFT JOIN person_instrument pi ON (p.id = pi.idper AND pi.idx = 0 "
       + " AND pi.ptype = " + getInstrumentFromScheduleType(ptype) + ")"
-      + " JOIN instrument i ON (pi.instrument = i.id)"
+      + " LEFT JOIN instrument i ON (pi.instrument = i.id)"
       + " WHERE idplanning = ?"
       + " ORDER BY pl.debut,p.nom,p.prenom";
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) layout.html Algem Web App 1.4.3 15/09/16
+ * @(#) layout.html Algem Web App 1.5.0 31/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -40,14 +40,14 @@
       <div>
         <h2 th:text="#{booking.help.title}">Comment réserver</h2>
         <p th:text="#{booking.help.info}"></p>
-        <h5>Remarques</h5>
+        <h5 th:text="#{notes.label}">Remarques</h5>
         <ol style="width:80%;font-size:smaller">
           <li th:text="|#{booking.help.note1} *|"></li>
           <li th:text="#{booking.help.note2(${bookingConf.minDelay},${bookingConf.maxDelay})}"></li>
           <li th:text="#{booking.help.note3}"></li>
           <li th:text="#{booking.help.note4}"></li>
         </ol>
-        <p style="font-size: smaller;font-style:italic">* Ouvrez le menu <i class="fa fa-bars"></i> et cliquez sur l'icone <i class="fa fa-user"></i> pour vous connecter.</p>
+        <p style="font-size: smaller;font-style:italic" th:utext="|* #{help.login.tip}"></p>
         <p><a th:href="@{/help.html}" th:text="#{help.page.label}">Help</a></p>
         <h2 th:text="#{help.color.label}">Couleurs</h2>
         <ul style="margin-bottom: 1em">

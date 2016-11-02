@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) weekly.html Algem Web App 1.5.0 27/10/16
+ * @(#) weekly.html Algem Web App 1.5.0 31/10/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -44,7 +44,7 @@
         <li><a href="#" class="close-link" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
         <li th:replace="fragments/menu :: cnx"></li>
-        <li><a id="info" href="#info-panel" th:title="#{informations.label}"><i class="fa fa-info-circle"></a></i></li>
+        <li><a id="info" href="#info-panel" th:title="#{informations.label}"><i class="fa fa-info-circle"></i></a></li>
       </ul>
     </div>
     <section id="login-panel" class="closeable" th:include="fragments/user :: login"></section>
@@ -52,7 +52,7 @@
       <nav>
         <div id="date-panel">
           <!--<span id="week" th:text="|s.${w}|"></span>-->
-          <a th:href="@{/perso/weekly.html(d=${#dates.format(prevDate,'dd-MM-yyyy')},id=${param.id[0]})}" title="Semaine précédente" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;&nbsp;<input id="pickerFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" />&nbsp;<label for="pickerTo">au</label>&nbsp;<input id="pickerTo" type="text" class="week-date" readonly="readonly" tabindex="4" th:value="${#dates.format(end,'dd-MM-yyyy')}"/>&nbsp;&nbsp;<a th:href="@{/perso/weekly.html(d=${#dates.format(nextDate,'dd-MM-yyyy')},id=${param.id[0]})}" title="Semaine suivante" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
+          <a th:href="@{/perso/weekly.html(d=${#dates.format(prevDate,'dd-MM-yyyy')},id=${param.id[0]})}" th:title="#{previous.week.label}" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;&nbsp;<input id="pickerFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" />&nbsp;<label for="pickerTo">au</label>&nbsp;<input id="pickerTo" type="text" class="week-date" readonly="readonly" tabindex="4" th:value="${#dates.format(end,'dd-MM-yyyy')}"/>&nbsp;&nbsp;<a th:href="@{/perso/weekly.html(d=${#dates.format(nextDate,'dd-MM-yyyy')},id=${param.id[0]})}" th:title="#{next.week.label}" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
         </div>
       </nav>
     </header>
@@ -88,7 +88,7 @@
         <div th:each="p : ${entry.value}" class="labels"
              th:data-algem-id="${p.id}"
              th:if="${p.label} != null"
-             th:title="|${p.label};${p.timeLabel};${'Salle ' + p.detail['room']};${p.detail['person'] ?: ''}|"
+             th:title="|${p.label};${p.timeLabel};#{room.label} ${p.detail['room']};${p.detail['person'] ?: ''}|"
              th:with="pos=${p.minutes - timeOffset}"
              th:style="'top:'+${pos}+'px;color:'+${p.labelColor}">
           <span th:text="${p.label}" th:class="${p.length >= 45 || #strings.length(p.label) <= 10 ? 'course_label wrapped' : 'course_label ellipsed'}"></span>
@@ -117,6 +117,11 @@
       var fdow = /*[[${param.d[0]}]]*/ '04-01-2016';
       var idper = /*[[${param.id[0]}]]*/ '1234';
       var detailURL =  /*[[@{/perso/xScheduleDetail}]]*/ "";
+      var labels = {
+        "cancel_label": /*[[#{cancel.label}]]*/ "",
+        "close_label": /*[[#{close.label}]]*/ "",
+        "save_label": /*[[#{save.label}]]*/ ""
+      }
       $(function () {
         setCommonEvents();
         setViewPortSize(h);
@@ -125,11 +130,13 @@
         $("#schedule-detail-dlg").dialog({
           autoOpen: false,
           modal: false,
-          buttons: {
-            Fermer: function () {
+          buttons: [{
+            text: labels.close_label,
+            click: function () {
               $(this).dialog("close");
             }
           }
+          ]
         });
         //hover style
         $('div.schedule, div.labels').hover(
@@ -157,7 +164,7 @@
             );
           displayScheduleDetail(detailURL, detail);
         });
-        
+
       });
       /*]]>*/
     </script>

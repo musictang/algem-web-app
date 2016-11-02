@@ -1,5 +1,5 @@
 /*
- * @(#) ErrorCtrl.java Algem Web App 1.0.6 02/01/2016
+ * @(#) ErrorCtrl.java Algem Web App 1.5.0 02/11/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -28,25 +28,34 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.6
+ * @version 1.5.0
  * @since 1.0.6 02/01/2016
  */
 @Controller
 public class ErrorCtrl {
 
-  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
   @RequestMapping(value = "/403", method = RequestMethod.GET)
   public String accessDenied() {
     return "403";
   }
-  
+
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @RequestMapping(value = "/404", method = RequestMethod.GET)
   public String pageNotFound() {
     return "404";
   }
-  
-    
+
+  /**
+   * Other http errors.
+   * @return generic error page
+   */
+  @RequestMapping(method = RequestMethod.GET, value="/error")
+  public String serviceUnavailable() {
+    return "httperror";
+  }
+
+
   @RequestMapping(method = RequestMethod.GET, value = "error.html")
   public String genericErrorPage() {
     return "error";
