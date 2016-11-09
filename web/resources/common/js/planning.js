@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.5.0 02/11/16
+ * @(#)planning.js	1.5.0 09/11/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -508,7 +508,7 @@ function getGroups(params) {
 function setPassChecked() {
   var urlPath = $("#booking-form #xpass-url").val();
    $.get(urlPath, function (data) {
-     console.log(data);
+     //console.log(data);
     if (data) {
       $("#pass").prop("checked","checked");
     }
@@ -555,7 +555,7 @@ function ScheduleDetail(id, person, label, type, collective, time, room) {
   this.room = room;
 }
 
-function displayScheduleDetail(url, detail) {
+function displayScheduleDetail(url, detail, btLabel) {
   $.get(url, {id: detail.id, type: detail.type}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("empty detail");
@@ -579,7 +579,17 @@ function displayScheduleDetail(url, detail) {
       d += "</tbody></table>"
       //console.log(d);
       $("#schedule-detail-dlg").html(d);
-      $("#schedule-detail-dlg").dialog({title: detail.label + " " + detail.time}).dialog("open");
+      $("#schedule-detail-dlg").dialog({
+        title: detail.label + " " + detail.time,
+        buttons: [{
+            text: btLabel,
+            class: "button-secondary",
+            click: function () {
+              $(this).dialog("close");
+            }
+          }
+          ]
+      }).dialog("open");
     }
 
   }, "json");

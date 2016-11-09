@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.5.0 02/11/16
+ * @(#) dossier.js Algem Web App 1.5.0 09/11/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
+var DOSSIER = DOSSIER || {};
 var labels = {};
 var paths = {};
 /**
@@ -89,7 +90,7 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
           + "<td>" + timeInfo + "</td>"
           + "<td>" + getTimeFromMinutes(length) + "</td>"
           + "<td>" + roomInfo + "</td>"
-          + "<td title=\""+ courseInfo + "\">" + (value.collective ? getMailtoLinkFromRanges(value.ranges, labels.mailto_all_in_course_title, courseInfo) : courseInfo) + "</td><td style=\"min-width: 8em\">";
+          + "<td title=\""+ courseInfo + "\">" + (value.collective ? getMailtoLinkFromRanges(value.ranges, labels.mailto_all_participants_tip, courseInfo) : courseInfo) + "</td><td style=\"min-width: 8em\">";
         if (value.collective) {
           result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.expand_collapse+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
         } else {
@@ -103,7 +104,7 @@ var photo = value.ranges[i].person.photo;
           result += "<li id=\"" + value.ranges[i].id + "\"><div class=\"monitoring-element\">";// scheduleRange Id
 
           if (photo != null) {
-            result += "<img data-algem-id=\""+ value.ranges[i].followUp.id +"\" class=\"photo-id-thumbnail dlg\" src=\"data:image/jpg;base64,"+photo+"\"/>";
+            result += "<img data-algem-id=\""+ value.ranges[i].followUp.id +"\" class=\"photo-id-thumbnail dlg\" src=\"data:image/jpg;base64,"+photo+"\" title=\"" + indTitle + "\"/>";
           } else {
             result += "<img data-algem-id=\""+ value.ranges[i].followUp.id +"\" class=\"photo-id-thumbnail dlg\" src=\""+ paths["def_photo_id"] + "\" />";
           }
@@ -112,8 +113,8 @@ var photo = value.ranges[i].person.photo;
           //CONTACT INFO
           var emails = value.ranges[i].person.emails;
           var tels = value.ranges[i].person.tels;
-          var email = emails.length > 0 ? "<a href=\"mailto:" + emails[0].email + "\">" + emails[0].email + "</a> " : "";
-          var tel = tels.length > 0 ? "<a href=\"tel:" + tels[0].number + "\">" + tels[0].number + "</a>" : "";
+          var email = emails.length > 0 ? "<a href=\"mailto:" + emails[0].email + "\" title=\""+labels.send_email_label+"\">" + emails[0].email + "</a> " : "";
+          var tel = tels.length > 0 ? "<a href=\"tel:" + tels[0].number + "\" title=\""+labels.call_label+"\">" + tels[0].number + "</a>" : "";
           result += email + tel;
           // CONTENT
           result += "<p class=\"follow-up-content\">" + $('<div />').text(nc).html() + "</p>"; // encode entities
@@ -167,7 +168,7 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
       var result = "";
       var total = 0;
       var supportLocales = toLocaleStringSupportsLocales();
-      console.log(supportLocales)
+      //console.log(supportLocales)
       $.each(data, function (index, value) {
         var d = new Date(value.date);
         // XXX toLocaleString([[locale], options]) not supported on android (excepted chrome)
@@ -210,7 +211,7 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
  * @returns {FollowUpObject}
  */
 function getAndFillFollowUp(url, element, co) {
-  console.log("image " + element.is('img'));
+  //console.log("image " + element.is('img'));
   var id = 0;
   if (element.is("img")) {
     id = $(element).attr("data-algem-id");
@@ -248,7 +249,7 @@ function getFollowUpSubContent(followUp) {
   var note = followUp.note;
   var abs = (followUp.status == 1);
   var exc = (followUp.status == 2);
-  var sub = (followUp.id > 0 && note !== null && note.length > 0) ? "<span class=\"follow-up-note\">NOTE : " + note + "</span>" : "";
+  var sub = (followUp.id > 0 && note !== null && note.length > 0) ? "<span class=\"follow-up-note\">"+labels.score_label +" : " + note + "</span>" : "";
   sub += abs ? "<span class=\"absent\">ABS</span>" : "";
   sub += exc ? "<span class=\"excused\">EXC</span>" : "";
   //console.log("sub = " + sub)
@@ -266,9 +267,11 @@ function initFollowUpDialog(element, labels) {
     modal: false,
     autoOpen: false,
     maxWidth: 320,
+    position: { my: "top", at: "top", of: window },
     buttons: [
       {
         text: labels.abort_label,
+        class: "button-secondary",
         click: function () {
           $(this).dialog("close");
         }
@@ -323,7 +326,7 @@ function updateFollowUp(form) {
       var co = $("#noteType").val();
       var note = $("#note").prop("readonly") ? null : $("#note").val();
       var up = new FollowUpObject(data.followUp.id, data.followUp.scheduleId, content, note, data.followUp.status, co);
-      console.log(up);
+      //console.log(up);
       refreshFollowContent(data.operation, up);
       $(form).next(".error").text('');
       $("#follow-up-dlg").dialog("close");
@@ -424,7 +427,7 @@ function setStudentWeekChange(url, idper) {
   var studentFrom = $("#student-weekFrom");
   var studentTo = $("#student-weekTo");
   studentFrom.change(function () {
-    console.log(this.value);
+    //console.log(this.value);
     var d = new Date(studentFrom.datepicker('getDate'));
     var wd = getCurrentWeekDates(d);
     getFollowUpStudent(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
@@ -434,7 +437,7 @@ function setStudentWeekChange(url, idper) {
   });
 
   studentTo.change(function () {
-    console.log(this.value);
+    //console.log(this.value);
     var d = new Date(studentTo.datepicker('getDate'));
     var wd = getCurrentWeekDates(d);
     getFollowUpStudent(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));

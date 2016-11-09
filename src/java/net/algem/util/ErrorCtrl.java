@@ -1,5 +1,5 @@
 /*
- * @(#) ErrorCtrl.java Algem Web App 1.5.0 02/11/16
+ * @(#) ErrorCtrl.java Algem Web App 1.5.0 09/11/16
  *
  * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
  *
@@ -51,7 +51,7 @@ public class ErrorCtrl {
    * @return generic error page
    */
   @RequestMapping(method = RequestMethod.GET, value="/error")
-  public String serviceUnavailable() {
+  public String httpError() {
     return "httperror";
   }
 

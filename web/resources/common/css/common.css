@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.5.0 02/11/16
+ * @(#) common.css Algem Web App 1.5.0 09/11/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.5.0 27/10/16
+    Last: 1.5.0 09/11/16
 */
 
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
@@ -382,8 +382,24 @@ select {font-size: small;}
 .ui-dialog .ui-dialog-buttonpane {text-align: center}
 .ui-dialog .ui-dialog-buttonpane {padding: .3em .4em .5em .4em;}
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {float: none}
-.ui-dialog-buttonset button.ui-state-default {border: 1px solid #999;}
-.ui-dialog-buttonset button.ui-state-active, .ui-dialog-buttonset button.ui-state-hover {border: 1px solid #555}
+.ui-dialog-buttonset button.ui-state-default,
+.ui-dialog-buttonset button.ui-state-active,
+.ui-dialog-buttonset button.ui-state-hover {
+  /*border: 1px solid #555*/
+  border: none
+}
+.ui-dialog-buttonset button.ui-state-default {background: #0078e7;}
+.ui-dialog-buttonset button.ui-state-active,
+.ui-dialog-buttonset button.ui-state-hover {
+  background: #0066e7
+}
+.ui-dialog-buttonset button.button-secondary.ui-state-default {background: #42b8dd}
+.ui-dialog-buttonset button.button-secondary.ui-state-active,
+.ui-dialog-buttonset button.button-secondary.ui-state-hover {
+  background: #2cb3dd
+}
+
+.ui-button-text {color: #fff}
 .ui-datepicker-title {color: #444;}
 #accordion .ui-accordion-content {padding: 1em 0.8em}
 #accordion .ui-accordion-icons {padding-left: 1.6em}
@@ -531,13 +547,13 @@ a.dlg ~ a {
 .follow-up-content, .subContent {padding: 0;}
 .follow-up-note, .absent, .excused {
   display: inline-block;
-  padding: 0 0.2em;
-  font-family: monospace;
+  padding: 0.2em;
+  line-height: 1em;
   font-weight: bold;
 }
 .absent {background-color: #FF5252;color: white;}
 .excused {background-color: seagreen;color: white;}
-.follow-up-note {background-color: #F7F77C;color: black;font-size: larger}
+.follow-up-note {background-color: #F7F77C;color: black;}
 
 #datepicker, #pickerFrom, #pickerTo {
   position: relative;

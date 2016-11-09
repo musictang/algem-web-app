@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) weekly.html Algem Web App 1.5.0 31/10/16
+ * @(#) weekly.html Algem Web App 1.5.0 09/11/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -130,13 +130,6 @@
         $("#schedule-detail-dlg").dialog({
           autoOpen: false,
           modal: false,
-          buttons: [{
-            text: labels.close_label,
-            click: function () {
-              $(this).dialog("close");
-            }
-          }
-          ]
         });
         //hover style
         $('div.schedule, div.labels').hover(
@@ -162,7 +155,7 @@
               $(e).attr("data-algem-time"),
               $(e).attr("data-algem-room")
             );
-          displayScheduleDetail(detailURL, detail);
+          displayScheduleDetail(detailURL, detail, labels.close_label);
         });
 
       });

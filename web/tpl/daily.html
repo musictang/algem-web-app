@@ -106,7 +106,7 @@
                 $(e).attr("data-algem-time"),
                 $(e).attr("data-algem-room")
               );
-            displayScheduleDetail(detailURL, detail);
+            displayScheduleDetail(detailURL, detail, /*[[#{close.label}]]*/ "!Close!");
           }
         });
 
@@ -127,7 +127,7 @@
     <section id="login-panel" class="closeable" th:include="fragments/user :: login"></section>
     <header>
       <nav>
-        <select id="estabSelection" name="estabId" tabindex="4">
+        <select id="estabSelection" name="estabId" tabindex="4" style="max-width: 8em">
           <option th:each="estab :${estabList}" th:value="${estab.id}" th:text="${estab.name}"></option>
         </select>
         <div id="date-panel">
