@@ -1,5 +1,5 @@
 /*
- * @(#) CommonDao.java Algem Web App 1.5.0 19/10/2016
+ * @(#) CommonDao.java Algem Web App 1.5.0 11/11/2016
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -22,6 +22,8 @@ package net.algem.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -38,17 +40,18 @@ public class CommonDao
   extends AbstractGemDao
 {
   private final static String PHOTO_TABLE = "personne_photo";
+  private final static Logger LOGGER = Logger.getLogger(CommonDao.class.getName());
 
   public String findPhoto(int idper) throws DataAccessException {
     String query = "SELECT photo FROM " + PHOTO_TABLE + " WHERE idper = ?";
-    return jdbcTemplate.queryForObject(query, new RowMapper<String>() {
+    byte[] data =  jdbcTemplate.queryForObject(query, new RowMapper<byte[]>() {
       @Override
-      public String mapRow(ResultSet rs, int i) throws SQLException {
-        byte[] data = rs.getBytes(1);
-        return Base64.encodeBase64String(data);
+      public byte[] mapRow(ResultSet rs, int i) throws SQLException {
+        return rs.getBytes(1);
       }
-
     }, idper);
+
+    return Base64.encodeBase64String(data);
 
   }
 }
