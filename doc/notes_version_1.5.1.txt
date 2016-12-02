@@ -1,0 +1,5 @@
+Algem web app 1.5.1
+
+CORRECTIFS
+* La durée de connexion par défaut est maintenant de 30 minutes. Elle était auparavant de 15 minutes seulement, ce qui laissait trop peu de temps aux professeurs pour remplir leur suivi pédagogique.
+* Il était impossible de réserver une plage horaire incluant des 1/2 heures. La durée de la réservation était systématiquement réduite à l'heure la plus proche. On peut maintenant réserver pour 1 heure 1/2 par exemple ou tout autre durée comportant des heures et des demi-heures.

@@ -1,5 +1,5 @@
 /*
- * @(#) BookingCtrl.java Algem Web App 1.5.0 21/10/16
+ * @(#) BookingCtrl.java Algem Web App 1.5.1 02/12/16
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -131,7 +131,7 @@ public class BookingCtrl
     try {
       // end time is disabled in form
       Hour hEnd = new Hour(booking.getStartTime());
-      int tl = (int) booking.getTimeLength() * 60;
+      int tl = (int) (booking.getTimeLength() * 60F);//!IMPORTANT 60F (float)
       // change end time if after midnight
       if (hEnd.toMinutes() + tl > 1440) {
         tl = 1440 - hEnd.toMinutes();
