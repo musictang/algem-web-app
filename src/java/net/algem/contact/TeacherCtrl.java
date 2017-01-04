@@ -1,7 +1,7 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.5.0 21/10/16
+ * @(#) TeacherCtrl.java Algem Web App 1.5.2 04/01/2017
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -99,7 +99,6 @@ public class TeacherCtrl
           @RequestParam String status
   ) {
     FollowUp up = new FollowUp();
-    int paramId = Integer.parseInt(id);
     try {
       up.setId(Integer.parseInt(id));
       up.setScheduleId(Integer.parseInt(scheduleId));

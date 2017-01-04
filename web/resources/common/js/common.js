@@ -1,5 +1,5 @@
 /*
- * @(#)common.js    1.4.0 16/07/16
+ * @(#)common.js    1.5.2 04/01/17
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -22,21 +22,28 @@
 /**
  * Global script for algem web module.
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.0
+ * @version 1.5.2
  * @since 1.0.6 28/12/15
  */
+function redirectLoginPage() {
+  window.location.href = "login.html";
+}
 
 function setCommonEvents() {
   var delay = 500;
+  // display ajax cursor
   jQuery.ajaxSetup({
-    beforeSend: function () {
-      $("#busy").show();
-    },
-    complete: function () {
-      $("#busy").hide();
-    },
+    beforeSend: function () {$("#busy").show();},
+    complete: function () {$("#busy").hide();},
     cache: false // IMPORTANT : IE,Edge fix
   });
+  // redirect if session timeout
+  $(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
+    if (jqXHR && (jqXHR.status == 403 || jqXHR.status == 405)) {
+      redirectLoginPage();
+    }
+  });
+
   //$(document).tooltip(); // default tooltip styling
   /*$(".labels").tooltip({
     content: function (callback) {

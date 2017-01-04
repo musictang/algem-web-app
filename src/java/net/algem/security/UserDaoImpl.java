@@ -121,7 +121,7 @@ public class UserDaoImpl
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         User u = new User();
         u.setId(rs.getInt(1));
-        u.setLogin(rs.getString(2));
+        u.setLogin(getLoginFromStringResult(rs.getString(2)));
         u.setProfile(getProfileFromId(rs.getShort(3)));
         u.setName(rs.getString(4));
         u.setFirstName(rs.getString(5));
@@ -144,7 +144,7 @@ public class UserDaoImpl
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         User u = new User();
         u.setId(rs.getInt(1));
-        u.setLogin(rs.getString(2));
+        u.setLogin(getLoginFromStringResult(rs.getString(2)));
         return u;
       }
     }, id, login);
@@ -174,7 +174,7 @@ public class UserDaoImpl
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         User u = new User();
         u.setId(rs.getInt(1));
-        u.setLogin(rs.getString(2));
+        u.setLogin(getLoginFromStringResult(rs.getString(2)));
         u.setProfile(getProfileFromId(rs.getShort(3)));
         u.setEmail(email);
         return u;
@@ -427,7 +427,7 @@ public class UserDaoImpl
   private User getFromRS(ResultSet rs) throws SQLException {
     User u = new User();
     u.setId(rs.getInt(1));
-    u.setLogin(rs.getString(2));
+    u.setLogin(getLoginFromStringResult(rs.getString(2)));
     u.setProfile(getProfileFromId(rs.getShort(3)));
     u.setName(rs.getString(4));
     u.setFirstName(rs.getString(5));
@@ -453,6 +453,13 @@ public class UserDaoImpl
       default:
         return Profile.Visitor;
     }
+  }
+
+  private String getLoginFromStringResult(String rs) {
+    if (rs != null) {
+      return rs.trim();
+    }
+    return rs;
   }
 
   /**
