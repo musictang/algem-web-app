@@ -1,7 +1,7 @@
 /*
- * @(#)CustomJdbcUserService.java	1.0.6 25/11/15
+ * @(#)CustomJdbcUserService.java	1.5.2 05/01/17
  *
- * Copyright (c) 2015 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -33,15 +33,15 @@ import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.0.6
+ * @version 1.5.2
  * @since 1.0.6 25/11/2015
  */
 public class CustomJdbcUserService
         extends JdbcDaoImpl
 {
 
-  private String customUsersByUsernameQuery = "SELECT l.login,l.pass,l.clef FROM login l INNER JOIN personne p ON (l.idper = p.id) WHERE l.login = ?";
-  private String customAuthoritiesByUsernameQuery = "SELECT profil FROM login WHERE login = ?";
+  private String customUsersByUsernameQuery = "SELECT trim(l.login),l.pass,l.clef FROM login l INNER JOIN personne p ON (l.idper = p.id) WHERE trim(l.login) = ?";
+  private String customAuthoritiesByUsernameQuery = "SELECT profil FROM login WHERE trim(login) = ?";
 
   public String getCustomUsersByUsernameQuery() {
     return customUsersByUsernameQuery;
@@ -111,8 +111,7 @@ public class CustomJdbcUserService
   }
 
   @Override
-  protected UserDetails createUserDetails(String username, UserDetails userFromUserQuery,
-          List<GrantedAuthority> combinedAuthorities) {
+  protected UserDetails createUserDetails(String username, UserDetails userFromUserQuery, List<GrantedAuthority> combinedAuthorities) {
     String returnUsername = userFromUserQuery.getUsername();
     CustomUserDetails cu = new CustomUserDetails(returnUsername, userFromUserQuery.getPassword(), userFromUserQuery.isEnabled(),
             true, true, true, combinedAuthorities);

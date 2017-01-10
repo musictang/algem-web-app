@@ -1,0 +1,5 @@
+Algem web app 1.5.2
+
+CORRECTIFS
+* La fermeture automatique de session n'était pas toujours correctement détectée dans la page perso d'un utilisateur. L'utilisateur est maintenant redirigé vers la page de connexion, s'il est resté inactif plus de 30 minutes sur sa page.
+* La saisie involontaire d'un espace après son login à la création de compte entraînait l'impossibilité de se connecter ultérieurement. La reconnaissance du nom d'utilisateur ne tient plus compte maintenant des espaces indésirables (en début ou en fin d'identifiant).

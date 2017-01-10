@@ -1,7 +1,7 @@
 /*
- * @(#)UserCtrl.java	1.5.0 21/10/16
+ * @(#)UserCtrl.java	1.5.2 05/01/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -73,7 +73,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Controller for login operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.0
+ * @version 1.5.2
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -160,7 +160,7 @@ public class UserCtrl
         String msg = messageSource.getMessage("already.connected.label", null, LocaleContextHolder.getLocale());
         return "{\"msg\":\"" + msg + "\"}";
       }
-      UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+      UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username.trim(), password);
       auth = authenticationManager.authenticate(token);
       secuContext.setAuthentication(auth);
 //      secCtxRepo.saveContext(secuContext, request, response);

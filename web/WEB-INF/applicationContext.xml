@@ -91,8 +91,8 @@
 
   <!--The <http> element is responsible for creating a FilterChainProxy and the filter beans which it uses.-->
   <bean id="authenticationEntryPoint" class="net.algem.security.AjaxAwareLoginUrlAuthenticationEntryPoint">
-  <property name="loginFormUrl" value="/login.html" />
-</bean>
+    <property name="loginFormUrl" value="/login.html" />
+  </bean>
   <security:http auto-config="true" use-expressions="true" entry-point-ref="authenticationEntryPoint">
     <security:intercept-url pattern="/book.htm*" access="hasAnyRole('1','2','3','4','11')" />
     <security:intercept-url pattern="/perso/**" access="hasAnyRole('1','2','3','4','11')" />

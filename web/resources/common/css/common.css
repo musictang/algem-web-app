@@ -572,3 +572,35 @@ table.mobile {
   display: table;
   width: 100%;
 }
+
+.postit {
+  background-image: url('../img/postit.png');
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: top left;
+  position: fixed;
+  width: 320px;
+  height: 350px;
+  z-index: 2002;
+  opacity: 0.9;
+  cursor: pointer;
+}
+.postit > p {
+  font-family: ubuntu,sans-serif;
+  font-style: italic;
+  /*font-size: smaller;*/
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-right: 20px;
+  transform: rotate(1.5deg);
+  color: #333;
+}
+.postit footer {
+  position: absolute;
+  display: block;
+  font-size: smaller;
+  color: #666;
+  bottom: 1em;
+  width: 92%;
+  text-align: right;
+}

@@ -1,7 +1,7 @@
 /*
- * @(#)UserDaoImpl.java	1.5.0 21/10/16
+ * @(#)UserDaoImpl.java	1.5.2 05/01/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -64,7 +64,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.0
+ * @version 1.5.2
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -115,7 +115,7 @@ public class UserDaoImpl
       + " LEFT OUTER JOIN prof ON (l.idper = prof.idper)"
       + " LEFT OUTER JOIN eleve e ON (l.idper = e.idper)"
       + " LEFT OUTER JOIN technicien tech ON (l.idper = tech.idper)"
-      + " WHERE l.login = ?";
+      + " WHERE trim(l.login) = ?";
     return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
       @Override
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
