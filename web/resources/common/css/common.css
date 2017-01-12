@@ -1,7 +1,7 @@
 /*
- * @(#) common.css Algem Web App 1.5.0 09/11/16
+ * @(#) common.css Algem Web App 1.5.2 11/01/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -21,7 +21,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.5.0 09/11/16
+    Last: 1.5.2 11/01/17
 */
 
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
@@ -585,15 +585,24 @@ table.mobile {
   opacity: 0.9;
   cursor: pointer;
 }
-.postit > p {
+.postit-private {background-image: url('../img/postit02.png');opacity:0.95}
+.postit > ul > li:first-child > p:first-child {
+  padding-top: 30px;
+}
+.postit > ul > li > p {
   font-family: ubuntu,sans-serif;
   font-style: italic;
-  /*font-size: smaller;*/
-  padding-top: 30px;
+  line-height: 1em;
   padding-left: 30px;
   padding-right: 20px;
   transform: rotate(1.5deg);
   color: #333;
+}
+.postit > ul > li > p:last-child {
+  color: #666;
+  text-align: right;
+  font-size: smaller;
+  line-height: .6em;
 }
 .postit footer {
   position: absolute;

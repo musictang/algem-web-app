@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java	1.5.2 05/01/17
+ * @(#)UserCtrl.java	1.5.2 11/01/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -44,6 +44,7 @@ import net.algem.planning.BookingScheduleElement;
 import net.algem.planning.PlanningService;
 import net.algem.planning.ScheduleElement;
 import static net.algem.util.GemConstants.DATE_FORMAT;
+import net.algem.util.Postit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -82,7 +83,7 @@ public class UserCtrl
 {
 
   private final static Logger LOGGER = Logger.getLogger(UserCtrl.class.getName());
-  
+
   @Autowired
   @Qualifier("authenticationManager")
   AuthenticationManager authenticationManager;
@@ -201,6 +202,12 @@ public class UserCtrl
     model.addAttribute("startOfW",  cal.getTime());
     Config c = service.getConf(ConfigKey.DEFAULT_ESTABLISHMENT.getKey());
     model.addAttribute("e",  c.getValue());
+LOGGER.log(Level.INFO, "user id = " + u.getId());
+    List<Postit> postitList = planningService.getPostits(u.getId());
+    if (u.isTeacher()) {
+      postitList.addAll(planningService.getPostits(Postit.TEACHERS));
+    }
+    model.addAttribute("postitList",postitList);
     return "dossier";
   }
 

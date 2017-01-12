@@ -1,5 +1,5 @@
 /*
- * @(#)common.js    1.5.2 04/01/17
+ * @(#)common.js    1.5.2 11/01/17
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -89,6 +89,10 @@ function setCommonEvents() {
       event.preventDefault();
     }
   });
+
+  //postits display timeout
+  $(".postit").delay(10000).hide(500);//!important : hide with argument
+  $(".postit").click(function() {$(this).hide();});
 
   var getHost = function () {
 //    var port = (window.location.port == "8080") ? ":8443" : "";

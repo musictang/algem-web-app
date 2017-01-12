@@ -1,7 +1,7 @@
 /*
- * @(#)PlanningServiceImpl.java	1.5.0 26/10/16
+ * @(#)PlanningServiceImpl.java 1.5.2 11/01/2017
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -32,6 +32,8 @@ import net.algem.config.ConfigKey;
 import net.algem.contact.Person;
 import net.algem.contact.PersonIO;
 import net.algem.room.Room;
+import net.algem.util.Postit;
+import net.algem.util.PostitDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -43,7 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Service class for schedule operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.0
+ * @version 1.5.2
  * @since 1.0.0 11/02/13
  */
 @Service
@@ -60,6 +62,8 @@ public class PlanningServiceImpl
   private PersonIO personIO;
   @Autowired
   private ConfigIO configIO;
+  @Autowired
+  private PostitDao postitDao;
   @Autowired
   private MessageSource messageSource;
 
@@ -220,6 +224,11 @@ public class PlanningServiceImpl
   @Override
   public List<BookingScheduleElement> getBookings(int idper) {
     return scheduleDao.getBookings(idper);
+  }
+
+  @Override
+  public List<Postit> getPostits(int type) {
+    return postitDao.find(type);
   }
 
   @Override

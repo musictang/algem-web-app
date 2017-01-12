@@ -1,7 +1,7 @@
 /*
- * @(#)PlanningCtrl.java	1.5.0 31/10/16
+ * @(#)PlanningCtrl.java 1.5.2 11/01/2017
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import net.algem.util.AuthUtil;
+import net.algem.util.Postit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +46,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * MVC Controller for planning view.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.0
+ * @version 1.5.2
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -90,6 +91,7 @@ public class PlanningCtrl
     model.addAttribute("bookingConf", service.getBookingConf());
     model.addAttribute("roomInfo", service.getRoomInfo(estab));
     model.addAttribute("colorDefs", service.getDefaultColorCodes());
+    model.addAttribute("postitList", service.getPostits(0));
 
     return "daily";
   }
@@ -103,6 +105,7 @@ public class PlanningCtrl
   String loadEstablishment(Model model, Principal p) {
     model.addAttribute("now", DATE_FORMAT.format(new Date()));
     model.addAttribute("estabList", service.getEstablishments(getEstabFilter(), p == null ? "": p.getName()));
+    model.addAttribute("postitList", service.getPostits(0));
     return "index";
   }
 

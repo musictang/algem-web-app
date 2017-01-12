@@ -27,6 +27,7 @@ import java.util.Map;
 import net.algem.config.Config;
 import net.algem.contact.Person;
 import net.algem.room.Room;
+import net.algem.util.Postit;
 
 /**
  *
@@ -139,6 +140,12 @@ public interface PlanningService
    */
   List<BookingScheduleElement> getBookings(int idper);
 
+  /**
+   * Gets the postits associated with this {@code type}.
+   * @param type postit category
+   * @return a list of postits
+   */
+  List<Postit> getPostits(int type);
 
   /**
    * Register booking.

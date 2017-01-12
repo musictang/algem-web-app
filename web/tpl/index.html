@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
- * @(#) index.html Algem Web App 1.2.1 11/05/16
+ * @(#) index.html Algem Web App 1.5.2 11/01/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -36,10 +36,7 @@
   </script>
   </head>
   <body>
-    <div id="postit" class="postit" onclick="this.style.visibility = 'hidden'" title="Cliquez pour fermer">
-      <p>Attention ! Fermeture pendant les vacances de Noël du 23/12/2016 au 02/01/2017.<br />Vous avez encore 2 jours pour réserver. Après cette date, les salles seront fermées.</p>
-      <!--<footer>Cliquez pour fermer</footer>-->
-    </div>
+    <div th:replace="fragments/layout :: postit"></div>
     <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
     <div id="menu">
       <ul>
