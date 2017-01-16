@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java	1.5.2 11/01/17
+ * @(#)UserCtrl.java	1.5.2 14/01/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -65,6 +65,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -182,13 +183,14 @@ public class UserCtrl
   }
 
   /**
-   * Show home page
+   * Show home page.
    * @param p
    * @param model
-   * @return
+   * @param _prs private postit read status
+   * @return a view as string
    */
   @RequestMapping(method = RequestMethod.GET, value = "perso/home.html")
-  public String showHome(Principal p, Model model) {
+  public String showHome(Principal p, Model model, @CookieValue(value = "_PRS", defaultValue = "false") String _prs) {
 
     User u = service.findUserByLogin(p.getName());
     model.addAttribute("user", u);
@@ -202,12 +204,14 @@ public class UserCtrl
     model.addAttribute("startOfW",  cal.getTime());
     Config c = service.getConf(ConfigKey.DEFAULT_ESTABLISHMENT.getKey());
     model.addAttribute("e",  c.getValue());
-LOGGER.log(Level.INFO, "user id = " + u.getId());
-    List<Postit> postitList = planningService.getPostits(u.getId());
-    if (u.isTeacher()) {
-      postitList.addAll(planningService.getPostits(Postit.TEACHERS));
+    LOGGER.log(Level.INFO, "user id = " + u.getId());
+    if ("false".equals(_prs)) {
+      List<Postit> postitList = planningService.getPostits(u.getId());
+      if (u.isTeacher()) {
+        postitList.addAll(planningService.getPostits(Postit.TEACHERS));
+      }
+      model.addAttribute("postitList", postitList);
     }
-    model.addAttribute("postitList",postitList);
     return "dossier";
   }
 

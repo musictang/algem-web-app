@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningCtrl.java 1.5.2 11/01/2017
+ * @(#)PlanningCtrl.java 1.5.2 14/01/2017
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -33,10 +33,10 @@ import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import net.algem.util.AuthUtil;
-import net.algem.util.Postit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,15 +63,17 @@ public class PlanningCtrl
   }
 
   /**
-   * Adds attributes to model for displaying day's schedule.
+   * Loads daily schedule.
    *
    * @param request http request
    * @param model Spring MVC model
-   * @return a string representing the view
+   * @param booking booking info
+   * @param prs public postit read status
+   * @return a view as string
    * @throws ParseException
    */
   @RequestMapping(method = RequestMethod.GET, value = "/daily.html")
-  String loadDaySchedule(HttpServletRequest request, Model model, Booking booking, Principal p) throws ParseException {
+  String loadDaySchedule(HttpServletRequest request, Model model, Booking booking, Principal p, @CookieValue(value = "PRS", defaultValue = "false")String prs) throws ParseException {
     SimpleDateFormat dayNameFormat = new SimpleDateFormat("EEE");
     Date date = DATE_FORMAT.parse(request.getParameter("d"));
     String dayName = dayNameFormat.format(date);
@@ -91,21 +93,27 @@ public class PlanningCtrl
     model.addAttribute("bookingConf", service.getBookingConf());
     model.addAttribute("roomInfo", service.getRoomInfo(estab));
     model.addAttribute("colorDefs", service.getDefaultColorCodes());
-    model.addAttribute("postitList", service.getPostits(0));
+    if ("false".equals(prs)) {
+      model.addAttribute("postitList", service.getPostits(0));
+    }
 
     return "daily";
   }
 
   /**
-   * Adds to model the list of establishments.
+   * Loads index page.
    *
    * @param model
+   * @param p principal
+   * @param prs public postit read status
    */
   @RequestMapping(method = RequestMethod.GET, value={ "/", "index.html"})
-  String loadEstablishment(Model model, Principal p) {
+  String loadEstablishment(Model model, Principal p, @CookieValue(value = "PRS", defaultValue = "false")String prs) {
     model.addAttribute("now", DATE_FORMAT.format(new Date()));
     model.addAttribute("estabList", service.getEstablishments(getEstabFilter(), p == null ? "": p.getName()));
-    model.addAttribute("postitList", service.getPostits(0));
+    if ("false".equals(prs)) {
+      model.addAttribute("postitList", service.getPostits(0));
+    }
     return "index";
   }
 
