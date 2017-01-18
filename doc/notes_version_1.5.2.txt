@@ -3,3 +3,10 @@ Algem web app 1.5.2
 CORRECTIFS
 * La fermeture automatique de session n'était pas toujours correctement détectée dans la page perso d'un utilisateur. L'utilisateur est maintenant redirigé vers la page de connexion, s'il est resté inactif plus de 30 minutes sur sa page.
 * La saisie involontaire d'un espace après son login à la création de compte entraînait l'impossibilité de se connecter ultérieurement. La reconnaissance du nom d'utilisateur ne tient plus compte maintenant des espaces indésirables (en début ou en fin d'identifiant).
+
+POSTITS
+
+IMPRESSION
+Vous pouviez déjà imprimer n'importe quelle page à partir de votre navigateur. Néanmoins, la composition originale de la page n'était pas forcément optimale à l'impression. Les pages imprimées ne tiennent plus compte maintenant des éléments annexes comme les menus, le pied de page ou les liens de navigation. Afin d'économiser de l'ancre et du papier, les photos des élèves (ou les photos par défaut) ne sont plus imprimées par exemple dans le suivi enseignant.
+
+La plupart des navigateurs ne tiennent pas compte des couleurs de fond à l'impression. Si vous désirez imprimer les couleurs de planning, activez l'option correspondante dans les paramètres d'impression (dans Firefox, par exemple, il faut cocher "Imprimer les couleurs d'arrière plan" dans l'onglet "Options" des paramètres d'impression).

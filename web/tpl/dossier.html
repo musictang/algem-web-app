@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.5.2 11/01/17
+ * @(#) dossier.html Algem Web App 1.5.2 18/01/17
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -29,6 +29,7 @@
     <link rel="stylesheet" th:href="@{/resources/themes/css/custom.css}" />
     <link rel="stylesheet" th:href="@{/resources/common/css/mediaqueries.css}" />
     <link rel="stylesheet" th:href="@{/resources/common/css/font-awesome.min.css}" />
+    <link rel="stylesheet" media="print" th:href="@{/resources/common/css/print.css}" />
     <script type="text/javascript" th:src="@{/resources/common/js/jquery-1.9.0.min.js}"></script>
     <script type="text/javascript" th:src="@{/resources/common/js/jquery-ui-1.11.4.min.js}"></script>
     <script type="text/javascript" th:src="@{/resources/common/js/jquery-ui.datepicker-fr.js}"></script>
@@ -132,16 +133,16 @@
                 <li><a href="javascript:;" id="follow-d" th:text="#{today.label}" th:formaction="@{/perso/xFollowUpSchedules}" /></li>
                 <li><a href="javascript:;" id="follow-w" th:text="#{current.week.label}"/></li>
                 <li><a href="javascript:;" id="follow-m" th:text="#{current.month.label}"/></li>
+                <li><a th:href="@{/perso/teacher/saveCSV(userId=${user.id},from=01-01-2017,to=30-01-2017)}" id="saveCSV" th:text="#{save.label}" /></li>
                 <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value=""/></li>
               </ul>
             </nav>
           </header>
-          <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
+          <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed printable">
             <thead>
               <tr><th th:text="#{day.label}">Jour</th><th th:text="#{time.label}">Horaire</th><th th:text="#{time.length.label}">Durée</th><th th:text="#{room.label}">Salle</th><th th:text="#{course.label}">Cours</th><th th:text="#{individual.monitoring.label}">Suivi individuel</th><th th:text="#{collective.monitoring.label}">Suivi co.</th></tr>
             </thead>
-            <tbody>
-            </tbody>
+            <tbody></tbody>
             <tfoot></tfoot>
           </table>
         </section>
@@ -234,6 +235,14 @@
       $(this).next().toggle();
     });
 
+//$("#saveCSV").click(function() {
+//  console.log("click save");
+//  $.get("/algem/planning/perso/xSave", {userId: userId}, function (data) {
+////    if (typeof data === 'undefined' || !data.length) {
+//      console.log(data.success ? "okk" : "badddd");
+//    });
+////    }
+//});
     $(document).on("click", ".dlg", function () {
       resetFollowUpDialog(paths["def_photo_id"]);
       var isCoCell = $(this).attr("accessKey") === "C";

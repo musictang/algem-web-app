@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java	1.5.2 14/01/17
+ * @(#)UserCtrl.java	1.5.2 18/01/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -39,7 +39,6 @@ import net.algem.config.Config;
 import net.algem.config.ConfigKey;
 import net.algem.contact.Email;
 import net.algem.contact.Person;
-import net.algem.contact.TeacherCtrl;
 import net.algem.planning.BookingScheduleElement;
 import net.algem.planning.PlanningService;
 import net.algem.planning.ScheduleElement;
@@ -388,9 +387,9 @@ public class UserCtrl
       Date dateTo = DATE_FORMAT.parse(to);
       f = service.getFollowUp(Integer.parseInt(userId), dateFrom, dateTo);
     } catch (DataAccessException ex) {
-      Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
     } catch (ParseException ex) {
-      Logger.getLogger(TeacherCtrl.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
     }
     return f;
   }

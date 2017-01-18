@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.5.2 04/01/2017
+ * @(#) TeacherCtrl.java Algem Web App 1.5.2 18/01/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -19,22 +19,34 @@
  */
 package net.algem.contact;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import net.algem.planning.FollowUp;
 import net.algem.planning.FollowUpException;
+import net.algem.planning.Hour;
 import net.algem.planning.ScheduleElement;
+import net.algem.planning.ScheduleRangeElement;
 import static net.algem.util.GemConstants.DATE_FORMAT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +55,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.0
+ * @version 1.5.2
  * @since 1.4.0 21/06/2016
  */
 @Controller
@@ -69,23 +81,85 @@ public class TeacherCtrl
           @RequestParam("from") String from,
           @RequestParam("to") String to,
           Principal p) {
-    List<ScheduleElement> f = null;
-    try {
-      Date dateFrom = DATE_FORMAT.parse(from);
-      Date dateTo = DATE_FORMAT.parse(to);
-      f = service.getFollowUpSchedules(Integer.parseInt(userId), dateFrom, dateTo);
-    } catch (DataAccessException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
-    } catch (ParseException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
-    }
-    return f;
+    return getFollowUpSchedules(userId, from, to);
   }
+
 
   @RequestMapping(method = RequestMethod.GET, value = "/perso/xFollowUp")
   public @ResponseBody
   FollowUp getFollowUp(@RequestParam("id") String id) {
     return service.getFollowUp(Integer.parseInt(id));
+  }
+
+  @RequestMapping(value = "/perso/teacher/saveCSV", method = RequestMethod.GET, produces = "txt/csv")
+  public @ResponseBody
+  void saveFollowUp(@RequestParam String userId, @RequestParam String from, @RequestParam String to,HttpServletResponse response) throws IOException {
+
+    File csv = getFollowUpAsFile(userId, from, to);
+    InputStream in = new FileInputStream(csv);
+    response.setHeader("Content-Length", String.valueOf(csv.length()));
+    response.setHeader("Content-disposition", "attachment;filename=" + csv.getName());
+    response.setContentType("txt/csv");
+
+    FileCopyUtils.copy(in, response.getOutputStream());
+  }
+
+  private File getFollowUpAsFile(String userId, String from, String to) throws IOException {
+    String path = "/tmp/" + "suivi-" + userId + ".csv";
+    File f = new File(path);
+    LOGGER.log(Level.INFO, f.getName());
+    StringBuilder data = new StringBuilder();
+    String nl = "\r\n";
+    data.append("Jour;Horaire;Durée;Salle;Cours;Elève;Statut;Note;Suivi individuel;Suivi collectif").append(nl);
+
+    List<ScheduleElement> items = getFollowUpSchedules(userId, from, to);
+
+    for (ScheduleElement e : items) {
+      List<ScheduleRangeElement> ranges = new ArrayList<ScheduleRangeElement>((Collection<? extends ScheduleRangeElement>) e.getRanges());
+
+      for (ScheduleRangeElement r : ranges) {
+        String status = getStatusFromNumber(r.getFollowUp().getStatus());
+        String note = r.getFollowUp().getNote();
+        String content1 = r.getFollowUp().getContent();
+        String content2 = e.getFollowUp().getContent();
+        data.append(e.getDateFr()).append(';')
+          .append(r.getStart()).append('-').append(r.getEnd()).append(';')
+          .append(new Hour(r.getLength())).append(';')
+          .append(e.getDetail().get("room").getName()).append(';')
+          .append(e.getDetail().get("course").getName()).append(';')
+          .append(r.getPerson().getFirstName()).append(' ').append(r.getPerson().getName()).append(';')
+          .append(status).append(';')
+          .append(note == null ? "" : note).append(';')
+          .append(content1 == null ? "" : content1.replaceAll("[\r\n]", " ")).append(';')
+          .append(content2 == null ? "" : content2.replaceAll("[\r\n]", " ")).append(nl);
+      }
+    }
+    Files.write(Paths.get(path), data.toString().getBytes());
+
+    return f;
+  }
+
+  private List<ScheduleElement> getFollowUpSchedules(String userId, String from, String to) {
+    try {
+      Date dateFrom = DATE_FORMAT.parse(from);
+      Date dateTo = DATE_FORMAT.parse(to);
+      return service.getFollowUpSchedules(Integer.parseInt(userId), dateFrom, dateTo);
+    } catch (DataAccessException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+    } catch (ParseException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+    }
+    return null;
+  }
+
+
+  private String getStatusFromNumber(short code) {
+    switch(code) {
+      case 0: return "";
+      case 1: return "ABS";
+      case 2: return "EXC";
+      default: return "";
+    }
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "/perso/xEditFollowUp")
