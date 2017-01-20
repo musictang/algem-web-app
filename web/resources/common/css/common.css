@@ -585,15 +585,23 @@ table.mobile {
   opacity: 0.9;
   cursor: pointer;
 }
+.postit > img {
+  position: relative;
+  left: 120px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  /*border: thin solid blue;*/
+}
 .postit-private {background-image: url('../img/postit02.png');opacity:0.95}
 .postit > ul > li:first-child > p:first-child {
-  padding-top: 30px;
+  /*padding-top: 00;*/
 }
 .postit > ul > li > p {
   font-family: ubuntu,sans-serif;
   font-style: italic;
   line-height: 1em;
-  padding-left: 30px;
+  padding-top: 0.2em;
+  padding-left: 20px;
   padding-right: 20px;
   transform: rotate(1.5deg);
   color: #333;

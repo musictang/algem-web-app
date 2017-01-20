@@ -121,6 +121,7 @@
     </div>
     <aside th:fragment="postit" th:if="${not #lists.isEmpty(postitList)}">
       <div class="postit postit-private" title="Cliquez pour fermer">
+        <img th:src="@{/resources/common/img/postit-pin.png}" />
         <ul>
           <li th:if="${postit.receiver == user.id || (user.teacher && postit.receiver == T(net.algem.util.Postit).TEACHERS)}" th:each="postit : ${postitList}">
             <p th:text="${postit.text}"></p>

@@ -139,7 +139,7 @@ public class TeacherDaoImpl
       + " LEFT JOIN telephone t2 ON (e.payeur = t2.idper AND t2.idx = 0)"
       + " LEFT JOIN suivi s ON (pl.note = s.id)"
       + " WHERE pl.idplanning = ? AND pl.debut = ? ORDER BY pl.debut";
-//    System.out.println(query);
+
     return jdbcTemplate.query(query, new RowMapper<ScheduleRangeElement>() {
 
       @Override

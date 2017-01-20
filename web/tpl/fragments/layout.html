@@ -116,6 +116,7 @@
     </div>
     <aside th:fragment="postit" th:if="${not #lists.isEmpty(postitList)}">
       <div class="postit" title="Cliquez pour fermer">
+        <img th:src="@{/resources/common/img/postit-pin.png}" />
         <ul>
           <li th:if="${postit.receiver == 0}" th:each="postit : ${postitList}">
             <p th:text="${postit.text}"></p>
