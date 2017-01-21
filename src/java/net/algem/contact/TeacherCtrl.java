@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.5.2 18/01/17
+ * @(#) TeacherCtrl.java Algem Web App 1.5.2 21/01/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -76,6 +77,7 @@ public class TeacherCtrl
 
   private final static int NOTE_LENGTH = 8;
   private final static Logger LOGGER = Logger.getLogger(TeacherCtrl.class.getName());
+  private final static Locale CTX_LOCALE = LocaleContextHolder.getLocale();
   private String CSV_HEADER;
   @Autowired
   private TeacherService service;
@@ -116,7 +118,7 @@ public class TeacherCtrl
 
     FileCopyUtils.copy(in, response.getOutputStream());
   }
-  
+
   @RequestMapping(value = "/perso/teacher/savePDF", method = RequestMethod.GET, produces = "application/pdf")
   public @ResponseBody
   void saveFollowUpAsPDF(@RequestParam String userId, @RequestParam String from, @RequestParam String to,HttpServletResponse response) throws IOException {
@@ -127,7 +129,7 @@ public class TeacherCtrl
       response.setHeader("Content-Length", String.valueOf(pdf.length()));
       response.setHeader("Content-disposition", "attachment;filename=" + pdf.getName());
       response.setContentType("application/pdf");
-      
+
       FileCopyUtils.copy(in, response.getOutputStream());
     } catch (DocumentException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
@@ -140,7 +142,7 @@ public class TeacherCtrl
     LOGGER.log(Level.INFO, f.getName());
     StringBuilder data = new StringBuilder();
     String nl = "\r\n";
-    data.append(messageSource.getMessage("csv.header", null, LocaleContextHolder.getLocale())).append(nl);
+    data.append(messageSource.getMessage("csv.header", null, CTX_LOCALE)).append(nl);
 
     List<ScheduleElement> items = getFollowUpSchedules(userId, from, to);
 
@@ -168,7 +170,7 @@ public class TeacherCtrl
 
     return f;
   }
-  
+
   private File getFollowUpAsPDF(String userId, String from, String to) throws IOException, BadElementException, DocumentException {
     String path = "/tmp/" + "suivi-" + userId + ".pdf";
     File f = new File(path);
@@ -181,30 +183,31 @@ public class TeacherCtrl
     PdfPTable table = new PdfPTable(10);
     table.setWidthPercentage(100);
     table.setWidths(new float[] {1.1f,1.2f,0.6f,1.5f,1.5f,2f,0.5f,0.5f,1.9f,1.9f});
-    
+
     BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, false);
     BaseFont bfb = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, false);
     Font normalFont = new Font(bf, 10);
     Font boldFont = new Font(bfb, 10);
-    
-    String fromDate = messageSource.getMessage("from.label", null, LocaleContextHolder.getLocale());
-    String toDate = messageSource.getMessage("to.label", null, LocaleContextHolder.getLocale());
+
+    String fromDate = messageSource.getMessage("from.label", null, CTX_LOCALE);
+    String toDate = messageSource.getMessage("to.label", null, CTX_LOCALE);
     PdfPCell headerCell = new PdfPCell(new Phrase(fromDate + " " + from + " " + toDate.toLowerCase() + " " + to, boldFont));
 
     headerCell.setBackgroundColor(Color.LIGHT_GRAY);
     headerCell.setColspan(10);
     table.addCell(headerCell);
-    
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("date.label", null, LocaleContextHolder.getLocale()), boldFont)));
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("time.label", null, LocaleContextHolder.getLocale()), boldFont)));
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("time.length.label", null, LocaleContextHolder.getLocale()), boldFont)));
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("room.label", null, LocaleContextHolder.getLocale()), boldFont)));
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("course.label", null, LocaleContextHolder.getLocale()), boldFont)));
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("student.label", null, LocaleContextHolder.getLocale()), boldFont)));
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("presence.label", null, LocaleContextHolder.getLocale()), boldFont)));
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("score.label", null, LocaleContextHolder.getLocale()), boldFont)));
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("individual.monitoring.label", null, LocaleContextHolder.getLocale()), boldFont)));
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("collective.monitoring.label", null, LocaleContextHolder.getLocale()), boldFont)));
+
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("date.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("time.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("time.length.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("room.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("course.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("student.label", null, CTX_LOCALE), boldFont)));
+    String abs = messageSource.getMessage("absence.label", null, CTX_LOCALE);
+    table.addCell(new PdfPCell(new Phrase(abs != null ? abs.substring(0,3) + "." : "", boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("score.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("individual.monitoring.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("collective.monitoring.label", null, CTX_LOCALE), boldFont)));
 
     List<ScheduleElement> items = getFollowUpSchedules(userId, from, to);
     //LOGGER.log(Level.INFO, items.toString());
@@ -235,7 +238,7 @@ public class TeacherCtrl
     Files.write(Paths.get(path), pdfBytes);
     return f;
   }
-  
+
   private List<ScheduleElement> getFollowUpSchedules(String userId, String from, String to) {
     try {
       Date dateFrom = DATE_FORMAT.parse(from);
@@ -301,13 +304,13 @@ public class TeacherCtrl
 
   private FollowUpResponse getErrorResponse(String msg) {
     FollowUpResponse response = new FollowUpResponse(false, -1);
-    response.setMessage(messageSource.getMessage(msg, null, LocaleContextHolder.getLocale()));
+    response.setMessage(messageSource.getMessage(msg, null, CTX_LOCALE));
     return response;
   }
 
   private FollowUpResponse getErrorResponse(String msg, Object[] args) {
     FollowUpResponse response = new FollowUpResponse(false, -1);
-    response.setMessage(messageSource.getMessage(msg, args, LocaleContextHolder.getLocale()));
+    response.setMessage(messageSource.getMessage(msg, args, CTX_LOCALE));
     return response;
   }
 

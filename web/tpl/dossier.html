@@ -113,7 +113,7 @@
                 <li><a href="javascript:;" id="student-follow-w" th:text="#{current.week.label}"/></li>
                 <li><a href="javascript:;" id="student-follow-m" th:text="#{current.month.label}"/></li>
                 <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="student-weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="student-weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""/>&nbsp;<label for="student-weekTo" th:text="#{to.label}"></label>&nbsp;<input id="student-weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value=""/></li>
-                <li><a class="img-link" href="javascript:;" id="saveStudentPDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.svg}" width="16" /></a></li>
+                <li><a class="img-link" href="javascript:;" id="saveStudentPDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.svg}" width="24" /></a></li>
               </ul>
             </nav>
           </header>
@@ -134,9 +134,9 @@
                 <li><a href="javascript:;" id="follow-d" th:text="#{today.label}" th:formaction="@{/perso/xFollowUpSchedules}" /></li>
                 <li><a href="javascript:;" id="follow-w" th:text="#{current.week.label}"/></li>
                 <li><a href="javascript:;" id="follow-m" th:text="#{current.month.label}"/></li>
-                <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value=""/></li>
-                <li><a class="img-link" href="javascript:;" id="saveCSV" th:title="#{save.to.csv.label}"><img th:src="@{/resources/common/img/csv.svg}" width="16"/></a></li>
-                <li><a class="img-link" href="javascript:;" id="savePDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.svg}" width="16" /></a></li>
+                <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date" tabindex="3" readonly value=""/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" tabindex="4" readonly value=""/></li>
+                <li><a class="img-link" href="javascript:;" id="saveCSV" th:title="#{save.to.csv.label}"><img th:src="@{/resources/common/img/csv.svg}" width="24"/></a></li>
+                <li><a class="img-link" href="javascript:;" id="savePDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.svg}" width="24" /></a></li>
               </ul>
             </nav>
           </header>
@@ -238,29 +238,20 @@
     });
 
     $("#saveCSV").click(function() {
-      console.log("click save csv");
-      var wf = $("#weekFrom").val();
-      var wt = $("#weekTo").val();
       var ref = /*[[@{/perso/teacher/saveCSV}]]*/ "";
-      window.location.href = ref + "?userId="+userId+"&from="+wf+"&to="+wt;
+      window.location.href = ref + "?userId="+userId+"&from="+$("#weekFrom").val()+"&to="+$("#weekTo").val();
     });
-    
+
     $("#savePDF").click(function() {
-      console.log("click save csv");
-      var wf = $("#weekFrom").val();
-      var wt = $("#weekTo").val();
       var ref = /*[[@{/perso/teacher/savePDF}]]*/ "";
-      window.location.href = ref + "?userId="+userId+"&from="+wf+"&to="+wt;
+      window.location.href = ref + "?userId="+userId+"&from="+$("#weekFrom").val()+"&to="+$("#weekTo").val();
     });
-    
+
      $("#saveStudentPDF").click(function() {
-      console.log("click save csv");
-      var wf = $("#weekFrom").val();
-      var wt = $("#weekTo").val();
       var ref = /*[[@{/perso/teacher/savePDF}]]*/ "";
-      window.location.href = ref + "?userId="+userId+"&from="+wf+"&to="+wt;
+      window.location.href = ref + "?userId="+userId+"&from="+$("#weekFrom").val()+"&to="+$("#weekTo").val();
     });
-    
+
     $(document).on("click", ".dlg", function () {
       resetFollowUpDialog(paths["def_photo_id"]);
       var isCoCell = $(this).attr("accessKey") === "C";
