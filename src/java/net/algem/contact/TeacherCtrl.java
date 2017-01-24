@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.5.2 21/01/17
+ * @(#) TeacherCtrl.java Algem Web App 1.5.2 23/01/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -44,6 +44,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -53,8 +54,11 @@ import net.algem.planning.FollowUpException;
 import net.algem.planning.Hour;
 import net.algem.planning.ScheduleElement;
 import net.algem.planning.ScheduleRangeElement;
+import net.algem.util.CommonDao;
 import static net.algem.util.GemConstants.DATE_FORMAT;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
@@ -84,6 +88,9 @@ public class TeacherCtrl
 
   @Resource(name = "messageSource")
   private MessageSource messageSource;
+  
+  @Value("#{organization}")
+  private Map<String, String> organization;
 
   public void setService(TeacherService service) {
     this.service = service;
@@ -150,7 +157,7 @@ public class TeacherCtrl
       List<ScheduleRangeElement> ranges = new ArrayList<ScheduleRangeElement>((Collection<? extends ScheduleRangeElement>) e.getRanges());
 
       for (ScheduleRangeElement r : ranges) {
-        String status = getStatusFromNumber(r.getFollowUp().getStatus());
+        String status = CommonDao.getAbsenceFromNumberStatus(r.getFollowUp().getStatus());
         String note = r.getFollowUp().getNote();
         String content1 = r.getFollowUp().getContent();
         String content2 = e.getFollowUp().getContent();
@@ -189,9 +196,11 @@ public class TeacherCtrl
     Font normalFont = new Font(bf, 10);
     Font boldFont = new Font(bfb, 10);
 
-    String fromDate = messageSource.getMessage("from.label", null, CTX_LOCALE);
-    String toDate = messageSource.getMessage("to.label", null, CTX_LOCALE);
-    PdfPCell headerCell = new PdfPCell(new Phrase(fromDate + " " + from + " " + toDate.toLowerCase() + " " + to, boldFont));
+    String fromLabel = messageSource.getMessage("from.label", null, CTX_LOCALE);
+    String toLabel = messageSource.getMessage("to.label", null, CTX_LOCALE);
+    String prefix = messageSource.getMessage("follow-up.label", null, CTX_LOCALE) + " " + organization.get("name.label");
+    String period = fromLabel.toLowerCase() + " " + from + " " + toLabel.toLowerCase() + " " + to;
+    PdfPCell headerCell = new PdfPCell(new Phrase( prefix + " " + period, boldFont));
 
     headerCell.setBackgroundColor(Color.LIGHT_GRAY);
     headerCell.setColspan(10);
@@ -215,7 +224,7 @@ public class TeacherCtrl
       List<ScheduleRangeElement> ranges = new ArrayList<ScheduleRangeElement>((Collection<? extends ScheduleRangeElement>) e.getRanges());
 
       for (ScheduleRangeElement r : ranges) {
-        String status = getStatusFromNumber(r.getFollowUp().getStatus());
+        String status = CommonDao.getAbsenceFromNumberStatus(r.getFollowUp().getStatus());
         String note = r.getFollowUp().getNote();
         String content1 = r.getFollowUp().getContent();
         String content2 = e.getFollowUp().getContent();
@@ -240,25 +249,22 @@ public class TeacherCtrl
   }
 
   private List<ScheduleElement> getFollowUpSchedules(String userId, String from, String to) {
+    Date dateFrom = null;
+    Date dateTo = null;
     try {
-      Date dateFrom = DATE_FORMAT.parse(from);
-      Date dateTo = DATE_FORMAT.parse(to);
+      dateFrom = DATE_FORMAT.parse(from);
+      dateTo = DATE_FORMAT.parse(to);
+    } catch (ParseException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      dateFrom = new Date();
+      dateTo = new Date();
+    }
+    try {
       return service.getFollowUpSchedules(Integer.parseInt(userId), dateFrom, dateTo);
     } catch (DataAccessException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
-    } catch (ParseException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
-    }
+    } 
     return null;
-  }
-
-  private String getStatusFromNumber(short code) {
-    switch(code) {
-      case 0: return "";
-      case 1: return "ABS";
-      case 2: return "EXC";
-      default: return "";
-    }
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "/perso/xEditFollowUp")

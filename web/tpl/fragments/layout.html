@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) layout.html Algem Web App 1.5.2 18/01/17
+ * @(#) layout.html Algem Web App 1.5.2 23/01/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -115,7 +115,7 @@
       </table>
     </div>
     <aside th:fragment="postit" th:if="${not #lists.isEmpty(postitList)}">
-      <div class="postit" title="Cliquez pour fermer">
+      <div class="postit" th:title="#{click.to.close.label}">
         <img th:src="@{/resources/common/img/postit-pin.png}" />
         <ul>
           <li th:if="${postit.receiver == 0}" th:each="postit : ${postitList}">

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.5.0 02/11/16
+ * @(#) login.html Algem Web App 1.5.2 23/01/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -59,6 +59,12 @@
         Cliquez respectivement sur <strong>Aujourd'hui</strong>, <strong>Cette semaine</strong>, <strong>Ce mois</strong> pour afficher les séances du jour, de la semaine ou du mois courants.<br />
         Vous pouvez également choisir n'importe quelle semaine dans l'année en cliquant sur l'une des dates et en vous déplaçant dans le calendrier.<br />
         Vos absences sont signalées par les mentions <span class="absent">ABS</span> ou <span class="excused">EXC</span> (si le motif de l'absence a été donné).</p>
+        <h5>Exportation du suivi</h5>
+        <p>Vous pouvez exporter votre suivi pédagogique de deux manières :</p>
+        <ol>
+          <li>En l'imprimant à partir de votre navigateur : chargez au préalable la période de votre choix en cliquant sur l'une de celles qui vous sont proposées (<code>Aujourd'hui</code>, <code>Cette semaine</code>, <code>Ce mois</code>) ou en sélectionnant une semaine spécifique dans le calendrier. Cliquez ensuite sur <code>Imprimer</code> dans votre navigateur.</li>
+          <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/pdf.svg}" width="20" /> <code>(Télécharger au format pdf)</code> après avoir chargé la période de votre choix.</li>
+        </ol>
         <div sec:authorize="hasAnyRole('1','2','4')">
           <h4><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{teacher.monitoring.label}]]</h4>
         <p>Si vous êtes enregistré en tant qu'enseignant, c'est ici que vous pouvez éditer et consulter le suivi de vos élèves.
@@ -78,6 +84,13 @@
           Cliquez sur la ligne qui vous intéresse en-dessous de la colonne <strong>Suivi co.</strong> pour ouvrir la fenêtre de saisie.<br />
         <strong>Info</strong> : contrairement au suivi individuel, vous ne pouvez pas mettre ici de note (le champ est désactivé par défaut). Le statut d'absence est également désactivé.</p>
         </div>
+        <h5>Exportation du suivi enseignant</h5>
+        <p>Vous pouvez exporter votre suivi enseignant de trois manières :</p>
+        <ol>
+          <li>En l'imprimant à partir de votre navigateur : chargez au préalable la période de votre choix en cliquant sur l'une de celles qui vous sont proposées (<code>Aujourd'hui</code>, <code>Cette semaine</code>, <code>Ce mois</code>) ou en sélectionnant une semaine spécifique dans le calendrier. Cliquez ensuite sur <code>Imprimer</code> dans votre navigateur.</li>
+          <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/csv.svg}" width="16" /> <code>(Télécharger au format tableur)</code> après avoir chargé la période de votre choix. Ce format de fichier vous permet par exemple de trier les résultats ou d'effectuer des sous-totaux dans un tableur.</li>
+          <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/pdf.svg}" width="20" /> <code>(Télécharger au format pdf)</code> après avoir chargé la période de votre choix.</li>
+        </ol>
       </div>
     </div>
   </body>

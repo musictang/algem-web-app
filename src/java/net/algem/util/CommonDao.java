@@ -1,7 +1,7 @@
 /*
- * @(#) CommonDao.java Algem Web App 1.5.0 11/11/2016
+ * @(#) CommonDao.java Algem Web App 1.5.2 23/01/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -22,7 +22,6 @@ package net.algem.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.dao.DataAccessException;
@@ -32,7 +31,7 @@ import org.springframework.stereotype.Repository;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.0
+ * @version 1.5.2
  * @since 1.5.0 19/10/2016
  */
 @Repository
@@ -53,5 +52,19 @@ public class CommonDao
 
     return Base64.encodeBase64String(data);
 
+  }
+  
+  /**
+   * Gets a string representing the absence or presence of a student.
+   * @param code absence status as saved in database
+   * @return the string designing the absence status or an empty string if no absence
+   */
+  public static String getAbsenceFromNumberStatus(short code) {
+    switch(code) {
+      case 0: return "";
+      case 1: return "ABS";
+      case 2: return "EXC";
+      default: return "";
+    }
   }
 }

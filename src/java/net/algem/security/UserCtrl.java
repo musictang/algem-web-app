@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java	1.5.2 18/01/17
+ * @(#)UserCtrl.java	1.5.2 23/01/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -20,10 +20,30 @@
  */
 package net.algem.security;
 
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import java.awt.Color;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -40,12 +60,16 @@ import net.algem.config.ConfigKey;
 import net.algem.contact.Email;
 import net.algem.contact.Person;
 import net.algem.planning.BookingScheduleElement;
+import net.algem.planning.Hour;
 import net.algem.planning.PlanningService;
 import net.algem.planning.ScheduleElement;
+import net.algem.planning.ScheduleRangeElement;
+import net.algem.util.CommonDao;
 import static net.algem.util.GemConstants.DATE_FORMAT;
 import net.algem.util.Postit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
@@ -63,6 +87,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,7 +108,11 @@ public class UserCtrl
 {
 
   private final static Logger LOGGER = Logger.getLogger(UserCtrl.class.getName());
-
+  private final static Locale CTX_LOCALE = LocaleContextHolder.getLocale();
+  
+  @Value("#{organization}")
+  private Map<String, String> organization;
+  
   @Autowired
   @Qualifier("authenticationManager")
   AuthenticationManager authenticationManager;
@@ -140,7 +169,6 @@ public class UserCtrl
    * @param password clear password
    * @param request httprequest
    * @param response httpresponse
-   * @param currentUser
    * @return JSON data as string
    */
 // IMPORTANT HERE if mapping ends with html : produces="text/html" !! AND NOT application/json or text/plain !
@@ -203,7 +231,7 @@ public class UserCtrl
     model.addAttribute("startOfW",  cal.getTime());
     Config c = service.getConf(ConfigKey.DEFAULT_ESTABLISHMENT.getKey());
     model.addAttribute("e",  c.getValue());
-    LOGGER.log(Level.INFO, "user id = " + u.getId());
+
     if ("false".equals(_prs)) {
       List<Postit> postitList = planningService.getPostits(u.getId());
       if (u.isTeacher()) {
@@ -381,17 +409,115 @@ public class UserCtrl
           @RequestParam("from") String from,
           @RequestParam("to") String to,
           Principal p) {
-    List<ScheduleElement> f = null;
+    return getFollowUpSchedules(userId, from, to);
+  }
+  
+  @RequestMapping(value = "/perso/user/savePDF", method = RequestMethod.GET, produces = "application/pdf")
+  public @ResponseBody
+  void saveFollowUpAsPDF(@RequestParam String userId, @RequestParam String from, @RequestParam String to,HttpServletResponse response) throws IOException {
+
     try {
-      Date dateFrom = DATE_FORMAT.parse(from);
-      Date dateTo = DATE_FORMAT.parse(to);
-      f = service.getFollowUp(Integer.parseInt(userId), dateFrom, dateTo);
-    } catch (DataAccessException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
-    } catch (ParseException ex) {
+      File pdf = getFollowUpAsPDF(userId, from, to);
+      InputStream in = new FileInputStream(pdf);
+      response.setHeader("Content-Length", String.valueOf(pdf.length()));
+      response.setHeader("Content-disposition", "attachment;filename=" + pdf.getName());
+      response.setContentType("application/pdf");
+
+      FileCopyUtils.copy(in, response.getOutputStream());
+    } catch (DocumentException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
     }
+  }
+  
+  private List<ScheduleElement> getFollowUpSchedules(String userId, String from, String to) {
+    Date dateFrom = null;
+    Date dateTo = null;
+    try {
+      dateFrom = DATE_FORMAT.parse(from);
+      dateTo = DATE_FORMAT.parse(to);
+    } catch (ParseException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      dateFrom = new Date();
+      dateTo = new Date();
+    }
+    try {
+      return service.getFollowUp(Integer.parseInt(userId), dateFrom, dateTo);
+    } catch (DataAccessException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+    } 
+    return null;
+  }
+  
+  private File getFollowUpAsPDF(String userId, String from, String to) throws IOException, BadElementException, DocumentException {
+    String path = "/tmp/" + "suivi-" + userId + ".pdf";
+    File f = new File(path);
+    LOGGER.log(Level.INFO, f.getName());
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    Document document = new Document(PageSize.A4.rotate());
+    PdfWriter.getInstance(document, byteArrayOutputStream);  // Do this BEFORE document.open()
+    document.open();
+
+    PdfPTable table = new PdfPTable(10);
+    table.setWidthPercentage(100);
+    table.setWidths(new float[] {1.1f,1.2f,0.6f,1.5f,1.5f,2f,0.5f,0.5f,1.9f,1.9f});
+
+    BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, false);
+    BaseFont bfb = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, false);
+    Font normalFont = new Font(bf, 10);
+    Font boldFont = new Font(bfb, 10);
+
+    String fromLabel = messageSource.getMessage("from.label", null, CTX_LOCALE);
+    String toLabel = messageSource.getMessage("to.label", null, CTX_LOCALE);
+    String prefix = messageSource.getMessage("follow-up.label", null, CTX_LOCALE) + " " + organization.get("name.label");
+    String period = fromLabel.toLowerCase() + " " + from + " " + toLabel.toLowerCase() + " " + to;
+    PdfPCell headerCell = new PdfPCell(new Phrase(prefix + " " + period, boldFont));
+
+    headerCell.setBackgroundColor(Color.LIGHT_GRAY);
+    headerCell.setColspan(10);
+    table.addCell(headerCell);
+
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("date.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("time.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("time.length.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("room.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("course.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("teacher.label", null, CTX_LOCALE), boldFont)));
+    String abs = messageSource.getMessage("absence.label", null, CTX_LOCALE);
+    table.addCell(new PdfPCell(new Phrase(abs != null ? abs.substring(0,3) + "." : "", boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("score.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("individual.monitoring.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("collective.monitoring.label", null, CTX_LOCALE), boldFont)));
+
+    fillPdfTable(table, getFollowUpSchedules(userId, from, to), normalFont);
+
+    document.add(table);
+    document.close();
+    byte[] pdfBytes = byteArrayOutputStream.toByteArray();
+    Files.write(Paths.get(path), pdfBytes);
     return f;
+  }
+  
+  private void fillPdfTable(PdfPTable table, List<ScheduleElement> items, Font font) {
+    for (ScheduleElement e : items) {
+      List<ScheduleRangeElement> ranges = new ArrayList<ScheduleRangeElement>((Collection<? extends ScheduleRangeElement>) e.getRanges());
+
+      for (ScheduleRangeElement r : ranges) {
+        String status = CommonDao.getAbsenceFromNumberStatus(r.getFollowUp().getStatus());
+        String note = r.getFollowUp().getNote();
+        String content1 = r.getFollowUp().getContent();
+        String content2 = e.getFollowUp().getContent();
+        table.addCell(new Phrase(e.getDateFr().toString(),font));
+        table.addCell(new Phrase(r.getStart() + "-" + r.getEnd(),font));
+        table.addCell(new Phrase(new Hour(r.getLength()).toString(),font));
+        table.addCell(new Phrase(e.getDetail().get("room").getName(),font));
+        table.addCell(new Phrase(e.getDetail().get("course").getName(),font));
+        table.addCell(new Phrase(e.getDetail().get("teacher").getName(), font));
+        table.addCell(new Phrase(status,font));
+        table.addCell(new Phrase(note == null ? "" : note, font));
+        table.addCell(new Phrase(content1 == null ? "" : content1.replaceAll("[\r\n]", " "),font));
+        table.addCell(new Phrase(content2 == null ? "" : content2.replaceAll("[\r\n]", " "),font));
+      }
+    }
   }
 
   private boolean isEmailValid(Person p, String email) {
