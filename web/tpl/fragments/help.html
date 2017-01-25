@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.5.2 23/01/17
+ * @(#) login.html Algem Web App 1.5.2 25/01/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -46,7 +46,7 @@
         <p> Ce lien est destiné à la réservation d'une salle pour une répétition individuelle ou de groupe.<br />Cliquez sur <strong>Réserver</strong> pour accéder au planning du jour et choisir un horaire.</p>
         <h5><i class="fa fa-calendar"></i> Mon planning hebdo</h5>
         <p>En cliquant sur cette option, vous accédez à votre planning de la semaine. Une fois sur la page&nbsp;*, vous pouvez vous déplacer de semaine en semaine en cliquant sur les flèches de gauche&nbsp;<i class="fa fa-chevron-circle-left"></i> et de droite&nbsp;<i class="fa fa-chevron-circle-right"></i>, de part et d'autre des dates de début et de fin de semaine. <strong>Vous pouvez aussi cliquer sur l'une des dates pour faire apparaître un calendrier et sélectionner la semaine de votre choix</strong>&nbsp;**.</p>
-        <p class="note">* Pour revenir à votre page perso, ouvrez le menu à 3 barres <i class="fa fa-bars"></i>, puis cliquez sur l'icone <i class="fa fa-user-plus"></i>, en-dessous de laquelle figure votre nom d'utilisateur (pseudo). Un lien est également disponible en bas de page.<br />
+        <p class="footnote">* Pour revenir à votre page perso, ouvrez le menu à 3 barres <i class="fa fa-bars"></i>, puis cliquez sur l'icone <i class="fa fa-user-plus"></i>, en-dessous de laquelle figure votre nom d'utilisateur (pseudo). Un lien est également disponible en bas de page.<br />
           ** Dans le calendrier, peu importe le jour de la semaine sur lequel vous cliquez. Les dates se placeront sur la semaine adéquate.</p>
         <h4 id="book-help"><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{my.bookings.label}]]</h4>
         <p>Vous pouvez consulter ici l'historique de vos réservations. Les réservations peuvent être en <strong>&laquo;&nbsp;attente de confirmation&nbsp;&raquo;</strong> ou <strong>&laquo;&nbsp;confirmées&nbsp;&raquo;</strong>.<br />
@@ -63,7 +63,7 @@
         <p>Vous pouvez exporter votre suivi pédagogique de deux manières :</p>
         <ol>
           <li>En l'imprimant à partir de votre navigateur : chargez au préalable la période de votre choix en cliquant sur l'une de celles qui vous sont proposées (<code>Aujourd'hui</code>, <code>Cette semaine</code>, <code>Ce mois</code>) ou en sélectionnant une semaine spécifique dans le calendrier. Cliquez ensuite sur <code>Imprimer</code> dans votre navigateur.</li>
-          <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/pdf.svg}" width="20" /> <code>(Télécharger au format pdf)</code> après avoir chargé la période de votre choix.</li>
+          <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/pdf.png}" /> <code>(Télécharger au format pdf)</code> après avoir chargé la période de votre choix.</li>
         </ol>
         <div sec:authorize="hasAnyRole('1','2','4')">
           <h4><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{teacher.monitoring.label}]]</h4>
@@ -77,7 +77,7 @@
         <h6>Edition du suivi individuel</h6>
         <p>Dans le tableau *, cliquez sur le nom ou la photo de l'élève à l'intérieur de la colonne <strong>Suivi individuel</strong> **. Une fenêtre de dialogue vous permet de saisir votre appréciation ou d'évaluer l'élève en lui donnant une note.</p>
         <p>Les notes ne sont pas restreintes au format numérique. Vous pouvez utiliser des lettres ou les signes <b>+</b> et <b>-</b>. Tout dépendra ici de la convention adoptée par l'école ou le centre de formation. Quelques exemples possibles : <tt><b>12; 12,5; 12.5; A; B+; B-; ++A;</b></tt> etc. Vous pouvez saisir jusqu'à <b>8</b> caractères.</p>
-          <p>Par défaut, l'élève est considéré comme <strong>&laquo;&nbsp;Présent&nbsp;&raquo;</strong>. S'il est absent, marquez-le comme tel en choisissant la mention <strong>&laquo;&nbsp;Absent(e)&nbsp;&raquo;</strong>. Si l'élève s'est excusé pour son absence ou si le motif de l'absence vous a été signalé, vous pouvez alternativement le marquer comme <strong>&laquo;&nbsp;Excusé(e)&nbsp;&raquo;</strong>. N'oubliez pas de <strong>Valider</strong> pour enregistrer votre saisie.</p><p class="note">* Sur les smartphones (en particulier, en mode portrait), faites glisser le tableau de gauche à droite pour faire apparaître toutes les colonnes.
+          <p>Par défaut, l'élève est considéré comme <strong>&laquo;&nbsp;Présent&nbsp;&raquo;</strong>. S'il est absent, marquez-le comme tel en choisissant la mention <strong>&laquo;&nbsp;Absent(e)&nbsp;&raquo;</strong>. Si l'élève s'est excusé pour son absence ou si le motif de l'absence vous a été signalé, vous pouvez alternativement le marquer comme <strong>&laquo;&nbsp;Excusé(e)&nbsp;&raquo;</strong>. N'oubliez pas de <strong>Valider</strong> pour enregistrer votre saisie.</p><p class="footnote">* Sur les smartphones (en particulier, en mode portrait), faites glisser le tableau de gauche à droite pour faire apparaître toutes les colonnes.
             <br />** La liste des élèves composant un cours collectif peut être pliée ou dépliée si nécessaire. Cliquez pour cela sur <i>Liste des élèves...</i>.</p>
         <h6>Edition du suivi collectif</h6>
         <p>Bien que cela soit plus rare, il est également possible d'entrer une appréciation de suivi collective. Cette appréciation est visible de tous les élèves ayant participé au cours et permet généralement de rappeler les notions ou les morceaux abordés durant la séance.<br />
@@ -88,8 +88,8 @@
         <p>Vous pouvez exporter votre suivi enseignant de trois manières :</p>
         <ol>
           <li>En l'imprimant à partir de votre navigateur : chargez au préalable la période de votre choix en cliquant sur l'une de celles qui vous sont proposées (<code>Aujourd'hui</code>, <code>Cette semaine</code>, <code>Ce mois</code>) ou en sélectionnant une semaine spécifique dans le calendrier. Cliquez ensuite sur <code>Imprimer</code> dans votre navigateur.</li>
-          <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/csv.svg}" width="16" /> <code>(Télécharger au format tableur)</code> après avoir chargé la période de votre choix. Ce format de fichier vous permet par exemple de trier les résultats ou d'effectuer des sous-totaux dans un tableur.</li>
-          <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/pdf.svg}" width="20" /> <code>(Télécharger au format pdf)</code> après avoir chargé la période de votre choix.</li>
+          <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/csv.png}" /> <code>(Télécharger au format tableur)</code> après avoir chargé la période de votre choix. Ce format de fichier vous permet par exemple de trier les résultats ou d'effectuer des sous-totaux dans un tableur.</li>
+          <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/pdf.png}" /> <code>(Télécharger au format pdf)</code> après avoir chargé la période de votre choix.</li>
         </ol>
       </div>
     </div>

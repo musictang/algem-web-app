@@ -40,14 +40,14 @@
       <ul class="horizontal-panel-menu"><li><i class="fa fa-home"></i>&nbsp;<a th:href="@{/index.html}" th:title="${hl}" th:text="#{home.label}"></a></li>
           <li sec:authorize="not isAnonymous()" ><i class="fa fa-rotate-left"></i>&nbsp;<a th:href="@{/perso/home.html}" th:title="#{my.account.label}" sec:authentication="name"></a></li></ul>
     </aside>
-    <section class="global">
+    <section class="global" style="margin-bottom: 1em">
       <aside id="help-menu">
         <ul class="disc">
           <li><a href="#chapter-booking" th:text="${#strings.toUpperCase('__#{booking.label}__')}">reservation</a></li>
           <li><a href="#chapter-perso" th:text="${#strings.toUpperCase('__#{my.account.label}__')}">mon compte</a></li>
-
+          <li><a href="#chapter-misc" th:text="${#strings.toUpperCase('__#{help.miscellaneous.label}__')}">divers</a></li>
         </ul>
-      </div>
+      </aside>
       <article class="centered">
         <h2 id="chapter-booking" style="display: block"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;RESERVATION</h2>
         <nav>
@@ -87,7 +87,7 @@
         <p>Le mot de passe de connexion est propre à chaque utilisateur et personne d'autre ne le connaît ni ne peut le déduire. Il peut arriver que les visiteurs occasionnels oublient le leur. Dans ce cas, voici la procédure à suivre, en tant que simple visiteur :</p>
         <ol>
           <li>Ouvrez la fenêtre de connexion en cliquant sur l'icone en forme de silhouette <i class="fa fa-user"></i> dans le menu de gauche.</li><li>Cliquez sur le lien &laquo;&nbsp;Mot de passe oublié ?&nbsp;&raquo;.</li>
-          <li>Entrez votre email dans le formulaire dédié. Un lien de récupération vous sera envoyé à cette adresse, avec une validité de 24 heures.</li>
+          <li>Entrez votre email dans le formulaire dédié. Un lien de récupération vous sera envoyé à cette adresse, avec une <strong>validité de 24 heures</strong>.</li>
           <li>Après réception, cliquez sur ce lien et saisissez votre nouveau mot de passe sur la page dédiée.</li></ol>
 <!--        <h3 id="weekly-help">Mon planning hebdo</h3>
         <p></p>
@@ -96,6 +96,14 @@
       </article>
       <article class="centered">
         <div th:include="fragments/help :: perso"></div>
+      </article>
+      <article class="centered">
+        <h2 id="chapter-misc" style="display: block"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;<span th:text="${#strings.toUpperCase('__#{help.miscellaneous.label}__')}"></span></h2>
+        <h3 id="printing-help"><a class="img-link" href="#chapter-misc"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;<span th:text="#{printing.label}"></span></h3>
+        <p>Vous pouvez imprimer n'importe quelle page à partir de votre navigateur. <strong>Les pages imprimées ne tiennent pas compte des éléments annexes comme les menus, le pied de page ou les liens de navigation</strong>. Afin d'économiser de l'encre et du papier, les photos des élèves (ou les photos par défaut) ne sont pas imprimées par exemple dans le suivi enseignant.</p>
+        <p>Il est préférable d'imprimer les plannings en mode <strong>"Portrait"</strong>. N'hésitez pas à utiliser l'&nbsp;<strong>"Aperçu avant impression"</strong> de votre navigateur pour vérifier la composition de la page.</p>
+        <p>La plupart des navigateurs ne tiennent pas compte des couleurs de fond à l'impression. Si vous désirez imprimer les couleurs de planning, activez l'option* correspondante dans les paramètres d'impression (dans Firefox, par exemple, il faut cocher "Imprimer les couleurs d'arrière plan" dans l'onglet "Options" des paramètres d'impression). Vous trouverez sur <a href="http://its.yale.edu/how-to/article-printing-web-page-background-colors-and-images" target="_blank">cette page</a> des captures d'écran qui vous aideront à activer cette option en fonction de votre navigateur.</p>
+          <p class="footnote">* Cette option n'est pas disponible sous Edge (dans ce cas, cliquez sur <code>Ouvrir avec Internet Explorer</code> dans le menu principal).</p>
       </article>
     </section>
     <!--<footer th:replace="fragments/layout :: footer"></footer>-->

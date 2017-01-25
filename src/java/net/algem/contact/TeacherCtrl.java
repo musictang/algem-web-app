@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.5.2 23/01/17
+ * @(#) TeacherCtrl.java Algem Web App 1.5.2 25/01/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -35,8 +35,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.Principal;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -88,7 +91,7 @@ public class TeacherCtrl
 
   @Resource(name = "messageSource")
   private MessageSource messageSource;
-  
+
   @Value("#{organization}")
   private Map<String, String> organization;
 
@@ -173,7 +176,7 @@ public class TeacherCtrl
           .append(content2 == null ? "" : content2.replaceAll("[\r\n]", " ")).append(nl);
       }
     }
-    Files.write(Paths.get(path), data.toString().getBytes());
+    Files.write(Paths.get(path), data.toString().getBytes("UTF-16LE"));// Excel hack argument (UTF-16LE)
 
     return f;
   }
@@ -263,7 +266,7 @@ public class TeacherCtrl
       return service.getFollowUpSchedules(Integer.parseInt(userId), dateFrom, dateTo);
     } catch (DataAccessException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
-    } 
+    }
     return null;
   }
 

@@ -1,7 +1,7 @@
 /*
- * @(#) dossier.js Algem Web App 1.5.0 09/11/16
+ * @(#) dossier.js Algem Web App 1.5.2 25/01/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -80,10 +80,13 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
         var me = (value.end.hour * 60) + value.end.minute;
         var length = me - ms;
         var roomInfo = value.detail['room'].name;
-        var courseInfo = value.detail['course'].name;
+        var courseInfo = value.ranges[0] ? value.detail['course'].name : "PAUSE";
         var firstNameName = "";
         var noteCo = value.followUp.content || "";
-        total += length;
+        // do not include breaks in total
+        if (value.collective || (value.ranges[0] && value.ranges[0].person.id > 0)) {
+          total += length;
+        }
 
         result += "<tr id=\"" + value.id + "\" class=\"" + (value.collective ? "co" : "notco") +"\">"// scheduleId
           + "<td>" + dateInfo + "</td>"
@@ -480,4 +483,3 @@ function setStudentDateNavigation(url, userId, weekDates) {
     setStudentWeekDates(dateFormatFR(weekDates.first), dateFormatFR(weekDates.last));
   });
 }
-

@@ -3,6 +3,7 @@ Algem web app 1.5.2
 CORRECTIFS
 * La fermeture automatique de session n'était pas toujours correctement détectée dans la page perso d'un utilisateur. L'utilisateur est maintenant redirigé vers la page de connexion, s'il est resté inactif plus de 30 minutes sur sa page.
 * La saisie involontaire d'un espace après son login à la création de compte entraînait l'impossibilité de se connecter ultérieurement. La reconnaissance du nom d'utilisateur ne tient plus compte maintenant des espaces indésirables (en début ou en fin d'identifiant).
+* Les plages de pause ne sont plus incluses dans le total des heures du suivi enseignant (en bas du tableau Mon suivi enseignant).
 
 POSTITS
 Parallèlement à la version 2.11.5 d'Algem, l'application web permet l'affichage sur ses pages de postits externes "publics" ou "privés". Les postits externes s'affichent en page d'accueil et sur le planning jour. Les postits privés s'affichent sur les pages perso respectives des personnes auxquelles ils sont adressés.
@@ -10,10 +11,16 @@ Parallèlement à la version 2.11.5 d'Algem, l'application web permet l'affichag
 IMPRESSION
 Vous pouviez déjà imprimer n'importe quelle page à partir de votre navigateur. Néanmoins, la composition originale de la page n'était pas forcément optimale. Les pages imprimées ne tiennent plus compte maintenant des éléments annexes comme les menus, le pied de page ou les liens de navigation. Afin d'économiser de l'encre et du papier, les photos des élèves (ou les photos par défaut) ne sont plus imprimées par exemple dans le suivi enseignant.
 
+Il est préférable d'imprimer les pages de planning en mode "Portrait". N'hésitez pas à utiliser l' "Aperçu avant impression" de votre navigateur pour vérifier la composition de la page.
+
 La plupart des navigateurs ne tiennent pas compte des couleurs de fond à l'impression. Si vous désirez imprimer les couleurs de planning, activez l'option correspondante dans les paramètres d'impression (dans Firefox, par exemple, il faut cocher "Imprimer les couleurs d'arrière plan" dans l'onglet "Options" des paramètres d'impression). Vous trouverez sur cette page des captures d'écran qui vous aideront à activer cette option en fonction de votre navigateur : http://its.yale.edu/how-to/article-printing-web-page-background-colors-and-images.
 
 SUIVI PEDAGOGIQUE
 Les professeurs ou les élèves peuvent maintenant exporter leur suivi pédagogique dans un fichier. Deux choix sont proposés aux professeurs dans la rubrique Mon suivi enseignant : Télécharger au format tableur (icone de tableur) et Télécharger au format pdf (icone pdf). L'avantage du premier est de pouvoir trier les résultats ou calculer des sous-totaux.
+Note : les plages de Pause ne sont pas incluses dans l'export.
+
 Les élèves n'ont la possibilité d'exporter leur suivi qu'en pdf (afin d'éviter d'éventuelles modifications).
 
 Pour l'heure, ces exports ne prennent en compte que la période actuellement sélectionnée (Aujourd'hui, Cette semaine, Ce mois) ou la semaine spécifiée dans le calendrier. Si aucune période n'est activée, l'export se fera sur la date du jour.
+
+La colonne "Status" a été renommée "Absence", plus intelligible, compte tenu du contexte.

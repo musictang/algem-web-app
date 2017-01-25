@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.5.2 23/01/17
+ * @(#) dossier.html Algem Web App 1.5.2 25/01/17
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -113,7 +113,7 @@
                 <li><a href="javascript:;" id="student-follow-w" th:text="#{current.week.label}"/></li>
                 <li><a href="javascript:;" id="student-follow-m" th:text="#{current.month.label}"/></li>
                 <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="student-weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="student-weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""/>&nbsp;<label for="student-weekTo" th:text="#{to.label}"></label>&nbsp;<input id="student-weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value=""/></li>
-                <li><a class="img-link" href="javascript:;" id="saveStudentPDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.svg}" width="24" /></a></li>
+                <li><a class="img-link" href="javascript:;" id="saveStudentPDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}" /></a></li>
               </ul>
             </nav>
           </header>
@@ -126,7 +126,7 @@
             <tfoot></tfoot>
           </table>
         </section>
-        <h3 id="kkkkk" th:if="${user.teacher}" th:text="#{teacher.monitoring.label}">Suivi</h3>
+        <h3 th:if="${user.teacher}" th:text="#{teacher.monitoring.label}">Suivi</h3>
         <section th:if="${user.teacher}">
           <header>
             <nav class="horizontal-panel-menu">
@@ -135,8 +135,8 @@
                 <li><a href="javascript:;" id="follow-w" th:text="#{current.week.label}"/></li>
                 <li><a href="javascript:;" id="follow-m" th:text="#{current.month.label}"/></li>
                 <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date" tabindex="3" readonly value=""/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" tabindex="4" readonly value=""/></li>
-                <li><a class="img-link" href="javascript:;" id="saveCSV" th:title="#{save.to.csv.label}"><img th:src="@{/resources/common/img/csv.svg}" width="20"/></a></li>
-                <li><a class="img-link" href="javascript:;" id="savePDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.svg}" width="24" /></a></li>
+                <li><a class="img-link" href="javascript:;" id="saveCSV" th:title="#{save.to.csv.label}"><img th:src="@{/resources/common/img/csv.png}" th:alt="#{save.to.csv.label}" /></a></li>
+                <li><a class="img-link" href="javascript:;" id="savePDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}"/></a></li>
               </ul>
             </nav>
           </header>
