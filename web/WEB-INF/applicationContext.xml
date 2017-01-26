@@ -90,6 +90,7 @@
   <security:http pattern="/signup.htm*" security="none"/>-->
 
   <!--The <http> element is responsible for creating a FilterChainProxy and the filter beans which it uses.-->
+  <!-- AJAX AWARE DECONNECTION @since 1.5.2 -->
   <bean id="authenticationEntryPoint" class="net.algem.security.AjaxAwareLoginUrlAuthenticationEntryPoint">
     <property name="loginFormUrl" value="/login.html" />
   </bean>
