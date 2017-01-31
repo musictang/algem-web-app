@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<!--
+ * @(#) dossier.html Algem Web App 1.5.2 25/01/17
+ *
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>MUSIQUES TANGENTES : Julien KOHLER</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="common/css/pure-min.css" />
+    <link rel="stylesheet" href="themes/default/css/jquery-ui.css" />
+    <link rel="stylesheet" href="common/css/common.css" />
+    <link rel="stylesheet" href="themes/default/css/custom.css" />
+    <link rel="stylesheet" href="common/css/mediaqueries.css" />
+    <link rel="stylesheet" href="common/css/font-awesome.min.css" />
+    <link rel="stylesheet" media="print" href="common/css/print.css" />
+    <script type="text/javascript" src="common/js/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript" src="common/js/jquery-ui-1.11.4.min.js"></script>
+    <script type="text/javascript" src="common/js/jquery-ui.datepicker-fr.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="common/js/util.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="common/js/common.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="common/js/dossier.js"></script>
+    <style>.doc-link {padding: 0 0 0 0.5em;cursor: pointer}
+    .doc-plus{opacity: .4} .doc-plus:hover{opacity: 1}
+    </style>
+  </head>
+  <body>
+    <aside>
+      <div class="postit postit-private" title="Cliquez pour fermer">
+        <img src="common/img/postit-pin.png" />
+        <ul>
+          <li>
+            <p>Postit privé externe</p>
+            <p>(mar. 24 janv. 2017)</p>
+          </li>
+        </ul>
+      </div>
+    </aside>
+    <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
+    <div id="menu">
+      <ul>
+        <li><a href="#" id="menu-close" title="Fermer"><i class="fa fa-close"></i></a></li>
+        <li><a href="/algem/planning/index.html" title="Accueil"><i class="fa fa-home"></i></a></li>
+
+
+        <li><a href="/algem/planning/perso/home.html" id="dossier" title="Mon compte"><i class="fa fa-user-plus"></i></a><span class="pseudo">julien</span></li>
+        <li><a href="/algem/planning/j_spring_security_logout" id="menu-logout" title="Déconnexion"><i class="fa fa-sign-out"></i></a></li>
+
+        <li><a id="help" href="/algem/planning/help.html#chapter-perso" title="Aide"><i class="fa fa-question-circle"></i></a></li>
+      </ul>
+    </div>
+    <header>
+      <h1>MUSIQUES TANGENTES</h1>
+    </header>
+    <div class="global">
+      <div id="accordion">
+        <h3>Julien KOHLER</h3>
+        <div>
+          <table class="pure-table pure-table-horizontal simple">
+            <tr><th>Login</th><td>julien</td></tr>
+            <tr>
+              <th>Email</th>
+              <td>
+                <ul class="simple">
+                  <li><a href="mailto:juko@jukozone.org">juko@jukozone.org</a></li>
+                  <li><a href="mailto:jukohler@wanadoo.fr">jukohler@wanadoo.fr</a></li>
+                </ul>
+              </td>
+            </tr>
+            <tr><th>Profil</th><td>Enseignant</td></tr>
+          </table>
+        </div>
+        <h3>Planning</h3>
+        <div>
+          <ul class="simple">
+            <li><i class="fa fa-calendar-plus-o"></i>
+              <a href="/algem/planning/daily.html?d=30-01-2017&amp;e=3501">Réserver</a>
+            </li>
+            <li><i class="fa fa-calendar"></i>
+              <a href="/algem/planning/perso/weekly.html?d=30-01-2017&amp;id=12019" title="Vue par semaine">Mon planning hebdo</a>
+            </li>
+          </ul>
+        </div>
+        <h3>Mes réservations</h3>
+        <table class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
+          <thead>
+            <tr>
+              <th>Groupe</th>
+              <th>Etablissement</th>
+              <th>Salle</th>
+              <th>Date</th>
+              <th>Heure</th>
+              <th>Statut</th>
+              <th style="width: 10%;text-align: center"><a href="javascript:location.reload(true);" title="Recharger la page" class="img-link"><i class="fa fa-refresh"></i></a></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        <h3>Mon suivi pédagogique</h3>
+        <section>
+          <header>
+            <nav class="horizontal-panel-menu">
+              <ul class="horizontal-panel-menu">
+                <li><a href="javascript:;" id="student-follow-d">Aujourd&#39;hui</a></li>
+                <li><a href="javascript:;" id="student-follow-w">Cette semaine</a></li>
+                <li><a href="javascript:;" id="student-follow-m">Ce mois</a></li>
+                <li title="Cliquez pour changer de semaine"><label style="text-transform: lowercase" for="student-weekFrom">Du</label>&nbsp;<input id="student-weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""/>&nbsp;<label for="student-weekTo">au</label>&nbsp;<input id="student-weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value=""/></li>
+                <li><a class="img-link" href="javascript:;" id="saveStudentPDF" title="Télécharger au format pdf" ><img src="common/img/pdf.png" alt="Télécharger au format pdf" /></a></li>
+              </ul>
+            </nav>
+          </header>
+          <table id="follow-up-student" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
+            <thead>
+              <tr><th>Jour</th><th>Horaire</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Enseignant</th><th>Suivi individuel</th><th>Suivi co.</th></tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+          </table>
+        </section>
+        <h3>Suivi enseignant</h3>
+        <section>
+          <header>
+            <nav class="horizontal-panel-menu">
+              <ul class="horizontal-panel-menu">
+                <li><a href="javascript:;" id="follow-d" formaction="/algem/planning/perso/xFollowUpSchedules" >Aujourd&#39;hui</a></li>
+                <li><a href="javascript:;" id="follow-w">Cette semaine</a></li>
+                <li><a href="javascript:;" id="follow-m">Ce mois</a></li>
+                <li title="Cliquez pour changer de semaine"><label style="text-transform: lowercase" for="weekFrom">Du</label>&nbsp;<input id="weekFrom" type="text" class="week-date" tabindex="3" readonly value=""/>&nbsp;<label for="weekTo">au</label>&nbsp;<input id="weekTo" type="text" class="week-date" tabindex="4" readonly value=""/></li>
+                <li><a class="img-link" href="javascript:;" id="saveCSV" title="Télécharger au format tableur"><img src="common/img/csv.png" alt="Télécharger au format tableur" /></a></li>
+                <li><a class="img-link" href="javascript:;" id="savePDF" title="Télécharger au format pdf" ><img src="common/img/pdf.png" alt="Télécharger au format pdf"/></a></li>
+              </ul>
+            </nav>
+          </header>
+          <div id="docEditor" style="display: none">
+            <form>
+              <fieldset>
+                <div class="row-form">
+              <select id="doc-type" style="width:100%">
+                <option>Type de document...</option>
+                <option>Partition</option>
+                <option>Audio</option>
+                <option>Vidéo</option>
+                <option>Autre</option>
+              </select>
+                </div>
+                <div class="row-form">
+              <label for="doc-name">Nom du lien</label>
+              <input id="doc-name" type="text"  style="width:96%"/>
+                </div>
+<!--              <label for="doc-type">Type</label>-->
+              <div class="row-form">
+              <label style="display:block" for="doc-url">Adresse du lien</label>
+              <input id="doc-url" type="text"  style="width:96%"/>
+              </div>
+              </fieldset>
+            </form>
+          </div>
+          <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed printable">
+            <thead>
+              <tr><th>Jour</th><th>Horaire</th><th>Durée</th><th>Salle</th><th>Cours</th><th>Suivi individuel</th><th>Suivi co.</th></tr>
+            </thead>
+            <tbody>
+              <tr id="105375" class="notco">
+                <td>mercredi 01-02-2017</td>
+                <td>15:00-​15:30</td>
+                <td>00:30</td>
+                <td>VERTE</td>
+                <td title="PIANO"><a href="#" title="Voir tous les documents">PIANO</a>
+                  <div id="doc-icon-panel" style="margin-top: 0.5em">
+<!--                  <img class="img-link doc-link" title="Le beau danube bleu" alt="Le beau danube bleu" src="common/img/music.png">
+                  <img class="img-link doc-link" title="Oh when the saints" alt="When the saints" src="common/img/audio.png">
+                  <img class="img-link doc-link" title="Red hot chili peppers : Otherside" alt="Red hot chili peppers : Otherside" src="common/img/movie.png">
+                  <img class="img-link doc-link" title="Histoire de la musique jazz" alt="Partage" src="common/img/partage.png">-->
+                  <img class="img-link doc-link" title="Les gammes pentatoniques" alt="Partage" src="common/img/partage.png">
+                    <a class="img-link doc-link doc-plus" title="Ajouter document..." href="javascript:;"><img alt="Ajouter..." src="common/img/plus.png"></a>
+                  </div>
+                </td>
+                <td style="min-width: 8em">
+                  <ul class="simple">
+                    <li id="230327">
+                      <div class="monitoring-element">
+                        <img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png">
+                          <a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Malcolm DANSET</a>
+                          <a href="mailto:osklower@wanadoo.fr" title="Envoyer un email">osklower@wanadoo.fr</a> <a href="tel:06 18 95 91 51" title="Appeler">06 18 95 91 51</a>
+                          <p class="follow-up-content"></p>
+                          <p class="subContent"></p>
+                      </div>
+                    </li>
+                  </ul>
+                </td>
+                <td id="0" class="dlg" accesskey="C" title="Editer le suivi collectif">
+                  <p></p>
+                  <p class="subContent"></p>
+                </td>
+              </tr>
+              <tr id="105375" class="notco"><td>mercredi 01-02-2017</td><td>15:30-​16:00</td><td>00:30</td><td>VERTE</td><td title="PIANO">PIANO</td><td style="min-width: 8em"><ul class="simple"><li id="232086"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Nina GUDIN</a><a href="mailto:manuela.c@hotmail.fr" title="Envoyer un email">manuela.c@hotmail.fr</a> <a href="tel:06 63 23 51 38" title="Appeler">06 63 23 51 38</a><p class="follow-up-content"></p><p class="subContent"></p></div></li></ul></td><td id="0" class="dlg" accesskey="C" title="Editer le suivi collectif"><p></p><p class="subContent"></p></td></tr>
+              <tr id="105375" class="notco"><td>mercredi 01-02-2017</td><td>16:00-​16:45</td><td>00:45</td><td>VERTE</td><td title="PIANO">PIANO</td><td style="min-width: 8em"><ul class="simple"><li id="232118"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Julien FLOUS</a><a href="mailto:juxr@yahoo.fr" title="Envoyer un email">juxr@yahoo.fr</a> <a href="tel:06 89 22 55 84" title="Appeler">06 89 22 55 84</a><p class="follow-up-content"></p><p class="subContent"></p></div></li></ul></td><td id="0" class="dlg" accesskey="C" title="Editer le suivi collectif"><p></p><p class="subContent"></p></td></tr>
+              <tr id="105375" class="notco"><td>mercredi 01-02-2017</td><td>16:45-​17:15</td><td>00:30</td><td>VERTE</td><td title="PIANO">PIANO</td><td style="min-width: 8em"><ul class="simple"><li id="234675"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Anaïs BAILLY</a><a href="mailto:anabel.bailly@gmail.com" title="Envoyer un email">anabel.bailly@gmail.com</a> <a href="tel:06 83 21 91 82" title="Appeler">06 83 21 91 82</a><p class="follow-up-content"></p><p class="subContent"></p></div></li></ul></td><td id="0" class="dlg" accesskey="C" title="Editer le suivi collectif"><p></p><p class="subContent"></p></td></tr>
+              <tr id="105375" class="notco"><td>mercredi 01-02-2017</td><td>17:30-​18:15</td><td>00:45</td><td>VERTE</td><td title="PIANO">PIANO</td><td style="min-width: 8em"><ul class="simple"><li id="234707"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Jacques TAILLADE</a><a href="mailto:jacquestaillade@free.fr" title="Envoyer un email">jacquestaillade@free.fr</a> <a href="tel:01 46 48 76 66" title="Appeler">01 46 48 76 66</a><p class="follow-up-content"></p><p class="subContent"></p></div></li></ul></td><td id="0" class="dlg" accesskey="C" title="Editer le suivi collectif"><p></p><p class="subContent"></p></td></tr>
+              <tr id="105375" class="notco"><td>mercredi 01-02-2017</td><td>18:15-​19:00</td><td>00:45</td><td>VERTE</td><td title="PIANO">PIANO</td><td style="min-width: 8em"><ul class="simple"><li id="226616"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Ulysse VIDAL</a><a href="mailto:m.bouzemberg@laposte.net" title="Envoyer un email">m.bouzemberg@laposte.net</a> <a href="tel:06 78 52 77 42 (GM)" title="Appeler">06 78 52 77 42 (GM)</a><p class="follow-up-content"></p><p class="subContent"></p></div></li></ul></td><td id="0" class="dlg" accesskey="C" title="Editer le suivi collectif"><p></p><p class="subContent"></p></td></tr>
+              <tr id="105279" class="co"><td>mercredi 01-02-2017</td><td>19:00-​20:30</td><td>01:30</td><td>ORCHESTRA</td>
+                <td title="AT. MUSTANG 3">
+                  <a href="mailto:marie-jose.gireaud@caissedesdepots.fr?bcc=jacquestaillade@free.fr,mail@lespierre.org,calasleo@gmail.com,jeanne.morand@caissedesdepots.fr,olivier.cossais@free.fr," title="Envoyer un mail à tous les participants"><i class="fa fa-envelope"></i>&nbsp;AT. MUSTANG 3</a>
+                <div id="doc-icon-panel" style="margin-top: 0.5em">
+<!--                  <img class="img-link doc-link" title="Le beau danube bleu" alt="Le beau danube bleu" src="common/img/music.png">
+                  <img class="img-link doc-link" title="Oh when the saints" alt="When the saints" src="common/img/audio.png">
+                  <img class="img-link doc-link" title="Red hot chili peppers : Otherside" alt="Red hot chili peppers : Otherside" src="common/img/movie.png">
+                  <img class="img-link doc-link" title="Histoire de la musique jazz" alt="Partage" src="common/img/partage.png">
+                  <img class="img-link doc-link" title="Les gammes pentatoniques" alt="Partage" src="common/img/partage.png">-->
+                    <a class="img-link doc-link doc-plus" title="Ajouter document..." href="javascript:;"><img alt="Ajouter..." src="common/img/plus.png"></a>
+                  </div>
+                </td>
+                <td style="min-width: 8em"><a href="javascript:;" class="expand" title="Plier/Déplier"><i>Liste des élèves&nbsp;...</i></a><ul class="simple"><li id="228885"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Marie-José GIREAUD</a><a href="mailto:marie-jose.gireaud@caissedesdepots.fr" title="Envoyer un email">marie-jose.gireaud@caissedesdepots.fr</a> <a href="tel:01 58 50 11 33" title="Appeler">01 58 50 11 33</a><p class="follow-up-content"></p><p class="subContent"></p></div></li><li id="227417"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Jacques TAILLADE</a><a href="mailto:jacquestaillade@free.fr" title="Envoyer un email">jacquestaillade@free.fr</a> <a href="tel:01 46 48 76 66" title="Appeler">01 46 48 76 66</a><p class="follow-up-content"></p><p class="subContent"></p></div></li><li id="227657"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Laurent PIERRE</a><a href="mailto:mail@lespierre.org" title="Envoyer un email">mail@lespierre.org</a> <a href="tel:01 42 53 96 63" title="Appeler">01 42 53 96 63</a><p class="follow-up-content"></p><p class="subContent"></p></div></li><li id="226712"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Léo CALAS</a><a href="mailto:calasleo@gmail.com" title="Envoyer un email">calasleo@gmail.com</a> <a href="tel:07 82 14 16 35" title="Appeler">07 82 14 16 35</a><p class="follow-up-content"></p><p class="subContent"></p></div></li><li id="228562"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Jeanne MORAND</a><a href="mailto:jeanne.morand@caissedesdepots.fr" title="Envoyer un email">jeanne.morand@caissedesdepots.fr</a> <a href="tel:06 19 90 24 10" title="Appeler">06 19 90 24 10</a><p class="follow-up-content"></p><p class="subContent"></p></div></li><li id="228594"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Olivier COSSAIS</a><a href="mailto:olivier.cossais@free.fr" title="Envoyer un email">olivier.cossais@free.fr</a> <a href="tel:07 83 69 39 21" title="Appeler">07 83 69 39 21</a><p class="follow-up-content"></p><p class="subContent"></p></div></li></ul></td><td id="0" class="dlg" accesskey="C" title="Editer le suivi collectif"><p></p><p class="subContent"></p></td></tr>
+              <tr id="107155" class="notco"><td>mercredi 01-02-2017</td><td>20:30-​21:30</td><td>01:00</td><td>VERTE</td><td title="HARMONIE IND">HARMONIE IND</td><td style="min-width: 8em"><ul class="simple"><li id="227537"><div class="monitoring-element"><img data-algem-id="0" class="photo-id-thumbnail dlg" src="common/img/idphoto.png"><a id="0" href="javascript:;" class="dlg" title="Editer le suivi de l'élève (ou signaler son absence)" accesskey="D">Pierre JACQUET</a><a href="mailto:grepie.grepie@free.fr" title="Envoyer un email">grepie.grepie@free.fr</a> <a href="tel:06 22 09 55 00" title="Appeler">06 22 09 55 00</a><p class="follow-up-content"></p><p class="subContent"></p></div></li></ul></td><td id="0" class="dlg" accesskey="C" title="Editer le suivi collectif"><p></p><p class="subContent"></p></td></tr>
+              <tr><th colspan="2">Total</th><td colspan="5"><b>06:15</b></td></tr></tbody>
+            <tfoot></tfoot>
+          </table>
+        </section>
+      </div>
+    </div>
+    <div id="follow-up-dlg">
+      <form id="follow-up-form" action="/algem/planning/perso/xEditFollowUp">
+        <fieldset>
+          <div>
+            <img id="follow-up-photo" src="common/img/idphoto.png" style="float: left;margin:0 0.5em 0.5em 0"/>
+            <legend>PIANO<br />mercredi 01-06-2016<br />17:00-17:30</legend>
+            <!--<label for="follow-content" th:text="#{follow-up.label}">Suivi</label>-->
+            <textarea style="display: block;width: 98%" rows="3" id="follow-content" name="content" maxlength="512" placeholder="Suivi"></textarea>
+          </div>
+          <div style="margin-top: 1em">
+            <label for="note" style="margin-right: 0.5em">Note</label><input id="note" type="text" name="note" maxlength="8" style="display: inline-block;width: 4em" />
+            <select id="follow-status" style="margin-left: 1em" >
+              <option value="0">Présent(e)</option>
+              <option value="1">Absent(e)</option>
+              <option value="2">Excusé(e)</option>
+            </select>
+            <!--Force sending status val when select is readonly-->
+            <input id="status" type="hidden" name="status" value="0" />
+          </div>
+          <input id="noteId" type="hidden" name="id" />
+          <input id="scheduleId" type="hidden" name="scheduleId" />
+          <input id="noteType" type="hidden" name="collective" />
+        </fieldset>
+      </form>
+      <p class="error">Erreur</p>
+    </div>
+
+    <footer>
+      <a class="logo" target="_blank" href="http://www.musiques-tangentes.asso.fr"><img src="themes/img/logo.png" /></a>
+      <address>
+        &copy;&nbsp;2016&nbsp;Musiques&nbsp;Tangentes&nbsp;AGPL&nbsp;3&nbsp;| v.1.5.2&nbsp;<a href="http://www.algem.net" target="_blank">www.algem.net</a>
+      </address>
+    </footer>
+    <div id="busy"></div>
+    <div id="errorDialog" title="Avertissement"></div>
+    <!--<aside id="help-panel" class="closeable" th:include="fragments/help :: perso"></aside>-->
+  </body>
+  <script type="text/javascript">
+    /*<![CDATA[*/
+    var userId = 12019;
+    var userProfile = 2;
+    var dlg = $("#follow-up-dlg");
+    var followUpURL = '/algem/planning/perso/xFollowUp';
+    var url1 = $("#follow-d").attr("formaction");
+    var url2 = $("#student-follow-d").attr("formaction");
+    var labels = {
+      "abort_label": 'Abandonner',
+      "call_label": 'Appeler',
+      "cancel_label": 'Annuler',
+      "collective_monitoring_action": 'Editer le suivi collectif',
+      "collective_monitoring_title": 'Suivi collectif',
+      "collective_monitoring_warning": 'Le suivi collectif n\'est pas \xE9ditable pour les cours individuels.',
+      "expand_collapse": 'Plier/D\xE9plier',
+      "individual_monitoring_action": 'Editer le suivi de l\'\xE9l\xE8ve (ou signaler son absence)',
+      "mailto_all_participants_tip": 'Envoyer un mail \xE0 tous les participants',
+      "send_email_label": 'Envoyer un email',
+      "save_label": 'Enregistrer',
+      "score_label": 'Note',
+      "student_list": 'Liste des \xE9l\xE8ves'
+    };
+    var paths = {
+      "def_photo_id": 'common/img/idphoto.png',
+      "def_photo_co": 'common/img/groupe_trans.png'
+    }
+    setCommonEvents();
+    initFollowUpDialog(dlg, labels);
+    initErrorDialog();
+    initWeekDates(new Date());
+    setWeekChange(url1, userId);
+    setStudentWeekChange(url2, userId);
+    setDefaultVars(labels, paths);
+    var cwd = getCurrentWeekDates(new Date());
+
+    $("#accordion").accordion({
+      heightStyle: "content",
+      collapsible: "true",
+      active: (userProfile === 2) ? $(this).children("h3:last").index() : 1,
+      animate: false
+              //animate: {easing: "linear",duration: 200}
+    });
+    //unactive ENTER key on dialog submit
+    $("#follow-up-form").submit(function (e) {
+      e.preventDefault();
+    }
+    );
+    setTeacherDateNavigation(url1, userId, cwd);
+    setStudentDateNavigation(url2, userId, cwd);
+    //manage ajax loaded content
+    $(document).on("click", ".expand", function () {
+      $(this).next().toggle();
+    });
+
+    $("#saveCSV").click(function () {
+      var ref = '/algem/planning/perso/teacher/saveCSV';
+      window.location.href = ref + "?userId=" + userId + "&from=" + $("#weekFrom").val() + "&to=" + $("#weekTo").val();
+    });
+
+    $("#savePDF").click(function () {
+      var ref = '/algem/planning/perso/teacher/savePDF';
+      window.location.href = ref + "?userId=" + userId + "&from=" + $("#weekFrom").val() + "&to=" + $("#weekTo").val();
+    });
+
+    $("#saveStudentPDF").click(function () {
+      var ref = '/algem/planning/perso/user/savePDF';
+      window.location.href = ref + "?userId=" + userId + "&from=" + $("#student-weekFrom").val() + "&to=" + $("#student-weekTo").val();
+    });
+    
+    $("#docEditor").dialog({
+    autoOpen: false,
+    title: "Document",
+    buttons: [
+      {
+        text: labels.abort_label,
+        class: "button-secondary",
+        click: function () {
+          $(this).dialog("close");
+        }
+      },
+      {
+        text: labels.save_label,
+        click: function () {
+          console.log("save");
+        }
+      }
+    ]
+  });
+$(".doc-link").click(function(){
+  $("#docEditor").dialog("open");
+});
+    
+
+    $(document).on("click", ".dlg", function () {
+      resetFollowUpDialog(paths["def_photo_id"]);
+      var isCoCell = $(this).attr("accessKey") === "C";
+      getAndFillFollowUp(followUpURL, $(this), isCoCell);
+      var row = $(this).closest('tr');
+      var course = row.find(':nth-child(5)').attr("title");
+      var date = row.find(':nth-child(1)').contents().get(0).nodeValue;
+      var time = " " + row.find(':nth-child(2)').contents().get(0).nodeValue;
+      var legendInfo = course + "<br />" + date + "<br />" + time;
+      var legend = $(dlg).find("legend");
+      var isImage = $(this).is("img");
+      // set dialog's title
+      var t = isCoCell ? labels.collective_monitoring_title : (isImage ? $(this).next().html() : $(this).html());
+      var isCo = row.hasClass("co");
+      $(legend).html(legendInfo + " <i class='fa fa-mail'></i>");
+      // complete form
+      if (isCoCell) {
+        $("#note").prop("readonly", true);
+        $("#follow-status").prop("disabled", "disabled");
+      } else {
+        $("#note").prop("readonly", false);
+        $("#follow-status").prop("disabled", false);
+      }
+      $("#noteId").val(isImage ? $(this).next().attr("id") : $(this).attr("id"));
+      // get rangeId if individual, scheduleId if collective
+      $("#scheduleId").val(isCoCell ? row.attr("id") : $(this).closest("li").attr("id"));
+      $("#noteType").val(isCoCell);
+      if (!isCoCell || (isCo && isCoCell)) {
+        $(dlg).dialog({title: t}).dialog("open");
+      } else {
+        $("#errorDialog").text(labels.collective_monitoring_warning).dialog("open");
+      }
+    });
+
+    /*]]>*/
+  </script>
+</html>

@@ -1,86 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-  <!--CHARGEMENT DU CONTEXTE DE L’APPLICATION WEB-->
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/applicationContext.xml /WEB-INF/client.xml /WEB-INF/sender.xml</param-value>
-  </context-param>
-
-  <!--ServletContextListener SPRING IMPLEMENTATION-->
-  <!--Le framework Spring fournit une implémentation de la classe ServletContextListener de
+    <!--CHARGEMENT DU CONTEXTE DE L’APPLICATION WEB-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml /WEB-INF/client.xml /WEB-INF/sender.xml</param-value>
+    </context-param>
+    <!--ServletContextListener SPRING IMPLEMENTATION-->
+    <!--Le framework Spring fournit une implémentation de la classe ServletContextListener de
   la spécification servlet permettant de configurer et d’initialiser le contexte d'application au démarrage
   et de le finaliser à l’arrêt de l’application Web.-->
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-
-  <!--SERVLET DU CONTRÔLEUR FAÇADE DE SPRING MVC-->
-  <servlet>
-    <servlet-name>dispatcher</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>dispatcher</servlet-name>
-    <url-pattern>/</url-pattern>
-    <url-pattern>*.html</url-pattern>
-  </servlet-mapping>
-  <session-config>
-    <session-timeout>30</session-timeout>
-  </session-config>
-
-  <!--  <welcome-file-list>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <!--SERVLET DU CONTRÔLEUR FAÇADE DE SPRING MVC-->
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>15</session-timeout>
+        <cookie-config>
+          <http-only>true</http-only>
+        </cookie-config>
+    </session-config>
+    <!--<welcome-file-list>
     <welcome-file>redirect.jsp</welcome-file>
-  </welcome-file-list>-->
-
-  <!--ENCODING FILTER-->
-  <filter>
-    <filter-name>encoding-filter</filter-name>
-    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-    <init-param>
-      <param-name>encoding</param-name>
-      <param-value>UTF-8</param-value>
-    </init-param>
-    <init-param>
-      <param-name>forceEncoding</param-name>
-      <param-value>TRUE</param-value>
-    </init-param>
-  </filter>
-  <filter-mapping>
-    <filter-name>encoding-filter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-
-  <!--SPRING SECURITY SERVLET FILTER PROXY-->
-  <!--SpringSecurity will automatically create a filter bean whose ID is springSecurityFilterChain -->
-  <filter>
-    <filter-name>springSecurityFilterChain</filter-name>
-    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>springSecurityFilterChain</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-
-  <!--ERROR PAGES-->
-  <error-page>
-    <error-code>403</error-code>
-    <location>/403</location>
-  </error-page>
-
-  <error-page>
-    <error-code>404</error-code>
-    <location>/404</location>
-  </error-page>
-
-  <error-page>
-    <error-code>500</error-code>
-    <location>/error</location>
-  </error-page>
-
-  <error-page>
-    <error-code>503</error-code>
-    <location>/error</location>
-  </error-page>
-
+    </welcome-file-list>-->
+    <!--ENCODING FILTER-->
+    <filter>
+        <filter-name>encoding-filter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>TRUE</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encoding-filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--SPRING SECURITY SERVLET FILTER PROXY-->
+    <!--SpringSecurity will automatically create a filter bean whose ID is springSecurityFilterChain -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--ERROR PAGES-->
+    <error-page>
+        <error-code>403</error-code>
+        <location>/403</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error</location>
+    </error-page>
+    <error-page>
+        <error-code>503</error-code>
+        <location>/error</location>
+    </error-page>
+  
 </web-app>

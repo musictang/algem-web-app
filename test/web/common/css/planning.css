@@ -1,0 +1,231 @@
+/*
+ * @(#) planning.css Algem Web App 1.5.0 27/10/16
+ *
+ * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+    Created on : 9 mai 2015, 09:23:44
+    Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
+    Last       : 1.5.0 27/10/16
+*/
+
+.ui-dialog{
+  /*
+  you need the key !important to override the default styling of the element; this affects all your dialogs if you need to set it only for a dialog use the dialogClass option and style it.
+  * http://stackoverflow.com/questions/16917430/jquery-ui-1-10-dialog-and-zindex-option
+  */
+  z-index:10000 !important ;
+}
+
+#dialog {
+  line-height: 1.25em;
+  font-size: smaller;
+}
+
+#grid {
+  position: absolute;
+  top: 6%;
+  border-collapse:collapse;
+  border-spacing: 0;
+  width: 100%;
+  height: 720px;
+  /*height: 100%;*/
+  /* border-top:1px and border-bottom:1px */
+  font-size: x-small;
+  text-align: left;
+  background-color: ivory;
+  border:1px solid gray;
+  z-index: 1000;
+  /*box-sizing: border-box;*/
+}
+
+#grid tr {
+  height: auto;
+}
+
+#grid th {
+  padding-left: 0.1em;
+  text-align: left;
+  vertical-align: top;
+  font-family: monospace,'Courier New',sans-serif;
+  border: none;
+}
+
+#grid tr th > p {
+  padding:0;
+  line-height: 0.9em;
+  color: #111;
+}
+
+#grid tr:nth-child(even) {border-bottom: 1px solid gray;}
+#grid tr:nth-child(odd) {border-bottom: 1px dotted gray;}
+
+#canvas {
+  background-color: ivory;
+  position: absolute;
+  top: 6%;
+  left:2.2em;
+  height:720px;
+  font-family: 'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
+  font-stretch: condensed;
+}
+
+.schedule_col {
+  position: relative;
+  width: 100px;
+  height:720px;
+  float:left;
+  border-right:1px solid gray;
+  z-index: 1001;
+}
+
+.schedule_col:nth-child(1) {
+  border-left:1px solid gray;
+}
+
+#schedule-detail-dlg {font-size: smaller}
+
+#title_col {
+  position: fixed;
+  top: 6%;
+  left:2.2em;
+  margin-top: -1.1em;
+  /*left: 33px;*/
+  z-index: 1002;
+}
+
+/*fixed title bar*/
+#title_col p {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  line-height: 1em;
+  width: 101px;
+  font-size: x-small;
+  font-family: 'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
+  font-weight: bold;
+  font-stretch: condensed;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: '.';
+  white-space: nowrap;
+  padding:0 0.1em;
+}
+/*absolute title col*/
+.title_col {
+  position: absolute;
+  top:-1.5em;
+  width: 100%;
+  padding:0;
+  font-size: x-small;
+  font-family: 'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
+  font-weight: bold;
+  font-stretch: condensed;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: '.';
+  white-space: nowrap;
+  /*padding: 0 0.2em;*/
+  box-sizing: border-box;
+  z-index: 1004;
+}
+
+.schedule {
+  box-sizing:  border-box;
+  position: absolute;
+  width:100%;
+  font-size: x-small;
+  text-align: center;
+  text-wrap: normal;
+  /*border-top: 1px solid gray;*/
+  border-bottom: 1px solid gray;
+  z-index: 1001;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.labels {
+  position: absolute;
+  color: #111;
+  width:100%;
+  margin:0;padding:0;
+  font-size: x-small;
+  line-height:0.9em;
+  text-align: center;
+  background-color: transparent;
+  z-index: 1003;
+}
+.course_label {
+  display: block;
+  /*// option
+  background-color: #eee;
+  color: black;*/
+  line-height: 0.95em;
+  z-index: 1002;
+}
+.range {
+  position: absolute;
+  background-color: #FCD300;
+  /*width:98%;*/
+  /*margin:0 1%;*/
+  border-radius: 2px;
+  z-index: 1002;
+}
+
+#dow {
+  display: inline-block;
+  text-align: right;
+  padding: 0 0.1em;
+  font-family: Consolas,'Ubuntu Mono',monospace;
+}
+
+#date-panel {
+  display: inline-block;
+}
+
+.tip {
+  position: absolute;
+  top: 1.2em;
+  padding:0.2em;
+  display: none;
+  background-color: #FCD300;
+  color:black;
+  font-size: larger;
+  z-index: 1010;
+}
+
+.color-square {
+  width:16px;
+  height:16px;
+  display: inline-block;
+  vertical-align: middle;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+  margin-right: 1em;
+}
+
+footer {top: 722px;}
+
+#previous:link, #previous:visited, #previous:hover, #previous:active,
+#next:link, #next:visited, #next:hover, #next:active {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: x-large;
+  vertical-align: middle;
+  border: none;
+}

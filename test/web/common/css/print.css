@@ -1,0 +1,38 @@
+/*
+ * @(#) print.css Algem Web App 1.5.2 18/01/2017
+ *
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+*/
+/*
+    Created on : 18/01/17
+    Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
+*/
+#menu, #bottom-menu, #bars, .gallery, .postit, nav.horizontal-panel-menu, footer {display: none}
+.printable {display: block !important;}
+.printable img {display: none;}
+.centered {width: 100%;}
+header > h1 {height: auto;font-size: 1.5em;color: black;background-color: #ddd}
+body {height: auto;background-color: white}
+h2 {color: black;font-size: 1.3em}
+#accordion .ui-accordion-header {color: black;font-size: 1em}
+/** FORCE BACKGROUND-COLOR FIREFOX HACK.
+1000px is a random high number that is definitely larger than the box dimension.
+Il est préférable de laisser le choix à l'utilisateur (config sous Firefox : "print.print_bgcolor")*/
+/*.schedule {box-shadow: inset 0 0 0 1000px #CCC;}
+.closed {box-shadow: inset 0 0 0 1000px #777;}
+.range {box-shadow: inset 0 0 0 1000px #999;}*/
+
