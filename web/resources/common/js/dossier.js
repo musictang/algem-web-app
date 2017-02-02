@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.5.2 25/01/17
+ * @(#) dossier.js Algem Web App 1.6.0 01/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -68,7 +68,7 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
     } else {
       var result = "";
       var total = 0;
-      var indTitle = labels.individual_monitoring_action;
+      //var indTitle = labels.individual_monitoring_action;
       var coTitle = labels.collective_monitoring_action;
       var supportLocales = toLocaleStringSupportsLocales();
       // zero-width space (&#8203;) inserted after hyphens to authorize breaks
@@ -81,49 +81,27 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
         var length = me - ms;
         var roomInfo = value.detail['room'].name;
         var courseInfo = value.ranges[0] ? value.detail['course'].name : "PAUSE";
-        var firstNameName = "";
+        //var firstNameName = "";
         var noteCo = value.followUp.content || "";
         // do not include breaks in total
         if (value.collective || (value.ranges[0] && value.ranges[0].person.id > 0)) {
           total += length;
         }
-
         result += "<tr id=\"" + value.id + "\" class=\"" + (value.collective ? "co" : "notco") +"\">"// scheduleId
           + "<td>" + dateInfo + "</td>"
           + "<td>" + timeInfo + "</td>"
           + "<td>" + getTimeFromMinutes(length) + "</td>"
           + "<td>" + roomInfo + "</td>"
-          + "<td title=\""+ courseInfo + "\">" + (value.collective ? getMailtoLinkFromRanges(value.ranges, labels.mailto_all_participants_tip, courseInfo) : courseInfo) + "</td><td style=\"min-width: 8em\">";
+          + "<td title=\""+ courseInfo + "\">"
+          + (value.collective ? getMailtoLinkFromRanges(value.ranges, labels.mailto_all_participants_tip, courseInfo) : courseInfo)
+          + fillDocumentPanel(value)
+          + "</td><td style=\"min-width: 8em\">";
         if (value.collective) {
           result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.expand_collapse+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
         } else {
           result += "<ul class=\"simple\">";
         }
-        for (var i = 0, len = value.ranges.length; i < len; i++) {
-          firstNameName = value.ranges[i].person.firstName + " " + value.ranges[i].person.name;
-          var nc = value.ranges[i].followUp.content || "";
-          var sub = getFollowUpSubContent(value.ranges[i].followUp);
-var photo = value.ranges[i].person.photo;
-          result += "<li id=\"" + value.ranges[i].id + "\"><div class=\"monitoring-element\">";// scheduleRange Id
-
-          if (photo != null) {
-            result += "<img data-algem-id=\""+ value.ranges[i].followUp.id +"\" class=\"photo-id-thumbnail dlg\" src=\"data:image/jpg;base64,"+photo+"\" title=\"" + indTitle + "\"/>";
-          } else {
-            result += "<img data-algem-id=\""+ value.ranges[i].followUp.id +"\" class=\"photo-id-thumbnail dlg\" src=\""+ paths["def_photo_id"] + "\" />";
-          }
-          // RANGE ID AND NAME
-          result += "<a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\"" + indTitle + "\" accessKey=\"D\">" + firstNameName + "</a>";
-          //CONTACT INFO
-          var emails = value.ranges[i].person.emails;
-          var tels = value.ranges[i].person.tels;
-          var email = emails.length > 0 ? "<a href=\"mailto:" + emails[0].email + "\" title=\""+labels.send_email_label+"\">" + emails[0].email + "</a> " : "";
-          var tel = tels.length > 0 ? "<a href=\"tel:" + tels[0].number + "\" title=\""+labels.call_label+"\">" + tels[0].number + "</a>" : "";
-          result += email + tel;
-          // CONTENT
-          result += "<p class=\"follow-up-content\">" + $('<div />').text(nc).html() + "</p>"; // encode entities
-          result += "<p class=\"subContent\">" + sub + "</p>";
-          result += "</div></li>";
-        }
+        result += fillRanges(value, paths, labels);
         result += "</ul>";
 
         result += "</td><td id=\"" + value.note + "\" class=\"dlg\" accessKey=\"C\" title=\"" + coTitle + "\"><p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + getFollowUpSubContent(value.followUp) + "</p></td></tr>\n";
@@ -132,6 +110,88 @@ var photo = value.ranges[i].person.photo;
       $("#follow-up-result tbody").html(result);
     }
   }, "json");
+}
+
+/**
+ *
+ * @param {Object} value json data
+ * @param {Object} paths default locations
+ * @param {Object} labels common labels
+ * @returns {String} full content html li element
+ */
+function fillRanges(value, paths, labels) {
+  var line = "";
+  var indTitle = labels.individual_monitoring_action;
+  for (var i = 0, len = value.ranges.length; i < len; i++) {
+    var firstNameName = value.ranges[i].person.firstName + " " + value.ranges[i].person.name;
+    var nc = value.ranges[i].followUp.content || "";
+    var sub = getFollowUpSubContent(value.ranges[i].followUp);
+    var photo = value.ranges[i].person.photo;
+    line += "<li id=\"" + value.ranges[i].id + "\"><div class=\"monitoring-element\">";// scheduleRange Id
+
+    if (photo != null) {
+      line += "<img data-algem-id=\"" + value.ranges[i].followUp.id + "\" class=\"photo-id-thumbnail dlg\" src=\"data:image/jpg;base64," + photo + "\" title=\"" + indTitle + "\"/>";
+    } else {
+      line += "<img data-algem-id=\"" + value.ranges[i].followUp.id + "\" class=\"photo-id-thumbnail dlg\" src=\"" + paths["def_photo_id"] + "\" />";
+    }
+    // RANGE ID AND NAME
+    line += "<a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\"" + indTitle + "\" accessKey=\"D\">" + firstNameName + "</a>";
+    //CONTACT INFO
+    var emails = value.ranges[i].person.emails;
+    var tels = value.ranges[i].person.tels;
+    var email = emails.length > 0 ? "<a href=\"mailto:" + emails[0].email + "\" title=\"" + labels.send_email_label + "\">" + emails[0].email + "</a> " : "";
+    var tel = tels.length > 0 ? "<a href=\"tel:" + tels[0].number + "\" title=\"" + labels.call_label + "\">" + tels[0].number + "</a>" : "";
+    line += email + tel;
+    // CONTENT
+    line += "<p class=\"follow-up-content\">" + $('<div />').text(nc).html() + "</p>"; // encode entities
+    line += "<p class=\"subContent\">" + sub + "</p>";
+    line += "</div></li>";
+  }
+  return line;
+}
+
+function fillDocumentPanel(schedule) {
+  console.log(schedule.idAction)
+  console.log(schedule.documents.length)
+  if (schedule.documents) {
+    var p = "<div id=\"doc-icon-panel\" style=\"margin-top: 0.5em\">";
+    for (var i = 0, len = schedule.documents.length; i < len; i++) {
+      var doc = schedule.documents[i];
+      if (doc.scheduleId === 0 && doc.rangeId === 0) {
+        p += "<img id=\"doc" + doc.id + "\" class=\"img-link doc-link\" title=\""+ getDocTypeFromNumber(doc.docType) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/"+ getIconFromDocType(doc.docType) +"\" />";
+      } else if (doc.scheduleId > 0 && schedule.id === doc.scheduleId) {
+        p += "<img id=\"doc" + doc.id + "\" class=\"img-link doc-link\" title=\"" + getDocTypeFromNumber(doc.docType) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/"+ getIconFromDocType(doc.docType) +"\" />";
+      } else {
+        for (var j = 0, rlen = schedule.ranges.length; j < rlen; j++) {
+          if (schedule.ranges[j].id === doc.rangeId) {
+            p += "<img id=\"doc" + doc.id + "\" class=\"img-link doc-link\" title=\"" + getDocTypeFromNumber(doc.docType) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/"+ getIconFromDocType(doc.docType) +"\" />";
+          }
+        }
+      }
+    }
+  }
+
+  p += "<a class=\"img-link doc-link doc-plus\" title=\"Ajouter document...\" href=\"javascript:;\"><img alt=\"Ajouter...\" src=\"../resources/common/img/plus.png\" /></a>";
+  p += "</div>";
+  return p;
+}
+
+function getDocTypeFromNumber(n) {
+  switch(n) {
+    case 0: return "Document";
+    case 1: return "Partition";
+    case 2: return "Lien audio";
+    case 3: return "Vidéo";
+  }
+}
+
+function getIconFromDocType(n) {
+  switch(n) {
+    case 0: return "share.png";
+    case 1: return "music.png";
+    case 2: return "audio.png";
+    case 3: return "movie.png";
+  }
 }
 
 function getMailtoLinkFromRanges(ranges, title, label) {

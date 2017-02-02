@@ -1,7 +1,7 @@
 /*
- * @(#) TeacherDaoImpl.java Algem Web App 1.5.0 21/10/16
+ * @(#) TeacherDaoImpl.java Algem Web App 1.6.0 01/02/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -35,6 +35,7 @@ import net.algem.planning.DateFr;
 import net.algem.planning.FollowUp;
 import net.algem.planning.Hour;
 import net.algem.planning.ScheduleDao;
+import net.algem.planning.ScheduleDoc;
 import net.algem.planning.ScheduleElement;
 import net.algem.planning.ScheduleRangeElement;
 import net.algem.planning.ScheduleRangeIO;
@@ -50,7 +51,7 @@ import org.springframework.stereotype.Repository;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.0
+ * @version 1.6.0
  * @since 1.0.6 06/01/2016
  */
 @Repository
@@ -62,7 +63,7 @@ public class TeacherDaoImpl
   public static final String FOLLOW_UP_T = "suivi";
   public static final String FOLLOW_UP_SEQ = "idsuivi";
 
-  private final static String FOLLOWUP_STATEMENT = "SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom,v.texte,v.statut"
+  private final static String FOLLOWUP_STATEMENT = "SELECT DISTINCT ON (p.jour,pl.debut) p.id,p.action,p.jour,pl.debut,pl.fin,p.lieux,p.note,c.id,c.titre,c.collectif,s.nom,v.texte,v.statut"
     + " FROM " + ScheduleDao.TABLE + " p"
     + " JOIN " + ScheduleRangeIO.TABLE + " pl ON (p.id = pl.idplanning)"
     + " JOIN " + ScheduleDao.T_ACTION + " a ON (p.action = a.id)"
@@ -72,12 +73,12 @@ public class TeacherDaoImpl
     + " WHERE p.idper = ?"
     + " AND jour BETWEEN ? AND ?"
     + " ORDER BY p.jour,pl.debut";
-  
+
   private final static Logger LOGGER = Logger.getLogger(TeacherDaoImpl.class.getName());
-  
+
   @Autowired
   private CommonDao commonDao;
-  
+
   private Map<Integer,String> photoCache = new HashMap<>();
 
   @Override
@@ -88,25 +89,27 @@ public class TeacherDaoImpl
       public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
         ScheduleElement d = new ScheduleElement();
         d.setId(rs.getInt(1));
-        d.setDateFr(new DateFr(rs.getString(2)));
-        d.setStart(new Hour(rs.getString(3)));
-        d.setEnd(new Hour(rs.getString(4)));
+        d.setIdAction(rs.getInt(2));
+        d.setDateFr(new DateFr(rs.getString(3)));
+        d.setStart(new Hour(rs.getString(4)));
+        d.setEnd(new Hour(rs.getString(5)));
         d.setIdPerson(teacher);
-        d.setPlace(rs.getInt(5));
-        d.setNote(rs.getInt(6));
-        d.setDetail("course", new NamedModel(rs.getInt(7), rs.getString(8)));
-        d.setCollective(rs.getBoolean(9));
-        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(10)));
+        d.setPlace(rs.getInt(6));
+        d.setNote(rs.getInt(7));
+        d.setDetail("course", new NamedModel(rs.getInt(8), rs.getString(9)));
+        d.setCollective(rs.getBoolean(10));
+        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(11)));
         d.setDetail("estab", null);
+
         FollowUp up = new FollowUp();
         up.setId(d.getNote());
-        up.setContent(rs.getString(11));
-        up.setStatus(rs.getShort(12));
+        up.setContent(rs.getString(12));
+        up.setStatus(rs.getShort(13));
         d.setFollowUp(up);
 
         Collection<ScheduleRangeElement> ranges = getRanges(d.getId(), d.getStart().toString());
         d.setRanges(ranges);
-
+        d.setDocuments(getActionDocuments(d.getIdAction()));
         return d;
       }
     }, teacher, from, to);
@@ -128,9 +131,27 @@ public class TeacherDaoImpl
     }, id);
   }
 
+  private List<ScheduleDoc> getActionDocuments(final int actionId) {
+    String query = "SELECT id,idplanning,idplage,doctype,nom,uri FROM document_action WHERE idaction = ?";
+    return jdbcTemplate.query(query, new RowMapper<ScheduleDoc>() {
+      @Override
+      public ScheduleDoc mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+        ScheduleDoc doc = new ScheduleDoc(rs.getInt(1), actionId);
+        doc.setScheduleId(rs.getInt(2));
+        doc.setRangeId(rs.getInt(3));
+        doc.setDocType(rs.getShort(4));
+        doc.setName(rs.getString(5));
+        doc.setUri(rs.getString(6));
+        LOGGER.log(Level.WARNING, doc.getName());
+        return doc;
+      }
+    }, actionId);
+  }
+
   private Collection<ScheduleRangeElement> getRanges(final int id, String start) {
-    String query = " SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.statut,COALESCE(em1.email, em2.email),COALESCE(t1.numero, t2.numero)"
-      + " FROM " + ScheduleRangeIO.TABLE 
+    String query = "SELECT pl.id,pl.debut,pl.fin,pl.adherent,pl.note,p.nom,p.prenom,p.pseudo,s.id,s.texte,s.note,s.statut,COALESCE(em1.email, em2.email),COALESCE(t1.numero, t2.numero)"
+      + " FROM " + ScheduleRangeIO.TABLE
       + " pl JOIN " + PersonIO.TABLE + " p ON (pl.adherent = p.id)"
       + " JOIN eleve e ON (p.id = e.idper)"
       + " LEFT JOIN email em1 ON (e.idper = em1.idper AND em1.idx = 0)"
@@ -181,7 +202,7 @@ public class TeacherDaoImpl
       }
     }, id, java.sql.Time.valueOf(start + ":00"));
   }
-  
+
   private String getPhotoAsBase64(int idper) {
     String data = photoCache.get(idper);
     try {

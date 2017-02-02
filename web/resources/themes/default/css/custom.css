@@ -1,7 +1,7 @@
 /*
- * @(#) custom.css Algem Web App 1.5.0 02/11/16
+ * @(#) custom.css Algem Web App 1.6.0 01/02/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -20,49 +20,43 @@
 /*
     Created on : 05/12/2015, 10:29:34
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last    : 1.5.0 19/10/16
+    Last    : 1.6.0 01/02/17
 */
 /*Personnalisation*/
-
 body {
-  background-color: #ff5719;
+  /*background-color: #ff5719;*/
   color: white;
 }
-
 .main-text-color {color: #ff5719;}
-
 .global {
   color: #444;
   background-color: white;
 }
-
+.header-top{background-color: #ff5719;}
 header nav select, #datepicker {color: #444;}
-
 header nav #previous, header nav #next {color: white;}
 
-footer {
+footer, #bottom-menu {
+  background-color: #ff5719;
+  box-shadow: 0px -1px 2px 0px #444;
+  /*background: linear-gradient(to bottom, rgba(255,87,25,1) 0%,rgba(255,87,25,0.9)60%,rgba(255,87,25,1)100%);*/
 /*  background-image:url('../img/personas-header-1280x1024.png');
   background-position: 98% center;
   background-repeat: no-repeat;*/
 }
 
 h1 {color: #FFC170;}
-
 h2, h3, h4, h5, h6, h7, fieldset > legend {color: #FF9770;}
 #follow-up-form fieldset div > legend {color:  #D33900}
 h2, h3, h4, fieldset > legend {border-color: #FF9770;}
 
 ul.disc{list-style-image: url('../img/puce-green.png');}
 a:link,a:visited, a:hover, a:active,
-.pure-menu, .pure-menu-heading, #menu
-{
-  color: #D33900;
-}
+.pure-menu, .pure-menu-heading, #menu { color: #D33900;}
 .closing-bar {background-color: #D33900;}
 
 a:link,a:visited, a:active {border-bottom-color: #FFC170;}
 a:hover {border-bottom-color: #666;}
-
 footer a:link,footer a:visited, footer a:hover, footer a:active {color: #FFF;}
 
 #menu {background: #D33900;}
@@ -70,8 +64,7 @@ footer a:link,footer a:visited, footer a:hover, footer a:active {color: #FFF;}
   color: white;
   background-color: #ff5719;
 }
-#bottom-menu a:link, #bottom-menu a:visited, #bottom-menu a:hover, #bottom-menu a:active
-{color: white;}
+#bottom-menu a:link, #bottom-menu a:visited, #bottom-menu a:hover, #bottom-menu a:active {color: white;}
 #bottom-menu a:hover {background-color: white;color: #ff5719;}
 
 .pure-menu-link:hover {

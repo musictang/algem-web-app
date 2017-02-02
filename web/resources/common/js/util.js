@@ -1,7 +1,7 @@
 /*
- * @(#) util.js Algem Web App 1.5.0 26/10/16
+ * @(#) util.js Algem Web App 1.6.0 01/02/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -19,7 +19,7 @@
  */
 function logVars() {
   var l = arguments.length;
-  if (l == 0) {return;}
+  if (l === 0) {return;}
   for (var i = 0 ;i < l; i++) {
     $.each(arguments[i], function (key, value) {
       console.log(key, value);
@@ -31,7 +31,7 @@ function logVars() {
  * Pad a number with 0.
  * If size is undefined, default padding length is 2.
  * Ex. : 1 -> 01 ; 12 -> 12 ; 0 -> 00
- * @param {Number} pad length
+ * @param {Number} size length
  * @returns {Number.prototype.pad.s|String}
  */
 Number.prototype.pad = function (size) {
@@ -40,7 +40,7 @@ Number.prototype.pad = function (size) {
     s = "0" + s;
   }
   return s;
-}
+};
 
 /**
  * Returns a string representation of the date in argument.
@@ -83,7 +83,7 @@ function getCurrentWeekDates(d) {
   var last = new Date(last.setDate(last.getDate() + last.getDay() + 5));
   last.setHours(0, -last.getTimezoneOffset(), 0, 0);
 
-  return {first: first, last: last}
+  return {first: first, last: last};
 }
 
 /**

@@ -1,7 +1,7 @@
 /*
- * @(#) custom.css Algem Web App 1.4.2 07/09/16
+ * @(#) custom.css Algem Web App 1.6.0 02/02/17
  *
- * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -20,7 +20,7 @@
 /*
     Created on : 25/03/16
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Version    : 1.4.2 07/09/16
+    Version    : 1.6.0 02/02/17
 */
 /*Personnalisation*/
 body {
@@ -32,12 +32,14 @@ body {
   color: #444;
   background-color: white;
 }
-
+.header-top{background-color: #fe1800;}
 header nav select, #datepicker {color: #444;}
 
 header nav #previous, header nav #next {color: white;}
 
-footer {
+footer, #bottom-menu {
+  background-color: #fe1800;
+  box-shadow: 0px -1px 2px 0px #444;
 /*  background-image:url('../img/personas-header-1280x1024.png');
   background-position: 98% center;
   background-repeat: no-repeat;*/

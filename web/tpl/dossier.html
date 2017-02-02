@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.5.2 25/01/17
+ * @(#) dossier.html Algem Web App 1.6.0 01/02/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -49,7 +49,7 @@
         <li><a id="help" th:href="@{/help.html#chapter-perso}" th:title="#{help.label}"><i class="fa fa-question-circle"></i></a></li>
       </ul>
     </div>
-    <header>
+    <header class="header-top">
       <h1 th:utext="${@organization['name.label']}"></h1>
     </header>
     <div class="global">
@@ -113,9 +113,9 @@
                 <li><a href="javascript:;" id="student-follow-w" th:text="#{current.week.label}"/></li>
                 <li><a href="javascript:;" id="student-follow-m" th:text="#{current.month.label}"/></li>
                 <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="student-weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="student-weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""/>&nbsp;<label for="student-weekTo" th:text="#{to.label}"></label>&nbsp;<input id="student-weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value=""/></li>
-                <li><a class="img-link" href="javascript:;" id="saveStudentPDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}" /></a></li>
               </ul>
             </nav>
+            <div class="export-panel"><a class="img-link" href="javascript:;" id="saveStudentPDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}" /></a></div>
           </header>
           <table id="follow-up-student" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
             <thead>
@@ -135,10 +135,9 @@
                 <li><a href="javascript:;" id="follow-w" th:text="#{current.week.label}"/></li>
                 <li><a href="javascript:;" id="follow-m" th:text="#{current.month.label}"/></li>
                 <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date" tabindex="3" readonly value=""/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" tabindex="4" readonly value=""/></li>
-                <li><a class="img-link" href="javascript:;" id="saveCSV" th:title="#{save.to.csv.label}"><img th:src="@{/resources/common/img/csv.png}" th:alt="#{save.to.csv.label}" /></a></li>
-                <li><a class="img-link" href="javascript:;" id="savePDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}"/></a></li>
               </ul>
             </nav>
+            <div class="export-panel"><a class="img-link" href="javascript:;" id="saveCSV" th:title="#{save.to.csv.label}"><img th:src="@{/resources/common/img/csv.png}" th:alt="#{save.to.csv.label}" /></a><a class="img-link" href="javascript:;" id="savePDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}"/></a></div>
           </header>
           <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed printable">
             <thead>

@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.5.2 25/01/17
+ * @(#) common.css Algem Web App 1.6.0 01/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.5.2 25/01/17
+    Last: 1.6.0 01/02/17
 */
 
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
@@ -108,12 +108,13 @@ body {
   font-family: Verdana,Helvetica,sans-serif;
   color: #444;
 }
-header {
+.header-top {
   position: relative;
   height: 6%;
   /*background-image: url('../img/bg-thumb.png');*/
   background-position: bottom;
   background-repeat: repeat-x;
+  box-shadow: 0px 2px 2px 0px #656565;
 }
 
 header > nav {
@@ -133,12 +134,15 @@ footer {
   background-repeat: repeat-x;
   width: 100%;
   z-index: 2000;
+  /*border-top: 2px solid #666;*/
 }
 footer > address {
   position: absolute;
   top:0;
   font-style: normal;
   font-size: smaller;
+  padding-left: .4em;
+  font-family:'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
 }
 /*Emplacement du logo*/
 footer a.logo {
@@ -165,6 +169,7 @@ h1 {
   padding: 0;
   text-align: center;
   text-transform: uppercase;
+  /*text-shadow: 0px 1px 0px rgba(255,255,255,.4), 0px 1px 4px rgba(0,0,0,.3);*/
   line-height: 1.25em;
   color: #ce8600;
 }
@@ -289,6 +294,7 @@ input[type=submit] {margin: 1em 0;}
 .note {font-size: smaller;}
 .footnote {font-size: smaller; line-height: 1.2em}
 .warning {background-color: lightpink;}
+.export-panel {display: inline-block; margin-top: 0.4em}
 
 a:link,a:visited, a:hover, a:active {
   text-decoration: none;
@@ -296,7 +302,11 @@ a:link,a:visited, a:hover, a:active {
   border-bottom-width: 2px;
   line-height: 1.2em;
 }
-a.img-link {border: none; vertical-align:top}
+a.img-link {border: none; margin-left: .4em}
+.doc-link {padding: 0 0 0 0.5em;cursor: pointer}
+.doc-link:hover {opacity: 0.8}
+.doc-plus {opacity: .4;}
+.doc-plus:hover {opacity: 1}
 
 select {font-size: small;}
 .pure-menu-list a {border: none;}
@@ -345,6 +355,9 @@ select {font-size: small;}
   position:fixed;
   bottom:0;
   width:100%;
+  height:40px;
+  /*border-top: 2px solid #666;*/
+/*box-shadow: 0px -2px 2px 0px #656565;*/
   z-index: 2001; /* above footer */
 }
 #bottom-menu a:hover {border: none;border-radius: 4px;padding:0.2em 0}
@@ -416,6 +429,7 @@ select {font-size: small;}
   width: 100%;
   height: 2em;
   text-align: right;
+  box-shadow: 0px 2px 2px 0px #656565;
 }
 .closing-bar + p {
   position: relative;
@@ -425,7 +439,8 @@ select {font-size: small;}
 }
 .closing-bar a.close-link {
   font-size: 1.6em;
-  padding: 0 1em;
+  padding: 0 0.5em 0 1em;
+  line-height: 1em;
   color: white;
   text-decoration: none;
   border: none;
@@ -499,10 +514,11 @@ ul.simple li:first-child { margin-top: 0;}
 ul.horizontal-panel-menu {
   list-style-type: none;
   margin: 0;
+  padding:0 0 .8em 0;
 }
 ul.horizontal-panel-menu li {
   display: inline-block;
-  margin: 0 0.5em 0 0;
+  margin: .5em .5em 0 0;
 }
 
 nav.horizontal-panel-menu {margin: 0; padding: 0}

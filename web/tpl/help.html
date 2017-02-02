@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
- * @(#) help.html Algem Web App 1.5.2 18/01/17
+ * @(#) help.html Algem Web App 1.6.0 01/02/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -33,7 +33,7 @@
         <li sec:authorize="isAuthenticated()"><a th:href="@{/j_spring_security_logout}" id="menu-logout" th:title="#{logout.label}"><i class="fa fa-sign-out"></i></a></li>
       </ul>
     </div>
-    <header>
+    <header class="header-top">
       <h1 th:utext="#{help.label}" id="top"></h1>
     </header>
     <aside id="bottom-menu">

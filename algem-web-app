@@ -1,4 +1,4 @@
-<#assign projectVersion = "1.5.2">
+<#assign projectVersion = "1.6.0">
 <#if licenseFirst??>
 ${licenseFirst}
 </#if>

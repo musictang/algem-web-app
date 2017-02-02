@@ -1,7 +1,7 @@
 /*
- * @(#)ScheduleElement.java	1.2.1 06/05/16
+ * @(#)ScheduleElement.java	1.6.0 01/02/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -22,6 +22,7 @@ package net.algem.planning;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import net.algem.util.NamedModel;
 
@@ -30,7 +31,7 @@ import net.algem.util.NamedModel;
  * This class is used in calendar to display a time slot with label, position and time.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.2.1
+ * @version 1.6.0
  * @since 1.0.0 11/02/13
  */
 public class ScheduleElement
@@ -48,6 +49,7 @@ public class ScheduleElement
   private String labelColor;
   private int code;
   private FollowUp followUp;
+  private List<ScheduleDoc> documents;
 
   public Map<String, NamedModel> getDetail() {
     return detail;
@@ -63,6 +65,14 @@ public class ScheduleElement
 
   public void setFollowUp(FollowUp followUp) {
     this.followUp = followUp;
+  }
+
+  public List<ScheduleDoc> getDocuments() {
+    return documents;
+  }
+
+  public void setDocuments(List<ScheduleDoc> documents) {
+    this.documents = documents;
   }
 
   /**
@@ -194,7 +204,7 @@ public class ScheduleElement
    */
   public String getHtmlColor() {
     String prefix = "#";
-    if (type == Schedule.ROOM) return prefix + "CCC";
+    if (Schedule.ROOM == type) return prefix + "CCC";
     return color;
   }
 
