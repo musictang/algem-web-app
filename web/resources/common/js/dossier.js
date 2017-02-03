@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.6.0 01/02/17
+ * @(#) dossier.js Algem Web App 1.6.0 03/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -39,11 +39,10 @@ function FollowUpSchedule(id, date, time, course) {
  * FollowUpObject constructor.
  * @param {Number} id
  * @param {Number} scheduleId
- * @param {String} text
- * @param {String} note
- * @param {Boolean} abs
- * @param {Boolean} exc
- * @param {Boolean} co
+ * @param {String} text content
+ * @param {String} note score
+ * @param {Boolean} status absence status
+ * @param {Boolean} co collective
  * @returns {FollowUpObject}
  */
 function FollowUpObject(id, scheduleId, text, note, status, co) {
@@ -94,7 +93,7 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
           + "<td>" + roomInfo + "</td>"
           + "<td title=\""+ courseInfo + "\">"
           + (value.collective ? getMailtoLinkFromRanges(value.ranges, labels.mailto_all_participants_tip, courseInfo) : courseInfo)
-          + fillDocumentPanel(value)
+          + fillTeacherDocumentPanel(value, labels)
           + "</td><td style=\"min-width: 8em\">";
         if (value.collective) {
           result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.expand_collapse+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
@@ -150,38 +149,89 @@ function fillRanges(value, paths, labels) {
   return line;
 }
 
-function fillDocumentPanel(schedule) {
-  console.log(schedule.idAction)
-  console.log(schedule.documents.length)
+function fillTeacherDocumentPanel(schedule, labels) {
+//  console.log(schedule.idAction);
+//  console.log(schedule.documents.length);
   if (schedule.documents) {
     var p = "<div id=\"doc-icon-panel\" style=\"margin-top: 0.5em\">";
+    var sDate = new Date(schedule.date);
+    // adjust with timezone offset
+    sDate.setTime(sDate.getTime() + new Date().getTimezoneOffset() * 60 * 1000);
     for (var i = 0, len = schedule.documents.length; i < len; i++) {
       var doc = schedule.documents[i];
-      if (doc.scheduleId === 0 && doc.rangeId === 0) {
-        p += "<img id=\"doc" + doc.id + "\" class=\"img-link doc-link\" title=\""+ getDocTypeFromNumber(doc.docType) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/"+ getIconFromDocType(doc.docType) +"\" />";
-      } else if (doc.scheduleId > 0 && schedule.id === doc.scheduleId) {
-        p += "<img id=\"doc" + doc.id + "\" class=\"img-link doc-link\" title=\"" + getDocTypeFromNumber(doc.docType) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/"+ getIconFromDocType(doc.docType) +"\" />";
+      var dDate = new Date(doc.firstDate);
+      dDate.setHours(13);
+//      console.log("schedule",sDate);
+//      console.log("doc",dDate);
+      if (sDate.getTime() < dDate.getTime()) {continue;}
+      var refTag = "<img data-actionRef=\""+ schedule.idAction +"\" id=\"doc" + doc.id + "\" class=\"img-link doc-ref\" title=\"" + getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/" + getIconFromDocType(doc.docType) + "\" />";
+      if (doc.scheduleId === 0 && doc.memberId === 0) {
+        p += refTag;
+      } else if (doc.scheduleId > 0) {
+        if (schedule.id === doc.scheduleId) {
+          p += refTag;
+        }
       } else {
         for (var j = 0, rlen = schedule.ranges.length; j < rlen; j++) {
-          if (schedule.ranges[j].id === doc.rangeId) {
-            p += "<img id=\"doc" + doc.id + "\" class=\"img-link doc-link\" title=\"" + getDocTypeFromNumber(doc.docType) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/"+ getIconFromDocType(doc.docType) +"\" />";
+          if (schedule.ranges[j].memberId === doc.memberId) {
+            p += refTag;
           }
         }
       }
     }
   }
 
-  p += "<a class=\"img-link doc-link doc-plus\" title=\"Ajouter document...\" href=\"javascript:;\"><img alt=\"Ajouter...\" src=\"../resources/common/img/plus.png\" /></a>";
+  p += "<a id=\"doc0\" data-actionRef=\""+ schedule.idAction +"\" class=\"img-link doc-ref doc-plus\" title=\"" + labels["document_add_label"] + "\" href=\"javascript:;\"><img alt=\"" + labels["document_add_label"] + "\" src=\"../resources/common/img/plus.png\" /></a>";
   p += "</div>";
   return p;
 }
 
-function getDocTypeFromNumber(n) {
+function fillStudentDocumentPanel(schedule, userId, labels) {
+  if (!schedule.documents) {
+    return "";
+  }
+  var panel = "<div id=\"doc-icon-panel\" style=\"margin-top: 0.5em\">";
+  var sDate = new Date(schedule.date);
+  // adjust with timezone offset
+  sDate.setTime(sDate.getTime() + new Date().getTimezoneOffset() * 60 * 1000);
+  for (var i = 0, len = schedule.documents.length; i < len; i++) {
+    var doc = schedule.documents[i];
+    var dDate = new Date(doc.firstDate);
+    dDate.setHours(13);
+    console.log("schedule", sDate);
+    console.log("doc", dDate);
+    if (sDate.getTime() < dDate.getTime()) {
+      continue;
+    }
+    var imgTag = "<img class=\"doc-link \" title=\"" + getDocTypeFromNumber(doc.docType, labels) + "\" alt=\"" + getDocTypeFromNumber(doc.docType, labels) + "\" src=\"../resources/common/img/" + getIconFromDocType(doc.docType) + "\" />";
+    var docTag = "<a href=\"" + doc.uri + "\" target=\"_blank\">" + (doc.name || "Document") + "</a>";
+    if (doc.scheduleId === 0 && doc.memberId === 0) {
+      console.log("doc action")
+      panel += "<p>" + imgTag + docTag + "</p>";
+    } else if (doc.scheduleId > 0) {
+      if (schedule.id === doc.scheduleId) {
+        console.log("doc planning")
+        panel += "<p>" + imgTag + docTag + "</p>";
+      }
+    } else {
+      for (var j = 0, rlen = schedule.ranges.length; j < rlen; j++) {
+        console.log("doc eleve")
+        if (userId === doc.memberId) {
+          panel += "<p>" + imgTag + docTag + "</p>";
+        }
+      }
+    }
+  }
+  return panel;
+}
+
+
+function getDocTypeFromNumber(n, labels) {
   switch(n) {
-    case 0: return "Document";
-    case 1: return "Partition";
-    case 2: return "Lien audio";
-    case 3: return "Vidéo";
+    case 0: return labels["document_type_other_label"];
+    case 1: return labels["document_type_music_sheet_label"];
+    case 2: return labels["document_type_music_label"];
+    case 3: return labels["document_type_video_label"];
   }
 }
 
@@ -192,6 +242,25 @@ function getIconFromDocType(n) {
     case 2: return "audio.png";
     case 3: return "movie.png";
   }
+}
+
+function setDocumentDialog(element) {
+  var dlg = $("#docEditor");
+  var docId = $(element).attr("id");
+  var actionRef = $(element).attr("data-actionRef");
+  var scheduleRef = $(element).closest("tr").attr("id");
+  if ("doc0" == docId) {
+    $("#docId").val(0);
+    $("#docActionId").val(actionRef);
+    $("#docScheduleId").val(0);
+    $("#docMemberId").val(0);
+    console.log("création", docId,actionRef,scheduleRef)
+  } 
+  else {
+    console.log("modification", docId,actionRef,scheduleRef);
+    // fill from database
+  }
+  $(dlg).dialog("open");
 }
 
 function getMailtoLinkFromRanges(ranges, title, label) {
@@ -254,7 +323,7 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
           + "<td>" + timeInfo + "</td>"
           + "<td>" + getTimeFromMinutes(length) + "</td>"
           + "<td>" + roomInfo + "</td>"
-          + "<td>" + courseInfo + "</td>"
+          + "<td>" + courseInfo + fillStudentDocumentPanel(value, userId, labels) + "</td>"
           + "<td>" + teacherInfo + "</td>"
           + "<td>" + nc + "<p class=\"subContent\">" + sub + "</p></td>"
           + "<td>" + noteCo + "<p class=\"subContent\">" + subCo + "</p></td></tr>";
@@ -310,8 +379,8 @@ function getAndFillFollowUp(url, element, co) {
  */
 function getFollowUpSubContent(followUp) {
   var note = followUp.note;
-  var abs = (followUp.status == 1);
-  var exc = (followUp.status == 2);
+  var abs = (followUp.status === 1);
+  var exc = (followUp.status === 2);
   var sub = (followUp.id > 0 && note !== null && note.length > 0) ? "<span class=\"follow-up-note\">"+labels.score_label +" : " + note + "</span>" : "";
   sub += abs ? "<span class=\"absent\">ABS</span>" : "";
   sub += exc ? "<span class=\"excused\">EXC</span>" : "";
@@ -360,6 +429,27 @@ function initErrorDialog() {
   });
 }
 
+function initDocumentDialog() {
+  $("#docEditor").dialog({
+    autoOpen: false,
+    title: "Document",
+    buttons: [
+      {
+        text: labels.abort_label,
+        class: "button-secondary",
+        click: function () {
+          $(this).dialog("close");
+        }
+      },
+      {
+        text: labels.save_label,
+        click: function () {
+          console.log("save");
+        }
+      }
+    ]
+  });
+}
 /**
  *
  * @param {FollowUpSchedule} f

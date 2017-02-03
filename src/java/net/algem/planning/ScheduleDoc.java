@@ -1,5 +1,5 @@
 /*
- * @(#) ScheduleDoc.java Algem Web App 1.6.0 01/02/17
+ * @(#) ScheduleDoc.java Algem Web App 1.6.0 03/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -20,6 +20,8 @@
 
 package net.algem.planning;
 
+import java.util.Date;
+
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
@@ -29,9 +31,10 @@ package net.algem.planning;
 public class ScheduleDoc {
 
   private int id;
+  private Date firstDate;
   private int actionId;
   private int scheduleId;
-  private int rangeId;
+  private int memberId;
   private String name;
   private short docType;
   private String uri;
@@ -47,6 +50,14 @@ public class ScheduleDoc {
 
   public void setId(int id) {
     this.id = id;
+  }
+
+  public Date getFirstDate() {
+    return firstDate;
+  }
+
+  public void setFirstDate(Date firstDate) {
+    this.firstDate = firstDate;
   }
 
   public int getActionId() {
@@ -65,12 +76,12 @@ public class ScheduleDoc {
     this.scheduleId = scheduleId;
   }
 
-  public int getRangeId() {
-    return rangeId;
+  public int getMemberId() {
+    return memberId;
   }
 
-  public void setRangeId(int rangeId) {
-    this.rangeId = rangeId;
+  public void setMemberId(int memberId) {
+    this.memberId = memberId;
   }
 
   public String getName() {

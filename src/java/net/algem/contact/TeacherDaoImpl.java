@@ -35,7 +35,7 @@ import net.algem.planning.DateFr;
 import net.algem.planning.FollowUp;
 import net.algem.planning.Hour;
 import net.algem.planning.ScheduleDao;
-import net.algem.planning.ScheduleDoc;
+import net.algem.planning.ScheduleDocDaoImpl;
 import net.algem.planning.ScheduleElement;
 import net.algem.planning.ScheduleRangeElement;
 import net.algem.planning.ScheduleRangeIO;
@@ -78,6 +78,9 @@ public class TeacherDaoImpl
 
   @Autowired
   private CommonDao commonDao;
+  
+  @Autowired
+  private ScheduleDocDaoImpl docDao;
 
   private Map<Integer,String> photoCache = new HashMap<>();
 
@@ -109,7 +112,7 @@ public class TeacherDaoImpl
 
         Collection<ScheduleRangeElement> ranges = getRanges(d.getId(), d.getStart().toString());
         d.setRanges(ranges);
-        d.setDocuments(getActionDocuments(d.getIdAction()));
+        d.setDocuments(docDao.findActionDocuments(d.getIdAction()));
         return d;
       }
     }, teacher, from, to);
@@ -129,24 +132,6 @@ public class TeacherDaoImpl
         return up;
       }
     }, id);
-  }
-
-  private List<ScheduleDoc> getActionDocuments(final int actionId) {
-    String query = "SELECT id,idplanning,idplage,doctype,nom,uri FROM document_action WHERE idaction = ?";
-    return jdbcTemplate.query(query, new RowMapper<ScheduleDoc>() {
-      @Override
-      public ScheduleDoc mapRow(ResultSet rs, int rowNum) throws SQLException {
-
-        ScheduleDoc doc = new ScheduleDoc(rs.getInt(1), actionId);
-        doc.setScheduleId(rs.getInt(2));
-        doc.setRangeId(rs.getInt(3));
-        doc.setDocType(rs.getShort(4));
-        doc.setName(rs.getString(5));
-        doc.setUri(rs.getString(6));
-        LOGGER.log(Level.WARNING, doc.getName());
-        return doc;
-      }
-    }, actionId);
   }
 
   private Collection<ScheduleRangeElement> getRanges(final int id, String start) {

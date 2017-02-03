@@ -179,6 +179,33 @@
     <footer th:replace="fragments/layout :: footer"></footer>
     <div id="busy"></div>
     <div id="errorDialog" th:title="#{warning.label}"></div>
+    <div id="docEditor">
+      <form>
+        <fieldset>
+          <div class="row-form">
+            <select id="docType" style="width:100%">
+              <option >Type de document...</option>
+              <option th:text="#{document.type.music.sheet.label}" value="1">partition</option>
+              <option th:text="#{document.type.music.label}" value="2">audio</option>
+              <option th:text="#{document.type.video.label}" value="3">vidéo</option>
+              <option th:text="#{document.type.other.label}" value="0">autre</option>
+            </select>
+          </div>
+          <div class="row-form">
+            <label for="docName">Nom du lien</label>
+            <input id="docName" type="text" style="width:96%"/>
+          </div>
+          <div class="row-form">
+            <label style="display:block" for="docUri">Adresse du lien</label>
+            <input id="docUri" type="text"  style="width:96%"/>
+          </div>
+          <input id="docId" type="hidden" value="" name="docId"/>
+          <input id="docActionId" type="hidden" value="" name="actionId"/>
+          <input id="docScheduleId" type="hidden" value="" name="scheduleId"/>
+          <input id="docMemberId" type="hidden" value="" name="memberId"/>
+        </fieldset>
+      </form>
+    </div>
     <!--<aside id="help-panel" class="closeable" th:include="fragments/help :: perso"></aside>-->
   </body>
   <script type="text/javascript" th:inline="javascript">
@@ -202,7 +229,15 @@
       "send_email_label" : /*[[#{send.email.label}]]*/ "",
       "save_label": /*[[#{save.label}]]*/ "",
       "score_label": /*[[#{score.label}]]*/ "",
-      "student_list": /*[[#{student.list.label}]]*/ ""
+      "student_list": /*[[#{student.list.label}]]*/ "",
+      "document_add_label": /*[[#{document.add.label}]]*/ "",
+      "document_choose_recipient_label": /*[[#{document.choose.recipient.label}]]*/ "",
+      "document_type_music_label": /*[[#{document.type.music.label}]]*/ "",
+      "document_type_video_label": /*[[#{document.type.video.label}]]*/ "",
+      "document_type_music_sheet_label": /*[[#{document.type.music.sheet.label}]]*/ "",
+      "document_type_other_label": /*[[#{document.type.other.label}]]*/ "",
+      "document_single_session_label": /*[[#{document.single.session.label}]]*/ "",
+      "document_single_recipient_label": /*[[#{document.single.recipient.label}]]*/ "",
     };
     var paths = {
       "def_photo_id": /*[[@{/resources/common/img/idphoto.png}]]*/ "",
@@ -211,6 +246,7 @@
     setCommonEvents();
     initFollowUpDialog(dlg, labels);
     initErrorDialog();
+    initDocumentDialog();
     initWeekDates(new Date());
     setWeekChange(url1, userId);
     setStudentWeekChange(url2, userId);
@@ -234,6 +270,9 @@
     //manage ajax loaded content
     $(document).on("click", ".expand", function () {
       $(this).next().toggle();
+    });
+    $(document).on("click", ".doc-ref", function () {
+      setDocumentDialog($(this));
     });
 
     $("#saveCSV").click(function() {

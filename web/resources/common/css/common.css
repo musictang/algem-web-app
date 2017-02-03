@@ -303,8 +303,10 @@ a:link,a:visited, a:hover, a:active {
   line-height: 1.2em;
 }
 a.img-link {border: none; margin-left: .4em}
-.doc-link {padding: 0 0 0 0.5em;cursor: pointer}
-.doc-link:hover {opacity: 0.8}
+.doc-ref {padding: 0 0 0 0.5em;cursor: pointer}
+.doc-link{vertical-align: middle}
+img.doc-link{margin-right: .5em}
+.doc-ref:hover, .doc-link:hover {opacity: 0.8}
 .doc-plus {opacity: .4;}
 .doc-plus:hover {opacity: 1}
 

@@ -45,6 +45,7 @@ import net.algem.planning.DateFr;
 import net.algem.planning.FollowUp;
 import net.algem.planning.Hour;
 import net.algem.planning.ScheduleDao;
+import net.algem.planning.ScheduleDocDaoImpl;
 import net.algem.planning.ScheduleElement;
 import net.algem.planning.ScheduleRangeElement;
 import net.algem.planning.ScheduleRangeIO;
@@ -76,7 +77,7 @@ public class UserDaoImpl
   public static final String T_PASSCARD = "carteabopersonne";
   private final static Logger LOGGER = Logger.getLogger(UserDaoImpl.class.getName());
   private static final String FOLLOWUP_STATEMENT
-    = "SELECT p.id,p.jour,pl.id,pl.debut,pl.fin,p.idper,per.nom,per.prenom,p.lieux,s.nom,c.id,c.titre,n1.id,n1.texte,n1.note,n1.statut,n2.id,n2.texte,n2.statut"
+    = "SELECT p.id,p.action,p.jour,pl.id,pl.debut,pl.fin,p.idper,per.nom,per.prenom,p.lieux,s.nom,c.id,c.titre,n1.id,n1.texte,n1.note,n1.statut,n2.id,n2.texte,n2.statut"
     + " FROM " + ScheduleDao.TABLE + " p"
     + " JOIN " + PersonIO.TABLE + " per on p.idper = per.id"
     + " JOIN action a ON p.action = a.id"
@@ -92,6 +93,9 @@ public class UserDaoImpl
 
   @Autowired
   private ConfigIO configIO;
+  
+  @Autowired
+  private ScheduleDocDaoImpl docDao;
 
   public UserDaoImpl() {
   }
@@ -378,32 +382,33 @@ public class UserDaoImpl
 
   @Override
   public List<ScheduleElement> getFollowUp(int userId, Date from, Date to) {
-
+//p.id,p.action,p.jour,pl.id,pl.debut,pl.fin,p.idper,per.nom,per.prenom,p.lieux,s.nom,c.id,c.titre,n1.id,n1.texte,n1.note,n1.statut,n2.id,n2.texte,n2.statut
     return jdbcTemplate.query(FOLLOWUP_STATEMENT, new RowMapper<ScheduleElement>() {
       @Override
       public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
         ScheduleElement d = new ScheduleElement();
         d.setId(rs.getInt(1));
-        d.setDateFr(new DateFr(rs.getString(2)));
-        d.setStart(new Hour(rs.getString(4)));
-        d.setEnd(new Hour(rs.getString(5)));
-        d.setIdPerson(rs.getInt(6));
-        String t = rs.getString(8) + " " + rs.getString(7);
-        d.setDetail("teacher", new NamedModel(rs.getInt(6), t));
-        d.setPlace(rs.getInt(9));
-        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(10)));
-        d.setDetail("course", new NamedModel(rs.getInt(11), rs.getString(12)));
-        d.setNote(rs.getInt(17));
+        d.setIdAction(rs.getInt(2));
+        d.setDateFr(new DateFr(rs.getString(3)));
+        d.setStart(new Hour(rs.getString(5)));
+        d.setEnd(new Hour(rs.getString(6)));
+        d.setIdPerson(rs.getInt(7));
+        String t = rs.getString(9) + " " + rs.getString(8);
+        d.setDetail("teacher", new NamedModel(rs.getInt(7), t));
+        d.setPlace(rs.getInt(10));
+        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(11)));
+        d.setDetail("course", new NamedModel(rs.getInt(12), rs.getString(13)));
+        d.setNote(rs.getInt(18));
         d.setDetail("estab", null);
         FollowUp up = new FollowUp();
         up.setId(d.getNote());
-        up.setContent(rs.getString(18));
-        up.setStatus(rs.getShort(19));
+        up.setContent(rs.getString(19));
+        up.setStatus(rs.getShort(20));
         d.setFollowUp(up);
         Collection<ScheduleRangeElement> ranges = new ArrayList<>();
-        ScheduleRangeElement r = getFollowUpDetail(rs);
         ranges.add(getFollowUpDetail(rs));
         d.setRanges(ranges);
+        d.setDocuments(docDao.findActionDocuments(d.getIdAction()));
         return d;
       }
     }, userId, from, to);
@@ -411,14 +416,14 @@ public class UserDaoImpl
 
   private ScheduleRangeElement getFollowUpDetail(ResultSet rs) throws SQLException {
     ScheduleRangeElement r = new ScheduleRangeElement();
-    r.setId(rs.getInt(3));
-    r.setStart(new Hour(rs.getString(4)));
-    r.setEnd(new Hour(rs.getString(5)));
+    r.setId(rs.getInt(2));
+    r.setStart(new Hour(rs.getString(5)));
+    r.setEnd(new Hour(rs.getString(6)));
     FollowUp up = new FollowUp();
-    up.setId(rs.getInt(13));
-    up.setContent(rs.getString(14));
-    up.setNote(rs.getString(15));
-    up.setStatus(rs.getShort(16));
+    up.setId(rs.getInt(14));
+    up.setContent(rs.getString(15));
+    up.setNote(rs.getString(16));
+    up.setStatus(rs.getShort(17));
 
     r.setFollowUp(up);
     return r;

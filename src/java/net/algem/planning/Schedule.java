@@ -20,6 +20,7 @@
  */
 package net.algem.planning;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -45,6 +46,8 @@ public class Schedule
   public static final int ADMINISTRATIVE = 9;
   public static final int BOOKING_GROUP = 13;
   public static final int BOOKING_MEMBER = 14;
+  
+  private static final Calendar CAL = Calendar.getInstance();
   private static final long serialVersionUID = 1L;
 
   protected int id;
@@ -107,6 +110,10 @@ public class Schedule
   }
 
   public Date getDate() {
+//    CAL.setTime(date.getDate());
+//    CAL.set(Calendar.HOUR_OF_DAY, 12);
+//    CAL.set(Calendar.MINUTE, 0);
+//    return CAL.getTime();
     return date.getDate();
   }
 
