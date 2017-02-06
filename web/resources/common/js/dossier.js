@@ -160,9 +160,9 @@ function fillTeacherDocumentPanel(schedule, labels) {
     for (var i = 0, len = schedule.documents.length; i < len; i++) {
       var doc = schedule.documents[i];
       var dDate = new Date(doc.firstDate);
-      dDate.setHours(13);
-//      console.log("schedule",sDate);
-//      console.log("doc",dDate);
+//      dDate.setHours(24);
+      console.log("schedule",sDate);
+      console.log("doc",dDate);
       if (sDate.getTime() < dDate.getTime()) {continue;}
       var refTag = "<img data-actionRef=\""+ schedule.idAction +"\" id=\"doc" + doc.id + "\" class=\"img-link doc-ref\" title=\"" + getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/" + getIconFromDocType(doc.docType) + "\" />";
       if (doc.scheduleId === 0 && doc.memberId === 0) {
@@ -255,7 +255,7 @@ function setDocumentDialog(element) {
     $("#docScheduleId").val(0);
     $("#docMemberId").val(0);
     console.log("création", docId,actionRef,scheduleRef)
-  } 
+  }
   else {
     console.log("modification", docId,actionRef,scheduleRef);
     // fill from database
