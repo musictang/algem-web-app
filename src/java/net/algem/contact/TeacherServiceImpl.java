@@ -1,7 +1,7 @@
 /*
- * @(#) TeacherServiceImpl.java Algem Web App 1.5.0 21/10/16
+ * @(#) TeacherServiceImpl.java Algem Web App 1.6.0 07/02/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.algem.planning.FollowUp;
+import net.algem.planning.ScheduleDoc;
+import net.algem.planning.ScheduleDocDaoImpl;
 import net.algem.planning.ScheduleElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -34,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.0
+ * @version 1.6.0
  * @since 1.4.0 21/06/2016
  */
 @Service
@@ -46,6 +48,9 @@ public class TeacherServiceImpl
   
   @Autowired
   private TeacherDaoImpl dao;
+  
+  @Autowired
+  private ScheduleDocDaoImpl docDao;
 
   @Override
   public List<ScheduleElement> getFollowUpSchedules(int teacher, Date from, Date to) {
@@ -69,6 +74,21 @@ public class TeacherServiceImpl
       LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
       return -1;
     }
+  }
+  
+  @Override
+  public int createDoc(ScheduleDoc doc) {
+    return docDao.create(doc);
+  }
+  
+  @Override
+  public ScheduleDoc getDocument(int docId) {
+    return docDao.findActionDocument(docId);
+  }
+
+  @Override
+  public void updateDoc(ScheduleDoc doc) {
+    docDao.update(doc);
   }
 
 }

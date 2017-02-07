@@ -180,11 +180,11 @@
     <div id="busy"></div>
     <div id="errorDialog" th:title="#{warning.label}"></div>
     <div id="docEditor">
-      <form>
+      <form id="documentForm" th:action="@{/perso/xScheduleDoc}">
         <fieldset>
           <div class="row-form">
-            <select id="docType" style="width:100%">
-              <option >Type de document...</option>
+            <select id="docType" style="width:100%" name="docType">
+              <option value="0">Type de document...</option>
               <option th:text="#{document.type.music.sheet.label}" value="1">partition</option>
               <option th:text="#{document.type.music.label}" value="2">audio</option>
               <option th:text="#{document.type.video.label}" value="3">vidéo</option>
@@ -193,17 +193,19 @@
           </div>
           <div class="row-form">
             <label for="docName">Nom du lien</label>
-            <input id="docName" type="text" style="width:96%"/>
+            <input id="docName" type="text" style="width:96%" name="docName" value=""/>
           </div>
           <div class="row-form">
             <label style="display:block" for="docUri">Adresse du lien</label>
-            <input id="docUri" type="text"  style="width:96%"/>
+            <input id="docUri" type="text" style="width:96%" name="docUri" value=""/>
           </div>
-          <input id="docId" type="hidden" value="" name="docId"/>
-          <input id="docActionId" type="hidden" value="" name="actionId"/>
-          <input id="docScheduleId" type="hidden" value="" name="scheduleId"/>
-          <input id="docMemberId" type="hidden" value="" name="memberId"/>
+          <input id="docId" type="hidden" value="0" name="docId"/>
+          <input id="docFirstDate" type="hidden" value="2017-02-06" name="docDate"/>
+          <input id="docActionId" type="hidden" value="0" name="actionId"/>
+          <input id="docScheduleId" type="hidden" value="0" name="scheduleId"/>
+          <input id="docMemberId" type="hidden" value="0" name="memberId"/>
         </fieldset>
+        <p class="error" style="display: none;"></p>
       </form>
     </div>
     <!--<aside id="help-panel" class="closeable" th:include="fragments/help :: perso"></aside>-->
@@ -261,7 +263,7 @@
       //animate: {easing: "linear",duration: 200}
     });
     //unactive ENTER key on dialog submit
-    $("#follow-up-form").submit(function (e) {
+    $("#follow-up-form, #documentForm").submit(function (e) {
         e.preventDefault();
       }
     );
@@ -272,7 +274,7 @@
       $(this).next().toggle();
     });
     $(document).on("click", ".doc-ref", function () {
-      setDocumentDialog($(this));
+      getAndFillDocumentDialog($(this), /*[[@{/perso/xDocument}]]*/ "");
     });
 
     $("#saveCSV").click(function() {

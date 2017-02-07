@@ -55,9 +55,11 @@ import javax.servlet.http.HttpServletResponse;
 import net.algem.planning.FollowUp;
 import net.algem.planning.FollowUpException;
 import net.algem.planning.Hour;
+import net.algem.planning.ScheduleDoc;
 import net.algem.planning.ScheduleElement;
 import net.algem.planning.ScheduleRangeElement;
 import net.algem.util.CommonDao;
+import net.algem.util.GemConstants;
 import static net.algem.util.GemConstants.DATE_FORMAT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -309,6 +311,55 @@ public class TeacherCtrl
       return new FollowUpResponse(true, result, up);
     }
 
+  }
+  
+@RequestMapping(method = RequestMethod.GET, value = "/perso/xDocument")
+  public @ResponseBody
+  ScheduleDoc getDocument(@RequestParam("docId") String id) {
+    return service.getDocument(Integer.parseInt(id));
+  }  
+  
+  @RequestMapping(method = RequestMethod.POST, value = "/perso/xScheduleDoc")
+  public @ResponseBody
+  ScheduleDoc updateScheduleDoc(
+          @RequestParam String docId,
+          @RequestParam String docDate,
+          @RequestParam String actionId,
+          @RequestParam String scheduleId,
+          @RequestParam String memberId,
+          @RequestParam String docType,
+          @RequestParam String docName,
+          @RequestParam String docUri
+  ) {
+    ScheduleDoc doc = new ScheduleDoc();
+    try {
+      int id = Integer.parseInt(docId);
+      int action = Integer.parseInt(actionId);
+      int schedule = Integer.parseInt(scheduleId);
+      int member = Integer.parseInt(memberId);
+      short type = Short.parseShort(docType);
+      LOGGER.log(Level.INFO, docDate);
+      Date date = GemConstants.DATE_FORMAT.parse(docDate);
+      doc.setId(id);
+      doc.setFirstDate(date);
+      doc.setActionId(action);
+      doc.setScheduleId(schedule);
+      doc.setMemberId(member);
+      doc.setDocType(type);
+      doc.setName(docName);
+      doc.setUri(docUri);
+      
+      if (doc.getId() == 0) {
+        doc.setId(service.createDoc(doc));
+      } else {
+        service.updateDoc(doc);
+      }
+    } catch (IllegalArgumentException iex) {
+      LOGGER.log(Level.SEVERE, null, iex);
+    } catch (ParseException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+    }
+    return doc;
   }
 
   private FollowUpResponse getErrorResponse(String msg) {

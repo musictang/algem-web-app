@@ -39,6 +39,9 @@ public class ScheduleDoc {
   private short docType;
   private String uri;
 
+  public ScheduleDoc() {
+  }
+  
   public ScheduleDoc(int id, int actionId) {
     this.id = id;
     this.actionId = actionId;
@@ -110,7 +113,7 @@ public class ScheduleDoc {
 
   @Override
   public String toString() {
-    return name;
+    return "ScheduleDoc{" + "id=" + id + ", firstDate=" + firstDate + ", actionId=" + actionId + ", scheduleId=" + scheduleId + ", memberId=" + memberId + ", name=" + name + ", docType=" + docType + ", uri=" + uri + '}';
   }
 
   @Override
