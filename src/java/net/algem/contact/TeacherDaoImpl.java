@@ -35,7 +35,7 @@ import net.algem.planning.DateFr;
 import net.algem.planning.FollowUp;
 import net.algem.planning.Hour;
 import net.algem.planning.ScheduleDao;
-import net.algem.planning.ScheduleDocDaoImpl;
+import net.algem.planning.ActionDocumentDaoImpl;
 import net.algem.planning.ScheduleElement;
 import net.algem.planning.ScheduleRangeElement;
 import net.algem.planning.ScheduleRangeIO;
@@ -80,7 +80,7 @@ public class TeacherDaoImpl
   private CommonDao commonDao;
   
   @Autowired
-  private ScheduleDocDaoImpl docDao;
+  private ActionDocumentDaoImpl docDao;
 
   private Map<Integer,String> photoCache = new HashMap<>();
 

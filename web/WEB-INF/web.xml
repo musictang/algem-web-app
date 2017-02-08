@@ -25,6 +25,7 @@
     </servlet-mapping>
     <session-config>
         <session-timeout>15</session-timeout>
+        <!-- Tomcat >= 7 (servlet 3 only) -->
         <cookie-config>
           <http-only>true</http-only>
         </cookie-config>
@@ -76,5 +77,5 @@
         <error-code>503</error-code>
         <location>/error</location>
     </error-page>
-  
+
 </web-app>

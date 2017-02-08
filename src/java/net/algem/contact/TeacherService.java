@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherService.java Algem Web App 1.6.0 07/02/17
+ * @(#) TeacherService.java Algem Web App 1.6.0 08/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -22,7 +22,7 @@ package net.algem.contact;
 import java.util.Date;
 import java.util.List;
 import net.algem.planning.FollowUp;
-import net.algem.planning.ScheduleDoc;
+import net.algem.planning.ActionDocument;
 import net.algem.planning.ScheduleElement;
 
 /**
@@ -39,11 +39,13 @@ public interface TeacherService
   FollowUp getFollowUp(int id);
 
   int updateFollowUp(FollowUp up);
-  
-  ScheduleDoc getDocument(int docId);
-  
-  int createDoc(ScheduleDoc doc);
-  
-  void updateDoc(ScheduleDoc doc);
+
+  ActionDocument getDocument(int docId);
+
+  int createDocument(ActionDocument doc);
+
+  void updateDocument(ActionDocument doc);
+
+  void removeDocument(int docId);
 
 }

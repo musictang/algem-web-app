@@ -1,5 +1,5 @@
 /*
- * @(#) ScheduleDoc.java Algem Web App 1.6.0 03/02/17
+ * @(#) ActionDocument.java Algem Web App 1.6.0 03/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -28,7 +28,7 @@ import java.util.Date;
  * @version 1.6.0
  * @since 1.6.0 01/02/17
  */
-public class ScheduleDoc {
+public class ActionDocument {
 
   private int id;
   private Date firstDate;
@@ -39,10 +39,10 @@ public class ScheduleDoc {
   private short docType;
   private String uri;
 
-  public ScheduleDoc() {
+  public ActionDocument() {
   }
-  
-  public ScheduleDoc(int id, int actionId) {
+
+  public ActionDocument(int id, int actionId) {
     this.id = id;
     this.actionId = actionId;
   }
@@ -135,7 +135,7 @@ public class ScheduleDoc {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    final ScheduleDoc other = (ScheduleDoc) obj;
+    final ActionDocument other = (ActionDocument) obj;
     if (this.id != other.id) {
       return false;
     }

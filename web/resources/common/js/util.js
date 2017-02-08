@@ -17,6 +17,38 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
+var GEMUTILS = GEMUTILS || {};
+
+/**
+ * Converts a french date with 'dd-mm-yyyy' format to standard date object.
+ * @param {String} date to convert
+ * @returns {Date}
+ */
+GEMUTILS.getDateFromString = function(d){
+   //dd-mm-yyyy
+  var dd = d.slice(0, 2);
+  var mm = d.slice(3, 5);
+  var y = d.slice(6, 10);
+  var sep = "/";
+  var isoFormat = y.concat(sep, mm, sep, dd);
+  console.log("isoFormat", isoFormat);
+  return new Date(isoFormat);
+};
+
+/**
+ * Checks if one date is after or equal another.
+ * @param {String} d1 the date to check : string-formatted (yyyy/mm/dd)
+ * @param {String} d2 the date to compare with : string-formatted (yyyy/mm/dd)
+ * @returns {Boolean}
+ */
+GEMUTILS.isDateIncluded = function (d1, d2) {
+  var rowDate = new Date(d1);
+  var docDate = new Date(d2);
+  rowDate.setTime(rowDate.getTime() + new Date().getTimezoneOffset() * 60 * 1000);
+  docDate.setTime(docDate.getTime() + new Date().getTimezoneOffset() * 60 * 1000);
+  return rowDate >= docDate;
+}
+
 function logVars() {
   var l = arguments.length;
   if (l === 0) {return;}

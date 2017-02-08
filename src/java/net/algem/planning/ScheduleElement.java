@@ -49,7 +49,7 @@ public class ScheduleElement
   private String labelColor;
   private int code;
   private FollowUp followUp;
-  private List<ScheduleDoc> documents;
+  private List<ActionDocument> documents;
 
   public Map<String, NamedModel> getDetail() {
     return detail;
@@ -67,11 +67,11 @@ public class ScheduleElement
     this.followUp = followUp;
   }
 
-  public List<ScheduleDoc> getDocuments() {
+  public List<ActionDocument> getDocuments() {
     return documents;
   }
 
-  public void setDocuments(List<ScheduleDoc> documents) {
+  public void setDocuments(List<ActionDocument> documents) {
     this.documents = documents;
   }
 

@@ -55,7 +55,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.algem.planning.FollowUp;
 import net.algem.planning.FollowUpException;
 import net.algem.planning.Hour;
-import net.algem.planning.ScheduleDoc;
+import net.algem.planning.ActionDocument;
 import net.algem.planning.ScheduleElement;
 import net.algem.planning.ScheduleRangeElement;
 import net.algem.util.CommonDao;
@@ -312,16 +312,16 @@ public class TeacherCtrl
     }
 
   }
-  
-@RequestMapping(method = RequestMethod.GET, value = "/perso/xDocument")
+
+@RequestMapping(method = RequestMethod.GET, value = "/perso/xGetActionDocument")
   public @ResponseBody
-  ScheduleDoc getDocument(@RequestParam("docId") String id) {
+  ActionDocument getDocument(@RequestParam("docId") String id) {
     return service.getDocument(Integer.parseInt(id));
-  }  
-  
-  @RequestMapping(method = RequestMethod.POST, value = "/perso/xScheduleDoc")
+  }
+
+  @RequestMapping(method = RequestMethod.POST, value = "/perso/xUpdateActionDocument")
   public @ResponseBody
-  ScheduleDoc updateScheduleDoc(
+  ActionDocument updateScheduleDoc(
           @RequestParam String docId,
           @RequestParam String docDate,
           @RequestParam String actionId,
@@ -331,14 +331,14 @@ public class TeacherCtrl
           @RequestParam String docName,
           @RequestParam String docUri
   ) {
-    ScheduleDoc doc = new ScheduleDoc();
+    ActionDocument doc = new ActionDocument();
     try {
       int id = Integer.parseInt(docId);
       int action = Integer.parseInt(actionId);
       int schedule = Integer.parseInt(scheduleId);
       int member = Integer.parseInt(memberId);
       short type = Short.parseShort(docType);
-      LOGGER.log(Level.INFO, docDate);
+      LOGGER.log(Level.INFO, "TeacherCtrl " + docDate);
       Date date = GemConstants.DATE_FORMAT.parse(docDate);
       doc.setId(id);
       doc.setFirstDate(date);
@@ -348,19 +348,32 @@ public class TeacherCtrl
       doc.setDocType(type);
       doc.setName(docName);
       doc.setUri(docUri);
-      
+
       if (doc.getId() == 0) {
-        doc.setId(service.createDoc(doc));
+        doc.setId(service.createDocument(doc));
       } else {
-        service.updateDoc(doc);
+        service.updateDocument(doc);
       }
-    } catch (IllegalArgumentException iex) {
-      LOGGER.log(Level.SEVERE, null, iex);
-    } catch (ParseException ex) {
+    } catch (IllegalArgumentException | ParseException | DataAccessException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
+      doc.setId(0); doc.setName(ex.getMessage());
     }
     return doc;
   }
+
+  @RequestMapping(method = RequestMethod.POST, value = "/perso/xRemoveActionDocument")
+  public @ResponseBody
+  Boolean removeActionDocument(@RequestParam String docId) {
+    try {
+      int id = Integer.parseInt(docId);
+      service.removeDocument(id);
+      return true;
+    } catch (IllegalArgumentException | DataAccessException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return false;
+    }
+  }
+
 
   private FollowUpResponse getErrorResponse(String msg) {
     FollowUpResponse response = new FollowUpResponse(false, -1);
@@ -374,7 +387,7 @@ public class TeacherCtrl
     return response;
   }
 
-  class FollowUpResponse
+  public class FollowUpResponse
   {
 
     private boolean success;

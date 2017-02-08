@@ -180,7 +180,7 @@
     <div id="busy"></div>
     <div id="errorDialog" th:title="#{warning.label}"></div>
     <div id="docEditor">
-      <form id="documentForm" th:action="@{/perso/xScheduleDoc}">
+      <form id="documentForm" th:action="@{/perso/xUpdateActionDocument}">
         <fieldset>
           <div class="row-form">
             <select id="docType" style="width:100%" name="docType">
@@ -274,7 +274,11 @@
       $(this).next().toggle();
     });
     $(document).on("click", ".doc-ref", function () {
-      getAndFillDocumentDialog($(this), /*[[@{/perso/xDocument}]]*/ "");
+      getAndFillDocumentDialog($(this), /*[[@{/perso/xGetActionDocument}]]*/ "");
+    });
+
+    $(document).on("click", "#docRemoveLink", function () {
+      removeActionDocument($(this), /*[[@{/perso/xRemoveActionDocument}]]*/ "");
     });
 
     $("#saveCSV").click(function() {

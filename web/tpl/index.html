@@ -54,7 +54,7 @@
         <h2 th:text="#{schedule.label}">Planning</h2>
         <section class="gallery">
           <div class="thumbnails thumbnails-out" th:each="estab: ${estabList}">
-            <a class="img-link" th:href="@{daily.html(d=${now},e=${estab.id})}">
+            <a style="border:none" th:href="@{daily.html(d=${now},e=${estab.id})}">
               <img th:src="@{/resources/themes/img/logo.png}" alt="Planning"/>
             </a><br />
             <a class="thumb-legend" th:href="@{daily.html(d=${now},e=${estab.id})}" th:text="${estab.name}"></a>

@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherServiceImpl.java Algem Web App 1.6.0 07/02/17
+ * @(#) TeacherServiceImpl.java Algem Web App 1.6.0 08/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.algem.planning.FollowUp;
-import net.algem.planning.ScheduleDoc;
-import net.algem.planning.ScheduleDocDaoImpl;
+import net.algem.planning.ActionDocument;
+import net.algem.planning.ActionDocumentDaoImpl;
 import net.algem.planning.ScheduleElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -45,12 +45,12 @@ public class TeacherServiceImpl
 {
 
   private final static Logger LOGGER = Logger.getLogger(TeacherServiceImpl.class.getName());
-  
+
   @Autowired
   private TeacherDaoImpl dao;
-  
+
   @Autowired
-  private ScheduleDocDaoImpl docDao;
+  private ActionDocumentDaoImpl docDao;
 
   @Override
   public List<ScheduleElement> getFollowUpSchedules(int teacher, Date from, Date to) {
@@ -75,20 +75,25 @@ public class TeacherServiceImpl
       return -1;
     }
   }
-  
+
   @Override
-  public int createDoc(ScheduleDoc doc) {
+  public int createDocument(ActionDocument doc) {
     return docDao.create(doc);
   }
-  
+
   @Override
-  public ScheduleDoc getDocument(int docId) {
+  public ActionDocument getDocument(int docId) {
     return docDao.findActionDocument(docId);
   }
 
   @Override
-  public void updateDoc(ScheduleDoc doc) {
+  public void updateDocument(ActionDocument doc) {
     docDao.update(doc);
+  }
+
+  @Override
+  public void removeDocument(int docId) {
+    docDao.delete(docId);
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * @(#) ScheduleDocDaoImpl.java Algem Web App 1.6.0 03/02/2017
+ * @(#) ActionDocumentDaoImpl.java Algem Web App 1.6.0 08/02/2017
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -24,7 +24,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,15 +41,14 @@ import org.springframework.stereotype.Repository;
  * @since 1.6.0 03/02/2017
  */
 @Repository
-public class ScheduleDocDaoImpl 
-        extends AbstractGemDao 
+public class ActionDocumentDaoImpl
+        extends AbstractGemDao
 {
 
   public final static String TABLE = "document_action";
-  private final static Logger LOGGER = Logger.getLogger(ScheduleDocDaoImpl.class.getName());
-  
-  public int create(final ScheduleDoc doc) {
-//    id,datedebut,idaction,idplanning,idper,doctype,nom,uri 
+  private final static Logger LOGGER = Logger.getLogger(ActionDocumentDaoImpl.class.getName());
+
+  public int create(final ActionDocument doc) {
     final String query = "INSERT INTO " + TABLE + " VALUES(DEFAULT,?,?,?,?,?,?,?)";
     LOGGER.log(Level.INFO, doc.toString());
     KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -70,8 +68,8 @@ public class ScheduleDocDaoImpl
     }, keyHolder);
     return keyHolder.getKey().intValue();
   }
-  
-  public void update(final ScheduleDoc doc) {
+
+  public void update(final ActionDocument doc) {
     final String query = "UPDATE " + TABLE + " SET datedebut = ?, doctype = ?, nom = ?, uri = ? WHERE id = ?";
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
@@ -86,14 +84,27 @@ public class ScheduleDocDaoImpl
       }
     });
   }
-  
-  public ScheduleDoc findActionDocument(final int docId) {
-    String query = "SELECT id,datedebut,idaction,idplanning,idper,doctype,nom,uri FROM " + TABLE + " WHERE id = ?";
-    return jdbcTemplate.queryForObject(query, new RowMapper<ScheduleDoc>() {
+
+  public void delete(final int docId) {
+    final String query = "DELETE FROM " + TABLE + " WHERE id = ?";
+    jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
-      public ScheduleDoc mapRow(ResultSet rs, int row) throws SQLException {
-        ScheduleDoc doc = new ScheduleDoc();
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, docId);
+        return ps;
+      }
+    });
+  }
+
+  public ActionDocument findActionDocument(final int docId) {
+    String query = "SELECT id,datedebut,idaction,idplanning,idper,doctype,nom,uri FROM " + TABLE + " WHERE id = ?";
+    return jdbcTemplate.queryForObject(query, new RowMapper<ActionDocument>() {
+      @Override
+      public ActionDocument mapRow(ResultSet rs, int row) throws SQLException {
+        ActionDocument doc = new ActionDocument();
         doc.setId(rs.getInt(1));
+        LOGGER.log(Level.INFO, "date en bd  : " +rs.getString(2));
         doc.setFirstDate(rs.getDate(2));
         doc.setActionId(rs.getInt(3));
         doc.setScheduleId(rs.getInt(4));
@@ -101,27 +112,27 @@ public class ScheduleDocDaoImpl
         doc.setDocType(rs.getShort(6));
         doc.setName(rs.getString(7));
         doc.setUri(rs.getString(8));
-        LOGGER.log(Level.WARNING, doc.toString());
+LOGGER.log(Level.INFO, doc.toString());
         return doc;
       }
-      
+
     }, docId);
   }
-  
-  public List<ScheduleDoc> findActionDocuments(final int actionId) {
-    String query = "SELECT id,datedebut,idplanning,idper,doctype,nom,uri FROM " + TABLE + " WHERE idaction = ?";
-    return jdbcTemplate.query(query, new RowMapper<ScheduleDoc>() {
-      @Override
-      public ScheduleDoc mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-        ScheduleDoc doc = new ScheduleDoc(rs.getInt(1), actionId);
+  public List<ActionDocument> findActionDocuments(final int actionId) {
+    String query = "SELECT id,datedebut,idplanning,idper,doctype,nom,uri FROM " + TABLE + " WHERE idaction = ?";
+    return jdbcTemplate.query(query, new RowMapper<ActionDocument>() {
+      @Override
+      public ActionDocument mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+        ActionDocument doc = new ActionDocument(rs.getInt(1), actionId);
         doc.setFirstDate(rs.getDate(2));
         doc.setScheduleId(rs.getInt(3));
         doc.setMemberId(rs.getInt(4));
         doc.setDocType(rs.getShort(5));
         doc.setName(rs.getString(6));
         doc.setUri(rs.getString(7));
-        LOGGER.log(Level.WARNING, doc.getName());
+
         return doc;
       }
     }, actionId);
