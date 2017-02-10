@@ -321,7 +321,7 @@ public class TeacherCtrl
 
   @RequestMapping(method = RequestMethod.POST, value = "/perso/xUpdateActionDocument")
   public @ResponseBody
-  ActionDocument updateScheduleDoc(
+  ActionDocument updateActionDocument(
           @RequestParam String docId,
           @RequestParam String docDate,
           @RequestParam String actionId,
@@ -338,7 +338,7 @@ public class TeacherCtrl
       int schedule = Integer.parseInt(scheduleId);
       int member = Integer.parseInt(memberId);
       short type = Short.parseShort(docType);
-      LOGGER.log(Level.INFO, "TeacherCtrl " + docDate);
+      LOGGER.log(Level.INFO, docDate);
       Date date = GemConstants.DATE_FORMAT.parse(docDate);
       doc.setId(id);
       doc.setFirstDate(date);

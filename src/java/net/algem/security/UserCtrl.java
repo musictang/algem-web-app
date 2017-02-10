@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java	1.5.2 23/01/17
+ * @(#)UserCtrl.java	1.6.0 10/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -99,7 +99,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Controller for login operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.2
+ * @version 1.6.0
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -186,14 +186,14 @@ public class UserCtrl
 
       Authentication auth = SecurityContextHolder.getContext().getAuthentication();
       if (auth != null && !(auth instanceof AnonymousAuthenticationToken) && auth.isAuthenticated()) {
-        String msg = messageSource.getMessage("already.connected.label", null, LocaleContextHolder.getLocale());
+        String msg = messageSource.getMessage("already.connected.label", null, CTX_LOCALE);
         return "{\"msg\":\"" + msg + "\"}";
       }
       UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username.trim(), password);
       auth = authenticationManager.authenticate(token);
       secuContext.setAuthentication(auth);
 //      secCtxRepo.saveContext(secuContext, request, response);
-      String msg = messageSource.getMessage("login.success.label", new Object[]{username}, LocaleContextHolder.getLocale());
+      String msg = messageSource.getMessage("login.success.label", new Object[]{username}, CTX_LOCALE);
 //			rememberMeServices.loginSuccess(request, response, auth);
       return "{\"msg\":\"" + msg + "\"}";
     } catch (BadCredentialsException ex) {
@@ -265,10 +265,10 @@ public class UserCtrl
       if (others != null) {
         for (User o : others) {
           if (o.getId() == user.getId()) {
-            bindingResult.rejectValue("id", "", messageSource.getMessage("user.exists", null, LocaleContextHolder.getLocale()));
+            bindingResult.rejectValue("id", "", messageSource.getMessage("user.exists", null, CTX_LOCALE));
             return "signup";
           } else if (o.getLogin() != null && o.getLogin().equals(user.getLogin())) {
-            bindingResult.rejectValue("login", "", messageSource.getMessage("login.used", null, LocaleContextHolder.getLocale()));
+            bindingResult.rejectValue("login", "", messageSource.getMessage("login.used", null, CTX_LOCALE));
             return "signup";
           }
         }
@@ -316,7 +316,7 @@ public class UserCtrl
   public String doRecoverPassword(@RequestParam String email, HttpServletRequest request, Model model) {
     User found = service.findUserByEmail(email);
     if (found == null) {
-      model.addAttribute("errorMessage", messageSource.getMessage("unknown.user", null, LocaleContextHolder.getLocale()));
+      model.addAttribute("errorMessage", messageSource.getMessage("unknown.user", null, CTX_LOCALE));
       return "recover";
     }
 
@@ -326,10 +326,10 @@ public class UserCtrl
     try {
       service.setToken(found.getId(), token);
       sendRecoverMessage(url, token, found);
-      model.addAttribute("message", messageSource.getMessage("recover.send.info", null, LocaleContextHolder.getLocale()));
+      model.addAttribute("message", messageSource.getMessage("recover.send.info", null, CTX_LOCALE));
     } catch (MailException | DataAccessException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
-      model.addAttribute("errorMessage", messageSource.getMessage("recover.send.exception", new Object[]{ex.getMessage()}, LocaleContextHolder.getLocale()));
+      model.addAttribute("errorMessage", messageSource.getMessage("recover.send.exception", new Object[]{ex.getMessage()}, CTX_LOCALE));
     }
 
     return "recover";
@@ -346,20 +346,19 @@ public class UserCtrl
    */
   @RequestMapping(method = RequestMethod.GET, value = "recover.html", params = {"id", "token"})
   public String recover(User u, @RequestParam("id") int id, @RequestParam("token") String token, Model model) {
-    Locale locale = LocaleContextHolder.getLocale();
     PasswordResetToken resetToken = null;
     try {
       resetToken = service.getToken(id);
       if (!token.equals(resetToken.getToken())) {
-        model.addAttribute("message", messageSource.getMessage("recover.invalid.token", null, locale));
+        model.addAttribute("message", messageSource.getMessage("recover.invalid.token", null, CTX_LOCALE));
         return "error";
       }
     } catch (EmptyResultDataAccessException ex) {
-      model.addAttribute("message", messageSource.getMessage("recover.invalid.token", new Object[]{ex.getMessage()}, locale));
+      model.addAttribute("message", messageSource.getMessage("recover.invalid.token", new Object[]{ex.getMessage()}, CTX_LOCALE));
       return "error";
     } catch (DataAccessException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
-      model.addAttribute("message", messageSource.getMessage("data.exception", new Object[]{ex.getMessage()}, locale));
+      model.addAttribute("message", messageSource.getMessage("data.exception", new Object[]{ex.getMessage()}, CTX_LOCALE));
       return "error";
     }
 
@@ -368,7 +367,7 @@ public class UserCtrl
     cal.add(Calendar.DAY_OF_MONTH, 1);// 24h delay
     LOGGER.log(Level.INFO, "today" + new Date() + " token " + cal.getTime());
     if (new Date().after(cal.getTime())) {
-      model.addAttribute("message", messageSource.getMessage("recover.expired.token", null, locale));
+      model.addAttribute("message", messageSource.getMessage("recover.expired.token", null, CTX_LOCALE));
       return "error";
     }
 
@@ -533,7 +532,7 @@ public class UserCtrl
     // Create a thread safe "copy" of the template message and customize it
     SimpleMailMessage mail = new SimpleMailMessage(recoverMessage);
     String args = "/recover.html?id=" + user.getId() + "&token=" + token;
-    String msg = messageSource.getMessage("recover.info", new Object[]{user.toString()}, LocaleContextHolder.getLocale());
+    String msg = messageSource.getMessage("recover.info", new Object[]{user.toString()}, CTX_LOCALE);
     String url = path + args;
     mail.setTo(user.getEmail());
     mail.setText(msg + url);

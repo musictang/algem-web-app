@@ -1,7 +1,7 @@
 /*
- * @(#) BookingCtrl.java Algem Web App 1.5.1 02/12/16
+ * @(#) BookingCtrl.java Algem Web App 1.6.0 10/02/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -55,13 +56,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.0
+ * @version 1.6.0
  * @since 1.0.6 20/01/2016
  */
 @Controller
 public class BookingCtrl
 {
   private final static Logger LOGGER = Logger.getLogger(BookingCtrl.class.getName());
+  private final static Locale CTX_LOCALE = LocaleContextHolder.getLocale();
   
   @Autowired
   private UserService service;
@@ -118,13 +120,13 @@ public class BookingCtrl
     redirectAttributes.addAttribute("e", estab);
     SecurityContext secuContext = SecurityContextHolder.getContext();
     if (!secuContext.getAuthentication().isAuthenticated()) {
-      model.addAttribute("message", messageSource.getMessage("booking.auth.error", null, LocaleContextHolder.getLocale()));
+      model.addAttribute("message", messageSource.getMessage("booking.auth.error", null, CTX_LOCALE));
       return "error";
     }
 
     User u = service.findUserByLogin(p.getName());
     if (u == null) {
-      model.addAttribute("message", messageSource.getMessage("booking.user.error", null, LocaleContextHolder.getLocale()));
+      model.addAttribute("message", messageSource.getMessage("booking.user.error", null, CTX_LOCALE));
       return "error";
     }
 
@@ -149,7 +151,7 @@ public class BookingCtrl
       if (dt.getOpening().after(booking.getStartTime()) || dt.getClosing().before(booking.getEndTime())) {
         String msg = messageSource.getMessage("booking.room.closed.error",
                 new Object[]{dt.getOpening().toString(), dt.getClosing().toString()},
-                LocaleContextHolder.getLocale());
+                CTX_LOCALE);
         LOGGER.log(Level.INFO, msg);
         model.addAttribute("message", msg);
         return "error";
@@ -159,14 +161,14 @@ public class BookingCtrl
 
       List<ScheduleElement> roomConflicts = planningService.getRoomConflicts(booking);
       if (roomConflicts.size() > 0) {
-        model.addAttribute("message", messageSource.getMessage("booking.room.conflict.error", null, LocaleContextHolder.getLocale()));
+        model.addAttribute("message", messageSource.getMessage("booking.room.conflict.error", null, CTX_LOCALE));
         model.addAttribute("data", roomConflicts);
         return "error";
       }
 
       List<ScheduleElement> personConflicts = planningService.getPersonConflicts(booking);
       if (personConflicts.size() > 0) {
-        model.addAttribute("message", messageSource.getMessage("booking.person.conflict.error", null, LocaleContextHolder.getLocale()));
+        model.addAttribute("message", messageSource.getMessage("booking.person.conflict.error", null, CTX_LOCALE));
         model.addAttribute("data", personConflicts);
         return "error";
       }
@@ -176,10 +178,10 @@ public class BookingCtrl
       sendMessage(booking, "booking.send.info", bookingMessage);
     } catch (ParseException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
-      model.addAttribute("message", messageSource.getMessage("date.format.error", null, LocaleContextHolder.getLocale()));
+      model.addAttribute("message", messageSource.getMessage("date.format.error", null, CTX_LOCALE));
       return "error";
     } catch (DataAccessException ex) {
-      model.addAttribute("message", messageSource.getMessage("data.exception", new Object[]{ex.getMessage()}, LocaleContextHolder.getLocale()));
+      model.addAttribute("message", messageSource.getMessage("data.exception", new Object[]{ex.getMessage()}, CTX_LOCALE));
       return "error";
     }
 
@@ -201,13 +203,13 @@ public class BookingCtrl
       if (b != null) {
         b.setDate(date);
         if (b.getStatus() == 1) {
-          model.addAttribute("message", messageSource.getMessage("booking.confirmed.cancel.warning", null, LocaleContextHolder.getLocale()));
+          model.addAttribute("message", messageSource.getMessage("booking.confirmed.cancel.warning", null, CTX_LOCALE));
           return "error";
         }
       }
 
       if (now.getTime() > d.getTime()) {
-        model.addAttribute("message", messageSource.getMessage("booking.cancel.delay.warning", null, LocaleContextHolder.getLocale()));
+        model.addAttribute("message", messageSource.getMessage("booking.cancel.delay.warning", null, CTX_LOCALE));
         return "error";
       }
       // n'annuler que si confirmé
@@ -224,7 +226,7 @@ public class BookingCtrl
     } catch (DataAccessException de) {
       LOGGER.log(Level.SEVERE, null, de);
       if (de instanceof EmptyResultDataAccessException) {
-        model.addAttribute("message", messageSource.getMessage("booking.not.found.warning", null, LocaleContextHolder.getLocale()));
+        model.addAttribute("message", messageSource.getMessage("booking.not.found.warning", null, CTX_LOCALE));
       } else {
         model.addAttribute("message", de.getMessage());
       }
@@ -253,7 +255,7 @@ public class BookingCtrl
     Room room = planningService.getRoom(booking.getRoom());
     String now = GemConstants.DATE_FORMAT.format(new Date());
     Object[] args = new Object[]{room.getName(), p == null ? "Anonymous" : p.toString(), now, booking.getDate()};
-    String msg = messageSource.getMessage(msgKey, args, LocaleContextHolder.getLocale());
+    String msg = messageSource.getMessage(msgKey, args, CTX_LOCALE);
 
     mail.setFrom(from);
     mail.setText(msg);
@@ -261,7 +263,7 @@ public class BookingCtrl
   }
 
   private void addMessageAttribute(Model m, String key, Object[] params) {
-    m.addAttribute("message", messageSource.getMessage(key, params, LocaleContextHolder.getLocale()));
+    m.addAttribute("message", messageSource.getMessage(key, params, CTX_LOCALE));
   }
 
 }

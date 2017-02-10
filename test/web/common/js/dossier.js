@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.5.2 25/01/17
+ * @(#) dossier.js Algem Web App 1.6.0 10/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -70,11 +70,11 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
       var total = 0;
       var indTitle = labels.individual_monitoring_action;
       var coTitle = labels.collective_monitoring_action;
-      var supportLocales = toLocaleStringSupportsLocales();
+      var supportLocales = GEMUTILS.toLocaleStringSupportsLocales();
       // zero-width space (&#8203;) inserted after hyphens to authorize breaks
       $.each(data, function (index, value) {
         var d = new Date(value.date);
-        var dateInfo = supportLocales ? d.toLocaleString(getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d) : dateFormatFR(d);
+        var dateInfo = supportLocales ? d.toLocaleString(GEMUTILS.getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d) : dateFormatFR(d);
         var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-&#8203;" + value.end.hour.pad() + ":" + value.end.minute.pad();
         var ms = (value.start.hour * 60) + value.start.minute;
         var me = (value.end.hour * 60) + value.end.minute;
@@ -170,12 +170,12 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
     } else {
       var result = "";
       var total = 0;
-      var supportLocales = toLocaleStringSupportsLocales();
+      var supportLocales = GEMUTILS.toLocaleStringSupportsLocales();
       //console.log(supportLocales)
       $.each(data, function (index, value) {
         var d = new Date(value.date);
         // XXX toLocaleString([[locale], options]) not supported on android (excepted chrome)
-        var dateInfo = supportLocales ? d.toLocaleString(getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d) : dateFormatFR(d);
+        var dateInfo = supportLocales ? d.toLocaleString(GEMUTILS.getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d) : dateFormatFR(d);
         var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-&#8203;" + value.end.hour.pad() + ":" + value.end.minute.pad();
         var ms = (value.start.hour * 60) + value.start.minute;
         var me = (value.end.hour * 60) + value.end.minute;

@@ -1,5 +1,5 @@
 /*
- * @(#) util.js Algem Web App 1.6.0 01/02/17
+ * @(#) util.js Algem Web App 1.6.0 10/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@ var GEMUTILS = GEMUTILS || {};
 
 /**
  * Converts a french date with 'dd-mm-yyyy' format to standard date object.
- * @param {String} date to convert
+ * @param {String} d date to convert
  * @returns {Date}
  */
 GEMUTILS.getDateFromString = function(d){
@@ -31,7 +31,6 @@ GEMUTILS.getDateFromString = function(d){
   var y = d.slice(6, 10);
   var sep = "/";
   var isoFormat = y.concat(sep, mm, sep, dd);
-  console.log("isoFormat", isoFormat);
   return new Date(isoFormat);
 };
 
@@ -47,6 +46,80 @@ GEMUTILS.isDateIncluded = function (d1, d2) {
   rowDate.setTime(rowDate.getTime() + new Date().getTimezoneOffset() * 60 * 1000);
   docDate.setTime(docDate.getTime() + new Date().getTimezoneOffset() * 60 * 1000);
   return rowDate >= docDate;
+};
+
+/**
+ * Returns a string representation of the date in argument.
+ * Format matches French locale : dd-mm-yyyy
+ * date.toLocaleDateString('fr') is not compatible with most of browsers.
+ * @param {Date} d
+ * @returns {String}
+ */
+GEMUTILS.dateFormatFR = function(d) {
+  if (!d instanceof Date) {
+    console.log("erreur date");
+  }
+  //var arg = first.toLocaleString().replace(/\//g, "-");
+  var s = d.toISOString().slice(0, 10);//2016-06-12 yyyy-mm-dd
+  var dd = s.slice(8, 10);
+  var mm = s.slice(5, 7);
+  var y = s.slice(0, 4);
+  var sep = "-";
+  return dd.concat(sep, mm, sep, y);
+};
+
+/**
+ * Gets first and last day of the week the date in argument is.
+ * @param {type} d selected date
+ * @returns {getCurrentWeekDates.utilAnonym$0}
+ */
+GEMUTILS.getCurrentWeekDates = function(d) {
+  var first = new Date(d.setDate(d.getDate() - d.getDay() + 1));
+  first.setHours(0, -first.getTimezoneOffset(), 0, 0); //removing the timezone offset.
+  var last = new Date(first);
+  var last = new Date(last.setDate(last.getDate() + last.getDay() + 5));
+  last.setHours(0, -last.getTimezoneOffset(), 0, 0);
+
+  return {first: first, last: last};
+}
+
+/**
+ * Gets first and last day of the current month.
+ * @returns {getCurrentMonthDates.utilAnonym$1}
+ */
+GEMUTILS.getCurrentMonthDates = function() {
+  var now = new Date();
+  var first = new Date(now.getFullYear(), now.getMonth(), 1);
+  first.setHours(0, -first.getTimezoneOffset(), 0, 0); //removing the timezone offset.
+  var last = new Date();
+  var last = new Date(last.getFullYear(), last.getMonth() + 1, 0);
+  last.setHours(0, -last.getTimezoneOffset(), 0, 0);
+
+  return {first: first, last: last};
+};
+
+GEMUTILS.getLocale = function() {
+  return navigator.languages && navigator.languages[0] || // Chrome / Firefox
+               navigator.language ||   // All browsers
+               navigator.userLanguage; // IE <= 10
+};
+
+GEMUTILS.toLocaleStringSupportsLocales = function() {
+    try {
+        new Date().toLocaleString("i");
+    } catch (e) {
+        return e.name === "RangeError";
+    }
+    return false;
+};
+
+/**
+ * Gets a string representation of a time in minutes : hh:mm.
+ * @param {type} m time in minutes
+ * @returns {String} a time-formatted string
+ */
+function getTimeFromMinutes(m) {
+  return (m/60>>0).pad() + ":" + (m%60).pad();
 }
 
 function logVars() {
@@ -73,80 +146,6 @@ Number.prototype.pad = function (size) {
   }
   return s;
 };
-
-/**
- * Returns a string representation of the date in argument.
- * Format matches French locale : dd-mm-yyyy
- * date.toLocaleDateString('fr') is not compatible with most of browsers.
- * @param {Date} d
- * @returns {String}
- */
-function dateFormatFR(d) {
-  if (!d instanceof Date) {
-    console.log("erreur date");
-  }
-  //var arg = first.toLocaleString().replace(/\//g, "-");
-  var s = d.toISOString().slice(0, 10);//2016-06-12 yyyy-mm-dd
-  var dd = s.slice(8, 10);
-  var mm = s.slice(5, 7);
-  var y = s.slice(0, 4);
-  var sep = "-";
-  return dd.concat(sep, mm, sep, y);
-}
-
-/**
- * Gets a string representation of a time in minutes : hh:mm.
- * @param {type} m time in minutes
- * @returns {String} a time-formatted string
- */
-function getTimeFromMinutes(m) {
-  return (m/60>>0).pad() + ":" + (m%60).pad();
-}
-
-/**
- * Gets first and last day of the week the date in argument is.
- * @param {type} d selected date
- * @returns {getCurrentWeekDates.utilAnonym$0}
- */
-function getCurrentWeekDates(d) {
-  var first = new Date(d.setDate(d.getDate() - d.getDay() + 1));
-  first.setHours(0, -first.getTimezoneOffset(), 0, 0); //removing the timezone offset.
-  var last = new Date(first);
-  var last = new Date(last.setDate(last.getDate() + last.getDay() + 5));
-  last.setHours(0, -last.getTimezoneOffset(), 0, 0);
-
-  return {first: first, last: last};
-}
-
-/**
- * Gets first and last day of the current month.
- * @returns {getCurrentMonthDates.utilAnonym$1}
- */
-function getCurrentMonthDates() {
-  var now = new Date();
-  var first = new Date(now.getFullYear(), now.getMonth(), 1);
-  first.setHours(0, -first.getTimezoneOffset(), 0, 0); //removing the timezone offset.
-  var last = new Date();
-  var last = new Date(last.getFullYear(), last.getMonth() + 1, 0);
-  last.setHours(0, -last.getTimezoneOffset(), 0, 0);
-
-  return {first: first, last: last};
-}
-
-function getLocale() {
-  return navigator.languages && navigator.languages[0] || // Chrome / Firefox
-               navigator.language ||   // All browsers
-               navigator.userLanguage; // IE <= 10
-}
-
-function toLocaleStringSupportsLocales() {
-    try {
-        new Date().toLocaleString("i");
-    } catch (e) {
-        return e.name === "RangeError";
-    }
-    return false;
-}
 
 /** From http://detectmobilebrowsers.com/. */
 function isMobile() {

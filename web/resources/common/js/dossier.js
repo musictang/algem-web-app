@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.6.0 03/02/17
+ * @(#) dossier.js Algem Web App 1.6.0 10/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -18,9 +18,7 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
 var DOSSIER = DOSSIER || {};
-//var gemUtils = new GEMUTILS();
-var labels = {};
-var paths = {};
+
 /**
  * FollowUpSchedule constructor.
  * @param {Number} id
@@ -55,12 +53,7 @@ function FollowUpObject(id, scheduleId, text, note, status, co) {
   this.collective = co;
 }
 
-function setDefaultVars (_labels, _path) {
-  labels = _labels;
-  defPhotoPath = _path;
-}
-
-function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
+DOSSIER.getFollowUpSchedules = function(urlPath, user, dateFrom, dateTo, labels, paths) {
   $.get(urlPath, {userId: user, from: dateFrom, to: dateTo}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("no data");
@@ -70,11 +63,12 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
       var total = 0;
       //var indTitle = labels.individual_monitoring_action;
       var coTitle = labels.collective_monitoring_action;
-      var supportLocales = toLocaleStringSupportsLocales();
+      var supportLocales = GEMUTILS.toLocaleStringSupportsLocales();
       // zero-width space (&#8203;) inserted after hyphens to authorize breaks
       $.each(data, function (index, value) {
         var d = new Date(value.date);
-        var dateInfo = supportLocales ? d.toLocaleString(getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d) : dateFormatFR(d);
+        var df = GEMUTILS.dateFormatFR(d);
+        var dateInfo = supportLocales ? d.toLocaleString(GEMUTILS.getLocale(), {weekday: 'long'}) + " " + df : df;
         var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-&#8203;" + value.end.hour.pad() + ":" + value.end.minute.pad();
         var ms = (value.start.hour * 60) + value.start.minute;
         var me = (value.end.hour * 60) + value.end.minute;
@@ -93,42 +87,41 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
           + "<td>" + getTimeFromMinutes(length) + "</td>"
           + "<td>" + roomInfo + "</td>"
           + "<td title=\""+ courseInfo + "\">"
-          + (value.collective ? getMailtoLinksFromRanges(value.ranges, labels.mailto_all_participants_tip, courseInfo) : courseInfo)
-          + fillTeacherDocumentPanel(value, labels)
+          + (value.collective ? DOSSIER.getMailtoLinksFromRanges(value.ranges, labels.mailto_all_participants_tip, courseInfo) : courseInfo)
+          + DOSSIER.fillTeacherDocumentPanel(value, labels)
           + "</td><td style=\"min-width: 8em\">";
         if (value.collective) {
           result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.expand_collapse+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
         } else {
           result += "<ul class=\"simple\">";
         }
-        result += fillRanges(value, paths, labels);
+        result += DOSSIER.fillRanges(value, labels, paths);
         result += "</ul>";
 
-        result += "</td><td id=\"" + value.note + "\" class=\"dlg\" accessKey=\"C\" title=\"" + coTitle + "\"><p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + getFollowUpSubContent(value.followUp) + "</p></td></tr>\n";
+        result += "</td><td id=\"" + value.note + "\" class=\"dlg\" accessKey=\"C\" title=\"" + coTitle + "\"><p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + DOSSIER.getFollowUpSubContent(value.followUp, labels) + "</p></td></tr>\n";
       });
       result += "<tr><th colspan=\"2\">Total</th><td colspan=\"5\"><b>" + getTimeFromMinutes(total) + "</b></td></tr>";
       $("#follow-up-result tbody").html(result);
     }
   }, "json");
-}
+};
 
 /**
  * Fills individual monitoring entries.
  * @param {Object} value json data
- * @param {Object} paths default locations
  * @param {Object} labels common labels
+ * @param {Object} paths default locations
  * @returns {String} full content html li element
  */
-function fillRanges(value, paths, labels) {
+DOSSIER.fillRanges = function(value, labels, paths) {
   var line = "";
   var indTitle = labels.individual_monitoring_action;
   for (var i = 0, len = value.ranges.length; i < len; i++) {
     var firstNameName = value.ranges[i].person.firstName + " " + value.ranges[i].person.name;
     var nc = value.ranges[i].followUp.content || "";
-    var sub = getFollowUpSubContent(value.ranges[i].followUp);
+    var sub = this.getFollowUpSubContent(value.ranges[i].followUp, labels);
     var photo = value.ranges[i].person.photo;
     line += "<li id=\"" + value.ranges[i].id + "\" data-algem-memberid=\"" + value.ranges[i].memberId + "\"><div class=\"monitoring-element\">";// scheduleRange Id
-
     if (photo != null) {
       line += "<img data-algem-followupid=\"" + value.ranges[i].followUp.id + "\" class=\"photo-id-thumbnail dlg\" src=\"data:image/jpg;base64," + photo + "\" title=\"" + indTitle + "\"/>";
     } else {
@@ -148,7 +141,7 @@ function fillRanges(value, paths, labels) {
     line += "</div></li>";
   }
   return line;
-}
+};
 
 /**
  * Fills document entries.
@@ -156,7 +149,7 @@ function fillRanges(value, paths, labels) {
  * @param {Object} labels common labels
  * @returns {String} a tag as string
  */
-function fillTeacherDocumentPanel(schedule, labels) {
+DOSSIER.fillTeacherDocumentPanel = function(schedule, labels) {
   if (schedule.documents) {
     var p = "<div class=\"doc-icon-panel\" style=\"margin-top: 0.5em\">";
     var sDate = new Date(schedule.date);
@@ -166,7 +159,7 @@ function fillTeacherDocumentPanel(schedule, labels) {
       var doc = schedule.documents[i];
       var dDate = new Date(doc.firstDate);
       if (sDate.getTime() < dDate.getTime()) {continue;}
-      var refTag = "<img data-algem-actionref=\""+ schedule.idAction +"\" data-algem-docid=\"" + doc.id + "\" class=\"img-link doc-ref\" title=\"" + getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/" + getIconFromDocType(doc.docType) + "\" />";
+      var refTag = "<img data-algem-actionref=\""+ schedule.idAction +"\" data-algem-docid=\"" + doc.id + "\" class=\"img-link doc-ref\" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/" + this.getIconFromDocType(doc.docType) + "\" />";
       if (doc.scheduleId === 0 && doc.memberId === 0) {
         p += refTag;
       } else if (doc.scheduleId > 0) {
@@ -186,9 +179,9 @@ function fillTeacherDocumentPanel(schedule, labels) {
   p += "<a data-algem-docid=\"0\" data-algem-actionref=\""+ schedule.idAction +"\" class=\"img-link doc-ref doc-plus\" title=\"" + labels["document_add_label"] + "\" href=\"javascript:;\"><img alt=\"" + labels["document_add_label"] + "\" src=\"../resources/common/img/plus.png\" /></a>";
   p += "</div>";
   return p;
-}
+};
 
-function fillStudentDocumentPanel(schedule, userId, labels) {
+DOSSIER.fillStudentDocumentPanel = function(schedule, userId, labels) {
   if (!schedule.documents) {
     return "";
   }
@@ -205,7 +198,7 @@ function fillStudentDocumentPanel(schedule, userId, labels) {
     if (sDate.getTime() < dDate.getTime()) {
       continue;
     }
-    var imgTag = "<img class=\"doc-link \" title=\"" + getDocTypeFromNumber(doc.docType, labels) + "\" alt=\"" + getDocTypeFromNumber(doc.docType, labels) + "\" src=\"../resources/common/img/" + getIconFromDocType(doc.docType) + "\" />";
+    var imgTag = "<img class=\"doc-link \" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + "\" alt=\"" + this.getDocTypeFromNumber(doc.docType, labels) + "\" src=\"../resources/common/img/" + this.getIconFromDocType(doc.docType) + "\" />";
     var docTag = "<a href=\"" + doc.uri + "\" target=\"_blank\">" + (doc.name || "Document") + "</a>";
     if (doc.scheduleId === 0 && doc.memberId === 0) {
       panel += "<p>" + imgTag + docTag + "</p>";
@@ -222,33 +215,33 @@ function fillStudentDocumentPanel(schedule, userId, labels) {
     }
   }
   return panel;
-}
+};
 
-function getDocTypeFromNumber(n, labels) {
+DOSSIER.getDocTypeFromNumber = function(n, labels) {
   switch(n) {
     case 0: return labels["document_type_other_label"];
     case 1: return labels["document_type_music_sheet_label"];
     case 2: return labels["document_type_music_label"];
     case 3: return labels["document_type_video_label"];
   }
-}
+};
 
-function getIconFromDocType(n) {
+DOSSIER.getIconFromDocType = function(n) {
   switch(n) {
     case 0: return "share.png";
     case 1: return "music.png";
     case 2: return "audio.png";
     case 3: return "movie.png";
   }
-}
+};
 
 /**
  * Fills form entries before opening document dialog.
  * @param {Object} element element clicked
  * @param {String} url controller url
- * @returns {undefined}
+ * @param {Object} labels translations
  */
-function getAndFillDocumentDialog(element, url) {
+DOSSIER.getAndFillDocumentDialog = function(element, url, labels) {
   var row = $(element).closest("tr");
   var actionRef = $(element).attr("data-algem-actionref");
   var scheduleRef = $(row).attr("id");
@@ -260,25 +253,24 @@ function getAndFillDocumentDialog(element, url) {
   var scheduleDate = dateRef.split(" ").pop();
   var dlg = $("#docEditor");
   var docId = $(element).attr("data-algem-docid");
-  resetDocumentDialog();// clear form
+  this.resetDocumentDialog();// clear form
   if ("0" === docId) {
+    //creation
     $("#docId").val(0);
     $("#docFirstDate").val(scheduleDate);
     $("#docActionId").val(actionRef);
     $("#docScheduleId").val(0);
     $("#docMemberId").val(memberRef);
-    console.log("création", docId, actionRef, scheduleRef, memberRef);
   } else {
-    console.log("modification", docId, actionRef, scheduleRef);
+    // modification
     $("#docFirstDate").val(scheduleDate);
     // fill from database
-    //var stripId = docId.substring(3);
     $.get(url, {docId: docId}, function (data) {
       if (typeof data === 'undefined') {
         console.log("no document");
       } else {
         $("#docId").val(data.id);
-        var dateFr = dateFormatFR(new Date(data.firstDate));
+        var dateFr = GEMUTILS.dateFormatFR(new Date(data.firstDate));
         $("#docFirstDate").val(dateFr);
         $("#docActionId").val(data.actionId);
         $("#docScheduleId").val(data.scheduleId);
@@ -286,31 +278,31 @@ function getAndFillDocumentDialog(element, url) {
         $("#docType").val(data.docType);
         $("#docName").val(data.name);
         $("#docUri").val(data.uri);
-        var docActionsTag = "<div id=\"docActions\"><a id=\"docRemoveLink\" data-algem-remove-link-id=\""+data.id+"\" href=\"javascript:;\">Supprimer</a></div>";
-        var lnk = "<p id=\"docUriLink\"><a href=\""+data.uri+"\" target=\"_blank\">Accéder au document</a></p>";
+        var docActionsTag = "<div id=\"docActions\"><a id=\"docRemoveLink\" data-algem-remove-link-id=\""+data.id+"\" href=\"javascript:;\">"+labels['remove_label']+"</a></div>";
+        var lnk = "<p id=\"docUriLink\"><a href=\""+data.uri+"\" target=\"_blank\">"+labels['document_access_label']+"</a></p>";
         $(docActionsTag).insertAfter($("#docUri"));
         $(lnk).insertBefore($("#docRemoveLink"));
       }
     });
   }
   $(dlg).dialog("open");
-}
+};
 
 /**
  * Clears form entries.
  * @returns {undefined}
  */
-function resetDocumentDialog() {
+DOSSIER.resetDocumentDialog = function() {
   $("#docId").val(0);
-    $("#docFirstDate").val(null);
-    $("#docActionId").val(0);
-    $("#docScheduleId").val(0);
-    $("#docMemberId").val(0);
-    $("#docType").val(0);
-    $("#docName").val(null);
-    $("#docUri").val(null);
-    $("#docActions").remove();
-}
+  $("#docFirstDate").val(null);
+  $("#docActionId").val(0);
+  $("#docScheduleId").val(0);
+  $("#docMemberId").val(0);
+  $("#docType").val(0);
+  $("#docName").val(null);
+  $("#docUri").val(null);
+  $("#docActions").remove();
+};
 
 /**
  * Constructs a mailto link from a list of ranges.
@@ -319,11 +311,19 @@ function resetDocumentDialog() {
  * @param {type} label link label
  * @returns {String} a string as link
  */
-function getMailtoLinksFromRanges(ranges, title, label) {
+DOSSIER.getMailtoLinksFromRanges = function(ranges, title, label) {
+  var getFirstMail = function (range) {
+    var emails = range.person.emails;
+    if (emails.length > 0) {
+      return emails[0].email;
+    }
+    return null;
+  };
+  
   var mailto = null;
   var emails = [];
   for (var i = 0, len = ranges.length; i < len; i++) {
-    var e = getFirstMailFromRange(ranges[i]);
+    var e = getFirstMail(ranges[i]);
     if (e != null) {
       emails.push(e);
     }
@@ -339,15 +339,7 @@ function getMailtoLinksFromRanges(ranges, title, label) {
   return mailto;
 }
 
-function getFirstMailFromRange(range) {
-  var emails = range.person.emails;
-  if (emails.length > 0) {
-    return emails[0].email;
-  }
-  return null;
-}
-
-function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
+DOSSIER.getFollowUpStudent = function(urlPath, userId, dateFrom, dateTo, labels) {
   $.get(urlPath, {userId: userId, from: dateFrom, to: dateTo}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("no data");
@@ -359,8 +351,9 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
       //console.log(supportLocales)
       $.each(data, function (index, value) {
         var d = new Date(value.date);
+        var df = GEMUTILS.dateFormatFR(d);
         // XXX toLocaleString([[locale], options]) not supported on android (excepted chrome)
-        var dateInfo = supportLocales ? d.toLocaleString(getLocale(), {weekday: 'long'}) + " " + dateFormatFR(d) : dateFormatFR(d);
+        var dateInfo = supportLocales ? d.toLocaleString(GEMUTILS.getLocale(), {weekday: 'long'}) + " " + df : df;
         var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-&#8203;" + value.end.hour.pad() + ":" + value.end.minute.pad();
         var ms = (value.start.hour * 60) + value.start.minute;
         var me = (value.end.hour * 60) + value.end.minute;
@@ -370,8 +363,8 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
         var teacherInfo = value.detail['teacher'].name;
         var noteCo = value.followUp.content || "";
         var nc = value.ranges[0].followUp.content || "";
-        var sub = getFollowUpSubContent(value.ranges[0].followUp);
-        var subCo = getFollowUpSubContent(value.followUp);
+        var sub = DOSSIER.getFollowUpSubContent(value.ranges[0].followUp, labels);
+        var subCo = DOSSIER.getFollowUpSubContent(value.followUp, labels);
         total += length;
 
         result += "<tr>"
@@ -379,7 +372,7 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
           + "<td>" + timeInfo + "</td>"
           + "<td>" + getTimeFromMinutes(length) + "</td>"
           + "<td>" + roomInfo + "</td>"
-          + "<td>" + courseInfo + fillStudentDocumentPanel(value, userId, labels) + "</td>"
+          + "<td>" + courseInfo + DOSSIER.fillStudentDocumentPanel(value, userId, labels) + "</td>"
           + "<td>" + teacherInfo + "</td>"
           + "<td>" + nc + "<p class=\"subContent\">" + sub + "</p></td>"
           + "<td>" + noteCo + "<p class=\"subContent\">" + subCo + "</p></td></tr>";
@@ -388,16 +381,17 @@ function getFollowUpStudent(urlPath, userId, dateFrom, dateTo) {
       $("#follow-up-student tbody").html(result);
     }
   }, "json");
-}
+};
 
 /**
  * Ajax function to get some followUp.
  * @param {String} url xhttp url
  * @param {Object} element node clicked
  * @param {Boolean} co collective
+ * @param {Object} paths default locations
  * @returns {FollowUpObject}
  */
-function getAndFillFollowUp(url, element, co) {
+DOSSIER.getAndFillFollowUp = function(url, element, co, paths) {
   var id = 0;
   if (element.is("img")) {
     id = $(element).attr("data-algem-followupid");
@@ -424,14 +418,15 @@ function getAndFillFollowUp(url, element, co) {
     }
 
   });
-}
+};
 
 /**
  * Returns the subContent info of the followUp in argument.
  * @param {FollowUpObject} followUp
+ * @param {Object} labels translations
  * @returns {String}
  */
-function getFollowUpSubContent(followUp) {
+DOSSIER.getFollowUpSubContent = function(followUp, labels) {
   var note = followUp.note;
   var abs = (followUp.status === 1);
   var exc = (followUp.status === 2);
@@ -439,7 +434,7 @@ function getFollowUpSubContent(followUp) {
   sub += abs ? "<span class=\"absent\">ABS</span>" : "";
   sub += exc ? "<span class=\"excused\">EXC</span>" : "";
   return sub || "";
-}
+};
 
 /**
  * Inits followUp dialog editing.
@@ -447,7 +442,7 @@ function getFollowUpSubContent(followUp) {
  * @param {Object} labels
  * @returns {undefined}
  */
-function initFollowUpDialog(element, labels) {
+DOSSIER.initFollowUpDialog = function(element, labels) {
   $(element).dialog({
     modal: false,
     autoOpen: false,
@@ -464,14 +459,14 @@ function initFollowUpDialog(element, labels) {
       {
         text: labels.save_label,
         click: function () {
-          updateFollowUp($("#follow-up-form"));
+          DOSSIER.updateFollowUp($("#follow-up-form"), labels);
         }
       }
     ]
   });
 }
 
-function initErrorDialog() {
+DOSSIER.initErrorDialog = function() {
   $("#errorDialog").dialog({
     autoOpen: false,
     buttons: {
@@ -482,7 +477,7 @@ function initErrorDialog() {
   });
 }
 
-function initDocumentDialog() {
+DOSSIER.initDocumentDialog = function(labels) {
 
   var documentForm = $("#documentForm");
   $("#docEditor").dialog({
@@ -499,36 +494,32 @@ function initDocumentDialog() {
       {
         text: labels.save_label,
         click: function () {
-          if ($("#docId").val() == "0") {
-            updateActionDocument(documentForm);
-          } else {
-            updateActionDocument(documentForm);
-          }
+          DOSSIER.updateActionDocument(documentForm, labels);
         }
       }
     ]
   });
-}
+};
 /**
  *
  * @param {FollowUpSchedule} f
  * @returns {undefined}
  */
-function showDialog(f) {
-  var dlg = $("#follow-up-dlg");
-  $(dlg).find("legend").html(f.name + " : " + f.time);
-  $(dlg).dialog({title: f.course + " " + f.date}).dialog("open");
-}
+//function showDialog(f) {
+//  var dlg = $("#follow-up-dlg");
+//  $(dlg).find("legend").html(f.name + " : " + f.time);
+//  $(dlg).dialog({title: f.course + " " + f.date}).dialog("open");
+//}
 
-function resetFollowUpDialog(defPhoto) {
+DOSSIER.resetFollowUpDialog = function(defPhoto) {
   $("#follow-up-photo").attr("src", defPhoto);
   $("#follow-content").val('');
   $("#follow-status").val('0');
   $("#note").val('');
   $("#follow-up-dlg").find(".error").text('');
-}
+};
 
-function updateFollowUp(form) {
+DOSSIER.updateFollowUp = function(form, labels) {
   var url = $(form).attr("action");
   //update hidden field before sending
   $("#status").val($("#follow-status").val());
@@ -538,7 +529,7 @@ function updateFollowUp(form) {
       var co = $("#noteType").val();
       var note = $("#note").prop("readonly") ? null : $("#note").val();
       var up = new FollowUpObject(data.followUp.id, data.followUp.scheduleId, content, note, data.followUp.status, co);
-      refreshFollowContent(data.operation, up);
+      DOSSIER.refreshFollowContent(data.operation, up, labels);
       $(form).next(".error").text('');
       $("#follow-up-dlg").dialog("close");
     } else {
@@ -546,10 +537,10 @@ function updateFollowUp(form) {
       $(form).next(".error").text(data.message);
     }
   }, "json");
-}
+};
 
-function refreshFollowContent(operation, followUp) {
-  var subContent = getFollowUpSubContent(followUp);
+DOSSIER.refreshFollowContent = function(operation, followUp, labels) {
+  var subContent = this.getFollowUpSubContent(followUp, labels);
   var id = followUp.id;
   if (followUp.collective === 'true') {
     $("#" + followUp.scheduleId).each(function () {
@@ -583,15 +574,14 @@ function refreshFollowContent(operation, followUp) {
     }
 
   }
-}
+};
 
-function updateActionDocument(form) {
+DOSSIER.updateActionDocument = function(form, labels) {
   var updateUrl = $(form).attr("action");
   var creation = $("#docId").val() == "0" ? true : false;
 
   $.post(updateUrl, form.serialize(), function (data) {
     if (data && data.id > 0) {
-      console.log("update document success", data);
       if (creation) {
         //refresh content
         var actionId = data.actionId;
@@ -599,7 +589,7 @@ function updateActionDocument(form) {
         var docId = data.id;
         var table = $("#follow-up-result");
         var target = null;
-        var refTag = "<img data-algem-actionref=\"" + actionId + "\" data-algem-docid=\"" + docId + "\" class=\"img-link doc-ref\" title=\"" + getDocTypeFromNumber(data.docType, labels) + " : " + data.name + "\" alt=\"" + data.name + "\" src=\"../resources/common/img/" + getIconFromDocType(data.docType) + "\" />";
+        var refTag = "<img data-algem-actionref=\"" + actionId + "\" data-algem-docid=\"" + docId + "\" class=\"img-link doc-ref\" title=\"" + DOSSIER.getDocTypeFromNumber(data.docType, labels) + " : " + data.name + "\" alt=\"" + data.name + "\" src=\"../resources/common/img/" + DOSSIER.getIconFromDocType(data.docType) + "\" />";
         if (data.memberId > 0) {
           var li = table.find("li[data-algem-memberid='" + memberId + "']");// multiple resultats
           var row = $(li).closest("tr");
@@ -618,8 +608,8 @@ function updateActionDocument(form) {
       } else {
         var imgTag = $("img[data-algem-docid="+data.id+"]");
         $(imgTag).each(function() {
-          $(this).attr("src", "../resources/common/img/" + getIconFromDocType(data.docType));
-          $(this).attr("title",getDocTypeFromNumber(data.docType, labels) + " : " + data.name);
+          $(this).attr("src", "../resources/common/img/" + DOSSIER.getIconFromDocType(data.docType));
+          $(this).attr("title",DOSSIER.getDocTypeFromNumber(data.docType, labels) + " : " + data.name);
           $(this).attr("alt",data.name);
         });
       }
@@ -629,9 +619,9 @@ function updateActionDocument(form) {
     }
   }, "json");
 
-}
+};
 
-function removeActionDocument(element, url) {
+DOSSIER.removeActionDocument = function(element, url) {
   var id = $(element).attr("data-algem-remove-link-id");
   $.post(url, {docId: id}, function (data) {
     if (data && data === true) {
@@ -642,40 +632,39 @@ function removeActionDocument(element, url) {
     }
     $("#docEditor").dialog("close");
   });
-}
+};
 
-function initWeekDates(today) {
+DOSSIER.initWeekDates = function(today) {
   var from = $("#weekFrom");
   var to = $("#weekTo");
   $(from).datepicker({changeMonth: true, changeYear: true, dateFormat: 'dd-mm-yy'}).datepicker('setDate', today);
   $(to).datepicker({changeMonth: true, changeYear: true, dateFormat: 'dd-mm-yy'}).datepicker('setDate', today);
-  $(from).val(dateFormatFR(today));
-  $(to).val(dateFormatFR(today));
+  $(from).val(GEMUTILS.dateFormatFR(today));
+  $(to).val(GEMUTILS.dateFormatFR(today));
 
   var studentFrom = $("#student-weekFrom");
   var studentTo = $("#student-weekTo");
   $(studentFrom).datepicker({changeMonth: true, changeYear: true, dateFormat: 'dd-mm-yy'}).datepicker('setDate', today);
   $(studentTo).datepicker({changeMonth: true, changeYear: true, dateFormat: 'dd-mm-yy'}).datepicker('setDate', today);
-  $(studentFrom).val(dateFormatFR(today));
-  $(studentTo).val(dateFormatFR(today));
+  $(studentFrom).val(GEMUTILS.dateFormatFR(today));
+  $(studentTo).val(GEMUTILS.dateFormatFR(today));
+};
 
-}
-
-function setWeekDates(firstDay, lastDay) {
+DOSSIER.setWeekDates = function(firstDay, lastDay) {
   $("#weekFrom").datepicker('setDate', firstDay);
   $("#weekTo").datepicker('setDate', lastDay);
-}
-function setStudentWeekDates(firstDay, lastDay) {
+};
+DOSSIER.setStudentWeekDates = function(firstDay, lastDay) {
   $("#student-weekFrom").datepicker('setDate', firstDay);
   $("#student-weekTo").datepicker('setDate', lastDay);
-}
-function setWeekChange(url, idper) {
+};
+DOSSIER.setWeekChange = function(url, idper, labels, paths) {
   var from = $("#weekFrom");
   var to = $("#weekTo");
   from.change(function () {
     var d = new Date(from.datepicker('getDate'));
-    var wd = getCurrentWeekDates(d);
-    getFollowUpSchedules(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
+    var wd = GEMUTILS.getCurrentWeekDates(d);
+    DOSSIER.getFollowUpSchedules(url, idper, GEMUTILS.dateFormatFR(wd.first), GEMUTILS.dateFormatFR(wd.last), labels, paths);
     from.datepicker('setDate', wd.first);
     to.datepicker('setDate', wd.last);
     from.blur();
@@ -683,21 +672,21 @@ function setWeekChange(url, idper) {
 
   to.change(function () {
     var d = new Date(to.datepicker('getDate'));
-    var wd = getCurrentWeekDates(d);
-    getFollowUpSchedules(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
+    var wd = GEMUTILS.getCurrentWeekDates(d);
+    DOSSIER.getFollowUpSchedules(url, idper, GEMUTILS.dateFormatFR(wd.first), GEMUTILS.dateFormatFR(wd.last), labels, paths);
     from.datepicker('setDate', wd.first);
     to.datepicker('setDate', wd.last);
     to.blur();
   });
-}
+};
 
-function setStudentWeekChange(url, idper) {
+DOSSIER.setStudentWeekChange = function(url, idper, labels) {
   var studentFrom = $("#student-weekFrom");
   var studentTo = $("#student-weekTo");
   studentFrom.change(function () {
     var d = new Date(studentFrom.datepicker('getDate'));
-    var wd = getCurrentWeekDates(d);
-    getFollowUpStudent(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
+    var wd = GEMUTILS.getCurrentWeekDates(d);
+    this.getFollowUpStudent(url, idper, GEMUTILS.dateFormatFR(wd.first), GEMUTILS.dateFormatFR(wd.last), labels);
     studentFrom.datepicker('setDate', wd.first);
     studentTo.datepicker('setDate', wd.last);
     studentFrom.blur();
@@ -705,44 +694,54 @@ function setStudentWeekChange(url, idper) {
 
   studentTo.change(function () {
     var d = new Date(studentTo.datepicker('getDate'));
-    var wd = getCurrentWeekDates(d);
-    getFollowUpStudent(url, idper, dateFormatFR(wd.first), dateFormatFR(wd.last));
+    var wd = GEMUTILS.getCurrentWeekDates(d);
+    DOSSIER.getFollowUpStudent(url, idper, GEMUTILS.dateFormatFR(wd.first), GEMUTILS.dateFormatFR(wd.last), labels);
     studentFrom.datepicker('setDate', wd.first);
     studentTo.datepicker('setDate', wd.last);
     studentTo.blur();
   });
-}
+};
 
-function setTeacherDateNavigation(url, userId, weekDates) {
+DOSSIER.setTeacherDateNavigation = function(url, userId, weekDates, labels, paths) {
   $("#follow-d").click(function () {
     var now = new Date();
-    getFollowUpSchedules(url, userId, dateFormatFR(now), dateFormatFR(now));
-    setWeekDates(dateFormatFR(now), dateFormatFR(now));
+    var dfnow = GEMUTILS.dateFormatFR(now);
+    DOSSIER.getFollowUpSchedules(url, userId, dfnow, dfnow, labels, paths);
+    DOSSIER.setWeekDates(dfnow, dfnow);
   });
   $("#follow-m").click(function () {
-    var cmd = getCurrentMonthDates();
-    getFollowUpSchedules(url, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
-    setWeekDates(dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+    var cmd = GEMUTILS.getCurrentMonthDates();
+    var dfFirst = GEMUTILS.dateFormatFR(cmd.first);
+    var dfLast = GEMUTILS.dateFormatFR(cmd.last);
+    DOSSIER.getFollowUpSchedules(url, userId, dfFirst, dfLast, labels, paths);
+    DOSSIER.setWeekDates(dfFirst, dfLast);
   });
   $("#follow-w").click(function () {
-    getFollowUpSchedules(url, userId, dateFormatFR(weekDates.first), dateFormatFR(weekDates.last));
-    setWeekDates(dateFormatFR(weekDates.first), dateFormatFR(weekDates.last));
+    var dfFirst = dateFormatFR(weekDates.first);
+    var dfLast = dateFormatFR(weekDates.last);
+    DOSSIER.getFollowUpSchedules(url, userId, dfFirst, dfLast, labels, paths);
+    DOSSIER.setWeekDates(dfFirst, dfLast);
   });
-}
+};
 
-function setStudentDateNavigation(url, userId, weekDates) {
+DOSSIER.setStudentDateNavigation = function(url, userId, weekDates, labels) {
   $("#student-follow-d").click(function () {
     var now = new Date();
-    getFollowUpStudent(url, userId, dateFormatFR(now), dateFormatFR(now));
-    setStudentWeekDates(dateFormatFR(now), dateFormatFR(now));
+    var dfnow = GEMUTILS.dateFormatFR(now);
+    DOSSIER.getFollowUpStudent(url, userId, dfnow, dfnow, labels);
+    DOSSIER.setStudentWeekDates(dfnow, dfnow);
   });
   $("#student-follow-m").click(function () {
-    var cmd = getCurrentMonthDates();
-    getFollowUpStudent(url, userId, dateFormatFR(cmd.first), dateFormatFR(cmd.last));
-    setStudentWeekDates(dateFormatFR(cmd.first), dateFormatFR(cmd.last));
+    var cmd = GEMUTILS.getCurrentMonthDates();
+    var dfFirst = GEMUTILS.dateFormatFR(cmd.first);
+    var dfLast = GEMUTILS.dateFormatFR(cmd.last);
+    DOSSIER.getFollowUpStudent(url, userId, dfFirst, dfLast, labels);
+    DOSSIER.setStudentWeekDates(dfFirst, dfLast);
   });
   $("#student-follow-w").click(function () {
-    getFollowUpStudent(url, userId, dateFormatFR(weekDates.first), dateFormatFR(weekDates.last));
-    setStudentWeekDates(dateFormatFR(weekDates.first), dateFormatFR(weekDates.last));
+    var dfFirst = dateFormatFR(weekDates.first);
+    var dfLast = dateFormatFR(weekDates.last);
+    DOSSIER.getFollowUpStudent(url, userId, dfFirst, dfLast, labels);
+    DOSSIER.setStudentWeekDates(dfFirst, dfLast);
   });
-}
+};

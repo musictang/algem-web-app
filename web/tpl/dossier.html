@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.6.0 01/02/17
+ * @(#) dossier.html Algem Web App 1.6.0 10/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -228,10 +228,12 @@
       "expand_collapse": /*[[#{expand.collapse.label}]]*/ "",
       "individual_monitoring_action": /*[[#{individual.monitoring.action.title}]]*/ "",
       "mailto_all_participants_tip" : /*[[#{mailto.all.participants.tip}]]*/ "",
+      "remove_label" : /*[[#{remove.label}]]*/ "",
       "send_email_label" : /*[[#{send.email.label}]]*/ "",
       "save_label": /*[[#{save.label}]]*/ "",
       "score_label": /*[[#{score.label}]]*/ "",
       "student_list": /*[[#{student.list.label}]]*/ "",
+      "document_access_label": /*[[#{document.access.label}]]*/ "",
       "document_add_label": /*[[#{document.add.label}]]*/ "",
       "document_choose_recipient_label": /*[[#{document.choose.recipient.label}]]*/ "",
       "document_type_music_label": /*[[#{document.type.music.label}]]*/ "",
@@ -246,14 +248,13 @@
       "def_photo_co":/*[[@{/resources/common/img/groupe_trans.png}]]*/ ""
     }
     setCommonEvents();
-    initFollowUpDialog(dlg, labels);
-    initErrorDialog();
-    initDocumentDialog();
-    initWeekDates(new Date());
-    setWeekChange(url1, userId);
-    setStudentWeekChange(url2, userId);
-    setDefaultVars(labels, paths);
-    var cwd = getCurrentWeekDates(new Date());
+    DOSSIER.initFollowUpDialog(dlg, labels);
+    DOSSIER.initErrorDialog();
+    DOSSIER.initDocumentDialog(labels);
+    DOSSIER.initWeekDates(new Date());
+    DOSSIER.setWeekChange(url1, userId, labels, paths);
+    DOSSIER.setStudentWeekChange(url2, userId, labels);
+    var cwd = GEMUTILS.getCurrentWeekDates(new Date());
 
     $("#accordion").accordion({
       heightStyle: "content",
@@ -267,20 +268,6 @@
         e.preventDefault();
       }
     );
-    setTeacherDateNavigation(url1, userId, cwd);
-    setStudentDateNavigation(url2, userId, cwd);
-    //manage ajax loaded content
-    $(document).on("click", ".expand", function () {
-      $(this).next().toggle();
-    });
-    $(document).on("click", ".doc-ref", function () {
-      getAndFillDocumentDialog($(this), /*[[@{/perso/xGetActionDocument}]]*/ "");
-    });
-
-    $(document).on("click", "#docRemoveLink", function () {
-      removeActionDocument($(this), /*[[@{/perso/xRemoveActionDocument}]]*/ "");
-    });
-
     $("#saveCSV").click(function() {
       var ref = /*[[@{/perso/teacher/saveCSV}]]*/ "";
       window.location.href = ref + "?userId="+userId+"&from="+$("#weekFrom").val()+"&to="+$("#weekTo").val();
@@ -296,10 +283,26 @@
       window.location.href = ref + "?userId="+userId+"&from="+$("#student-weekFrom").val()+"&to="+$("#student-weekTo").val();
     });
 
+    DOSSIER.setTeacherDateNavigation(url1, userId, cwd, labels, paths);
+    DOSSIER.setStudentDateNavigation(url2, userId, cwd, labels);
+    
+    //manage ajax loaded content
+    $(document).on("click", ".expand", function () {
+      $(this).next().toggle();
+    });
+    $(document).on("click", ".doc-ref", function () {
+      DOSSIER.getAndFillDocumentDialog($(this), /*[[@{/perso/xGetActionDocument}]]*/ "", labels);
+    });
+
+    $(document).on("click", "#docRemoveLink", function () {
+      DOSSIER.removeActionDocument($(this), /*[[@{/perso/xRemoveActionDocument}]]*/ "");
+    });
+    
+    /** Opens followUp dialog. */
     $(document).on("click", ".dlg", function () {
-      resetFollowUpDialog(paths["def_photo_id"]);
+      DOSSIER.resetFollowUpDialog(paths["def_photo_id"]);
       var isCoCell = $(this).attr("accessKey") === "C";
-      getAndFillFollowUp(followUpURL, $(this), isCoCell);
+      DOSSIER.getAndFillFollowUp(followUpURL, $(this), isCoCell, paths);
       var row = $(this).closest('tr');
       var course = row.find(':nth-child(5)').attr("title");
       var date = row.find(':nth-child(1)').contents().get(0).nodeValue;

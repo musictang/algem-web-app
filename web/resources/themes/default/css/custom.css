@@ -32,13 +32,16 @@ body {
   color: #444;
   background-color: white;
 }
-.header-top{background-color: #ff5719;}
+.header-top{
+  background-color: #ff5719;
+}
 header nav select, #datepicker {color: #444;}
 header nav #previous, header nav #next {color: white;}
 
 footer, #bottom-menu {
-  background-color: #ff5719;
-  box-shadow: 0px -1px 2px 0px #444;
+  background-color: #ff4500;
+/*background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjZmY1NzE5Ij48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDBMOCA4Wk04IDBMMCA4WiIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2U9IiNmZjZhMzMiPjwvcGF0aD4KPC9zdmc+");*/
+  box-shadow: 0px -1px 1px 0px #444;
   /*background: linear-gradient(to bottom, rgba(255,87,25,1) 0%,rgba(255,87,25,0.9)60%,rgba(255,87,25,1)100%);*/
 /*  background-image:url('../img/personas-header-1280x1024.png');
   background-position: 98% center;
