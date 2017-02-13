@@ -83,11 +83,14 @@ public interface PlanningService
    * @return a list of rooms
    */
   List<Room> getRoomInfo(int estab);
+  
+  Room getRoomDetail(int id);
 
   /**
    * Gets the list of establishments in the organization.
    *
    * @param where
+   * @param login
    * @return a list of persons' instances of type {@value Person#ESTABLISHMENT}
    */
   List<Person> getEstablishments(String where, String login);
@@ -97,6 +100,7 @@ public interface PlanningService
    *
    * @param date selected date
    * @param estab establishment number
+   * @param adminAccess
    * @return a map
    */
   Map<String, Collection<ScheduleElement>> getDaySchedule(Date date, int estab, boolean adminAccess);

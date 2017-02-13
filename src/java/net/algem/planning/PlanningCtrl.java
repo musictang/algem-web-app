@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import net.algem.room.Room;
 import net.algem.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -156,6 +157,12 @@ public class PlanningCtrl
     @RequestParam("id") String id,
     @RequestParam("type") String type) {
     return service.getScheduleDetail(Integer.parseInt(id), Integer.parseInt(type));
+  }
+  
+  @RequestMapping(method = RequestMethod.GET, value = "/xRoomDetail")
+  public @ResponseBody
+  Room getRoomDetail(@RequestParam("id") String id) {
+    return service.getRoomDetail(Integer.parseInt(id));
   }
 
   private String getEstabFilter() {

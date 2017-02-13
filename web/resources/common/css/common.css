@@ -630,10 +630,10 @@ a.dlg ~ a {
   z-index: 3000;
 }
 #datepicker, .week-date {
-  font-size: normal;
+  font-size: medium;
   text-align: center;
   width: 8em;
-  height: 1.5em;
+  height: 1.25em;
   vertical-align: middle;
   background-color: #eee;
   border: 1px solid gray;

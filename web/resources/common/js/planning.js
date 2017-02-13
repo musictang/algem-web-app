@@ -200,17 +200,17 @@ function getMarginGrid() {
 
 /**
  * Set the style of hovered schedules.
+ * @param {Object} commonParams
  * @returns {undefined}
  */
 function setHoverStyle(commonParams) {
-  $('div.labels,div.schedule,p.title_col').hover(
+  $('div.labels,div.schedule').hover(
     function () {
       if (commonParams.hasDetailAccess) {
         $(this).css({cursor: "zoom-in"});
       } else {
         $(this).css({cursor: "not-allowed"});
       }
-
       $(this).css({
 //        'box-shadow': 'inset 0px 0px 1px 1px rgba(0,0,0,1)',
         opacity: "0.8"
@@ -535,14 +535,17 @@ function initBookingDate(date) {
   bookDatePicker.blur();
 }
 
+
+
 /**
- * ScheduleDetail function constructor
- * @param {type} id schedule id
- * @param {type} label schedule label
- * @param {type} type schedule type
- * @param {type} collective
- * @param {type} time time label
- * @param {type} room room label
+ * ScheduleDetail function constructor.
+ * @param {Number} id schedule id
+ * @param {Object} person schedule idper
+ * @param {String} label schedule label
+ * @param {Number} type schedule type
+ * @param {boolean} collective
+ * @param {String} time time label
+ * @param {String} room room label
  * @returns {ScheduleDetail}
  */
 function ScheduleDetail(id, person, label, type, collective, time, room) {
@@ -592,5 +595,37 @@ function displayScheduleDetail(url, detail, btLabel) {
       }).dialog("open");
     }
 
+  }, "json");
+}
+function initRoomDetailDialog(element) {
+  $(element).dialog({
+    modal: false,
+    autoOpen: false,
+    maxHeight: 440,
+    position: { my: "top", at: "top", of: window}
+  });
+}
+function showRoomDetail(element, url) {
+  var roomId = $(element).closest("div").attr("id");
+  console.log(roomId);
+  $.get(url, {id: roomId}, function (data) {
+    console.log(data);
+    if (typeof data === 'undefined' || data === null) {
+      console.log("empty detail");
+    } else {
+      var content = "<h4>Fonction</h4><p>"+data.usage+"</p>";
+      content += "<h4>Tarifs</h4><table><tr><th>Heures creuses</th><td>"+data.offPeakPrice+ " €</<td></tr><tr><th>Plein tarif</th><td>"+data.fullPrice+" €</td></tr></table>";
+      
+      if (data.equipment) {
+        content +="<h4>Equipement</h4><table><tr><th>Quantité</th><th>Nom</th></tr>";
+        for (var i=0; i < data.equipment.length; i++) {
+//          content +="<li>"+data.equipment[i].name+"</li>";
+          content += "<tr><td>"+data.equipment[i].quantity +"</td><td>"+data.equipment[i].name +"</td></tr>";
+        }
+        content +="</table>";
+      }
+      $("#roomDetailDialog").html(content);
+      $("#roomDetailDialog").dialog({title: "Salle " +data.name}).dialog("open");
+    }
   }, "json");
 }

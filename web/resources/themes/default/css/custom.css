@@ -80,6 +80,7 @@ footer a:link,footer a:visited, footer a:hover, footer a:active {color: #FFF;}
   color: #444;
 }
 .title_col, #title_col {background-color: #ff5719;}
+.title_col:hover {background:ivory;color:#666}
 
 .doc-ref:hover {color: #ff5719}
 

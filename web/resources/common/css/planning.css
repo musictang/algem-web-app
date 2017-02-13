@@ -98,8 +98,12 @@
   border-left:1px solid gray;
 }
 
-#schedule-detail-dlg {font-size: smaller}
-
+#schedule-detail-dlg, #roomDetailDialog {font-size: smaller}
+#roomDetailDialog table:first-of-type th {text-align: left}
+#roomDetailDialog table:first-of-type td {text-align: right}
+#roomDetailDialog table:nth-of-type(2) td {padding: 0 .5em}
+#roomDetailDialog table:nth-of-type(2) td:first-child {text-align: right}
+#roomDetailDialog table:nth-of-type(2) th {text-align: left}
 #title_col {
   position: fixed;
   top: 6%;
@@ -145,7 +149,6 @@
   box-shadow: 0px 1px 1px 0px #656565;
   z-index: 1004;
 }
-
 .schedule {
   box-sizing:  border-box;
   position: absolute;

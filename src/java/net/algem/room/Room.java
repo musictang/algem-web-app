@@ -22,6 +22,9 @@ package net.algem.room;
 
 //import net.algem.contact.Person;
 
+import java.util.List;
+
+
 /**
  * Room object model.
  * A room is a person of type {@link net.algem.contact.Person#ROOM}.
@@ -45,6 +48,7 @@ public class Room
   private int priceIndex;
   private double offPeakPrice;
   private double fullPrice;
+  private List<Equipment> equipment;
 
   /** Public access and available for rehearsals. */
   private boolean available;
@@ -64,6 +68,14 @@ public class Room
   public Room(int i, String n) {
     id = i;
     name = n;
+  }
+
+  public List<Equipment> getEquipment() {
+    return equipment;
+  }
+
+  public void setEquipment(List<Equipment> equipment) {
+    this.equipment = equipment;
   }
 
   @Override

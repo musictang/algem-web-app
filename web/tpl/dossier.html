@@ -193,11 +193,11 @@
           </div>
           <div class="row-form">
             <label for="docName">Nom du lien</label>
-            <input id="docName" type="text" style="width:96%" name="docName" value=""/>
+            <input id="docName" type="text" style="width:100%" name="docName" value=""/>
           </div>
           <div class="row-form">
             <label style="display:block" for="docUri">Adresse du lien</label>
-            <input id="docUri" type="text" style="width:96%" name="docUri" value=""/>
+            <input id="docUri" type="text" style="width:100%" name="docUri" value=""/>
           </div>
           <input id="docId" type="hidden" value="0" name="docId"/>
           <input id="docFirstDate" type="hidden" value="2017-02-06" name="docDate"/>
@@ -219,29 +219,31 @@
     var url1 = $("#follow-d").attr("formaction");
     var url2 = $("#student-follow-d").attr("formaction");
     var labels = {
-      "abort_label": /*[[#{abort.label}]]*/ "",
-      "call_label": /*[[#{call.label}]]*/ "",
-      "cancel_label": /*[[#{cancel.label}]]*/ "",
-      "collective_monitoring_action": /*[[#{collective.monitoring.action.title}]]*/ "",
-      "collective_monitoring_title": /*[[#{collective.monitoring.title}]]*/ "",
-      "collective_monitoring_warning" : /*[[#{collective.monitoring.warning}]]*/ "",
-      "expand_collapse": /*[[#{expand.collapse.label}]]*/ "",
-      "individual_monitoring_action": /*[[#{individual.monitoring.action.title}]]*/ "",
-      "mailto_all_participants_tip" : /*[[#{mailto.all.participants.tip}]]*/ "",
-      "remove_label" : /*[[#{remove.label}]]*/ "",
-      "send_email_label" : /*[[#{send.email.label}]]*/ "",
-      "save_label": /*[[#{save.label}]]*/ "",
-      "score_label": /*[[#{score.label}]]*/ "",
+      "abort_label": /*[[#{abort.label}]]*/ "!abort!",
+      "call_label": /*[[#{call.label}]]*/ "!call!",
+      "cancel_label": /*[[#{cancel.label}]]*/ "!cancel!",
+      "collective_monitoring_action": /*[[#{collective.monitoring.action.title}]]*/ "!collective monitoring!",
+      "collective_monitoring_title": /*[[#{collective.monitoring.title}]]*/ "!collective monitoring!",
+      "collective_monitoring_warning" : /*[[#{collective.monitoring.warning}]]*/ "!collective monitoring!",
+      "expand_collapse": /*[[#{expand.collapse.label}]]*/ "!expand_collapse!",
+      "individual_monitoring_action": /*[[#{individual.monitoring.action.title}]]*/ "!individual_monitoring!",
+      "mailto_all_participants_tip" : /*[[#{mailto.all.participants.tip}]]*/ "!mailto!",
+      "remove_label" : /*[[#{remove.label}]]*/ "!remove!",
+      "send_email_label" : /*[[#{send.email.label}]]*/ "!send!",
+      "save_label": /*[[#{save.label}]]*/ "!save!",
+      "score_label": /*[[#{score.label}]]*/ "!score!",
       "student_list": /*[[#{student.list.label}]]*/ "",
-      "document_access_label": /*[[#{document.access.label}]]*/ "",
-      "document_add_label": /*[[#{document.add.label}]]*/ "",
-      "document_choose_recipient_label": /*[[#{document.choose.recipient.label}]]*/ "",
-      "document_type_music_label": /*[[#{document.type.music.label}]]*/ "",
-      "document_type_video_label": /*[[#{document.type.video.label}]]*/ "",
-      "document_type_music_sheet_label": /*[[#{document.type.music.sheet.label}]]*/ "",
-      "document_type_other_label": /*[[#{document.type.other.label}]]*/ "",
-      "document_single_session_label": /*[[#{document.single.session.label}]]*/ "",
-      "document_single_recipient_label": /*[[#{document.single.recipient.label}]]*/ "",
+      "document_access_label": /*[[#{document.access.label}]]*/ "!open!",
+      "document_add_label": /*[[#{document.add.label}]]*/ "!add!",
+      "document_choose_recipient_label": /*[[#{document.choose.recipient.label}]]*/ "!recipient!",
+      "document_link_label": /*[[#{document.link.label}]]*/ "!document!",
+      "document_type_music_label": /*[[#{document.type.music.label}]]*/ "!music!",
+      "document_type_video_label": /*[[#{document.type.video.label}]]*/ "!video!",
+      "document_type_music_sheet_label": /*[[#{document.type.music.sheet.label}]]*/ "!music sheet!",
+      "document_type_other_label": /*[[#{document.type.other.label}]]*/ "!other!",
+      "document_remove_label": /*[[#{document.remove.label}]]*/ "!remove!",
+      "document_single_session_label": /*[[#{document.single.session.label}]]*/ "!one session!",
+      "document_single_recipient_label": /*[[#{document.single.recipient.label}]]*/ "!all sessions!",
     };
     var paths = {
       "def_photo_id": /*[[@{/resources/common/img/idphoto.png}]]*/ "",

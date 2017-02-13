@@ -34,6 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.algem.config.Instrument;
 import net.algem.contact.Person;
+import net.algem.room.Equipment;
 import net.algem.room.Room;
 import net.algem.util.AbstractGemDao;
 import net.algem.util.GemConstants;
@@ -274,6 +275,43 @@ public class ScheduleDao
 
     }, estab);
     return rooms;
+  }
+  
+  Room findRoomDetail(final int roomId) {
+    String query = "SELECT s.nom,s.fonction,t.hc,t.hp FROM salle s LEFT JOIN tarifsalle t ON(s.idtarif = t.id) WHERE s.id = ?";
+
+    Room room = jdbcTemplate.queryForObject(query, new RowMapper<Room>() {
+      @Override
+      public Room mapRow(ResultSet rs, int i) throws SQLException {
+        Room r = new Room();
+        r.setId(roomId);
+        r.setName(rs.getString(1));
+        r.setUsage(rs.getString(2));
+        r.setOffPeakPrice(rs.getDouble(3));
+        r.setFullPrice(rs.getDouble(4));
+        return r;
+      }
+    }, roomId);
+//    Room r = findRoom(roomId);
+    if (room != null) {
+      room.setEquipment(findRoomEquipment(room.getId()));
+    }
+    return room;
+  }
+  
+  private List<Equipment> findRoomEquipment(final int roomId) {
+    String query = "SELECT libelle,qte,idx from sallequip WHERE idsalle = ? ORDER BY idx";
+    return jdbcTemplate.query(query, new RowMapper<Equipment>() {
+     @Override
+      public Equipment mapRow(ResultSet rs, int row) throws SQLException {
+        Equipment e = new Equipment();
+        e.setRoomId(roomId);
+        e.setName(rs.getString(1));
+        e.setQuantity(rs.getInt(2));
+        e.setIndex(rs.getInt(3));
+        return e;
+      }
+    }, roomId);
   }
 
   List<ScheduleElement> getRoomConflicts(final Booking booking) {

@@ -53,6 +53,16 @@ function FollowUpObject(id, scheduleId, text, note, status, co) {
   this.collective = co;
 }
 
+/**
+ * Fills teacher monitoring.
+ * @param {type} urlPath
+ * @param {type} user
+ * @param {type} dateFrom
+ * @param {type} dateTo
+ * @param {type} labels
+ * @param {type} paths
+ * @returns {undefined}
+ */
 DOSSIER.getFollowUpSchedules = function(urlPath, user, dateFrom, dateTo, labels, paths) {
   $.get(urlPath, {userId: user, from: dateFrom, to: dateTo}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
@@ -61,7 +71,6 @@ DOSSIER.getFollowUpSchedules = function(urlPath, user, dateFrom, dateTo, labels,
     } else {
       var result = "";
       var total = 0;
-      //var indTitle = labels.individual_monitoring_action;
       var coTitle = labels.collective_monitoring_action;
       var supportLocales = GEMUTILS.toLocaleStringSupportsLocales();
       // zero-width space (&#8203;) inserted after hyphens to authorize breaks
@@ -97,8 +106,9 @@ DOSSIER.getFollowUpSchedules = function(urlPath, user, dateFrom, dateTo, labels,
         }
         result += DOSSIER.fillRanges(value, labels, paths);
         result += "</ul>";
-
-        result += "</td><td id=\"" + value.note + "\" class=\"dlg\" accessKey=\"C\" title=\"" + coTitle + "\"><p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + DOSSIER.getFollowUpSubContent(value.followUp, labels) + "</p></td></tr>\n";
+        result += "</td><td id=\"" + value.note + "\" accessKey=\"C\"";
+        if(value.collective) {result += " class=\"dlg\" title=\"" + coTitle + "\"";}
+        result +="><p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + DOSSIER.getFollowUpSubContent(value.followUp, labels) + "</p></td></tr>\n";
       });
       result += "<tr><th colspan=\"2\">Total</th><td colspan=\"5\"><b>" + getTimeFromMinutes(total) + "</b></td></tr>";
       $("#follow-up-result tbody").html(result);
@@ -144,7 +154,7 @@ DOSSIER.fillRanges = function(value, labels, paths) {
 };
 
 /**
- * Fills document entries.
+ * Fills teacher monitoring document entries.
  * @param {Object} schedule schedule element
  * @param {Object} labels common labels
  * @returns {String} a tag as string
@@ -159,8 +169,7 @@ DOSSIER.fillTeacherDocumentPanel = function(schedule, labels) {
       var doc = schedule.documents[i];
       var dDate = new Date(doc.firstDate);
       if (sDate.getTime() < dDate.getTime()) {continue;}
-//      var refTag = "<img data-algem-actionref=\""+ schedule.idAction +"\" data-algem-docid=\"" + doc.id + "\" class=\"img-link doc-ref\" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/" + this.getIconFromDocType(doc.docType) + "\" />";
-var refTag = "<span class=\"doc-ref "+ this.getIconFromDocType(doc.docType) + "\" data-algem-actionref=\""+ schedule.idAction +"\" data-algem-docid=\"" + doc.id + "\" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\"></span>";
+      var refTag = "<span class=\"doc-ref "+ this.getIconFromDocType(doc.docType) + "\" data-algem-actionref=\""+ schedule.idAction +"\" data-algem-docid=\"" + doc.id + "\" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\"></span>";
       if (doc.scheduleId === 0 && doc.memberId === 0) {
         p += refTag;
       } else if (doc.scheduleId > 0) {
@@ -218,26 +227,39 @@ DOSSIER.fillStudentDocumentPanel = function(schedule, userId, labels) {
   return panel;
 };
 
+/**
+ * 
+ * @param {type} n doc type index
+ * @param {type} labels common labels
+ * @returns {String}
+ */
 DOSSIER.getDocTypeFromNumber = function(n, labels) {
   switch(n) {
     case 0: return labels["document_type_other_label"];
     case 1: return labels["document_type_music_sheet_label"];
     case 2: return labels["document_type_music_label"];
     case 3: return labels["document_type_video_label"];
+    default: return "";
   }
 };
 
+/**
+ * Returns the class name corresponding to doc type index.
+ * Each class refers to a character in icomoon font.
+ * @param {Number} n doc type index
+ * @returns {String} class name
+ * @see https://icomoon.io/
+ */
 DOSSIER.getIconFromDocType = function(n) {
   switch(n) {
-//    case 0: return "share.png";
-//    case 1: return "music.png";
-//    case 2: return "audio.png";
-//    case 3: return "movie.png";
+    //case 0: return "share.png";
+    //case 1: return "music.png";
+    //case 2: return "audio.png";
+    //case 3: return "movie.png";
     case 0: return "icon-share2";
     case 1: return "icon-file-music";
     case 2: return "icon-headphones";
     case 3: return "icon-video-camera";
-
   }
 };
 
@@ -284,7 +306,7 @@ DOSSIER.getAndFillDocumentDialog = function(element, url, labels) {
         $("#docType").val(data.docType);
         $("#docName").val(data.name);
         $("#docUri").val(data.uri);
-        var docActionsTag = "<div id=\"docActions\"><a id=\"docRemoveLink\" data-algem-remove-link-id=\""+data.id+"\" href=\"javascript:;\">"+labels['remove_label']+"</a></div>";
+        var docActionsTag = "<div id=\"docActions\" style=\"margin-top: 1em\"><a id=\"docRemoveLink\" data-algem-remove-link-id=\""+data.id+"\" href=\"javascript:;\">"+labels['document_remove_label']+"</a></div>";
         var lnk = "<p id=\"docUriLink\"><a href=\""+data.uri+"\" target=\"_blank\">"+labels['document_access_label']+"</a></p>";
         $(docActionsTag).insertAfter($("#docUri"));
         $(lnk).insertBefore($("#docRemoveLink"));
@@ -295,7 +317,7 @@ DOSSIER.getAndFillDocumentDialog = function(element, url, labels) {
 };
 
 /**
- * Clears form entries.
+ * Clears document form entries.
  * @returns {undefined}
  */
 DOSSIER.resetDocumentDialog = function() {
@@ -344,7 +366,15 @@ DOSSIER.getMailtoLinksFromRanges = function(ranges, title, label) {
   mailto += "\" title=\""+title+"\"><i class=\"fa fa-envelope\"></i>&nbsp;"+label+"</a>";
   return mailto;
 }
-
+/**
+ * Fills user monitoring.
+ * @param {type} urlPath action url
+ * @param {type} userId
+ * @param {type} dateFrom
+ * @param {type} dateTo
+ * @param {type} labels
+ * @returns {undefined}
+ */
 DOSSIER.getFollowUpStudent = function(urlPath, userId, dateFrom, dateTo, labels) {
   $.get(urlPath, {userId: userId, from: dateFrom, to: dateTo}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
@@ -488,7 +518,7 @@ DOSSIER.initDocumentDialog = function(labels) {
   var documentForm = $("#documentForm");
   $("#docEditor").dialog({
     autoOpen: false,
-    title: "Document",
+    title: labels.document_link_label,
     buttons: [
       {
         text: labels.abort_label,
@@ -595,7 +625,8 @@ DOSSIER.updateActionDocument = function(form, labels) {
         var docId = data.id;
         var table = $("#follow-up-result");
         var target = null;
-        var refTag = "<img data-algem-actionref=\"" + actionId + "\" data-algem-docid=\"" + docId + "\" class=\"img-link doc-ref\" title=\"" + DOSSIER.getDocTypeFromNumber(data.docType, labels) + " : " + data.name + "\" alt=\"" + data.name + "\" src=\"../resources/common/img/" + DOSSIER.getIconFromDocType(data.docType) + "\" />";
+        var refTag = "<span data-algem-actionref=\"" + actionId + "\" data-algem-docid=\"" + docId + "\" class=\"doc-ref " + DOSSIER.getIconFromDocType(data.docType) + "\" title=\"" + DOSSIER.getDocTypeFromNumber(data.docType, labels) + " : " + data.name + "\"></span>";
+//        var refTag = "<img data-algem-actionref=\"" + actionId + "\" data-algem-docid=\"" + docId + "\" class=\"img-link doc-ref\" title=\"" + DOSSIER.getDocTypeFromNumber(data.docType, labels) + " : " + data.name + "\" alt=\"" + data.name + "\" src=\"../resources/common/img/" + DOSSIER.getIconFromDocType(data.docType) + "\" />";
         if (data.memberId > 0) {
           var li = table.find("li[data-algem-memberid='" + memberId + "']");// multiple resultats
           var row = $(li).closest("tr");
@@ -612,16 +643,17 @@ DOSSIER.updateActionDocument = function(form, labels) {
           }
         });
       } else {
-        var imgTag = $("img[data-algem-docid="+data.id+"]");
+        var imgTag = $("span[data-algem-docid="+data.id+"]");
         $(imgTag).each(function() {
-          $(this).attr("src", "../resources/common/img/" + DOSSIER.getIconFromDocType(data.docType));
+//          $(this).attr("src", "../resources/common/img/" + DOSSIER.getIconFromDocType(data.docType));
+          $(this).attr("class","doc-ref " + DOSSIER.getIconFromDocType(data.docType));
           $(this).attr("title",DOSSIER.getDocTypeFromNumber(data.docType, labels) + " : " + data.name);
-          $(this).attr("alt",data.name);
+//          $(this).attr("alt",data.name);
         });
       }
       $("#docEditor").dialog("close");
     } else {
-      $(form).find(".error").text(data.name);
+      $(form).find(".error").text(data.name).show();
     }
   }, "json");
 

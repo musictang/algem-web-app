@@ -71,11 +71,13 @@
         max: 8 //Max booking length (in hours)
       };
       var detailURL =  /*[[@{/perso/xScheduleDetail}]]*/ "";
+      var roomDetailURL =  /*[[@{/xRoomDetail}]]*/ "";
       if (debug) console.log(logVars(commonParams, bookingParams, steps));
       $(document).ready(function () {
         setCommonEvents();
         setDatePicker(commonParams);
         initBookingDate(commonParams.date);
+        initRoomDetailDialog($("#roomDetailDialog"));
         setUI(commonParams);
         setBooking(bookingParams, steps);
         $("#booking-cancel-bt").click(function() {
@@ -110,8 +112,13 @@
             displayScheduleDetail(detailURL, detail, /*[[#{close.label}]]*/ "!Close!");
           }
         });
-
+        $("p.title_col").click(function(){
+          console.log("room clicked");
+          // get room info
+          showRoomDetail(this, roomDetailURL);
+        });
       });
+      
       /*]]>*/
     </script>
   </head>
@@ -223,6 +230,7 @@
     <div id="dialog"></div>
     <div id="schedule-detail-dlg" title="Détail planning"></div>
     <div id="errorDialog" th:title="#{warning.label}"></div>
+    <div id="roomDetailDialog" th:title="#{room.label}"><p></p></div>
     <div id="busy"></div>
   </body>
 </html>

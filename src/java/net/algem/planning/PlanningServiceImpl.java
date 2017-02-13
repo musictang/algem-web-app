@@ -114,6 +114,11 @@ public class PlanningServiceImpl
   public Room getRoom(int roomId) {
     return scheduleDao.findRoom(roomId);
   }
+  
+  @Override
+  public Room getRoomDetail(int roomId) {
+    return scheduleDao.findRoomDetail(roomId);
+  }
 
   @Override
   public List<Room> getRoomInfo(int estab) {
