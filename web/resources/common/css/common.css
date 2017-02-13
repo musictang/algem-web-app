@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.6.0 01/02/17
+ * @(#) common.css Algem Web App 1.6.0 13/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.6.0 01/02/17
+    Last: 1.6.0 13/02/17
 */
 
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
@@ -57,6 +57,48 @@
     font-weight: normal;
     font-style: normal;
 }
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icomoon.eot?td4dni');
+  src:  url('../fonts/icomoon.eot?td4dni#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?td4dni') format('truetype'),
+    url('../fonts/icomoon.woff?td4dni') format('woff'),
+    url('../fonts/icomoon.svg?td4dni#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-headphones:before {
+  content: "\e910";
+}
+.icon-video-camera:before {
+  content: "\e914";
+}
+.icon-file-music:before {
+  content: "\e928";
+}
+.icon-plus:before {
+  content: "\ea0a";
+}
+.icon-share2:before {
+  content: "\ea82";
+}
+
 /*
  CSS Reset by Eric Meyer - Released under Public Domain
    http://meyerweb.com/eric/tools/css/reset/
@@ -242,6 +284,7 @@ table.vertical-header th, table.vertical-header td {
   margin-right: 0.5em;
   max-width: 50px;
 }
+.photo-id-thumbnail:hover{transform:scale(1.05);}
 
 #busy {display:none;position: fixed;top:50%;left:50%;margin-left: -32px;margin-top: -32px;z-index: 20000;width:64px;height:64px;background:url(../img/loader.svg) no-repeat center transparent;}
 /*Espacement en bas de page avant le footer*/
@@ -286,9 +329,9 @@ input[type=submit] {margin: 1em 0;}
 .indented {padding: 0 1em;}
 
 .framed {
-  width: 85%;
+  /*width: 85%;*/
   border: 1px solid #444;
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 0.5em;
 }
 .note {font-size: smaller;}
@@ -303,12 +346,13 @@ a:link,a:visited, a:hover, a:active {
   line-height: 1.2em;
 }
 a.img-link {border: none; margin-left: .4em}
-.doc-ref {padding: 0 0 0 0.5em;cursor: pointer}
+.doc-ref, .doc-icon-ref {font-size: 2em;padding: 0 .1em; margin: 0 .1em;}
+.doc-ref {cursor: pointer;}
 .doc-link{vertical-align: middle}
 img.doc-link{margin-right: .5em}
-.doc-ref:hover, .doc-link:hover {opacity: 0.8}
+.doc-link:hover {transform:scale(0.9);}
 .doc-plus {opacity: .4;}
-.doc-plus:hover {opacity: 1}
+.doc-plus:hover {opacity: 1;}
 
 select {font-size: small;}
 .pure-menu-list a {border: none;}
@@ -402,15 +446,18 @@ select {font-size: small;}
   /*border: 1px solid #555*/
   border: none
 }
-.ui-dialog-buttonset button.ui-state-default {background: #0078e7;}
+.ui-dialog-buttonset button.ui-state-default {background: #0078e7;box-shadow: 0px 2px 2px 0px #656565;}
 .ui-dialog-buttonset button.ui-state-active,
 .ui-dialog-buttonset button.ui-state-hover {
-  background: #0066e7
+  background: #0066e7;
+  box-shadow: inset 0px 0px 16px 0px #999;
 }
-.ui-dialog-buttonset button.button-secondary.ui-state-default {background: #42b8dd}
+.ui-dialog-buttonset button.button-secondary.ui-state-default {background: #42b8dd;box-shadow: 0px 2px 2px 0px #656565;}
 .ui-dialog-buttonset button.button-secondary.ui-state-active,
 .ui-dialog-buttonset button.button-secondary.ui-state-hover {
-  background: #2cb3dd
+  background: #2cb3dd;
+  /*box-shadow: 0px 4px 4px 0px #656565;*/
+  box-shadow: inset 0px 0px 8px 0px #999;
 }
 
 .ui-button-text {color: #fff}
@@ -451,8 +498,8 @@ select {font-size: small;}
 .closing-bar ~ div {padding: 0 1em;}
 .closeable{}
 
-form input[type='text'], input[type='password'], form input[type='button'], form input[type='submit']{
-  display: block;
+form input[type='text'], input[type='password'], form input[type='button'], form input[type='submit'] {
+  display: block;box-sizing: border-box;
 }
 form input[type='button'], form input[type='submit'] {
   margin-top: 1em
@@ -468,7 +515,9 @@ form label {
 form legend + label {
   display: block;
 }
-
+#ajax-login-form input, #login-form input, #signup-form input, #recover-form input {width: 100%}
+/*#ajax-login-form input[type=submit],#login-form input[type=submit] {width: 100%}*/
+ /*{box-sizing: border-box;width: 100%}*/
 .pure-g label[class*="pure-u"] {font-family: 'ubuntumedium','Segoe UI',Verdana,sans-serif;vertical-align: middle}
 .row-form {margin: 0.5em 0;}
 .field-help {font-size: smaller;max-width: 320px;display:none}
@@ -476,9 +525,13 @@ form legend + label {
 #booking input[type='radio'] + label {
   padding: 0 0.5em;
 }
+#groupInfo > label {width:20%;margin-right:1%}
+#groupInfo > select {width:77%;}
 .pending {color: red;}
 .confirmed {color: green;}
 
+.pure-button {box-shadow: 0px 2px 2px 0px #656565;}
+.pure-button:hover {box-shadow: inset 0px 0px 16px 0px #999;}
 .pure-menu-heading {
   height: 3em;
   margin:0;
@@ -577,12 +630,14 @@ a.dlg ~ a {
   z-index: 3000;
 }
 #datepicker, .week-date {
-  font-size: small;
+  font-size: normal;
   text-align: center;
-  width: 5.5em;
+  width: 8em;
+  height: 1.5em;
+  vertical-align: middle;
   background-color: #eee;
   border: 1px solid gray;
-  border-radius: 4px
+  border-radius: 3px
 }
 
 table.mobile {

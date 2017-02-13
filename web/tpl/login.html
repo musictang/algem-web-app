@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.6.0 01/02/17
+ * @(#) login.html Algem Web App 1.6.0 11/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -34,9 +34,9 @@
       <h1 th:utext="${@organization['name.label']}"></h1>
     </header>
     <div class="global">
-      <div class="centered">
+      <div class="centered" style="max-width:320px">
         <div>
-          <form id="login-form" th:action="@{j_spring_security_check}" method="post" >
+          <form id="login-form" th:action="@{j_spring_security_check}" method="post">
             <fieldset>
               <legend th:text="#{connect.label}"></legend>
               <label for="login" th:text="#{form.username.label}" style="">Login</label>
@@ -51,7 +51,8 @@
           <div class="note" th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}">
             <a href="recover.html" th:text="#{password.forgotten}"></a>
           </div>
-          <p class="note"><span th:text="#{signup.warning}"></span><br /><a href="signup.html" th:text="#{signup.label}"></a></p>
+          <p class="note"><a href="recover.html" th:text="#{password.forgotten}"></a></p>
+          <p class="note" style="margin-top: 1em"><span th:text="#{signup.warning}"></span><br /><a href="signup.html" th:text="#{signup.label}"></a></p>
         </div>
       </div>
     </div>

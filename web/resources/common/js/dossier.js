@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.6.0 10/02/17
+ * @(#) dossier.js Algem Web App 1.6.0 11/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -159,7 +159,8 @@ DOSSIER.fillTeacherDocumentPanel = function(schedule, labels) {
       var doc = schedule.documents[i];
       var dDate = new Date(doc.firstDate);
       if (sDate.getTime() < dDate.getTime()) {continue;}
-      var refTag = "<img data-algem-actionref=\""+ schedule.idAction +"\" data-algem-docid=\"" + doc.id + "\" class=\"img-link doc-ref\" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/" + this.getIconFromDocType(doc.docType) + "\" />";
+//      var refTag = "<img data-algem-actionref=\""+ schedule.idAction +"\" data-algem-docid=\"" + doc.id + "\" class=\"img-link doc-ref\" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\" alt=\"" + doc.name + "\" src=\"../resources/common/img/" + this.getIconFromDocType(doc.docType) + "\" />";
+var refTag = "<span class=\"doc-ref "+ this.getIconFromDocType(doc.docType) + "\" data-algem-actionref=\""+ schedule.idAction +"\" data-algem-docid=\"" + doc.id + "\" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\"></span>";
       if (doc.scheduleId === 0 && doc.memberId === 0) {
         p += refTag;
       } else if (doc.scheduleId > 0) {
@@ -198,7 +199,7 @@ DOSSIER.fillStudentDocumentPanel = function(schedule, userId, labels) {
     if (sDate.getTime() < dDate.getTime()) {
       continue;
     }
-    var imgTag = "<img class=\"doc-link \" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + "\" alt=\"" + this.getDocTypeFromNumber(doc.docType, labels) + "\" src=\"../resources/common/img/" + this.getIconFromDocType(doc.docType) + "\" />";
+    var imgTag = "<span class=\"doc-icon-ref " + this.getIconFromDocType(doc.docType) + "\" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + "\"></span>";
     var docTag = "<a href=\"" + doc.uri + "\" target=\"_blank\">" + (doc.name || "Document") + "</a>";
     if (doc.scheduleId === 0 && doc.memberId === 0) {
       panel += "<p>" + imgTag + docTag + "</p>";
@@ -228,10 +229,15 @@ DOSSIER.getDocTypeFromNumber = function(n, labels) {
 
 DOSSIER.getIconFromDocType = function(n) {
   switch(n) {
-    case 0: return "share.png";
-    case 1: return "music.png";
-    case 2: return "audio.png";
-    case 3: return "movie.png";
+//    case 0: return "share.png";
+//    case 1: return "music.png";
+//    case 2: return "audio.png";
+//    case 3: return "movie.png";
+    case 0: return "icon-share2";
+    case 1: return "icon-file-music";
+    case 2: return "icon-headphones";
+    case 3: return "icon-video-camera";
+
   }
 };
 
@@ -319,7 +325,7 @@ DOSSIER.getMailtoLinksFromRanges = function(ranges, title, label) {
     }
     return null;
   };
-  
+
   var mailto = null;
   var emails = [];
   for (var i = 0, len = ranges.length; i < len; i++) {
@@ -347,7 +353,7 @@ DOSSIER.getFollowUpStudent = function(urlPath, userId, dateFrom, dateTo, labels)
     } else {
       var result = "";
       var total = 0;
-      var supportLocales = toLocaleStringSupportsLocales();
+      var supportLocales = GEMUTILS.toLocaleStringSupportsLocales();
       //console.log(supportLocales)
       $.each(data, function (index, value) {
         var d = new Date(value.date);

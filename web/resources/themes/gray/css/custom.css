@@ -18,90 +18,93 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
 */
 /*
-    Created on : 05/12/2015, 10:29:34
+    Created on : 1.6.0 11/02/17
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Version    : 1.6.0 02/02/17
+    Version    : 1.6.0
 */
-/*Personnalisation BLUE THEME*/
+/*Personnalisation GRAY THEME*/
 
 body {
-  background-color: #013D76;
-  /* #002fa7 = bleu klein*/
-  /*background-color: #002fa7;*/
+  background-color: #444;
   color: white;
 }
-.main-text-color {color: #013D76;}
+.main-text-color {color: #444;}
 .global {
   color: #444;
   background-color: white;
 }
 .header-top{
-  background-color: #013D76;
-  background: linear-gradient(to bottom, rgba(1,61,118,1) 0%,rgba(2,99,191,1) 100%);
+  background-color: #444;
+  background: linear-gradient(to bottom, rgba(68,68,68,1) 0%,rgba(102,102,102,1) 100%);
 }
 header nav select, #datepicker {color: #444;}
 
 header nav #previous, header nav #next {color: white;}
 footer, #bottom-menu {
-  background-color: #013D76;
-  box-shadow: 0px -1px 2px 0px #444;
+  background-color: #444;
   box-shadow: 0px -1px 1px 0px #444;
-  background: linear-gradient(to bottom, rgba(1,61,118,1) 0%,rgba(2,99,191,1) 100%); /*
-/*  background-image:url('../img/personas-header-1280x1024.png');
-  background-position: 98% center;
-  background-repeat: no-repeat;*/
+  /*background: linear-gradient(to bottom, rgba(1,61,118,1) 0%,rgba(2,99,191,1) 100%);*/
 }
 
-h1 {color: #f5f5f5;}
+h1 {color: #eee;}
 
-h2, h3, h4, h5, h6, h7, fieldset > legend {color: #013D76;}
-#follow-up-form fieldset div > legend {color: #013D76}
-h2, h3, h4, fieldset > legend {border-color: #013D76;}
+h2, h3, h4, h5, h6, h7, fieldset > legend {color: #444;}
+#follow-up-form fieldset div > legend {color: #444}
+h2, h3, h4, fieldset > legend {border-color: #444;}
 ul.disc{list-style-image: url('../img/puce-blue.png');}
 a:link,a:visited, a:active, a:hover,
 .pure-menu, .pure-menu-heading, #menu
 {
-  color: #013D76;
+  color: #444;
 }
-.closing-bar {background-color: #013D76;}
+.closing-bar {background-color: #444;}
 
-a:link,a:visited, a:active {border-bottom-color: #013D76;}
-a:hover {border-bottom-color: #75BAFD;}
+a:link,a:visited, a:active {border-bottom-color: #aaa;}
+a:hover {border-bottom-color: #222;}
 
 footer a:link,footer a:visited,footer a:active,footer a:hover {color: #FFF;}
 
 #bars {color: #aaa}
-#menu {background: #0078e7; /*#1E90FF;*/}
+#menu {background: #555; /*#1E90FF;*/}
 #bottom-menu {
   color: white;
-  background-color: #013D76;
+  background-color: #444;
 }
 #bottom-menu a:link, #bottom-menu a:visited, #bottom-menu a:hover, #bottom-menu a:active
 {color: white;border-color:white}
-#bottom-menu a:hover {background-color: white;color: #013D76;}
+#bottom-menu a:hover {background-color: white;color: #444;}
 .pure-menu-link:hover {
   color: #75BAFD;
   background-color: #0078e7;
 }
 
 #help-panel, #info-panel, #login-panel, .side-panel {
-  background-color: aliceblue;
+  background-color: #eee;
   color: #444;
 }
 
 .title_col {
-  background-color: #013D76;
+  background-color: #555;
   padding:0;
 }
-.doc-ref:hover {color: #0078e7}
+.doc-ref:hover {color: #aaa}
 #accordion h3.ui-state-active {
-  background: #013D76;
-  background: linear-gradient(to bottom, rgba(1,61,118,1) 0%,rgba(2,99,191,1) 100%);
+  background: #444;
+  background: linear-gradient(to bottom, rgba(68,68,68,1) 0%,rgba(102,102,102,1) 100%);
   box-shadow: 0px 2px 2px 0px #656565;
 }
-#accordion .ui-widget-content a {color: #013D76;}
+#accordion .ui-widget-content a {color: #444;}
+.ui-widget button {
+  /*CUSTOM font-size*/
+	font-size: 0.95em;/* orig = 1em */
+}
+.ui-widget-content {background: #fff;color:#444}
 .ui-dialog-titlebar {
-  background: #013D76;
-  background: linear-gradient(to bottom, rgba(1,61,118,1) 0%,rgba(2,99,191,1) 100%);
+  background: #444;
+  background: linear-gradient(to bottom, rgba(68,68,68,1) 0%,rgba(102,102,102,1) 100%);
   box-shadow: 0px 2px 2px 0px #656565;
+}
+.ui-state-hover .ui-icon,
+.ui-state-focus .ui-icon {
+	background-image: url("images/ui-icons_666666_256x240.png");
 }

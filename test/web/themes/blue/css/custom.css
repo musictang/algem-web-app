@@ -67,6 +67,8 @@ footer a:link,footer a:visited,footer a:active,footer a:hover {color: #FFF;}
 #bottom-menu {
   color: white;
   background-color: #013D76;
+  box-shadow: 0px -1px 1px 0px #444;
+  background: linear-gradient(to bottom, rgba(255,87,25,1) 0%,rgba(255,87,25,0.9)60%,rgba(255,87,25,1)100%);
 }
 #bottom-menu a:link, #bottom-menu a:visited, #bottom-menu a:hover, #bottom-menu a:active
 {color: white;border-color:white}
@@ -85,7 +87,11 @@ footer a:link,footer a:visited,footer a:active,footer a:hover {color: #FFF;}
   background-color: #013D76;
   padding:0;
 }
-
+.doc-ref:hover {color: #ff5719}
 #accordion h3.ui-state-active {background: #013D76;}
 #accordion .ui-widget-content a {color: #013D76;}
-.ui-dialog-titlebar {background: #013D76}
+.ui-dialog-titlebar {
+  background: #013D76;
+  background: linear-gradient(to bottom, rgba(255,69,0,1) 0%,rgba(255,125,77,1) 100%);
+  box-shadow: 0px 2px 2px 0px #656565;
+}

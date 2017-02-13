@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) signup.html Algem Web App 1.6.0 01/02/17
+ * @(#) signup.html Algem Web App 1.6.0 11/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -43,7 +43,7 @@
       <h1 th:utext="${@organization['name.label']}"></h1>
     </header>
     <div class="global">
-      <div class="centered">
+      <div class="centered" style="max-width: 320px">
         <form id="signup-form" th:object="${user}" th:action="@{signup.html}" method="post" accept-charset="UTF-8">
           <fieldset><legend th:text="#{signup.label}"></legend>
             <label for="id" th:text="|#{member.id.label} *|">Number *</label>
@@ -73,6 +73,8 @@
                         </div>-->
           </fieldset>
         </form>
+      </div>
+      <div class="centered">
         <h5 th:text="#{note.label}">Note</h5>
         <p class="note framed" th:text="#{signup.prerequisite(${@organization['name.label']})}"></p>
       </div>

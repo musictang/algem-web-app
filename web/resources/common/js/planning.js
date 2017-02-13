@@ -1,7 +1,7 @@
 /*
- * @(#)planning.js	1.5.0 09/11/16
+ * @(#)planning.js	1.6.0 13/02/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -23,7 +23,7 @@
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @since 09/05/15
- * @version 1.5.0
+ * @version 1.6.0
  * @returns {void}
  */
 //var isMobileAndWebkit = isMobile() && 'WebkitAppearance' in document.documentElement.style;
@@ -104,7 +104,7 @@ function weeklyDatePicker(date, idper) {
     //console.log(this.value);
     var d = new Date(from.datepicker('getDate'));
     var first = new Date(d.setDate(d.getDate() - d.getDay() + 2));// +2 pour lundi
-    var arg = dateFormatFR(first);
+    var arg = GEMUTILS.dateFormatFR(first);
     //console.log(arg);
     window.location = 'weekly.html?d=' + arg + '&id=' + idper;
   });
@@ -113,14 +113,14 @@ function weeklyDatePicker(date, idper) {
   var d2 = new Date(from.datepicker('getDate'));
   var last = new Date(d2.setDate(d2.getDate() + d2.getDay() + 6));
   to.datepicker({changeMonth: true, changeYear: true});
-  to.datepicker('setDate', dateFormatFR(last));
+  to.datepicker('setDate', GEMUTILS.dateFormatFR(last));
   to.datepicker("refresh");
 
   to.change(function () {
     var d = new Date(to.datepicker('getDate'));
     var first = new Date(d.setDate(d.getDate() - d.getDay() +2));// +2 pour lundi
     //console.log(first);
-    var arg = dateFormatFR(first);
+    var arg = GEMUTILS.dateFormatFR(first);
     //console.log(arg);
     window.location = 'weekly.html?d=' + arg + '&id=' + idper;
   });
@@ -489,8 +489,8 @@ function getGroups(params) {
       $("<div id=\"groupInfo\" class=\"error\" style=\"font-size: smaller\">"+params.groupWarning+"</div>").appendTo("#groupPanel");
     } else {
       $("<div id=\"groupInfo\">").appendTo("#groupPanel");
-      $("<label class=\"pure-u-6-24\" for=\"bookingGroup\">"+(params.groupLabel === undefined ? "" : params.groupLabel)+"</label>").appendTo('#groupInfo');
-      $("<select class=\"pure-u-18-24\" id=\"bookingGroup\" name=\"group\">").appendTo('#groupInfo');
+      $("<label for=\"bookingGroup\">"+(params.groupLabel === undefined ? "" : params.groupLabel)+"</label>").appendTo('#groupInfo');
+      $("<select id=\"bookingGroup\" name=\"group\">").appendTo('#groupInfo');
       $.each(data, function (index, value) {
         $("<option value=\""+value.id+"\">"+value.name+"</otpion>").appendTo('#bookingGroup');
       });

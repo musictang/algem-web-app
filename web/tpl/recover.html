@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) recover.html Algem Web App 1.6.0 01/02/17
+ * @(#) recover.html Algem Web App 1.6.0 11/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -34,7 +34,7 @@
       <h1 th:utext="${@organization['name.label']}"></h1>
     </header>
     <div class="global">
-      <div class="centered">
+      <div class="centered" style="max-width: 320px">
         <form action="#" id="recover-form" th:action="@{recover.html}" method="post" accept-charset="UTF-8">
           <fieldset><legend th:text="#{recover.legend}"></legend>
             <label for="email" th:text="#{email.label}">Email</label>
