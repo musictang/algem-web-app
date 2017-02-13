@@ -1,7 +1,7 @@
 /*
- * @(#)ScheduleDao.java	1.5.0 28/10/16
+ * @(#)ScheduleDao.java	1.6.0 13/02/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -50,7 +50,7 @@ import org.springframework.stereotype.Repository;
  * IO methods for class {@link net.algem.planning.Schedule}.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.0
+ * @version 1.6.0
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -276,9 +276,9 @@ public class ScheduleDao
     }, estab);
     return rooms;
   }
-  
+
   Room findRoomDetail(final int roomId) {
-    String query = "SELECT s.nom,s.fonction,t.hc,t.hp FROM salle s LEFT JOIN tarifsalle t ON(s.idtarif = t.id) WHERE s.id = ?";
+    String query = "SELECT s.nom,s.fonction,s.surf,s.npers,t.hc,t.hp FROM salle s LEFT JOIN tarifsalle t ON(s.idtarif = t.id) WHERE s.id = ?";
 
     Room room = jdbcTemplate.queryForObject(query, new RowMapper<Room>() {
       @Override
@@ -287,8 +287,10 @@ public class ScheduleDao
         r.setId(roomId);
         r.setName(rs.getString(1));
         r.setUsage(rs.getString(2));
-        r.setOffPeakPrice(rs.getDouble(3));
-        r.setFullPrice(rs.getDouble(4));
+        r.setSurface(rs.getShort(3));
+        r.setPlaces(rs.getShort(4));
+        r.setOffPeakPrice(rs.getDouble(5));
+        r.setFullPrice(rs.getDouble(6));
         return r;
       }
     }, roomId);
@@ -298,7 +300,7 @@ public class ScheduleDao
     }
     return room;
   }
-  
+
   private List<Equipment> findRoomEquipment(final int roomId) {
     String query = "SELECT libelle,qte,idx from sallequip WHERE idsalle = ? ORDER BY idx";
     return jdbcTemplate.query(query, new RowMapper<Equipment>() {

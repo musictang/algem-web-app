@@ -1,5 +1,5 @@
 /*
- * @(#) planning.css Algem Web App 1.6.0 11/02/17
+ * @(#) planning.css Algem Web App 1.6.0 13/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -99,11 +99,14 @@
 }
 
 #schedule-detail-dlg, #roomDetailDialog {font-size: smaller}
-#roomDetailDialog table:first-of-type th {text-align: left}
-#roomDetailDialog table:first-of-type td {text-align: right}
-#roomDetailDialog table:nth-of-type(2) td {padding: 0 .5em}
-#roomDetailDialog table:nth-of-type(2) td:first-child {text-align: right}
-#roomDetailDialog table:nth-of-type(2) th {text-align: left}
+#roomDetailDialog h4 {margin-bottom: .25em}
+#roomDetailDialog p {line-height: 1em}
+#roomDetailDialog table th, #roomDetailDialog table td {padding: 0}
+#roomDetailDialog table th {text-align: left}
+#roomDetailDialog table td {text-align: right}
+#roomDetailDialog table td:nth-child(2), #roomDetailDialog table th:nth-child(2) {padding-left: 1em}
+#roomDetailDialog table:last-of-type td:nth-child(2) {text-align: left}
+#roomDetailDialog table:last-of-type th {text-align: left}
 #title_col {
   position: fixed;
   top: 6%;

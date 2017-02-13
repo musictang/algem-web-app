@@ -605,6 +605,7 @@ function initRoomDetailDialog(element) {
     position: { my: "top", at: "top", of: window}
   });
 }
+
 function showRoomDetail(element, url) {
   var roomId = $(element).closest("div").attr("id");
   console.log(roomId);
@@ -613,19 +614,19 @@ function showRoomDetail(element, url) {
     if (typeof data === 'undefined' || data === null) {
       console.log("empty detail");
     } else {
-      var content = "<h4>Fonction</h4><p>"+data.usage+"</p>";
-      content += "<h4>Tarifs</h4><table><tr><th>Heures creuses</th><td>"+data.offPeakPrice+ " €</<td></tr><tr><th>Plein tarif</th><td>"+data.fullPrice+" €</td></tr></table>";
-      
-      if (data.equipment) {
-        content +="<h4>Equipement</h4><table><tr><th>Quantité</th><th>Nom</th></tr>";
-        for (var i=0; i < data.equipment.length; i++) {
+      var content = "<h4>Fonction</h4><p>" + data.usage + "</p>";
+      content += "<h4>Caractéristiques</h4><table><tr><th>Superficie</th><td>" + (data.surface > 0 ? data.surface : "NC") + "</td></tr><tr><th>Nb de places (max)</th><td>" + (data.places > 0 ? data.places : "NC") + "</td></tr></table>";
+      content += "<h4>Tarifs</h4><table><tr><th>Heures creuses</th><td>" + data.offPeakPrice + " €</td></tr><tr><th>Plein tarif</th><td>" + data.fullPrice + " €</td></tr></table>";
+      if (data.equipment && data.equipment.length > 0) {
+        content += "<h4>Equipement</h4><table><tr><th>Quantité</th><th>Nom</th></tr>";
+        for (var i = 0; i < data.equipment.length; i++) {
 //          content +="<li>"+data.equipment[i].name+"</li>";
-          content += "<tr><td>"+data.equipment[i].quantity +"</td><td>"+data.equipment[i].name +"</td></tr>";
+          content += "<tr><td>" + data.equipment[i].quantity + "</td><td>" + data.equipment[i].name + "</td></tr>";
         }
-        content +="</table>";
+        content += "</table>";
       }
       $("#roomDetailDialog").html(content);
-      $("#roomDetailDialog").dialog({title: "Salle " +data.name}).dialog("open");
+      $("#roomDetailDialog").dialog({title: "Salle " + data.name}).dialog("open");
     }
   }, "json");
 }
