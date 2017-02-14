@@ -113,6 +113,39 @@ GEMUTILS.toLocaleStringSupportsLocales = function() {
     return false;
 };
 
+GEMUTILS.isValidURI = function(url) {
+  if (!url instanceof String) {
+    return false;
+  }
+  var hasValidChars = function(value) {
+    var forbiddenChars = ["<", ">", "\""];
+    for (var i=0; i < forbiddenChars.length; i++){
+      if (value.includes(forbiddenChars[i])) {
+        return false;
+      }
+    }
+    return true;
+  };
+  var isValidProtocol = function (prefix) {
+    var protocols = ["ftp", "http", "https"];
+    for (var i = 0; i < protocols.length; i++) {
+      if (proto === protocols[i]) {
+        return true;
+      }
+    }
+    return false;
+  };
+  var idx = url.indexOf(":");
+  if (idx === -1) {
+    return url.startsWith("www") && hasValidChars(url);
+  }
+  
+  var proto = url.substring(0, idx);
+  var path = url.substring(idx +1);
+ 
+  return isValidProtocol(proto) && hasValidChars(path);
+};
+
 /**
  * Gets a string representation of a time in minutes : hh:mm.
  * @param {type} m time in minutes

@@ -34,10 +34,15 @@
     <script type="text/javascript" th:src="@{/resources/common/js/util.js}"></script>
     <script type="text/javascript" th:src="@{/resources/common/js/common.js}"></script>
     <script type="text/javascript" th:src="@{/resources/common/js/planning.js}"></script>
+     <script type="text/javascript" th:src="@{/resources/common/js/util.js}"></script>
     <script type="text/javascript" th:src="@{/resources/common/js/jquery-ui.datepicker-fr.js}"></script>
 
     <script th:with="delay=24" type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
+      //test
+//      console.log("valid uri ? ",GEMUTILS.isValidURI("https://www.youtube.com/watch?v=QQ3tlLq_Z14"));
+//      console.log("valid uri ? ",GEMUTILS.isValidURI("www.algem.net"));
+//      console.log("valid uri ? ",GEMUTILS.isValidURI("https://www.algem.net<script>"));
       var tOffset = /*[[${timeOffset}]]*/ '720';
       console.log(tOffset)
       var debug = false;
@@ -66,6 +71,18 @@
         memberShipRequired: /*[[${bookingConf.memberShipRequired}]]*/ false,
         preEnrolmentStart: /*[[${conf['preEnrolmentStart']}]]*/ '01-07-2016',
       };
+      var planningLabels = {
+        "equipment_label": /*[[#{equipment.label}]]*/ "!equipment!",
+        "features_label": /*[[#{features.label}]]*/ "!features!",
+        "function_label": /*[[#{function.label}]]*/ "!function!",
+        "full_price_label": /*[[#{full.price.label}]]*/ "!full price!",
+        "offpeak_price_label": /*[[#{offPeak.price.label}]]*/ "!offpeak price!",
+        "name_label": /*[[#{name.label}]]*/ "!name!",
+        "number_of_places_label": /*[[#{number.of.places.label}]]*/ "!places!",
+        "prices_label": /*[[#{prices.label}]]*/ "!tarifs!",
+        "quantity_label": /*[[#{quantity.label}]]*/ "!quantity!",
+        "surface_label": /*[[#{surface.label}]]*/ "!surface!",
+      }
       var steps = {
         height: 1440 - tOffset, //720,//Canvas height
         max: 8 //Max booking length (in hours)
@@ -115,7 +132,7 @@
         $("p.title_col").click(function(){
           console.log("room clicked");
           // get room info
-          showRoomDetail(this, roomDetailURL);
+          showRoomDetail(this, roomDetailURL, planningLabels);
         });
       });
       

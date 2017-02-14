@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.6.0 13/02/17
+ * @(#) common.css Algem Web App 1.6.0 14/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.6.0 13/02/17
+    Last: 1.6.0 14/02/17
 */
 
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
@@ -124,13 +124,39 @@ ins               {text-decoration: none;}
 del               {text-decoration: line-through;}
 table             {border-collapse: collapse;border-spacing: 0;}
 /*End reset*/
-
+/*GLOBAL ELEMENTS*/
+html {height: 100%;}
+body {
+  height:100%;
+  font-family: Verdana,Helvetica,sans-serif;
+  color: #444;
+}
 p, blockquote, pre, ul, ol, dl {
   padding: 0.25em 0;
   line-height: 1.5em;
 }
 ul {margin: 0 1em;}
 ul li {margin: 0.5em}
+ul.disc{
+  list-style: disc;
+  margin:0;
+  list-style-position: inside
+}
+ul.simple {
+  list-style-type: none;
+  margin: 0;
+}
+ul.simple li, ul.disc li { margin: 0.5em 0;}
+ul.simple li:first-child { margin-top: 0;}
+ul.horizontal-panel-menu {
+  list-style-type: none;
+  margin: 0;
+  padding:0 0 .8em 0;
+}
+ul.horizontal-panel-menu li {
+  display: inline-block;
+  margin: .5em .5em 0 0;
+}
 .info ul li {margin: 0.5em 0;}
 ol {list-style-position: inside;}
 dl dt  {font-weight: bold;}
@@ -144,12 +170,6 @@ dl dd {margin-left: 1em;}
   /* width: 10em; */
 }
 
-html {height: 100%;}
-body {
-  height:100%;
-  font-family: Verdana,Helvetica,sans-serif;
-  color: #444;
-}
 .header-top {
   position: relative;
   height: 6%;
@@ -158,12 +178,10 @@ body {
   background-repeat: repeat-x;
   box-shadow: 0px 2px 2px 0px #656565;
 }
-
 header > nav {
   float: left;
   padding:0.25em 0 0.25em 2.2em;
 }
-
 .global {
   padding: 2em 1em;
   width: auto;
@@ -204,7 +222,7 @@ footer a.logo img {
   border-color: white;
   border-radius: 10px;
 }
-
+/*HEADERS*/
 h1 {
   font-family:'Exo 2','Arial Black',sans-serif;
   font-size: 2.2em;
@@ -239,6 +257,7 @@ h4 {font-size: 1.25em;}
 h5 {font-size: 1.15em;}
 h6 {font-size: 1em;}
 
+/*TABLES*/
 table tr > th {
   padding: 0 1em;
 }
@@ -246,8 +265,22 @@ table.vertical-header th, table.vertical-header td {
   text-align: left;
   padding: 0.5em 0 0 1em;
 }
-
+table.simple th, table.simple td {padding: 0 0.5em;}
+table.condensed th, table.condensed td {padding: 0 0.5em}
 .pure-table th, .pure-table-th {font-family: ubuntumedium}
+.pure-table-horizontal {border: none;}
+.pure-table-horizontal th, .pure-table-horizontal td {
+  text-align: left;
+  border: none;
+}
+.pure-table-horizontal th {font-weight: bold;}
+.info table th {width: 8em}
+table.mobile {
+  display: table;
+  width: 100%;
+}
+
+/*IMAGES*/
 .gallery {
   text-align: center;
 }
@@ -265,7 +298,6 @@ table.vertical-header th, table.vertical-header td {
 .thumbnails > a:hover img{
   opacity: 1;
 }
-
 /*Ombrage des vignettes*/
 .thumbnails-out {
   -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.8);
@@ -278,7 +310,6 @@ table.vertical-header th, table.vertical-header td {
   -moz-box-shadow: inset 0px 0px 8px 3px rgba(0,0,0,0.8);
   box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.8);
 }
-
 .photo-id-thumbnail {
   float: left;
   margin-right: 0.5em;
@@ -286,18 +317,8 @@ table.vertical-header th, table.vertical-header td {
 }
 .photo-id-thumbnail:hover{transform:scale(1.05);}
 
-#busy {display:none;position: fixed;top:50%;left:50%;margin-left: -32px;margin-top: -32px;z-index: 20000;width:64px;height:64px;background:url(../img/loader.svg) no-repeat center transparent;}
-/*Espacement en bas de page avant le footer*/
-.last-block {height: 2em;}
-/*Couleur du texte des erreurs*/
-.error {color: red;}
-span.error {display: block;}
-.success {color: green;}
-fieldset legend {font-size: 1.3em;}
-input[type=submit] {margin: 1em 0;}
 
-.inline {display: inline;}
-
+/*BUTTONS*/
 .button-success,
 .button-error,
 .button-warning,
@@ -312,14 +333,25 @@ input[type=submit] {margin: 1em 0;}
 .button-secondary {background: rgb(66, 184, 221);} /* this is a light blue */
 .button-large {font-size: 110%;background-color: orange;}
 .button-xlarge {font-size: 125%;background-color: orange;}
+.pure-button {box-shadow: 0px 2px 2px 0px #656565;}
+.pure-button:hover {box-shadow: inset 0px 0px 16px 0px #999;}
 .bt-close {
   position:relative;
   top:0;
   right: 0;
   padding: 0 1em;
 }
-.bordered {border : 1px solid red;}
 
+/*COMMON CLASSES*/
+#busy {display:none;position: fixed;top:50%;left:50%;margin-left: -32px;margin-top: -32px;z-index: 20000;width:64px;height:64px;background:url(../img/loader.svg) no-repeat center transparent;}
+/*Espacement en bas de page avant le footer*/
+.last-block {height: 2em;}
+/*Couleur du texte des erreurs*/
+.error {color: red;}
+span.error {display: block;}
+.success {color: green;}
+.inline {display: inline;}
+.bordered {border : 1px solid red;}
 /*Centrage d'un bloc*/
 .centered {
   box-sizing: border-box;
@@ -327,7 +359,6 @@ input[type=submit] {margin: 1em 0;}
   margin: 0 auto;
 }
 .indented {padding: 0 1em;}
-
 .framed {
   /*width: 85%;*/
   border: 1px solid #444;
@@ -338,7 +369,17 @@ input[type=submit] {margin: 1em 0;}
 .footnote {font-size: smaller; line-height: 1.2em}
 .warning {background-color: lightpink;}
 .export-panel {display: inline-block; margin-top: 0.4em}
+.ellipsed {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.wrapped {display: block;}
+.collapse {display: none}
+.condensed {font-size: smaller;}
 
+/*LINKS*/
 a:link,a:visited, a:hover, a:active {
   text-decoration: none;
   border-bottom-style: solid;
@@ -353,8 +394,18 @@ img.doc-link{margin-right: .5em}
 .doc-link:hover {transform:scale(0.9);}
 .doc-plus {opacity: .4;}
 .doc-plus:hover {opacity: 1;}
+.pure-menu-link:link, .pure-menu-link:visited, .pure-menu-link:active {
+  color:#fff8dc;
+}
+.pure-menu-link:hover {}
+.expand {}
+.dlg {cursor: pointer}
+a.dlg ~ a {
+  display: inline-block;
+  margin-left: 0.5em;
+}
 
-select {font-size: small;}
+/*NAVIGATION - MENUS */
 .pure-menu-list a {border: none;}
 .pure-menu {
   position: fixed;
@@ -373,17 +424,6 @@ select {font-size: small;}
   text-align: center;
   z-index: 3000;
   border-radius: 0 0 0 10px ;
-}
-#bars {
-  position: fixed;
-  top: 0;
-  right:0;
-  font-size: 2em;
-  z-index: 2000;
-  text-align: center;
-  padding: 0.15em 0.5em;
-  cursor: pointer;
-  color:#444
 }
 #menu ul {
   list-style-type: none;font-size: 2em;margin:0;padding:0
@@ -407,6 +447,66 @@ select {font-size: small;}
   z-index: 2001; /* above footer */
 }
 #bottom-menu a:hover {border: none;border-radius: 4px;padding:0.2em 0}
+.pure-menu-heading {
+  height: 3em;
+  margin:0;
+  padding:0;
+  border-bottom:1px solid #fff8dc;
+  text-align: center;
+  color:#fff8dc;
+}
+nav.horizontal-panel-menu {margin: 0; padding: 0}
+#datepicker, #pickerFrom, #pickerTo {
+  position: relative;
+  z-index: 3000;
+}
+#datepicker, .week-date {
+  font-size: medium;
+  text-align: center;
+  width: 8em;
+  height: 1.25em;
+  vertical-align: middle;
+  background-color: #eee;
+  border: 1px solid gray;
+  border-radius: 3px
+}
+
+/*PANELS*/
+#bars {
+  position: fixed;
+  top: 0;
+  right:0;
+  font-size: 2em;
+  z-index: 2000;
+  text-align: center;
+  padding: 0.15em 0.5em;
+  cursor: pointer;
+  color:#444
+}
+.closing-bar {
+  position: relative;
+  width: 100%;
+  height: 2em;
+  text-align: right;
+  box-shadow: 0px 2px 2px 0px #656565;
+}
+.closing-bar + p {
+  position: relative;
+  top: -1.5em;
+  font-size: smaller;
+  font-weight: bold;
+}
+.closing-bar a.close-link {
+  font-size: 1.6em;
+  padding: 0 0.5em 0 1em;
+  line-height: 1em;
+  color: white;
+  text-decoration: none;
+  border: none;
+}
+.closing-bar ~ div {padding: 0 1em;}
+.closeable{}
+
 #help-panel, #info-panel, #login-panel {
   position: absolute;
   top:6%;
@@ -421,10 +521,7 @@ select {font-size: small;}
   z-index:3001;
 }
 #login-panel {width: 20em;}
-
 #help-panel ul, #info-panel ul {list-style-type: none;}
-
-.info table th {width: 8em}
 
 .colorHelp {
   text-align: center;
@@ -432,6 +529,8 @@ select {font-size: small;}
   font-weight: bold
 }
 .panel, #xlogin-panel {padding: 0 1em;}
+
+/*JQUERY UI*/
 .ui-dialog {z-index: 2002 !important ;}
 .ui-dialog-title {font-family: ubuntu,ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;}
 .ui-widget,#datepicker,.week-date {font-family: ubuntu,Verdana,sans-serif}
@@ -459,7 +558,6 @@ select {font-size: small;}
   /*box-shadow: 0px 4px 4px 0px #656565;*/
   box-shadow: inset 0px 0px 8px 0px #999;
 }
-
 .ui-button-text {color: #fff}
 .ui-datepicker-title {color: #444;}
 #accordion .ui-accordion-content {padding: 1em 0.8em}
@@ -473,31 +571,8 @@ select {font-size: small;}
 
 /*#bookdate {display: inline-block;width: 6em;padding:0 0.25em;text-align: center}*/
 #bookdate {display: inline-block;text-align: center;box-sizing: border-box}
-.closing-bar {
-  position: relative;
-  width: 100%;
-  height: 2em;
-  text-align: right;
-  box-shadow: 0px 2px 2px 0px #656565;
-}
-.closing-bar + p {
-  position: relative;
-  top: -1.5em;
-  font-size: smaller;
-  font-weight: bold;
-}
-.closing-bar a.close-link {
-  font-size: 1.6em;
-  padding: 0 0.5em 0 1em;
-  line-height: 1em;
-  color: white;
-  text-decoration: none;
-  border: none;
-}
 
-.closing-bar ~ div {padding: 0 1em;}
-.closeable{}
-
+/*FORMS*/
 form input[type='text'], input[type='password'], form input[type='button'], form input[type='submit'] {
   display: block;box-sizing: border-box;
 }
@@ -505,13 +580,16 @@ form input[type='button'], form input[type='submit'] {
   margin-top: 1em
 }
 form input + span {display: inline;}
-
 form input[type='checkbox'] {vertical-align: middle}
+
+input[type=submit] {margin: 1em 0;}
+select {font-size: small;}
 form label {
   display: inline-block;
   margin-top: 0.5em;
   font-family: 'ubuntumedium','Segoe UI',Verdana,sans-serif;
 }
+fieldset legend {font-size: 1.3em;}
 form legend + label {
   display: block;
 }
@@ -527,59 +605,10 @@ form legend + label {
 }
 #groupInfo > label {width:20%;margin-right:1%}
 #groupInfo > select {width:77%;}
+
+
 .pending {color: red;}
 .confirmed {color: green;}
-
-.pure-button {box-shadow: 0px 2px 2px 0px #656565;}
-.pure-button:hover {box-shadow: inset 0px 0px 16px 0px #999;}
-.pure-menu-heading {
-  height: 3em;
-  margin:0;
-  padding:0;
-  border-bottom:1px solid #fff8dc;
-  text-align: center;
-  color:#fff8dc;
-}
-.pure-menu-link:link, .pure-menu-link:visited, .pure-menu-link:active {
-  color:#fff8dc;
-}
-.pure-menu-link:hover {}
-.pure-table-horizontal {border: none;}
-
-.pure-table-horizontal th, .pure-table-horizontal td {
-  text-align: left;
-  border: none;
-}
-.pure-table-horizontal th {font-weight: bold;}
-
-ul.disc{
-  list-style: disc;
-  margin:0;
-  list-style-position: inside
-}
-
-ul.simple {
-  list-style-type: none;
-  margin: 0;
-}
-
-ul.simple li, ul.disc li { margin: 0.5em 0;}
-ul.simple li:first-child { margin-top: 0;}
-
-ul.horizontal-panel-menu {
-  list-style-type: none;
-  margin: 0;
-  padding:0 0 .8em 0;
-}
-ul.horizontal-panel-menu li {
-  display: inline-block;
-  margin: .5em .5em 0 0;
-}
-
-nav.horizontal-panel-menu {margin: 0; padding: 0}
-
-table.simple th, table.simple td {padding: 0 0.5em;}
-
 .pseudo {
   display: block;
   font-size: small;
@@ -588,31 +617,12 @@ table.simple th, table.simple td {padding: 0 0.5em;}
   font-stretch: condensed;
 }
 
-.ellipsed {
-  display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.wrapped {display: block;}
-.collapse {display: none}
-.condensed {font-size: smaller;}
-table.condensed th, table.condensed td {padding: 0 0.5em}
-.expand {}
-
-.dlg {cursor: pointer}
-a.dlg ~ a {
-  display: inline-block;
-  margin-left: 0.5em;
-}
+/*MONITORING*/
 .monitoring-element {clear: left;}
-
 #follow-up-form div > legend {
   margin:0;
   font-size: smaller;
 }
-
 #follow-up-result tbody tr td:first-child {text-align: right}
 .follow-up-content, .subContent {padding: 0;}
 .follow-up-note, .absent, .excused {
@@ -624,27 +634,8 @@ a.dlg ~ a {
 .absent {background-color: #FF5252;color: white;}
 .excused {background-color: seagreen;color: white;}
 .follow-up-note {background-color: #F7F77C;color: black;}
-
-#datepicker, #pickerFrom, #pickerTo {
-  position: relative;
-  z-index: 3000;
-}
-#datepicker, .week-date {
-  font-size: medium;
-  text-align: center;
-  width: 8em;
-  height: 1.25em;
-  vertical-align: middle;
-  background-color: #eee;
-  border: 1px solid gray;
-  border-radius: 3px
-}
-
-table.mobile {
-  display: table;
-  width: 100%;
-}
-
+.cell-edit {background-image : url(../img/edit.svg);background-repeat: no-repeat;background-position:center}
+/*POSTITS*/
 .postit {
   background-image: url('../img/postit.png');
   background-attachment: fixed;

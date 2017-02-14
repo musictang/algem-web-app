@@ -606,7 +606,7 @@ function initRoomDetailDialog(element) {
   });
 }
 
-function showRoomDetail(element, url) {
+function showRoomDetail(element, url, labels) {
   var roomId = $(element).closest("div").attr("id");
   console.log(roomId);
   $.get(url, {id: roomId}, function (data) {
@@ -614,11 +614,11 @@ function showRoomDetail(element, url) {
     if (typeof data === 'undefined' || data === null) {
       console.log("empty detail");
     } else {
-      var content = "<h4>Fonction</h4><p>" + data.usage + "</p>";
-      content += "<h4>Caractéristiques</h4><table><tr><th>Superficie</th><td>" + (data.surface > 0 ? data.surface : "NC") + "</td></tr><tr><th>Nb de places (max)</th><td>" + (data.places > 0 ? data.places : "NC") + "</td></tr></table>";
-      content += "<h4>Tarifs</h4><table><tr><th>Heures creuses</th><td>" + data.offPeakPrice + " €</td></tr><tr><th>Plein tarif</th><td>" + data.fullPrice + " €</td></tr></table>";
+      var content = "<h4>"+labels.function_label+"</h4><p>" + data.usage + "</p>";
+      content += "<h4>"+labels.features_label+"</h4><table><tr><th>"+labels.surface_label+"</th><td>" + (data.surface > 0 ? data.surface : "NC") + "</td></tr><tr><th>"+labels.number_of_places_label+"</th><td>" + (data.places > 0 ? data.places : "NC") + "</td></tr></table>";
+      content += "<h4>"+labels.prices_label +"</h4><table><tr><th>"+labels.offpeak_price_label +"</th><td>" + data.offPeakPrice + " €</td></tr><tr><th>"+labels.full_price_label +"</th><td>" + data.fullPrice + " €</td></tr></table>";
       if (data.equipment && data.equipment.length > 0) {
-        content += "<h4>Equipement</h4><table><tr><th>Quantité</th><th>Nom</th></tr>";
+        content += "<h4>"+labels.equipment_label+"</h4><table><tr><th>"+labels.quantity_label+"</th><th>"+labels.name_label+"</th></tr>";
         for (var i = 0; i < data.equipment.length; i++) {
 //          content +="<li>"+data.equipment[i].name+"</li>";
           content += "<tr><td>" + data.equipment[i].quantity + "</td><td>" + data.equipment[i].name + "</td></tr>";

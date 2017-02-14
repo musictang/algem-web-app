@@ -107,8 +107,11 @@ DOSSIER.getFollowUpSchedules = function(urlPath, user, dateFrom, dateTo, labels,
         result += DOSSIER.fillRanges(value, labels, paths);
         result += "</ul>";
         result += "</td><td id=\"" + value.note + "\" accessKey=\"C\"";
-        if(value.collective) {result += " class=\"dlg\" title=\"" + coTitle + "\"";}
-        result +="><p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + DOSSIER.getFollowUpSubContent(value.followUp, labels) + "</p></td></tr>\n";
+//        <i class='fa fa-pencil-square-o'></i>
+        if(value.collective) {
+          result += " class=\"cell-edit dlg\" title=\"" + coTitle + "\">";
+        } else {result += ">";}
+        result +="<p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + DOSSIER.getFollowUpSubContent(value.followUp, labels) + "</p></td></tr>\n";
       });
       result += "<tr><th colspan=\"2\">Total</th><td colspan=\"5\"><b>" + getTimeFromMinutes(total) + "</b></td></tr>";
       $("#follow-up-result tbody").html(result);
@@ -330,6 +333,7 @@ DOSSIER.resetDocumentDialog = function() {
   $("#docName").val(null);
   $("#docUri").val(null);
   $("#docActions").remove();
+  $("#documentForm").find(".error").hide();
 };
 
 /**
@@ -615,7 +619,11 @@ DOSSIER.refreshFollowContent = function(operation, followUp, labels) {
 DOSSIER.updateActionDocument = function(form, labels) {
   var updateUrl = $(form).attr("action");
   var creation = $("#docId").val() == "0" ? true : false;
-
+  var uri = $("#docUri").val();
+  if (!GEMUTILS.isValidURI(uri)) {
+    $(form).find(".error").text("URL invalide").show();
+    return false;
+  }
   $.post(updateUrl, form.serialize(), function (data) {
     if (data && data.id > 0) {
       if (creation) {
