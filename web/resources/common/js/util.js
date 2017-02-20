@@ -1,5 +1,5 @@
 /*
- * @(#) util.js Algem Web App 1.6.0 10/02/17
+ * @(#) util.js Algem Web App 1.6.0 15/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -113,37 +113,51 @@ GEMUTILS.toLocaleStringSupportsLocales = function() {
     return false;
 };
 
+GEMUTILS.isURIValidName = function (uri) {
+  var forbiddenChars = ["<", ">", "\""];
+  for (var i = 0; i < uri.length; i++) {
+    for (var j = 0; j < forbiddenChars.length; j++) {
+      if (uri.charAt(i) === forbiddenChars[j]) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
 GEMUTILS.isValidURI = function(url) {
   if (!url instanceof String) {
     return false;
   }
-  var hasValidChars = function(value) {
+  var isValidPath = function (value) {
     var forbiddenChars = ["<", ">", "\""];
-    for (var i=0; i < forbiddenChars.length; i++){
-      if (value.includes(forbiddenChars[i])) {
-        return false;
+    for (var i = 0; i < value.length; i++) {
+      for (var j = 0; j < forbiddenChars.length; j++) {
+        if (value.charAt(i) === forbiddenChars[j]) {
+          return false;
+        }
       }
     }
+    if (value.match("javascript:")) {return false;}
     return true;
   };
   var isValidProtocol = function (prefix) {
-    var protocols = ["ftp", "http", "https"];
+    var protocols = ["file://", "ftp://", "ftps://", "ftpes://", "http://", "https://", "sftp://"];
     for (var i = 0; i < protocols.length; i++) {
-      if (proto === protocols[i]) {
+      if (prefix === protocols[i]) {
         return true;
       }
     }
     return false;
   };
-  var idx = url.indexOf(":");
+  var idx = url.indexOf("//");
   if (idx === -1) {
-    return url.startsWith("www") && hasValidChars(url);
+    return url.startsWith("www.") && isValidPath(url);
   }
-  
-  var proto = url.substring(0, idx);
-  var path = url.substring(idx +1);
- 
-  return isValidProtocol(proto) && hasValidChars(path);
+
+  var proto = url.substring(0, idx +2);
+  var path = url.slice(idx + 2);
+  return isValidProtocol(proto) && isValidPath(path);
 };
 
 /**

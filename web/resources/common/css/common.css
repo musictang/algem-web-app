@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.6.0 14/02/17
+ * @(#) common.css Algem Web App 1.6.0 15/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.6.0 14/02/17
+    Last: 1.6.0 15/02/17
 */
 
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
@@ -146,7 +146,7 @@ ul.simple {
   list-style-type: none;
   margin: 0;
 }
-ul.simple li, ul.disc li { margin: 0.5em 0;}
+ul.simple > li, ul.disc > li { margin: 0.5em 0;}
 ul.simple li:first-child { margin-top: 0;}
 ul.horizontal-panel-menu {
   list-style-type: none;
@@ -246,6 +246,8 @@ h2, h3, h4, h5, h6, fieldset > legend {
   line-height: 1em;
   /*border-radius: 8px*/
 }
+h2.help > a.img-link, h3.help > a.img-link, h4.help > a.img-link {margin-left: 0}
+
 h2, h3, h4, fieldset > legend {
   font-family: ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;
   border-bottom-width: 4px;
@@ -347,7 +349,7 @@ table.mobile {
 /*Espacement en bas de page avant le footer*/
 .last-block {height: 2em;}
 /*Couleur du texte des erreurs*/
-.error {color: red;}
+.error {color: red; font-size: smaller}
 span.error {display: block;}
 .success {color: green;}
 .inline {display: inline;}
@@ -470,7 +472,8 @@ nav.horizontal-panel-menu {margin: 0; padding: 0}
   border: 1px solid gray;
   border-radius: 3px
 }
-
+#help-menu { float: left; width:20%;}
+.help-content {margin-left:20%}
 /*PANELS*/
 #bars {
   position: fixed;

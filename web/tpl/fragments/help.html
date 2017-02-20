@@ -26,7 +26,7 @@
   <body>
     <div th:fragment="perso">
       <div>
-        <h2 id="chapter-perso" style="display: block"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[${#strings.toUpperCase('__#{my.account.label}__')}]]</h2>
+        <h2 class="help" id="chapter-perso" style="display: block"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[${#strings.toUpperCase('__#{my.account.label}__')}]]</h2>
         <p>Mon compte est composée de quatre sections principales :</p>
         <ol>
           <li><a href="#account-info-help">Informations</a></li>
@@ -34,26 +34,26 @@
           <li><a href="#book-help" th:text="#{my.bookings.label}">Réservations</a></li>
           <li><a href="#followup-help" th:text="#{student.monitoring.label}">Suivi pédagogique</a></li>
         </ol>
-        <h4 id="account-info-help"><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;Informations</h4>
+        <h4 class="help" id="account-info-help"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;Informations</h4>
         <p>Trois éléments nous permettent de vous identifier :</p>
         <ul class="disc"><li>Votre nom d'utilisateur</li><li>Vos emails</li><li>Votre profil</li></ul>
         <p>Suivant votre profil, certaines informations pourront ne pas être visibles dans les plannings.
           Les options de menu dépendront également du profil de la personne.<br />
           Les &laquo;&nbsp;Utilisateurs&nbsp;&raquo;, par exemple, peuvent voir le nom des groupes dans les plannings, contrairement aux simples &laquo;&nbsp;Adhérents&nbsp;&raquo;.
         </p>
-        <h4 id="weekly-help"><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{schedule.label}]]</h4>
+        <h4 class="help" id="weekly-help"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{schedule.label}]]</h4>
         <h5 style="display:block"><i class="fa fa-calendar-plus-o"></i> Réserver</h5>
         <p> Ce lien est destiné à la réservation d'une salle pour une répétition individuelle ou de groupe.<br />Cliquez sur <strong>Réserver</strong> pour accéder au planning du jour et choisir un horaire.</p>
         <h5><i class="fa fa-calendar"></i> Mon planning hebdo</h5>
         <p>En cliquant sur cette option, vous accédez à votre planning de la semaine. Une fois sur la page&nbsp;*, vous pouvez vous déplacer de semaine en semaine en cliquant sur les flèches de gauche&nbsp;<i class="fa fa-chevron-circle-left"></i> et de droite&nbsp;<i class="fa fa-chevron-circle-right"></i>, de part et d'autre des dates de début et de fin de semaine. <strong>Vous pouvez aussi cliquer sur l'une des dates pour faire apparaître un calendrier et sélectionner la semaine de votre choix</strong>&nbsp;**.</p>
         <p class="footnote">* Pour revenir à votre page perso, ouvrez le menu à 3 barres <i class="fa fa-bars"></i>, puis cliquez sur l'icone <i class="fa fa-user-plus"></i>, en-dessous de laquelle figure votre nom d'utilisateur (pseudo). Un lien est également disponible en bas de page.<br />
           ** Dans le calendrier, peu importe le jour de la semaine sur lequel vous cliquez. Les dates se placeront sur la semaine adéquate.</p>
-        <h4 id="book-help"><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{my.bookings.label}]]</h4>
+        <h4 class="help" id="book-help"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{my.bookings.label}]]</h4>
         <p>Vous pouvez consulter ici l'historique de vos réservations. Les réservations peuvent être en <strong>&laquo;&nbsp;attente de confirmation&nbsp;&raquo;</strong> ou <strong>&laquo;&nbsp;confirmées&nbsp;&raquo;</strong>.<br />
           Cliquez sur la date de réservation pour accéder au planning au jour indiqué.<br />
           Un mail vous est envoyé lorsque la réservation est confirmée. Si vous êtes encore dans les délais, vous pouvez annuler vous-même une réservation en cliquant sur <strong>Annuler</strong>.<br />
           Enfin, vous pouvez recharger l'historique en cliquant sur l'icone <i class="fa fa-refresh"></i>.</p>
-        <h4 id="followup-help"><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{student.monitoring.label}]]</h4>
+        <h4 class="help" id="followup-help"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{student.monitoring.label}]]</h4>
         <h5 style="display:block">Suivi élève</h5>
         <p>Si vous êtes inscrit en tant qu'élève dans la structure, vous pouvez consulter votre propre suivi pédagogique : appréciations des professeurs, notes, contenu des séances de cours, morceaux et techniques abordées, etc.<br />
         Cliquez respectivement sur <strong>Aujourd'hui</strong>, <strong>Cette semaine</strong>, <strong>Ce mois</strong> pour afficher les séances du jour, de la semaine ou du mois courants.<br />
@@ -65,8 +65,10 @@
           <li>En l'imprimant à partir de votre navigateur : chargez au préalable la période de votre choix en cliquant sur l'une de celles qui vous sont proposées (<code>Aujourd'hui</code>, <code>Cette semaine</code>, <code>Ce mois</code>) ou en sélectionnant une semaine spécifique dans le calendrier. Cliquez ensuite sur <code>Imprimer</code> dans votre navigateur.</li>
           <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/pdf.png}" /> <code>(Télécharger au format pdf)</code> après avoir chargé la période de votre choix.</li>
         </ol>
+        <h5>[[#{educational.documents.label}]]</h5>
+        <p>Les liens vers les documents pédagogiques partagés par vos professeurs apparaissent dans la colonne cours. Chacun de ces liens est représenté par une icone, suivie de son nom : <span th:class="icon-share2" aria-label="partage"></span> pour un partage quelconque,  <span th:class="icon-headphones" aria-label="music"></span> pour un lien d'écoute, <span th:class="icon-video-camera" aria-label="video"></span> pour une vidéo ou <span th:class="icon-file-music" aria-label="music sheet"></span> pour une partition.<br />Cliquez sur le nom du lien pour accéder au fichier ou au document partagé; le document s'ouvrira dans un nouvel onglet. Un cours peut comporter plusieurs liens. Ces documents ne sont visibles qu'à partir de la date à laquelle ils ont été ajoutés et ne peuvent être supprimés que par vos professeurs.</p>
         <div sec:authorize="hasAnyRole('1','2','4')">
-          <h4><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{teacher.monitoring.label}]]</h4>
+          <h4 class="help"><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{teacher.monitoring.label}]]</h4>
         <p>Si vous êtes enregistré en tant qu'enseignant, c'est ici que vous pouvez éditer et consulter le suivi de vos élèves.
         Cliquez respectivement sur <strong>Aujourd'hui</strong>, <strong>Cette semaine</strong>, <strong>Ce mois</strong> pour afficher vos séances du jour, de la semaine ou du mois courants.<br />
         Vous pouvez également choisir n'importe quelle semaine dans l'année en cliquant sur l'une des dates et en vous déplaçant dans le calendrier.<br />
@@ -80,10 +82,9 @@
           <p>Par défaut, l'élève est considéré comme <strong>&laquo;&nbsp;Présent&nbsp;&raquo;</strong>. S'il est absent, marquez-le comme tel en choisissant la mention <strong>&laquo;&nbsp;Absent(e)&nbsp;&raquo;</strong>. Si l'élève s'est excusé pour son absence ou si le motif de l'absence vous a été signalé, vous pouvez alternativement le marquer comme <strong>&laquo;&nbsp;Excusé(e)&nbsp;&raquo;</strong>. N'oubliez pas de <strong>Valider</strong> pour enregistrer votre saisie.</p><p class="footnote">* Sur les smartphones (en particulier, en mode portrait), faites glisser le tableau de gauche à droite pour faire apparaître toutes les colonnes.
             <br />** La liste des élèves composant un cours collectif peut être pliée ou dépliée si nécessaire. Cliquez pour cela sur <i>Liste des élèves...</i>.</p>
         <h6>Edition du suivi collectif</h6>
-        <p>Bien que cela soit plus rare, il est également possible d'entrer une appréciation de suivi collective. Cette appréciation est visible de tous les élèves ayant participé au cours et permet généralement de rappeler les notions ou les morceaux abordés durant la séance.<br />
+        <p>Il est également possible d'entrer une appréciation de suivi collective. Cette appréciation est visible de tous les élèves ayant participé au cours et permet généralement de rappeler les notions ou les morceaux abordés durant la séance.<br />
           Cliquez sur la ligne qui vous intéresse en-dessous de la colonne <strong>Suivi co.</strong> pour ouvrir la fenêtre de saisie.<br />
         <strong>Info</strong> : contrairement au suivi individuel, vous ne pouvez pas mettre ici de note (le champ est désactivé par défaut). Le statut d'absence est également désactivé.</p>
-        </div>
         <h5>Exportation du suivi enseignant</h5>
         <p>Vous pouvez exporter votre suivi enseignant de trois manières :</p>
         <ol>
@@ -91,6 +92,13 @@
           <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/csv.png}" /> <code>(Télécharger au format tableur)</code> après avoir chargé la période de votre choix. Ce format de fichier vous permet par exemple de trier les résultats ou d'effectuer des sous-totaux dans un tableur.</li>
           <li>En cliquant sur l'icone <img class="img-link" th:src="@{/resources/common/img/pdf.png}" /> <code>(Télécharger au format pdf)</code> après avoir chargé la période de votre choix.</li>
         </ol>
+        <h4 class="help"><a class="img-link" href="#chapter-perso"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{educational.documents.label}]]</h4>
+        <p>Vous pouvez enregistrer des <strong>liens vers des documents pédagogiques</strong> : une adresse Youtube, un lien de partage provenant de votre propre espace de stockage (OneDrive, GoogleDrive, Dropbox, etc.), une page Web, un lien weTransfer, un fichier pdf accessible via le Net, les exemples sont multiples.</p>
+        <p><strong>Ces liens seront visibles par vos élèves</strong> et s'adressent soit à un élève en particulier, dans le cas d'un cours individuel, soit à tous les élèves du groupe dans le cas d'un cours collectif. Le lien n'apparaît dans le suivi qu'à partir de la date de la session à laquelle il a été créé et reste actif pour toutes les sessions suivantes. Chaque lien est associé à un cours et vous pouvez en ajouter autant que vous voulez.</p>
+        <p>Pour ajouter un lien, cliquez sur l'icone <img th:src="@{/resources/common/img/plus.png}" alt="Plus" /> à l'intérieur de la colonne du cours . Vous pouvez préciser le type du lien en choisissant parmi les quatre proposés : "Partition", "Vidéo", "Musique", "Autre". L'adresse du lien est obligatoire et ne doit pas comporter de caractères invalides comme les guillemets ou les chevrons (&lt;, &gt;).</p>
+        <p>Une fois le lien créé, il apparaît dans la colonne cours sous forme d'icone : <span th:class="icon-share2" aria-label="partage"></span> pour un partage dont le type n'est pas précisé (ou "Autre"),  <span th:class="icon-headphones" aria-label="music"></span> pour un lien d'écoute, <span th:class="icon-video-camera" aria-label="video"></span> pour un lien vidéo ou <span th:class="icon-file-music" aria-label="music sheet"></span> pour une partition. Exemple :</p><div><img style="max-width: 100%"th:src="@{/resources/common/img/help/document-link.png}" alt="Dialogue de modification d'un document" /></div>
+        <p>Pour modifier un lien, cliquez sur son icone. Vous pouvez cliquer sur "Ouvrir le lien" pour vérifier son adresse ou vous rappeler son contenu. Vous pouvez enfin le supprimer. Notez que vous ne supprimez ici que le lien et pas le document vers lequel il pointait. Voici un exemple de lien dans la capture ci-dessous :<br /><img th:src="@{/resources/common/img/help/document-update.png}" alt="Dialogue de modification d'un document" /></p>
+        </div>
       </div>
     </div>
   </body>

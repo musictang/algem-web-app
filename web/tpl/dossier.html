@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.6.0 10/02/17
+ * @(#) dossier.html Algem Web App 1.6.0 15/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -46,7 +46,7 @@
         <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
         <li th:replace="fragments/menu :: cnx"></li>
-        <li><a id="help" th:href="@{/help.html#chapter-perso}" th:title="#{help.label}"><i class="fa fa-question-circle"></i></a></li>
+        <li><a id="help" th:href="@{/help.html}" th:title="#{help.label}"><i class="fa fa-question-circle"></i></a></li>
       </ul>
     </div>
     <header class="header-top">
@@ -237,6 +237,8 @@
       "document_add_label": /*[[#{document.add.label}]]*/ "!add!",
       "document_choose_recipient_label": /*[[#{document.choose.recipient.label}]]*/ "!recipient!",
       "document_link_label": /*[[#{document.link.label}]]*/ "!document!",
+      "document_invalid_name_warning": /*[[#{document.invalid.name.warning}]]*/ "!invalid name!",
+      "document_invalid_uri_warning": /*[[#{document.invalid.uri.warning}]]*/ "!invalid uri!",
       "document_type_music_label": /*[[#{document.type.music.label}]]*/ "!music!",
       "document_type_video_label": /*[[#{document.type.video.label}]]*/ "!video!",
       "document_type_music_sheet_label": /*[[#{document.type.music.sheet.label}]]*/ "!music sheet!",
@@ -247,7 +249,7 @@
     };
     var paths = {
       "def_photo_id": /*[[@{/resources/common/img/idphoto.png}]]*/ "",
-      "def_photo_co":/*[[@{/resources/common/img/groupe_trans.png}]]*/ ""
+      "def_photo_co":/*[[@{/resources/common/img/group.png}]]*/ ""
     }
     setCommonEvents();
     DOSSIER.initFollowUpDialog(dlg, labels);
@@ -287,7 +289,7 @@
 
     DOSSIER.setTeacherDateNavigation(url1, userId, cwd, labels, paths);
     DOSSIER.setStudentDateNavigation(url2, userId, cwd, labels);
-    
+
     //manage ajax loaded content
     $(document).on("click", ".expand", function () {
       $(this).next().toggle();
@@ -299,7 +301,7 @@
     $(document).on("click", "#docRemoveLink", function () {
       DOSSIER.removeActionDocument($(this), /*[[@{/perso/xRemoveActionDocument}]]*/ "");
     });
-    
+
     /** Opens followUp dialog. */
     $(document).on("click", ".dlg", function () {
       DOSSIER.resetFollowUpDialog(paths["def_photo_id"]);

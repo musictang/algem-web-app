@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.6.0 13/02/17
+ * @(#)planning.js	1.6.0 15/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -597,12 +597,21 @@ function displayScheduleDetail(url, detail, btLabel) {
 
   }, "json");
 }
-function initRoomDetailDialog(element) {
+
+function initRoomDetailDialog(element, closingLabel) {
   $(element).dialog({
     modal: false,
     autoOpen: false,
     maxHeight: 440,
-    position: { my: "top", at: "top", of: window}
+    position: {my: "top", at: "top", of: window},
+    buttons: [{
+        text: closingLabel,
+        class: "button-secondary",
+        click: function () {
+          $(this).dialog("close");
+        }
+      }
+    ]
   });
 }
 
