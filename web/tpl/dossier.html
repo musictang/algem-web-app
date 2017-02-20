@@ -192,12 +192,12 @@
             </select>
           </div>
           <div class="row-form">
-            <label for="docName">Nom du lien</label>
+            <label for="docName" th:text="#{document.name.label}">Nom du lien</label>
             <input id="docName" type="text" style="width:100%" name="docName" value=""/>
           </div>
           <div class="row-form">
-            <label style="display:block" for="docUri">Adresse du lien</label>
-            <input id="docUri" type="text" style="width:100%" name="docUri" value=""/>
+            <label style="display:block" for="docUri" th:text="#{document.uri.label}">Adresse du lien</label>
+            <input id="docUri" type="text" style="width:100%" name="docUri" value="" required="required" />
           </div>
           <input id="docId" type="hidden" value="0" name="docId"/>
           <input id="docFirstDate" type="hidden" value="2017-02-06" name="docDate"/>

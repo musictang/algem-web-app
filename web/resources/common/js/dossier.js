@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.6.0 11/02/17
+ * @(#) dossier.js Algem Web App 1.6.0 20/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -18,6 +18,7 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
 var DOSSIER = DOSSIER || {};
+var GEMUTILS = GEMUTILS;
 
 /**
  * FollowUpSchedule constructor.
@@ -634,7 +635,6 @@ DOSSIER.updateActionDocument = function(form, labels) {
         var table = $("#follow-up-result");
         var target = null;
         var refTag = "<span data-algem-actionref=\"" + actionId + "\" data-algem-docid=\"" + docId + "\" class=\"doc-ref " + DOSSIER.getIconFromDocType(data.docType) + "\" title=\"" + DOSSIER.getDocTypeFromNumber(data.docType, labels) + " : " + data.name + "\"></span>";
-//        var refTag = "<img data-algem-actionref=\"" + actionId + "\" data-algem-docid=\"" + docId + "\" class=\"img-link doc-ref\" title=\"" + DOSSIER.getDocTypeFromNumber(data.docType, labels) + " : " + data.name + "\" alt=\"" + data.name + "\" src=\"../resources/common/img/" + DOSSIER.getIconFromDocType(data.docType) + "\" />";
         if (data.memberId > 0) {
           var li = table.find("li[data-algem-memberid='" + memberId + "']");// multiple resultats
           var row = $(li).closest("tr");
@@ -653,10 +653,8 @@ DOSSIER.updateActionDocument = function(form, labels) {
       } else {
         var imgTag = $("span[data-algem-docid="+data.id+"]");
         $(imgTag).each(function() {
-//          $(this).attr("src", "../resources/common/img/" + DOSSIER.getIconFromDocType(data.docType));
           $(this).attr("class","doc-ref " + DOSSIER.getIconFromDocType(data.docType));
           $(this).attr("title",DOSSIER.getDocTypeFromNumber(data.docType, labels) + " : " + data.name);
-//          $(this).attr("alt",data.name);
         });
       }
       $("#docEditor").dialog("close");
