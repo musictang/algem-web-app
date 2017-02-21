@@ -86,6 +86,8 @@ and (orientation : portrait) {
     padding: 0;
     font-size: 1.45em;
   }
+  #help-menu { float: none; width:100%;}
+  .help-content{margin-left: 0}
 }
 
 @media only screen
@@ -115,7 +117,8 @@ and (orientation : portrait) {
   #login-panel .close-link > .fa-close {
     font-size: 1.4em;
   }
-
+  #help-menu { float: none; width:100%;}
+  .help-content{margin-left: 0}
 }
 @media only screen
 and (max-width : 800px)
@@ -137,6 +140,8 @@ and (orientation : landscape) {
     display: block;
   }
   .centered {width: 100%;}
+  #help-menu { float: none; width:100%;}
+  .help-content{margin-left: 0}
 }
 @media only screen
 and (max-width : 480px)
@@ -157,4 +162,6 @@ and (orientation : landscape) {
     display: block;
   }
   .centered {width: 100%;}
+  #help-menu { float: none; width:100%;}
+  .help-content{margin-left: 0}
 }

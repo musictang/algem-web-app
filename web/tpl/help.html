@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) help.html Algem Web App 1.6.0 01/02/17
+ * @(#) help.html Algem Web App 1.6.0 21/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -43,13 +43,36 @@
     <section class="global" style="margin-bottom: 1em">
       <aside id="help-menu">
         <ul class="disc">
-          <li><a href="#chapter-booking" th:text="${#strings.toUpperCase('__#{booking.label}__')}">reservation</a></li>
-          <li><a href="#chapter-perso" th:text="${#strings.toUpperCase('__#{my.account.label}__')}">mon compte</a></li>
-          <li><a href="#chapter-misc" th:text="${#strings.toUpperCase('__#{help.miscellaneous.label}__')}">divers</a></li>
+          <li>
+            <a href="#chapter-booking" th:text="${#strings.toUpperCase('__#{booking.label}__')}">reservation</a>
+            <ul>
+              <li><a href="#booking-help">Réservation de salle</a></li>
+              <li><a href="#account-help">Création d'un compte utilisateur</a></li>
+              <li><a href="#password-help">Récupération du mot de passe</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#chapter-perso" th:text="${#strings.toUpperCase('__#{my.account.label}__')}">mon compte</a>
+            <ul>
+              <li><a href="#account-info-help">Informations</a></li>
+              <li><a href="#weekly-help" th:text="#{schedule.label}">Planning</a></li>
+              <li><a href="#book-help" th:text="#{my.bookings.label}">Réservations</a></li>
+              <li sec:authorize="hasAnyRole('1','2','4', '11')"><a href="#followup-help" th:text="#{student.monitoring.label}">Suivi pédagogique</a></li>
+              <li sec:authorize="hasAnyRole('1','2','4')"><a href="#teacher-help" th:text="#{teacher.monitoring.label}">Suivi enseignant</a></li>
+              <li sec:authorize="hasAnyRole('1','2','4')"><a href="#teacher-documents" th:text="#{educational.documents.label}" >Documents</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#chapter-misc" th:text="${#strings.toUpperCase('__#{help.miscellaneous.label}__')}">divers</a>
+            <ul>
+              <li><a href="#printing-help" th:text="#{printing.label}">Printing</a></li>
+              <li><a href="#room-help" th:text="#{rooms.label}">Rooms</a></li>
+            </ul>
+          </li>
         </ul>
       </aside>
       <article class="centered">
-        <h2 id="chapter-booking" style="display: block"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;RESERVATION</h2>
+        <h2 class="help" id="chapter-booking" style="display: block"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;RESERVATION</h2>
         <nav>
           <ul>
             <li><a href="#booking-help">Réservation de salle</a></li>
@@ -57,7 +80,7 @@
             <li><a href="#password-help">Récupération du mot de passe</a></li>
           </ul>
         </nav>
-        <h3 id="booking-help"><a class="img-link" href="#chapter-booking"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;Réservation de salle</h3>
+        <h3 class="help" id="booking-help"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;Réservation de salle</h3>
         <p>Vous devez disposer d'un compte utilisateur afin de pouvoir réserver. La <a href="#password-help">création d'un compte</a> n'est possible que si vous êtes enregistré auprès de votre organisation et que vous disposez d'un numéro de contact et d'une adresse email valides.</p>
         <p>DEUX TYPES DE RÉSERVATION vous sont proposés :</p>
         <ul>
@@ -80,36 +103,32 @@
         <p>La rubrique &laquo;&nbsp;Mes réservations&nbsp;&raquo; vous présente une liste de vos réservations présentes et passées. Les plus récentes disposent d'un lien d'annulation à droite de chaque ligne. Si vous avez commis une erreur lors de la réservation, vous pouvez l'annuler tant que celle-ci n'est pas confirmée par les personnes de l'accueil ayant reçu votre demande. <strong>Seules les réservations &laquo;&nbsp;En attente de confirmation&nbsp;&raquo; peuvent être annulées</strong>, les autres étant marquées comme &laquo;&nbsp;Confirmées&nbsp;&raquo; et par définition, non éditables.</p>
         <p><strong>Note</strong> : une fois connecté, vous pouvez également accéder à votre page personnelle en cliquant sur l'icone <i class="fa fa-user-plus"></i> dans le menu de droite.</p>
         <p>Il se peut qu'après validation vous soyez redirigé vers une page d'erreur. Cela peut arriver si l'horaire que vous avez choisi entre en conflit avec un planning déjà existant, une zone non libre ou si vous êtes déjà présent sur une partie de cet horaire. Refaites dans ce cas votre réservation en tenant compte des avertissements qui vous ont été présentés.</p>
-        <h3 id="account-help"><a class="img-link" href="#chapter-booking"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;Création d'un compte utilisateur</h3>
+        <h3 class="help" id="account-help"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;Création d'un compte utilisateur</h3>
         <p>Cliquez sur le lien &laquo;&nbsp;Créez un compte&nbsp;&raquo; dans la fenêtre de connexion pour accéder au formulaire d'enregistrement. Le premier champ requis correspond à votre numéro d'adhérent (ou de contact). Par défaut, ce numéro est à 0 mais <strong>vous devez obligatoirement le compléter avec votre propre identifiant</strong>. Vous pouvez le trouver par exemple sur votre carte d'adhérent ou dans les documents qui vous ont été fournis lors de votre première inscription. L'adresse email qui suit nous permettra de vous identifier sans ambiguité, en comparant cette adresse avec l'une de celles que vous nous avez déjà fournies. Saisissez ensuite un <strong>login</strong> (nom d'utilisateur) <strong>entre 2 et 16 caractères</strong>. Ce login sera refusé s'il existe déjà. Le <strong>mot de passe</strong> doit comporter <strong>au moins huit caractères</strong>. Si aucune erreur n'a été détectée après la validation du formulaire, vous serez redirigé vers la page de connexion . Indiquez votre login et votre mot de passe tels que vous les avez saisis à l'étape précédente.</p>
         <p><strong>Note 1</strong> : si vous avez déjà un login et un mot de passe de connexion en tant qu'utilisateur d'Algem, la création de compte est inutile. Utilisez vos identifiants habituels pour vous connecter.</p>
-        <h3 id="password-help"><a class="img-link" href="#chapter-booking"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;Récupération du mot de passe</h3>
+        <h3 class="help" id="password-help"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;Récupération du mot de passe</h3>
         <p>Le mot de passe de connexion est propre à chaque utilisateur et personne d'autre ne le connaît ni ne peut le déduire. Il peut arriver que les visiteurs occasionnels oublient le leur. Dans ce cas, voici la procédure à suivre, en tant que simple visiteur :</p>
         <ol>
           <li>Ouvrez la fenêtre de connexion en cliquant sur l'icone en forme de silhouette <i class="fa fa-user"></i> dans le menu de gauche.</li><li>Cliquez sur le lien &laquo;&nbsp;Mot de passe oublié ?&nbsp;&raquo;.</li>
           <li>Entrez votre email dans le formulaire dédié. Un lien de récupération vous sera envoyé à cette adresse, avec une <strong>validité de 24 heures</strong>.</li>
           <li>Après réception, cliquez sur ce lien et saisissez votre nouveau mot de passe sur la page dédiée.</li></ol>
-<!--        <h3 id="weekly-help">Mon planning hebdo</h3>
-        <p></p>
-        <h3 id="followup-student-help">Mon suivi pédagogique</h3>
-        <p></p>-->
       </article>
       <article class="centered">
         <div th:include="fragments/help :: perso"></div>
       </article>
       <article class="centered">
-        <h2 id="chapter-misc" style="display: block"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;<span th:text="${#strings.toUpperCase('__#{help.miscellaneous.label}__')}"></span></h2>
-        <h3 id="printing-help"><a class="img-link" href="#chapter-misc"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;<span th:text="#{printing.label}"></span></h3>
+        <h2 class="help" id="chapter-misc" style="display: block"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;<span th:text="${#strings.toUpperCase('__#{help.miscellaneous.label}__')}"></span></h2>
+        <h3 class="help" id="printing-help"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;<span th:text="#{printing.label}"></span></h3>
         <p>Vous pouvez imprimer n'importe quelle page à partir de votre navigateur. <strong>Les pages imprimées ne tiennent pas compte des éléments annexes comme les menus, le pied de page ou les liens de navigation</strong>. Afin d'économiser de l'encre et du papier, les photos des élèves (ou les photos par défaut) ne sont pas imprimées par exemple dans le suivi enseignant.</p>
         <p>Il est préférable d'imprimer les plannings en mode <strong>"Portrait"</strong>. N'hésitez pas à utiliser l'&nbsp;<strong>"Aperçu avant impression"</strong> de votre navigateur pour vérifier la composition de la page.</p>
         <p>La plupart des navigateurs ne tiennent pas compte des couleurs de fond à l'impression. Si vous désirez imprimer les couleurs de planning, activez l'option* correspondante dans les paramètres d'impression (dans Firefox, par exemple, il faut cocher "Imprimer les couleurs d'arrière plan" dans l'onglet "Options" des paramètres d'impression). Vous trouverez sur <a href="http://its.yale.edu/how-to/article-printing-web-page-background-colors-and-images" target="_blank">cette page</a> des captures d'écran qui vous aideront à activer cette option en fonction de votre navigateur.</p>
           <p class="footnote">* Cette option n'est pas disponible sous Edge (dans ce cas, cliquez sur <code>Ouvrir avec Internet Explorer</code> dans le menu principal).</p>
-          <h3>Informations salles</h3>
+          <h3 class="help" id="room-help"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;Informations salles</h3>
           <p>Les informations de salles sont disponibles à deux endroits :</p>
           <ul>
-          <li>En cliquant sur le nom d'une salle en haut de colonne dans le planning jour : fonction, tarifs, caractéristiques principales (surface, nombre de places) et équipement.
+          <li>En cliquant sur le nom d'une salle en haut de colonne dans le planning jour, vous accédez aux données suivantes (si elles ont été renseignées) : fonction, tarifs, caractéristiques principales (surface, nombre de places) et équipement. La mention &laquo; NC &raquo; signifie &laquo; Non Communiqué &raquo;
           </li>
-            <li>En cliquant sur l'icone <i class="fa fa-info-circle"></i> dans le menu de droite : tableau des tarifs.</li>
+            <li>En cliquant sur l'icone <i class="fa fa-info-circle"></i> dans le menu de droite par l'intermédiaire du tableau des tarifs.</li>
           </ul>
       </article>
     </section>

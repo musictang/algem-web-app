@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) layout.html Algem Web App 1.6.0 01/02/17
+ * @(#) layout.html Algem Web App 1.6.0 21/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -72,18 +72,20 @@
     <div th:fragment="info">
       <div class="info">
         <h2 th:id="#{hotline.label}" th:text="#{hotline.label}">Hotline</h2>
-          <div th:each="estab:${@hotline}">
-            <p><span class="pure-table-th" th:text="${estab.key}"></span> : <a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a></p>
-            <ul class="disc"><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul>
-          </div>
+        <div class="indented" th:each="estab:${@hotline}">
+          <table class="pure-table pure-table-horizontal mobile" ><tr><th th:text="${estab.key}" style="padding-left:0;"></th><td><a th:text="${estab.value[0]}" th:href="${'tel:+33' + #strings.replace(estab.value[0],' ', '')}"></a></td></tr></table>
+          <ul class="disc"><li th:each="h,status:${estab.value}" th:if="${status.index} > 0" th:utext="${h}"></li></ul>
+        </div>
         <h2 th:id="#{contact.label}" th:text="#{contact.label}">Contact</h2>
+        <div class="indented">
         <ul class="simple" th:with="org=${@organization}">
-          <li><i class="fa fa-envelope-o"></i> <a th:text="${org['email.label']}" th:href="${'mailto:' + org['email.label']}"></a></li>
-          <li><i class="fa fa-map-o"></i> <a target="_blank" th:text="${org['address.label']}" th:href="${org['address.map']}"></a></li>
+          <li><i class="fa fa-envelope-o" aria-hidden="true"></i> <a th:text="${org['email.label']}" th:href="${'mailto:' + org['email.label']}"></a></li>
+          <li><i class="fa fa-map-o" aria-hidden="true"></i> <a target="_blank" th:text="${org['address.label']}" th:href="${org['address.map']}"></a></li>
         </ul>
         <ul class="disc">
           <li th:each="entry,status:${@organization}" th:if="${status.index} > 3"><a target="_blank" th:utext="#{${entry.key}}" th:href="${entry.value}"></a></li>
         </ul>
+        </div>
       </div>
     </div>
     <div th:fragment="roomInfo" th:with="offPeakTime=${conf['offPeakTime']}" class="indented">

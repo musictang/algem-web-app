@@ -1,5 +1,5 @@
 /*
- * @(#) custom.css Algem Web App 1.6.0 02/02/17
+ * @(#) custom.css Algem Web App 1.6.0 21/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -20,9 +20,9 @@
 /*
     Created on : 25/03/16
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Version    : 1.6.0 02/02/17
+    Version    : 1.6.0 15/02/17
 */
-/*Personnalisation*/
+/*Personnalisation RED THEME*/
 body {
   background-color: #fe1800;
   color: white;
@@ -32,7 +32,11 @@ body {
   color: #444;
   background-color: white;
 }
-.header-top{background-color: #fe1800;}
+
+.header-top{
+  background-color: #fe1800;
+  background: linear-gradient(to bottom, rgba(254,24,0,1) 0%,rgba(254,93,76,1) 100%);
+}
 header nav select, #datepicker {color: #444;}
 
 header nav #previous, header nav #next {color: white;}
@@ -40,9 +44,7 @@ header nav #previous, header nav #next {color: white;}
 footer, #bottom-menu {
   background-color: #fe1800;
   box-shadow: 0px -1px 2px 0px #444;
-/*  background-image:url('../img/personas-header-1280x1024.png');
-  background-position: 98% center;
-  background-repeat: no-repeat;*/
+  background: linear-gradient(to bottom, rgba(254,93,76,1) 0%, rgba(254,24,0,1) 100%);
 }
 
 h1 {color:  #ffa399;}
@@ -80,6 +82,25 @@ footer a:link,footer a:visited,footer a:active,footer a:hover {color: #FFF;}
   color: #444;
 }
 .title_col {background-color: #fe1800;}
-#accordion h3.ui-state-active {background: #fe1800;}
+.title_col:hover {background:ivory;color:#666}
+.doc-ref:hover {color: #fe1800}
+
+#accordion h3.ui-state-active {
+  background: #fe1800;
+  background: linear-gradient(to bottom, rgba(254,24,0,1) 0%,rgba(254,93,76,1) 100%);
+  box-shadow: 0px 2px 2px 0px #656565;
+}
 #accordion .ui-widget-content a {color: #ff301a;}
-.ui-dialog-titlebar {background: #fe1800}
+#accordion .ui-widget-content a.dlg {font-weight: bold}
+.ui-widget {font-size: 1em;}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {font-size: 0.95em;/* orig = 1em */}
+.ui-datepicker {width: 20em}
+.ui-datepicker-calendar td > a {height:2em}
+.ui-dialog-titlebar {
+  background: #fe1800;
+  background: linear-gradient(to bottom, rgba(254,24,0,1) 0%,rgba(254,93,76,1) 100%);
+  box-shadow: 0px 2px 2px 0px #656565;
+}

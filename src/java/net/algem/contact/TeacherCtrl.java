@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.5.2 25/01/17
+ * @(#) TeacherCtrl.java Algem Web App 1.6.0 15/02/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -35,11 +35,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.security.Principal;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -77,7 +74,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.2
+ * @version 1.6.0
  * @since 1.4.0 21/06/2016
  */
 @Controller
@@ -347,8 +344,10 @@ public class TeacherCtrl
       doc.setMemberId(member);
       doc.setDocType(type);
       doc.setName(docName);
+      if (!isValidURI(docUri)) {
+        throw new IllegalArgumentException(messageSource.getMessage("document.invalid.uri.warning", null,CTX_LOCALE));
+      }
       doc.setUri(docUri);
-
       if (doc.getId() == 0) {
         doc.setId(service.createDocument(doc));
       } else {
@@ -359,6 +358,31 @@ public class TeacherCtrl
       doc.setId(0); doc.setName(ex.getMessage());
     }
     return doc;
+  }
+
+  boolean isValidURI(String uri) {
+    boolean validPrefix = false;
+    int idx = 0;
+    char forbiddenChars[] = {'<', '>', '"'};
+    String prefixes [] = {"file://", "ftp://", "ftps://", "ftpes://", "http://", "https://", "sftp://", "www."};
+    for(String p : prefixes) {
+      if (uri.startsWith(p)) {
+        validPrefix = true;
+        idx = p.length();
+        break;
+      }
+    }
+    if (!validPrefix) return false;
+    uri = uri.substring(idx);
+    System.out.println(uri);
+    for (int i = 0; i < uri.length(); i++) {
+      for (int j = 0; j < forbiddenChars.length; j++) {
+        if (uri.charAt(i) == forbiddenChars[j]) {
+          return false;
+        }
+      }
+    }
+    return validPrefix && !uri.matches("^.*(javascript|=alert|:alert).*$");
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "/perso/xRemoveActionDocument")

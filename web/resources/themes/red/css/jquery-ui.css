@@ -832,9 +832,7 @@ body .ui-tooltip {
 /* Component containers
 ----------------------------------*/
 .ui-widget {
-	/*font-size: 1.1em;*/
-/*custom*/
-	font-size: 1em;
+	font-size: 1.1em;
 }
 .ui-widget .ui-widget {
 	font-size: 1em;
@@ -843,9 +841,7 @@ body .ui-tooltip {
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-	/*font-size: 1em;*/
-  /*CUSTOM font-size*/
-	font-size: 0.95em;
+	font-size: 1em;
 }
 .ui-widget-content {
 	border: 1px solid #eeeeee;
