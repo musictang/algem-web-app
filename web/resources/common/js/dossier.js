@@ -238,6 +238,7 @@ DOSSIER.fillStudentDocumentPanel = function(schedule, userId, labels) {
  */
 DOSSIER.getDocTypeFromNumber = function(n, labels) {
   switch(n) {
+    case -1: return labels["document_type_label"];
     case 0: return labels["document_type_other_label"];
     case 1: return labels["document_type_music_sheet_label"];
     case 2: return labels["document_type_music_label"];
@@ -255,7 +256,9 @@ DOSSIER.getDocTypeFromNumber = function(n, labels) {
  */
 DOSSIER.getIconFromDocType = function(n) {
   switch(n) {
-    case 0: return "icon-share2";
+    case -1:
+    case 0: 
+      return "icon-share2";
     case 1: return "icon-file-music";
     case 2: return "icon-headphones";
     case 3: return "icon-video-camera";
@@ -284,6 +287,7 @@ DOSSIER.getAndFillDocumentDialog = function(element, url, labels) {
   if ("0" === docId) {
     //creation
     $("#docId").val(0);
+    $("#docType").val(-1);
     $("#docFirstDate").val(scheduleDate);
     $("#docActionId").val(actionRef);
     $("#docScheduleId").val(0);
@@ -325,7 +329,7 @@ DOSSIER.resetDocumentDialog = function() {
   $("#docActionId").val(0);
   $("#docScheduleId").val(0);
   $("#docMemberId").val(0);
-  $("#docType").val(0);
+  $("#docType").val(-1);
   $("#docName").val(null);
   $("#docUri").val(null);
   $("#docActions").remove();

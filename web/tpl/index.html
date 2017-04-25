@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) index.html Algem Web App 1.6.0 01/02/17
+ * @(#) index.html Algem Web App 1.6.1 25/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -51,6 +51,7 @@
     </header>
     <div class="global">
       <div class="centered">
+        <div><a class="img-link" href="?lang=fr_FR" title="Français"><img th:src="@{/resources/common/img/fr.svg}" width="24"/></a>&nbsp;&nbsp;<a class="img-link" href="?lang=en_GB" title="English"><img th:src="@{/resources/common/img/gb.svg}" width="24"/></a></div>
         <h2 th:text="#{schedule.label}">Planning</h2>
         <section class="gallery">
           <div class="thumbnails thumbnails-out" th:each="estab: ${estabList}">

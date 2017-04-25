@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningCtrl.java 1.6.0 07/02/17
+ * @(#)PlanningCtrl.java 1.6.1 25/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,6 @@
 package net.algem.planning;
 
 import java.security.Principal;
-import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,6 +34,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import net.algem.room.Room;
 import net.algem.util.AuthUtil;
+import net.algem.util.GemConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,14 +48,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * MVC Controller for planning view.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.0
+ * @version 1.6.1
  * @since 1.0.0 11/02/13
  */
 @Controller
 public class PlanningCtrl
 {
 
-  private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
+//  private static DateFormat DATE_FORMAT; 
   private final static Logger LOGGER = Logger.getLogger(PlanningCtrl.class.getName());
 
   @Autowired
@@ -76,9 +76,16 @@ public class PlanningCtrl
    * @throws ParseException
    */
   @RequestMapping(method = RequestMethod.GET, value = "/daily.html")
-  String loadDaySchedule(HttpServletRequest request, Model model, Booking booking, Principal p, @CookieValue(value = "PRS", defaultValue = "false")String prs) throws ParseException {
-    SimpleDateFormat dayNameFormat = new SimpleDateFormat("EEE");
-    Date date = DATE_FORMAT.parse(request.getParameter("d"));
+  String loadDaySchedule(
+          HttpServletRequest request,
+          Model model, 
+          Booking booking, 
+          Principal p, 
+          @CookieValue(value = "PRS", defaultValue = "false") String prs,
+          @CookieValue(value = "ALGEM_LANG", defaultValue = "fr_FR") String lang
+  ) throws ParseException {
+    SimpleDateFormat dayNameFormat = new SimpleDateFormat("EEE", getLocaleFromCode(lang));
+    Date date = GemConstants.DATE_FORMAT.parse(request.getParameter("d"));
     String dayName = dayNameFormat.format(date);
     int estab = Integer.parseInt(request.getParameter("e"));
     booking.setTimeLength(1);
@@ -111,8 +118,10 @@ public class PlanningCtrl
    * @param prs public postit read status
    */
   @RequestMapping(method = RequestMethod.GET, value={ "/", "index.html"})
-  String loadEstablishment(Model model, Principal p, @CookieValue(value = "PRS", defaultValue = "false")String prs) {
-    model.addAttribute("now", DATE_FORMAT.format(new Date()));
+  String loadEstablishment(Model model, Principal p, 
+          @CookieValue(value = "PRS", defaultValue = "false")String prs
+          ) {   
+    model.addAttribute("now", GemConstants.DATE_FORMAT.format(new Date()));
     model.addAttribute("estabList", service.getEstablishments(getEstabFilter(), p == null ? "": p.getName()));
     if ("false".equals(prs)) {
       model.addAttribute("postitList", service.getPostits(0));
@@ -125,7 +134,7 @@ public class PlanningCtrl
     int idper = Integer.parseInt(request.getParameter("id"));
     String sow = request.getParameter("d");
     Calendar cal = Calendar.getInstance();
-    Date start = DATE_FORMAT.parse(sow);
+    Date start = GemConstants.DATE_FORMAT.parse(sow);
     cal.setTime(start);
     cal.add(Calendar.DATE, 6);
     int week = cal.get(Calendar.WEEK_OF_YEAR);
@@ -168,6 +177,11 @@ public class PlanningCtrl
   private String getEstabFilter() {
     return AuthUtil.isAdministrativeMember() ? ""
       : " AND p.id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)";
+  }
+  
+  private Locale getLocaleFromCode(String code) {
+    String bcp47 = code.replace('_','-');
+    return Locale.forLanguageTag(bcp47);
   }
 
 }

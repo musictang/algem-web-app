@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.6.0 15/02/17
+ * @(#) daily.html Algem Web App 1.6.1 25/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -39,10 +39,6 @@
 
     <script th:with="delay=24" type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
-      //test
-//      console.log("valid uri ? ",GEMUTILS.isValidURI("https://www.youtube.com/watch?v=QQ3tlLq_Z14"));
-//      console.log("valid uri ? ",GEMUTILS.isValidURI("www.algem.net"));
-//      console.log("valid uri ? ",GEMUTILS.isValidURI("https://www.algem.net<script>"));
       var tOffset = /*[[${timeOffset}]]*/ '720';
       console.log(tOffset)
       var debug = false;
@@ -51,7 +47,6 @@
       //console.log("offPeakTime " + offPeakTime);
       var commonParams = {
         estab: /*[[${param.e[0]}]]*/ 3501,
-//        auth: /*[[${#authorization.expression('isAuthenticated()')}]]*/ false,
         auth: /*[[${#authorization.expression(\"hasAnyRole('1','2','3','4','11')\")}]]*/ false,
         hasDetailAccess: /*[[${#authorization.expression(\"hasAnyRole('1','4')\")}]]*/ false,
         date: /*[[${param.d[0]}]]*/ '29-12-2015'
@@ -157,7 +152,7 @@
           <option th:each="estab :${estabList}" th:value="${estab.id}" th:text="${estab.name}"></option>
         </select>
         <div id="date-panel">
-          <label id="dow" for="datepicker" th:text="${dayName}"></label><a href="" th:title="#{previous.day.label}" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;<input type="text" id="datepicker" tabindex="3" readonly="readonly"/>&nbsp;<a href="" th:title="#{next.day.label}" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
+          <label id="dow" for="datepicker" th:text="${dayName}"></label>&nbsp;<a href="" th:title="#{previous.day.label}" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;<input type="text" id="datepicker" tabindex="3" readonly="readonly"/>&nbsp;<a href="" th:title="#{next.day.label}" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
         </div>
       </nav>
     </header>
