@@ -374,7 +374,7 @@ public class TeacherCtrl
     }
     if (!validPrefix) return false;
     uri = uri.substring(idx);
-    System.out.println(uri);
+    LOGGER.info(uri);
     for (int i = 0; i < uri.length(); i++) {
       for (int j = 0; j < forbiddenChars.length; j++) {
         if (uri.charAt(i) == forbiddenChars[j]) {

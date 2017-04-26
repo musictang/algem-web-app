@@ -1,8 +1,9 @@
 /* French initialisation for the jQuery UI date picker plugin. */
 /* Written by Keith Wood (kbwood@virginbroadband.com.au) and St&eacute;phane Nahmani (sholby@sholby.net). */
+/* 1.6.1 25/04/17 */
 jQuery(function($){
 	$.datepicker.regional['fr'] = {
-    clearText: 'Effacer', clearStatus: '',
+        clearText: 'Effacer', clearStatus: '',
 		closeText: 'Fermer', closeStatus: 'Fermer sans modifier',
 		prevText: 'Pr&eacute;c', prevStatus: 'Voir le mois pr&eacute;c&eacute;dent',
 		nextText: 'Suiv', nextStatus: 'Voir le mois suivant',
@@ -19,7 +20,12 @@ jQuery(function($){
 		dayStatus: 'Utiliser DD comme premier jour de la semaine', dateStatus: 'Choisir le DD, MM d',
 		dateFormat: 'dd-mm-yy', firstDay: 1,
 		initStatus: 'Choisir la date', isRTL: false};
-	$.datepicker.setDefaults($.datepicker.regional['fr']);
+    var lang = GEMUTILS.getCookie('ALGEM_LANG');
+    if (lang.substr(0, 2) === "en") {
+      $.datepicker.setDefaults($.datepicker.regional['']);
+    } else {
+      $.datepicker.setDefaults($.datepicker.regional['fr']);
+    }
 });
 
 

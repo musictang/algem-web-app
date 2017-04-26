@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.6.0 15/02/17
+ * @(#)planning.js	1.6.1 25/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -23,7 +23,7 @@
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @since 09/05/15
- * @version 1.6.0
+ * @version 1.6.1
  * @returns {void}
  */
 //var isMobileAndWebkit = isMobile() && 'WebkitAppearance' in document.documentElement.style;
@@ -62,7 +62,7 @@ function setDatePicker(commonParams) {
   var picker = $("#datepicker");
   var estabSelect = $("#estabSelection");
   //picker.datepicker({ appendText: "(jj-mm-yyyy)", changeMonth: true, changeYear: true, autoSize: true })
-  picker.datepicker({changeMonth: true, changeYear: true});
+  picker.datepicker({changeMonth: true, changeYear: true, dateFormat: "dd-mm-yy"});
   picker.datepicker('setDate', commonParams.date);
   picker.datepicker("refresh");
   $(estabSelect).val(commonParams.estab);
@@ -96,7 +96,7 @@ function setDatePicker(commonParams) {
 
 function weeklyDatePicker(date, idper) {
   var from = $("#pickerFrom");
-  from.datepicker({changeMonth: true, changeYear: true});
+  from.datepicker({changeMonth: true, changeYear: true, dateFormat: "dd-mm-yy"});
   from.datepicker('setDate', date);
   from.datepicker("refresh");
 
@@ -112,7 +112,7 @@ function weeklyDatePicker(date, idper) {
   var to = $("#pickerTo");
   var d2 = new Date(from.datepicker('getDate'));
   var last = new Date(d2.setDate(d2.getDate() + d2.getDay() + 6));
-  to.datepicker({changeMonth: true, changeYear: true});
+  to.datepicker({changeMonth: true, changeYear: true, dateFormat: "dd-mm-yy"});
   to.datepicker('setDate', GEMUTILS.dateFormatFR(last));
   to.datepicker("refresh");
 
@@ -525,6 +525,7 @@ function initBookingDate(date) {
   bookDatePicker.datepicker({
     changeMonth: true,
     changeYear: true,
+    dateFormat: "dd-mm-yy"
     //showOn: "button",
     //buttonImage: "images/calendar.gif",
     //buttonImageOnly: true,

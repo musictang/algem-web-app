@@ -1,0 +1,8 @@
+Algem web app 1.6.1
+
+Prise en charge des langues
+La prise en charge automatique de la langue du navigateur ne fonctionnait pas toujours correctement. Afin d'y remédier, il est maintenant possible de déclarer explicitement la langue favorite en page d'accueil. Cliquez sur l'un des deux drapeaux (français, anglais) pour changer la langue par défaut.
+
+Le calendrier reflète maintenant le changement de langue (noms des jours, des mois, etc.).
+
+Quelques corrections de liens dans la page d'aide.

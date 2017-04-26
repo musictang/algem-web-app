@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.6.0 21/02/17
+ * @(#) login.html Algem Web App 1.6.1 25/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -42,8 +42,8 @@
           Les &laquo;&nbsp;Utilisateurs&nbsp;&raquo;, par exemple, peuvent voir le nom des groupes dans les plannings, contrairement aux simples &laquo;&nbsp;Adhérents&nbsp;&raquo;.
         </p>
         <h4 class="help" id="weekly-help"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{schedule.label}]]</h4>
-        <h5 style="display:block"><i class="fa fa-calendar-plus-o"></i> Réserver</h5>
-        <p> Ce lien est destiné à la réservation d'une salle pour une répétition individuelle ou de groupe.<br />Cliquez sur <strong>Réserver</strong> pour accéder au planning du jour et choisir un horaire.</p>
+        <h5 style="display:block"><i class="fa fa-calendar-plus-o"></i> Consulter/Réserver</h5>
+        <p> Cliquez sur sur ce lien pour accéder au planning du jour et/ou réserver une salle pour une répétition individuelle ou de groupe.</p>
         <h5><i class="fa fa-calendar"></i> Mon planning hebdo</h5>
         <p>En cliquant sur cette option, vous accédez à votre planning de la semaine. Une fois sur la page&nbsp;*, vous pouvez vous déplacer de semaine en semaine en cliquant sur les flèches de gauche&nbsp;<i class="fa fa-chevron-circle-left"></i> et de droite&nbsp;<i class="fa fa-chevron-circle-right"></i>, de part et d'autre des dates de début et de fin de semaine. <strong>Vous pouvez aussi cliquer sur l'une des dates pour faire apparaître un calendrier et sélectionner la semaine de votre choix</strong>&nbsp;**.</p>
         <p class="footnote">* Pour revenir à votre page perso, ouvrez le menu à 3 barres <i class="fa fa-bars"></i>, puis cliquez sur l'icone <i class="fa fa-user-plus"></i>, en-dessous de laquelle figure votre nom d'utilisateur (pseudo). Un lien est également disponible en bas de page.<br />
@@ -85,6 +85,7 @@
             <br />** La liste des élèves composant un cours collectif peut être pliée ou dépliée si nécessaire. Cliquez pour cela sur <i>Liste des élèves...</i>.</p>
           <h6>Edition du suivi collectif</h6>
           <p>Il est également possible d'entrer une appréciation de suivi collective. Cette appréciation est visible de tous les élèves ayant participé au cours et permet généralement de rappeler les notions ou les morceaux abordés durant la séance.<br />
+            <strong>Les cours pour lesquels il est possible de saisir un suivi collectif sont signalés par l'icone <img th:src="@{/resources/common/img/edit.svg}" width="24" /> à l'intérieur de la colone Suivi co.</strong><br />
             Cliquez sur la ligne qui vous intéresse en-dessous de la colonne <strong>Suivi co.</strong> pour ouvrir la fenêtre de saisie.<br />
             <strong>Info</strong> : contrairement au suivi individuel, vous ne pouvez pas mettre ici de note (le champ est désactivé par défaut). Le statut d'absence est également désactivé.</p>
           <h5>Exportation du suivi enseignant</h5>

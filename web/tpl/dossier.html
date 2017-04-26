@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.6.0 20/02/17
+ * @(#) dossier.html Algem Web App 1.6.1 25/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -73,7 +73,7 @@
         <div>
           <ul class="simple">
             <li th:if="${e != null && T(java.lang.Integer).parseInt(e) > 0}"><i class="fa fa-calendar-plus-o"></i>
-              <a th:with="n=${#dates.createNow()}" th:href="@{/daily.html(d=${#dates.format(n,'dd-MM-yyyy')},e=${e})}" th:text="#{book.label}"></a>
+              <a th:with="n=${#dates.createNow()}" th:href="@{/daily.html(d=${#dates.format(n,'dd-MM-yyyy')},e=${e})}" th:text="|#{see.label}/#{book.label}|"></a>
             </li>
             <li><i class="fa fa-calendar"></i>
               <a th:href="@{/perso/weekly.html(d=${#dates.format(startOfW,'dd-MM-yyyy')},id=${user.id})}" th:text="#{my.weekly.schedule.label}" th:title="#{my.weekly.schedule.title}">Mon planning</a>
@@ -184,7 +184,7 @@
         <fieldset>
           <div class="row-form">
             <select id="docType" style="width:100%" name="docType">
-              <option value="0">Type de document...</option>
+              <option th:text="#{document.type.label}" value="-1">Type</option>
               <option th:text="#{document.type.music.sheet.label}" value="1">partition</option>
               <option th:text="#{document.type.music.label}" value="2">audio</option>
               <option th:text="#{document.type.video.label}" value="3">vidéo</option>
