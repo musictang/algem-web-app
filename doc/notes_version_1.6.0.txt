@@ -1,0 +1,28 @@
+1.6.0
+Corrections
+* La dernière demi-heure n'était pas visible dans certaines configurations d'écran et/ou d'horaires.
+
+SUIVI PÉDAGOGIQUE
+Documents de cours
+Les professeurs peuvent dorénavant partager des documents pédagogiques avec leurs élèves. Ces documents sont rattachés à un élève en particulier dans le cas d'un cours individuel, à l'ensemble des élèves dans le cas d'un cours collectif. Plus précisément, cela consiste à ajouter un ou plusieurs liens vers des documents externes, collectés sur le Net : une adresse Youtube, un lien de partage provenant de son propre espace de stockage (OneDrive, GoogleDrive, Dropbox, etc.), une page Web, un lien weTransfer, un fichier pdf accessible en ligne, les exemples sont multiples.
+
+C'est le rôle de l'icône + (Plus) dans la colonne Cours du suivi pédagogique.
+Le lien n'apparaît dans le suivi qu'à partir de la date de la session à laquelle il a été créé et reste actif pour toutes les sessions suivantes.
+Une fois le lien créé, il apparaît dans la colonne cours sous forme d'icône : un partage dont le type n'est pas précisé (ou "Autre"), un lien d'écoute, un lien vidéo ou une partition.
+Ces liens seront visibles par vos élèves à l'ouverture du suivi pédagogique dans leur page perso. Ils ne peuvent être supprimés que par les professeurs qui les ont créés.
+
+L'ajout de suivi collectif a été désactivé pour les cours individuels. Une icône permet maintenant d'identifier les emplacements où il est possible de saisir un suivi collectif.
+
+SALLES
+Cliquer sur le nom d'une salle en haut du planning jour permet maintenant de consulter ses caractéristiques détaillées : fonction, surface, nombre de places, tarifs et équipement.
+
+AIDE
+La page d'aide a été réorganisée et complétée. Le menu de navigation permet maintenant d'accéder immédiatement à chaque rubrique, qu'on soit sur un ordinateur fixe ou sur un smartphone.
+
+INTERFACE
+- De nombreuses améliorations visuelles dans les différents formulaires concernant en particulier les barres de titre et les boutons de commande.
+- Disponibilité d'un nouveau thème en niveaux de gris (pour ceux que cela intéresse).
+- Le calendrier a été agrandi pour qu'il soit plus facile à utiliser sur les smartphones.
+- Les icônes "Précédent" et "Suivant" ont été agrandies pour les petits écrans.
+- La disposition des éléments a été revue en page d'accueil afin de gagner de la place sur smartphone.
+- Le pied de page a été retravaillé afin qu'il n'empiète pas sur le logo.

@@ -26,9 +26,9 @@
     <session-config>
         <session-timeout>15</session-timeout>
         <!-- Tomcat >= 7 (servlet 3 only) -->
-        <cookie-config>
+        <!-- <cookie-config>
           <http-only>true</http-only>
-        </cookie-config>
+        </cookie-config> -->
     </session-config>
     <!--<welcome-file-list>
     <welcome-file>redirect.jsp</welcome-file>
