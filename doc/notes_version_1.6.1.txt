@@ -5,4 +5,10 @@ La prise en charge automatique de la langue du navigateur ne fonctionnait pas to
 
 Le calendrier reflète maintenant le changement de langue (noms des jours, des mois, etc.).
 
+Réservations
+Les liste des réservations est maintenant classée de la plus récente à la plus ancienne. Cela vous évite ainsi d'utiliser l'ascenseur pour consulter la dernière réservation lorsque vous en avez beaucoup.
+
+Seules les 10 dernières réservations sont maintenant listées à l'ouverture de votre page perso. Cliquez sur "Voir plus..." pour afficher les 10 réservations suivantes dans l'historique.
+
+
 Quelques corrections de liens dans la page d'aide.

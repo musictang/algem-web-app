@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningCtrl.java 1.6.1 25/04/17
+ * @(#)PlanningCtrl.java 1.6.1 26/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -55,7 +55,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PlanningCtrl
 {
 
-//  private static DateFormat DATE_FORMAT; 
+//  private static DateFormat DATE_FORMAT;
   private final static Logger LOGGER = Logger.getLogger(PlanningCtrl.class.getName());
 
   @Autowired
@@ -78,9 +78,9 @@ public class PlanningCtrl
   @RequestMapping(method = RequestMethod.GET, value = "/daily.html")
   String loadDaySchedule(
           HttpServletRequest request,
-          Model model, 
-          Booking booking, 
-          Principal p, 
+          Model model,
+          Booking booking,
+          Principal p,
           @CookieValue(value = "PRS", defaultValue = "false") String prs,
           @CookieValue(value = "ALGEM_LANG", defaultValue = "fr_FR") String lang
   ) throws ParseException {
@@ -118,9 +118,9 @@ public class PlanningCtrl
    * @param prs public postit read status
    */
   @RequestMapping(method = RequestMethod.GET, value={ "/", "index.html"})
-  String loadEstablishment(Model model, Principal p, 
+  String loadEstablishment(Model model, Principal p,
           @CookieValue(value = "PRS", defaultValue = "false")String prs
-          ) {   
+          ) {
     model.addAttribute("now", GemConstants.DATE_FORMAT.format(new Date()));
     model.addAttribute("estabList", service.getEstablishments(getEstabFilter(), p == null ? "": p.getName()));
     if ("false".equals(prs)) {
@@ -161,16 +161,14 @@ public class PlanningCtrl
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/perso/xScheduleDetail")
-  public @ResponseBody
-  List<ScheduleRangeElement> getScheduleDetail(
+  public @ResponseBody List<ScheduleRangeElement> getScheduleDetail(
     @RequestParam("id") String id,
     @RequestParam("type") String type) {
     return service.getScheduleDetail(Integer.parseInt(id), Integer.parseInt(type));
   }
-  
+
   @RequestMapping(method = RequestMethod.GET, value = "/xRoomDetail")
-  public @ResponseBody
-  Room getRoomDetail(@RequestParam("id") String id) {
+  public @ResponseBody Room getRoomDetail(@RequestParam("id") String id) {
     return service.getRoomDetail(Integer.parseInt(id));
   }
 
@@ -178,7 +176,7 @@ public class PlanningCtrl
     return AuthUtil.isAdministrativeMember() ? ""
       : " AND p.id IN (SELECT DISTINCT etablissement FROM salle WHERE public = TRUE)";
   }
-  
+
   private Locale getLocaleFromCode(String code) {
     String bcp47 = code.replace('_','-');
     return Locale.forLanguageTag(bcp47);

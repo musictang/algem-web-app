@@ -1,5 +1,5 @@
 /*
- * @(#)ScheduleDao.java	1.6.0 13/02/17
+ * @(#)ScheduleDao.java	1.6.1 26/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -50,7 +50,7 @@ import org.springframework.stereotype.Repository;
  * IO methods for class {@link net.algem.planning.Schedule}.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.0
+ * @version 1.6.1
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -417,14 +417,20 @@ public class ScheduleDao
     }, id);
   }
 
-  List<BookingScheduleElement> getBookings(int idper) {
+  /**
+   *
+   * @param idper member's id
+   * @param key primary key id
+   * @return a list of bookings
+   */
+  List<BookingScheduleElement> getBookings(int idper, int key) {
     String query = "SELECT r.id,p.action,p.idper,p.jour,p.debut,p.fin,p.ptype,p.lieux,s.nom,e.id,e.nom,"
       + " CASE WHEN (p.ptype = " + Schedule.BOOKING_GROUP + " OR p.ptype = " + Schedule.GROUP + ") THEN g.nom ELSE '' END"
       + ",r.statut"
       + " FROM " + TABLE + " p JOIN " + T_BOOKING + " r ON (p.action = r.idaction) JOIN salle s ON(p.lieux = s.id)"
       + " JOIN personne e ON (e.id = s.etablissement)"
       + " LEFT JOIN groupe g ON (p.idper = g.id)"
-      + " WHERE r.idper = ? ORDER BY p.jour,p.debut";
+      + " WHERE r.id < ? AND r.idper = ? ORDER BY r.id DESC, p.jour DESC,p.debut  LIMIT 10";
     return jdbcTemplate.query(query, new RowMapper<BookingScheduleElement>() {
       @Override
       public BookingScheduleElement mapRow(ResultSet rs, int i) throws SQLException {
@@ -446,7 +452,7 @@ public class ScheduleDao
         return b;
       }
 
-    }, idper);
+    }, key, idper);
   }
 
   private ScheduleElement getConflictFromRS(ResultSet rs) throws SQLException {

@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningServiceImpl.java 1.5.2 11/01/2017
+ * @(#)PlanningServiceImpl.java 1.6.1 26/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -45,7 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Service class for schedule operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.2
+ * @version 1.6.1
  * @since 1.0.0 11/02/13
  */
 @Service
@@ -114,7 +114,7 @@ public class PlanningServiceImpl
   public Room getRoom(int roomId) {
     return scheduleDao.findRoom(roomId);
   }
-  
+
   @Override
   public Room getRoomDetail(int roomId) {
     return scheduleDao.findRoomDetail(roomId);
@@ -227,8 +227,8 @@ public class PlanningServiceImpl
   }
 
   @Override
-  public List<BookingScheduleElement> getBookings(int idper) {
-    return scheduleDao.getBookings(idper);
+  public List<BookingScheduleElement> getBookings(int idper, int offsetKey) {
+    return scheduleDao.getBookings(idper, offsetKey);
   }
 
   @Override

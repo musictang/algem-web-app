@@ -1,7 +1,7 @@
 /*
- * @(#) PlanningService.java Algem Web App 1.5.0 26/10/16
+ * @(#) PlanningService.java Algem Web App 1.6.1 26/04/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -32,7 +32,7 @@ import net.algem.util.Postit;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.0
+ * @version 1.6.1
  * @since 1.0.6 27/01/2016
  */
 public interface PlanningService
@@ -83,7 +83,7 @@ public interface PlanningService
    * @return a list of rooms
    */
   List<Room> getRoomInfo(int estab);
-  
+
   Room getRoomDetail(int id);
 
   /**
@@ -140,9 +140,10 @@ public interface PlanningService
    * Gets all the bookings of the person with id {@code idper}.
    *
    * @param idper person's id
+   * @param offsetKey primary key offset for paging
    * @return a list of BookingScheduleElement
    */
-  List<BookingScheduleElement> getBookings(int idper);
+  List<BookingScheduleElement> getBookings(int idper, int offsetKey);
 
   /**
    * Gets the postits associated with this {@code type}.

@@ -21,7 +21,7 @@
   <!--========================-->
   <!--DATASOURCE CONFIGURATION-->
   <!--========================-->
-  <jee:jndi-lookup id="dataSource" jndi-name="jdbc/algem"/>
+  <jee:jndi-lookup id="dataSource" jndi-name="jdbc/algem_19658"/>
   <!--bean id="propertyConfigurer"
   class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
   p:location="/WEB-INF/jdbc.properties" />-->
@@ -54,9 +54,9 @@
         <value>/WEB-INF/resources/security</value>
       </list>
     </property>
-    <!--Falling back to the system Locale is the default behavior of java.util.ResourceBundle. 
-    However, this is often not desirable in an application server environment, 
-    where the system Locale is not relevant to the application at all: Set this flag to "false" in such a scenario.--> 
+    <!--Falling back to the system Locale is the default behavior of java.util.ResourceBundle.
+    However, this is often not desirable in an application server environment,
+    where the system Locale is not relevant to the application at all: Set this flag to "false" in such a scenario.-->
     <property name="fallbackToSystemLocale" value="false" />
   </bean>
 

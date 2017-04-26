@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.6.1 25/04/17
+ * @(#) dossier.html Algem Web App 1.6.1 26/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -93,7 +93,13 @@
               <th style="width: 10%;text-align: center"><a href="javascript:location.reload(true);" th:title="#{refresh.page.label}" class="img-link"><i class="fa fa-refresh"></i></a></th>
             </tr>
           </thead>
-          <tbody><tr th:each="b:${bookings}">
+          <tfoot>
+            <tr style="border-top:1px solid #ccc">
+              <td colspan="7"><a id="bookingLinkPlus" href="javascript:;" th:text="#{see.more}"></a><p class="error" id="bookingListStatus"></p></td>
+            </tr>
+          </tfoot>
+          <tbody id="bookingList">
+            <tr th:each="b:${bookings}" th:data-booking-id="${b.id}">
               <td th:text="${b.detail['group']}"></td>
               <td th:text="${b.detail['estab']}"></td>
               <td th:text="${b.detail['room']}"></td>
@@ -104,6 +110,7 @@
             </tr>
           </tbody>
         </table>
+
         <h3 th:if="${user.student}" th:text="#{student.monitoring.label}">Suivi</h3>
         <section th:if="${user.student}">
           <header>
@@ -246,12 +253,15 @@
       "document_remove_label": /*[[#{document.remove.label}]]*/ "!remove!",
       "document_single_session_label": /*[[#{document.single.session.label}]]*/ "!one session!",
       "document_single_recipient_label": /*[[#{document.single.recipient.label}]]*/ "!all sessions!",
-      "empty_field_warning": /*[[#{empty.field.warning}]]*/ "!must not be empty!"
+      "empty_field_warning": /*[[#{empty.field.warning}]]*/ "!must not be empty!",
+      "booking_confirmed_label": /*[[#{booking.confirmed.label}]]*/ "!confirmed!",
+      "booking_pending_label": /*[[#{booking.pending.label}]]*/ "!pending!",
+      "booking_list_full_history_warning": /*[[#{booking.list.full.history.warning}]]*/ "!no more booking!"
     };
     var paths = {
       "def_photo_id": /*[[@{/resources/common/img/idphoto.png}]]*/ "",
       "def_photo_co":/*[[@{/resources/common/img/group.png}]]*/ ""
-    }
+    };
     setCommonEvents();
     DOSSIER.initFollowUpDialog(dlg, labels);
     DOSSIER.initErrorDialog();
@@ -301,6 +311,10 @@
 
     $(document).on("click", "#docRemoveLink", function () {
       DOSSIER.removeActionDocument($(this), /*[[@{/perso/xRemoveActionDocument}]]*/ "");
+    });
+
+    $(document).on("click", "#bookingLinkPlus", function () {
+      DOSSIER.getBookings(/*[[@{/perso/jxBookings}]]*/ "" , userId,/*[[@{/daily.html}]]*/ "", /*[[@{/perso/book-cancel.html}]]*/ "", labels);
     });
 
     /** Opens followUp dialog. */

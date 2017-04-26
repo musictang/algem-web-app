@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.6.1 25/04/17
+ * @(#) daily.html Algem Web App 1.6.1 26/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -152,7 +152,7 @@
           <option th:each="estab :${estabList}" th:value="${estab.id}" th:text="${estab.name}"></option>
         </select>
         <div id="date-panel">
-          <label id="dow" for="datepicker" th:text="${dayName}"></label>&nbsp;<a href="" th:title="#{previous.day.label}" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;<input type="text" id="datepicker" tabindex="3" readonly="readonly"/>&nbsp;<a href="" th:title="#{next.day.label}" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
+          <label id="dow" for="datepicker" th:text="${dayName}"></label><a href="" th:title="#{previous.day.label}" id="previous" tabindex="2"><i class="fa fa-chevron-circle-left"></i></a>&nbsp;<input type="text" id="datepicker" tabindex="3" readonly="readonly"/>&nbsp;<a href="" th:title="#{next.day.label}" id="next" tabindex="1"><i class="fa fa-chevron-circle-right"></i></a>
         </div>
       </nav>
     </header>

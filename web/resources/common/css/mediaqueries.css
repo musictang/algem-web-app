@@ -1,5 +1,5 @@
 /*
- * @(#) mediaqueries.css Algem Web App 1.6.0 13/02/17
+ * @(#) mediaqueries.css Algem Web App 1.6.1 26/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -49,7 +49,7 @@ and (max-device-width : 1024px)
   .schedule_col {width: 80px}
   #title_col p {width: 81px}
   #datepicker, .week-date {width: 5.5em;font-size: small}
-  #previous:link, #previous:visited, #previous:hover, #previous:active, #next:link, #next:visited, #next:hover, #next:active{margin:0 .2em;font-size: 2em}
+  #previous:link, #previous:visited, #previous:hover, #previous:active, #next:link, #next:visited, #next:hover, #next:active{font-size: 2em}
 }
 @media only screen
 and (max-width : 1280px)
@@ -66,7 +66,7 @@ and (orientation : portrait) {
   .header-top > nav {padding:0.5em 0}
   /*#grid, #canvas, #title_col {top: 65px}*/
   #planning{top: 65px}
-  h1 {font-size: 1.6em;text-align: left;line-height: 1em}
+  h1 {font-size: 1.6em;text-align: left;line-height: 1em;width: 90%;}
   .schedule_col {width: 48px}
   #title_col p {width: 49px}
   .labels {font-size: 0.65em}
@@ -88,6 +88,7 @@ and (orientation : portrait) {
   }
   #help-menu { float: none; width:100%;}
   .help-content{margin-left: 0}
+  #bars {padding: .15em .1em .15em 0;}
 }
 
 @media only screen

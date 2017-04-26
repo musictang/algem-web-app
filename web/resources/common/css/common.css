@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.6.0 15/02/17
+ * @(#) common.css Algem Web App 1.6.1 26/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -227,7 +227,7 @@ footer a.logo img {
 h1 {
   font-family:'Exo 2','Arial Black',sans-serif;
   font-size: 2.2em;
-  padding: 0;
+  padding: .1em 0 0 0;
   text-align: center;
   text-transform: uppercase;
   /*text-shadow: 0px 1px 0px rgba(255,255,255,.4), 0px 1px 4px rgba(0,0,0,.3);*/
@@ -406,6 +406,7 @@ a.dlg ~ a {
   display: inline-block;
   margin-left: 0.5em;
 }
+ #previous:link, #previous:visited, #previous:hover, #previous:active, #next:link, #next:visited, #next:hover, #next:active{margin:0 .2em;}
 
 /*NAVIGATION - MENUS */
 .pure-menu-list a {border: none;}

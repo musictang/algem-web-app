@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.6.0 20/02/17
+ * @(#) dossier.js Algem Web App 1.6.1 26/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -19,6 +19,48 @@
  */
 var DOSSIER = DOSSIER || {};
 var GEMUTILS = GEMUTILS;
+
+DOSSIER.getBookings = function (url, userId, planningUrl, cancelUrl, labels) {
+  var offset = $("#bookingList").children("tr").last().attr("data-booking-id");
+  console.log(offset);
+  fillBookings = function (data) {
+    $.each(data, function (index, b) {
+      var group = b.detail['group'] === null ? "" : b.detail['group'].name;
+      var estab = b.detail['estab'].name;
+      var room = b.detail['room'].name;
+      var dateFr = GEMUTILS.dateFormatFR(new Date(b.date));
+      var start = b.start.hour.pad() + ":" + b.start.minute.pad();
+      var timeInfo = start + "-&#8203;" + b.end.hour.pad() + ":" + b.end.minute.pad();
+      var link = planningUrl+"?d=" + dateFr + "&e=" + b.detail['estab'].id;
+      var cancelLink = "<a href=" +cancelUrl+"?id="+b.id+"&action="+b.idAction+"&date="+dateFr+"&start="+start + ">"+labels.cancel_label+"</a>";
+      var statusClass = b.status === 0 ? "pending" : "confirmed";
+      var statusLabel = b.status === 0 ? labels.booking_pending_label : labels.booking_confirmed_label;
+//      console.log(cancelLink);
+//      console.log(link);
+      var tr = "<tr data-booking-id=\"" + b.id + "\">\n";
+      tr += "\n\t<td>" + group + "</td>";
+      tr += "\n\t<td>" + estab + "</td>";
+      tr += "\n\t<td>" + room + "</td>";
+      tr += "\n\t<td><a href=" + link + ">"+dateFr+"</a></td>";
+      tr += "\n\t<td>"+timeInfo+"</td>";
+      tr += "\n\t<td class=\""+statusClass+"\" >"+statusLabel+"</td>";
+      tr += "\n\t<td>"+ (b.status === 0 ? cancelLink : "")+"</td>";
+      tr += "\n</tr>\n";
+      $("#bookingList").append(tr);
+    });
+  };
+  $.get(url, {idper: userId, key: offset}, function (data) {
+    if (typeof data === 'undefined' || !data.length) {
+      console.log(labels.booking_list_full_history_warning);
+      $("#bookingListStatus").text(labels.booking_list_full_history_warning);
+    } else {
+      $("#bookingLinkStatus").empty();
+      fillBookings(data);
+    }
+  });
+};
+
+
 
 /**
  * FollowUpSchedule constructor.
@@ -257,7 +299,7 @@ DOSSIER.getDocTypeFromNumber = function(n, labels) {
 DOSSIER.getIconFromDocType = function(n) {
   switch(n) {
     case -1:
-    case 0: 
+    case 0:
       return "icon-share2";
     case 1: return "icon-file-music";
     case 2: return "icon-headphones";

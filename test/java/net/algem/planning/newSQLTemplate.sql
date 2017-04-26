@@ -243,3 +243,11 @@ LEFT JOIN instrument i ON (pi.instrument = i.id)
 WHERE idplanning = 105073
 ORDER BY pl.debut,p.nom,p.prenom;
 
+-- bookings pagination test
+SELECT r.id,p.action,p.idper,p.jour,p.debut,p.fin,p.ptype,p.lieux,s.nom,e.id,e.nom,
+CASE WHEN (p.ptype = 13 OR p.ptype = 14) THEN g.nom ELSE '' END ,r.statut
+FROM planning p JOIN reservation r ON (p.action = r.idaction) JOIN salle s ON(p.lieux = s.id)
+JOIN personne e ON (e.id = s.etablissement)
+LEFT JOIN groupe g ON (p.idper = g.id)
+WHERE r.id < 2147483647 AND r.idper = 1199 ORDER BY r.id DESC LIMIT 10;
+

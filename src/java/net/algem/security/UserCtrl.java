@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java	1.6.0 10/02/17
+ * @(#)UserCtrl.java	1.6.1 26/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -99,7 +99,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Controller for login operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.0
+ * @version 1.6.1
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -109,10 +109,10 @@ public class UserCtrl
 
   private final static Logger LOGGER = Logger.getLogger(UserCtrl.class.getName());
   private final static Locale CTX_LOCALE = LocaleContextHolder.getLocale();
-  
+
   @Value("#{organization}")
   private Map<String, String> organization;
-  
+
   @Autowired
   @Qualifier("authenticationManager")
   AuthenticationManager authenticationManager;
@@ -221,7 +221,7 @@ public class UserCtrl
 
     User u = service.findUserByLogin(p.getName());
     model.addAttribute("user", u);
-    List<BookingScheduleElement> bookings = planningService.getBookings(u.getId());
+    List<BookingScheduleElement> bookings = planningService.getBookings(u.getId(), Integer.MAX_VALUE);
     model.addAttribute("bookings", bookings);
     model.addAttribute("person", service.getPersonFromUser(u.getId()));
     Date now = new Date();
@@ -241,6 +241,15 @@ public class UserCtrl
     }
     return "dossier";
   }
+
+
+  @RequestMapping(method = RequestMethod.GET, value = "/perso/jxBookings")
+  public @ResponseBody List<BookingScheduleElement> getBookings(
+    @RequestParam("idper") int idper,  @RequestParam("key") int key) {
+      return planningService.getBookings(idper, key);
+  }
+
+
 
   @RequestMapping(method = RequestMethod.GET, value = "signup.html")
   public String signUp(User u) {
@@ -410,7 +419,7 @@ public class UserCtrl
           Principal p) {
     return getFollowUpSchedules(userId, from, to);
   }
-  
+
   @RequestMapping(value = "/perso/user/savePDF", method = RequestMethod.GET, produces = "application/pdf")
   public @ResponseBody
   void saveFollowUpAsPDF(@RequestParam String userId, @RequestParam String from, @RequestParam String to,HttpServletResponse response) throws IOException {
@@ -427,7 +436,7 @@ public class UserCtrl
       LOGGER.log(Level.SEVERE, null, ex);
     }
   }
-  
+
   private List<ScheduleElement> getFollowUpSchedules(String userId, String from, String to) {
     Date dateFrom = null;
     Date dateTo = null;
@@ -443,10 +452,10 @@ public class UserCtrl
       return service.getFollowUp(Integer.parseInt(userId), dateFrom, dateTo);
     } catch (DataAccessException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
-    } 
+    }
     return null;
   }
-  
+
   private File getFollowUpAsPDF(String userId, String from, String to) throws IOException, BadElementException, DocumentException {
     String path = "/tmp/" + "suivi-" + userId + ".pdf";
     File f = new File(path);
@@ -495,7 +504,7 @@ public class UserCtrl
     Files.write(Paths.get(path), pdfBytes);
     return f;
   }
-  
+
   private void fillPdfTable(PdfPTable table, List<ScheduleElement> items, Font font) {
     for (ScheduleElement e : items) {
       List<ScheduleRangeElement> ranges = new ArrayList<ScheduleRangeElement>((Collection<? extends ScheduleRangeElement>) e.getRanges());
