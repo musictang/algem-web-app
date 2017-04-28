@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) httperror.html Algem Web App 1.6.0 01/02/17
+ * @(#) httperror.html Algem Web App 1.6.1 28/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -23,13 +23,8 @@
     <title>Error</title>
   </head>
   <body>
-    <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
-    <div id="menu">
-      <ul>
-        <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
-        <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
-      </ul>
-    </div>
+    <div id="bars" title="Menu"><i class="fa fa-bars"></i><span class="menu-label" th:text="#{menu.label}">Menu</span></div>
+    <div id="menu"><ul th:replace="fragments/menu :: basic"></ul></div>
     <header class="header-top">
       <h1 th:utext="${@organization['name.label']}"></h1>
     </header>

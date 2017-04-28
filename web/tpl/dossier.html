@@ -40,13 +40,13 @@
   </head>
   <body>
     <div th:replace="fragments/user :: postit"></div>
-    <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
+    <div id="bars" title="Menu"><i class="fa fa-bars"></i><span class="menu-label" th:text="#{menu.label}">Menu</span></div>
     <div id="menu">
       <ul>
-        <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
-        <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
-        <li th:replace="fragments/menu :: cnx"></li>
-        <li><a id="help" th:href="@{/help.html}" th:title="#{help.label}"><i class="fa fa-question-circle"></i></a></li>
+        <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a><span class="menu-label" th:text="#{close.label}">Fermer</span></li>
+        <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a><span class="menu-label" th:text="#{home.label}">Accueil</span></li>
+        <li sec:authorize="isAuthenticated()"><a th:href="@{/j_spring_security_logout}" id="menu-logout" th:title="#{logout.label}"><i class="fa fa-sign-out" th:attr="aria-label=#{logout.label}"></i></a><span class="menu-label" th:text="#{logout.label}">Déconnexion</span></li>
+        <li><a id="help" th:href="@{/help.html}" th:title="#{help.label}"><i class="fa fa-question-circle"></i></a><span class="menu-label" th:text="#{help.label}">Aide</span></li>
       </ul>
     </div>
     <header class="header-top">
@@ -73,10 +73,10 @@
         <div>
           <ul class="simple">
             <li th:if="${e != null && T(java.lang.Integer).parseInt(e) > 0}"><i class="fa fa-calendar-plus-o"></i>
-              <a th:with="n=${#dates.createNow()}" th:href="@{/daily.html(d=${#dates.format(n,'dd-MM-yyyy')},e=${e})}" th:text="|#{see.label}/#{book.label}|"></a>
+              <a th:with="n=${#dates.createNow()}" th:href="@{/daily.html(d=${#dates.format(n,'dd-MM-yyyy')},e=${e})}" th:text="|#{see.label}/#{book.label}|"th:title="#{book.and.see.tip}" ></a>
             </li>
             <li><i class="fa fa-calendar"></i>
-              <a th:href="@{/perso/weekly.html(d=${#dates.format(startOfW,'dd-MM-yyyy')},id=${user.id})}" th:text="#{my.weekly.schedule.label}" th:title="#{my.weekly.schedule.title}">Mon planning</a>
+              <a th:href="@{/perso/weekly.html(d=${#dates.format(startOfW,'dd-MM-yyyy')},id=${user.id})}" th:text="#{my.weekly.schedule.label}" th:title="#{my.weekly.schedule.tip}">Mon planning</a>
             </li>
           </ul>
         </div>
@@ -95,7 +95,7 @@
           </thead>
           <tfoot>
             <tr style="border-top:1px solid #ccc">
-              <td colspan="7"><a id="bookingLinkPlus" href="javascript:;" th:text="#{see.more}"></a><p class="error" id="bookingListStatus"></p></td>
+              <td colspan="7"><a id="bookingLinkPlus" href="javascript:;" th:text="#{see.more}" th:title="#{booking.see.more.tip}"></a><p class="error" id="bookingListStatus"></p></td>
             </tr>
           </tfoot>
           <tbody id="bookingList">
@@ -116,9 +116,9 @@
           <header>
             <nav class="horizontal-panel-menu">
               <ul class="horizontal-panel-menu">
-                <li><a href="javascript:;" id="student-follow-d" th:text="#{today.label}" th:formaction="@{/perso/xFollowUpStudent}" /></li>
-                <li><a href="javascript:;" id="student-follow-w" th:text="#{current.week.label}"/></li>
-                <li><a href="javascript:;" id="student-follow-m" th:text="#{current.month.label}"/></li>
+                <li><a href="javascript:;" id="student-follow-d" th:text="#{today.label}" th:title="#{today.tip}" th:formaction="@{/perso/xFollowUpStudent}" /></li>
+                <li><a href="javascript:;" id="student-follow-w" th:text="#{current.week.label}" th:title="#{current.week.tip}"/></li>
+                <li><a href="javascript:;" id="student-follow-m" th:text="#{current.month.label}" th:title="#{current.month.tip}"/></li>
                 <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="student-weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="student-weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""/>&nbsp;<label for="student-weekTo" th:text="#{to.label}"></label>&nbsp;<input id="student-weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value=""/></li>
               </ul>
             </nav>
@@ -138,13 +138,19 @@
           <header>
             <nav class="horizontal-panel-menu">
               <ul class="horizontal-panel-menu">
-                <li><a href="javascript:;" id="follow-d" th:text="#{today.label}" th:formaction="@{/perso/xFollowUpSchedules}" /></li>
-                <li><a href="javascript:;" id="follow-w" th:text="#{current.week.label}"/></li>
-                <li><a href="javascript:;" id="follow-m" th:text="#{current.month.label}"/></li>
+                <li><a href="javascript:;" id="follow-d" th:text="#{today.label}" th:title="#{today.tip}" th:formaction="@{/perso/xFollowUpSchedules}" /></li>
+                <li><a href="javascript:;" id="follow-w" th:text="#{current.week.label}" th:title="#{current.week.tip}"/></li>
+                <li><a href="javascript:;" id="follow-m" th:text="#{current.month.label}" th:title="#{current.month.tip}"/></li>
                 <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date" tabindex="3" readonly value=""/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" tabindex="4" readonly value=""/></li>
               </ul>
             </nav>
             <div class="export-panel"><a class="img-link" href="javascript:;" id="saveCSV" th:title="#{save.to.csv.label}"><img th:src="@{/resources/common/img/csv.png}" th:alt="#{save.to.csv.label}" /></a><a class="img-link" href="javascript:;" id="savePDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}"/></a></div>
+            <div class="export-panel" style="margin-left: 1em;vertical-align: top">
+              <input id="collapseAll" type="checkbox" />
+              <label for="collapseAll" style="margin-left:.2em" th:text="#{collapse.expand.all.label}" th:title="#{collapse.expand.all.collective.tip}">Tout replier/déplier</label>
+              <input id="maskPhotos" type="checkbox" style="margin-left: 1em"/>
+              <label for="maskPhotos" style="margin-left:.2em" th:text="#{mask.all.photos.label}" th:title="#{mask.all.photos.tip}">Photos</label>
+            </div>
           </header>
           <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed printable">
             <thead>
@@ -232,7 +238,7 @@
       "collective_monitoring_action": /*[[#{collective.monitoring.action.title}]]*/ "!collective monitoring!",
       "collective_monitoring_title": /*[[#{collective.monitoring.title}]]*/ "!collective monitoring!",
       "collective_monitoring_warning" : /*[[#{collective.monitoring.warning}]]*/ "!collective monitoring!",
-      "expand_collapse": /*[[#{expand.collapse.label}]]*/ "!expand_collapse!",
+      "collapse_expand": /*[[#{collapse.expand.label}]]*/ "!expand_collapse!",
       "individual_monitoring_action": /*[[#{individual.monitoring.action.title}]]*/ "!individual_monitoring!",
       "mailto_all_participants_tip" : /*[[#{mailto.all.participants.tip}]]*/ "!mailto!",
       "remove_label" : /*[[#{remove.label}]]*/ "!remove!",
@@ -296,6 +302,21 @@
      $("#saveStudentPDF").click(function() {
       var ref = /*[[@{/perso/user/savePDF}]]*/ "";
       window.location.href = ref + "?userId="+userId+"&from="+$("#student-weekFrom").val()+"&to="+$("#student-weekTo").val();
+    });
+    
+    $("#collapseAll").click(function() {
+      if ($(this).is(":checked")) {
+        $(".expand").next().hide(); 
+      } else {
+        $(".expand").next().show();
+      }
+    });
+    $("#maskPhotos").click(function() {
+      if ($(this).is(":checked")) {
+        $(".photo-id-thumbnail").hide();
+      }else {
+        $(".photo-id-thumbnail").show();
+      }
     });
 
     DOSSIER.setTeacherDateNavigation(url1, userId, cwd, labels, paths);

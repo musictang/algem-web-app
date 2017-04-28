@@ -27,6 +27,8 @@
  * @returns {void}
  */
 //var isMobileAndWebkit = isMobile() && 'WebkitAppearance' in document.documentElement.style;
+
+var GEMUTILS = GEMUTILS;
 /**
  * Group constructor.
  * @param {Number} id group Id

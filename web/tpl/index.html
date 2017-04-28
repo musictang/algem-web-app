@@ -38,10 +38,10 @@
   </head>
   <body>
     <div th:replace="fragments/layout :: postit"></div>
-    <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
+    <div id="bars" title="Menu"><i class="fa fa-bars"></i><span class="menu-label" th:text="#{menu.label}">Menu</span></div>
     <div id="menu">
       <ul>
-        <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
+        <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a><span class="menu-label" th:text="#{close.label}">Fermer !</span></li>
         <li th:replace="fragments/menu :: cnx"></li>
       </ul>
     </div>
@@ -51,7 +51,7 @@
     </header>
     <div class="global">
       <div class="centered">
-        <div><a class="img-link" href="?lang=fr_FR" title="Français"><img th:src="@{/resources/common/img/fr.svg}" width="24"/></a>&nbsp;&nbsp;<a class="img-link" href="?lang=en_GB" title="English"><img th:src="@{/resources/common/img/gb.svg}" width="24"/></a></div>
+        <div><a class="img-link" href="?lang=fr_FR" title="Français"><img th:src="@{/resources/common/img/fr.svg}" width="24" alt="Français"/></a>&nbsp;&nbsp;<a class="img-link" href="?lang=en_GB" title="English"><img th:src="@{/resources/common/img/gb.svg}" width="24" alt="English"/></a></div>
         <h2 th:text="#{schedule.label}">Planning</h2>
         <section class="gallery">
           <div class="thumbnails thumbnails-out" th:each="estab: ${estabList}">

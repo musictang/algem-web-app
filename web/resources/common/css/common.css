@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.6.1 26/04/17
+ * @(#) common.css Algem Web App 1.6.1 28/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -469,11 +469,18 @@ nav.horizontal-panel-menu {margin: 0; padding: 0}
   vertical-align: middle;
   background-color: #eee;
   border: 1px solid gray;
-  border-radius: 3px
+  border-radius: 3px;
 }
+
 #help-menu { float: left; width:20%;}
 .help-content {margin-left:20%}
-
+.menu-label {
+  display: block;
+  font-size: small;
+  line-height: .3em;
+  font-family: 'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
+  font-stretch: condensed;
+}
 /*PANELS*/
 #bars {
   position: fixed;
@@ -583,7 +590,7 @@ form input[type='button'], form input[type='submit'] {
   margin-top: 1em
 }
 form input + span {display: inline;}
-form input[type='checkbox'] {vertical-align: middle}
+form input[type='checkbox'], input[type='checkbox'] {vertical-align: middle}
 
 input[type=submit] {margin: 1em 0;}
 select {font-size: small;}

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) weekly.html Algem Web App 1.6.0 01/02/17
+ * @(#) weekly.html Algem Web App 1.6.1 28/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -38,13 +38,13 @@
 
   </head>
   <body>
-    <div id="bars" title="Menu"><i class="fa fa-bars"></i></div>
+    <div id="bars" title="Menu"><i class="fa fa-bars"></i><span class="menu-label" th:text="#{menu.label}">Menu</span></div>
     <div class="closeable" id="menu">
       <ul>
-        <li><a href="#" class="close-link" th:title="#{close.label}"><i class="fa fa-close"></i></a></li>
-        <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a></li>
+        <li><a href="#" class="close-link" th:title="#{close.label}"><i class="fa fa-close"></i><span class="menu-label" th:text="#{close.label}">Fermer !</span></a></li>
+        <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a><span class="menu-label" th:text="#{home.label}">Accueil</span></li>
         <li th:replace="fragments/menu :: cnx"></li>
-        <li><a id="info" href="#info-panel" th:title="#{informations.label}"><i class="fa fa-info-circle"></i></a></li>
+        <li><a id="info" href="#info-panel" th:title="#{informations.label}"><i class="fa fa-info-circle"></i><span class="menu-label" th:text="#{informations.label}">Infos</span></a></li>
       </ul>
     </div>
     <section id="login-panel" class="closeable" th:include="fragments/user :: login"></section>

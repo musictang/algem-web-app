@@ -99,9 +99,12 @@ GEMUTILS.getCurrentMonthDates = function() {
 };
 
 GEMUTILS.getLocale = function() {
-  return navigator.languages && navigator.languages[0] || // Chrome / Firefox
+  /*return navigator.languages && navigator.languages[0] || // Chrome / Firefox
                navigator.language ||   // All browsers
-               navigator.userLanguage; // IE <= 10
+               navigator.userLanguage; // IE <= 10*/
+  var lang = GEMUTILS.getCookie('ALGEM_LANG');
+  console.log(lang);
+  return lang === "" ? "fr" : lang.substr(0,2);
 };
 
 GEMUTILS.toLocaleStringSupportsLocales = function() {

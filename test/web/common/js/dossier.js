@@ -95,7 +95,7 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
           + "<td>" + roomInfo + "</td>"
           + "<td title=\""+ courseInfo + "\">" + (value.collective ? getMailtoLinkFromRanges(value.ranges, labels.mailto_all_participants_tip, courseInfo) : courseInfo) + "</td><td style=\"min-width: 8em\">";
         if (value.collective) {
-          result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.expand_collapse+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
+          result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.collapse_expand+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
         } else {
           result += "<ul class=\"simple\">";
         }

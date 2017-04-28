@@ -156,6 +156,7 @@ DOSSIER.getFollowUpSchedules = function(urlPath, user, dateFrom, dateTo, labels,
         result +="<p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + DOSSIER.getFollowUpSubContent(value.followUp, labels) + "</p></td></tr>\n";
       });
       result += "<tr><th colspan=\"2\">Total</th><td colspan=\"5\"><b>" + getTimeFromMinutes(total) + "</b></td></tr>";
+      $("#collapseAll").prop("checked", false);
       $("#follow-up-result tbody").html(result);
     }
   }, "json");
@@ -195,6 +196,9 @@ DOSSIER.fillRanges = function(value, labels, paths) {
     line += "<p class=\"subContent\">" + sub + "</p>";
     line += "</div></li>";
   }
+  if ($("#maskPhotos").is(":checked")) {
+    $(".photo-id-thumbnail").hide();
+  } else {$(".photo-id-thumbnail").show();}
   return line;
 };
 
@@ -430,12 +434,13 @@ DOSSIER.getFollowUpStudent = function(urlPath, userId, dateFrom, dateTo, labels)
       var result = "";
       var total = 0;
       var supportLocales = GEMUTILS.toLocaleStringSupportsLocales();
+      var currentLocale = GEMUTILS.getLocale();
       //console.log(supportLocales)
       $.each(data, function (index, value) {
         var d = new Date(value.date);
         var df = GEMUTILS.dateFormatFR(d);
         // XXX toLocaleString([[locale], options]) not supported on android (excepted chrome)
-        var dateInfo = supportLocales ? d.toLocaleString(GEMUTILS.getLocale(), {weekday: 'long'}) + " " + df : df;
+        var dateInfo = supportLocales ? d.toLocaleString(currentLocale, {weekday: 'long'}) + " " + df : df;
         var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-&#8203;" + value.end.hour.pad() + ":" + value.end.minute.pad();
         var ms = (value.start.hour * 60) + value.start.minute;
         var me = (value.end.hour * 60) + value.end.minute;

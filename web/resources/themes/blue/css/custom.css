@@ -1,5 +1,5 @@
 /*
- * @(#) custom.css Algem Web App 1.6.0 21/02/17
+ * @(#) custom.css Algem Web App 1.6.1 28/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -90,7 +90,9 @@ footer a:link,footer a:visited,footer a:active,footer a:hover {color: #FFF;}
 .title_col { background-color: #013D76;}
 .title_col:hover {background:ivory;color:#666}
 .doc-ref:hover {color: #0078e7}
-
+.fa-chevron-circle-left:hover, .fa-chevron-circle-right:hover {color: #98cbfd}
+#datepicker, .week-date {box-shadow: inset 0px 0px 1px 0px #0078e7;}
+#datepicker:hover, .week-date:hover {box-shadow: 0px 0px 3px 1px #75BAFD;}
 #accordion h3.ui-state-active {
   background: #013D76;
   background: linear-gradient(to bottom, rgba(1,61,118,1) 0%,rgba(2,99,191,1) 100%);
