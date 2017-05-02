@@ -1,14 +1,24 @@
 Algem web app 1.6.1
+CORRECTIFS
+* Le pied de page recouvrait le calendrier dans certaines configurations d'écran et de fenêtre.
+* La langue du navigateur n'était pas toujours correctement prise en compte.
 
+NOUVEAUTES
 Prise en charge des langues
-La prise en charge automatique de la langue du navigateur ne fonctionnait pas toujours correctement. Afin d'y remédier, il est maintenant possible de déclarer explicitement la langue favorite en page d'accueil. Cliquez sur l'un des deux drapeaux (français, anglais) pour changer la langue par défaut.
+La prise en charge automatique de la langue du navigateur ne fonctionnait pas toujours correctement. Afin d'y remédier, il est maintenant possible de déclarer explicitement la langue favorite en page d'accueil. Cliquez sur l'un des deux drapeaux (français, anglais) pour modifier la langue par défaut. Le choix par défaut est le français.
 
 Le calendrier reflète maintenant le changement de langue (noms des jours, des mois, etc.).
 
 Réservations
-Les liste des réservations est maintenant classée de la plus récente à la plus ancienne. Cela vous évite ainsi d'utiliser l'ascenseur pour consulter la dernière réservation lorsque vous en avez beaucoup.
+Les réservations est maintenant classée de la plus récente à la plus ancienne. Cela vous évite ainsi d'utiliser l'ascenseur pour consulter la dernière réservation lorsque vous en avez beaucoup.
 
-Seules les 10 dernières réservations sont maintenant listées à l'ouverture de votre page perso. Cliquez sur "Voir plus..." pour afficher les 10 réservations suivantes dans l'historique.
+Seules les 10 dernières réservations sont maintenant listées à l'ouverture de votre page perso. Cliquez sur "Voir plus..." pour afficher les 10 réservations précédentes dans l'historique. 
 
+Suivi enseignant
+Afin de rendre l'interface plus compacte, deux nouvelles cases à cocher sont désormais disponibles en haut de l'onglet Suivi enseignant :
+- Tout replier/déplier : permet d'afficher ou de masquer les listes d'élèves dans l'ensemble des cours collectifs.
+- Cacher/Afficher photos :  désactive ou réactive l'affichage du cadre photo devant le nom des élèves.
 
-Quelques corrections de liens dans la page d'aide.
+Interface
+- Les icones de menu comportent maintenant un libellé.
+- Des améliorations de détail concernant les icones de navigation et de menu.

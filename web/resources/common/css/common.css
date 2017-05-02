@@ -465,6 +465,7 @@ nav.horizontal-panel-menu {margin: 0; padding: 0}
   z-index: 3000;
 }
 #datepicker, .week-date {
+  position: relative; /* required for z-index */
   font-size: medium;
   text-align: center;
   width: 8em;
@@ -473,6 +474,7 @@ nav.horizontal-panel-menu {margin: 0; padding: 0}
   background-color: #eee;
   border: 1px solid gray;
   border-radius: 3px;
+  z-index: 2000; /* over footer z-index +1" */
 }
 
 #help-menu { float: left; width:20%;}

@@ -1,5 +1,5 @@
 /*
- * @(#) util.js Algem Web App 1.6.1 25/04/17
+ * @(#) util.js Algem Web App 1.6.1 02/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -103,7 +103,7 @@ GEMUTILS.getLocale = function() {
                navigator.language ||   // All browsers
                navigator.userLanguage; // IE <= 10*/
   var lang = GEMUTILS.getCookie('ALGEM_LANG');
-  console.log(lang);
+  //console.log(lang);
   return lang === "" ? "fr" : lang.substr(0,2);
 };
 

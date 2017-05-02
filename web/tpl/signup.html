@@ -42,7 +42,7 @@
         <form id="signup-form" th:object="${user}" th:action="@{signup.html}" method="post" accept-charset="UTF-8">
           <fieldset><legend th:text="#{signup.label}"></legend>
             <label for="id" th:text="|#{member.id.label} *|">Number *</label>
-            <input class="tt" type="text" required="required" th:field="*{id}" th:title="#{signup.id.tip}"/>
+            <input class="tt" type="text" required="required" th:field="*{id}" th:title="#{signup.id.tip}" />
             <!--<p class="field-help" ></p>-->
             <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}" th:errorclass="error">Id Error</span>
             <label for="email" th:text="#{email.label} + ' *'">Email *</label>
