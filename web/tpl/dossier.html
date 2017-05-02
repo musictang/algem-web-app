@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.6.1 26/04/17
+ * @(#) dossier.html Algem Web App 1.6.1 02/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -88,7 +88,7 @@
               <th th:text="#{establishment.label}">Etablissement</th>
               <th th:text="#{room.label}">Salle</th>
               <th th:text="#{date.label}">Date</th>
-              <th th:text="#{hour.label}">Heure</th>
+              <th th:text="#{time.label}">Heure</th>
               <th th:text="#{status.label}">Statut</th>
               <th style="width: 10%;text-align: center"><a href="javascript:location.reload(true);" th:title="#{refresh.page.label}" class="img-link"><i class="fa fa-refresh"></i></a></th>
             </tr>
@@ -145,11 +145,13 @@
               </ul>
             </nav>
             <div class="export-panel"><a class="img-link" href="javascript:;" id="saveCSV" th:title="#{save.to.csv.label}"><img th:src="@{/resources/common/img/csv.png}" th:alt="#{save.to.csv.label}" /></a><a class="img-link" href="javascript:;" id="savePDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}"/></a></div>
-            <div class="export-panel" style="margin-left: 1em;vertical-align: top">
+            <div class="export-panel">
               <input id="collapseAll" type="checkbox" />
-              <label for="collapseAll" style="margin-left:.2em" th:text="#{collapse.expand.all.label}" th:title="#{collapse.expand.all.collective.tip}">Tout replier/déplier</label>
-              <input id="maskPhotos" type="checkbox" style="margin-left: 1em"/>
-              <label for="maskPhotos" style="margin-left:.2em" th:text="#{mask.all.photos.label}" th:title="#{mask.all.photos.tip}">Photos</label>
+              <label for="collapseAll" th:text="#{collapse.expand.all.label}" th:title="#{collapse.expand.all.collective.tip}">Tout replier/déplier</label>
+            </div>
+            <div class="export-panel">
+              <input id="maskPhotos" type="checkbox"/>
+              <label for="maskPhotos" th:text="#{mask.all.photos.label}" th:title="#{mask.all.photos.tip}">Photos</label>
             </div>
           </header>
           <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed printable">
@@ -303,10 +305,10 @@
       var ref = /*[[@{/perso/user/savePDF}]]*/ "";
       window.location.href = ref + "?userId="+userId+"&from="+$("#student-weekFrom").val()+"&to="+$("#student-weekTo").val();
     });
-    
+
     $("#collapseAll").click(function() {
       if ($(this).is(":checked")) {
-        $(".expand").next().hide(); 
+        $(".expand").next().hide();
       } else {
         $(".expand").next().show();
       }
@@ -314,7 +316,7 @@
     $("#maskPhotos").click(function() {
       if ($(this).is(":checked")) {
         $(".photo-id-thumbnail").hide();
-      }else {
+      } else {
         $(".photo-id-thumbnail").show();
       }
     });

@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.6.1 26/04/17
+ * @(#) dossier.js Algem Web App 1.6.1 29/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -116,6 +116,7 @@ DOSSIER.getFollowUpSchedules = function(urlPath, user, dateFrom, dateTo, labels,
       var total = 0;
       var coTitle = labels.collective_monitoring_action;
       var supportLocales = GEMUTILS.toLocaleStringSupportsLocales();
+      var isPhotosMasked = $("#maskPhotos").is(":checked");
       // zero-width space (&#8203;) inserted after hyphens to authorize breaks
       $.each(data, function (index, value) {
         var d = new Date(value.date);
@@ -143,11 +144,11 @@ DOSSIER.getFollowUpSchedules = function(urlPath, user, dateFrom, dateTo, labels,
           + DOSSIER.fillTeacherDocumentPanel(value, labels)
           + "</td><td style=\"min-width: 8em\">";
         if (value.collective) {
-          result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.expand_collapse+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
+          result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.collapse_expand+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
         } else {
           result += "<ul class=\"simple\">";
         }
-        result += DOSSIER.fillRanges(value, labels, paths);
+        result += DOSSIER.fillRanges(value, labels, paths, isPhotosMasked);
         result += "</ul>";
         result += "</td><td id=\"" + value.note + "\" accessKey=\"C\"";
         if(value.collective) {
@@ -169,9 +170,10 @@ DOSSIER.getFollowUpSchedules = function(urlPath, user, dateFrom, dateTo, labels,
  * @param {Object} paths default locations
  * @returns {String} full content html li element
  */
-DOSSIER.fillRanges = function(value, labels, paths) {
+DOSSIER.fillRanges = function(value, labels, paths, isPhotosMasked) {
   var line = "";
   var indTitle = labels.individual_monitoring_action;
+
   for (var i = 0, len = value.ranges.length; i < len; i++) {
     var firstNameName = value.ranges[i].person.firstName + " " + value.ranges[i].person.name;
     var nc = value.ranges[i].followUp.content || "";
@@ -179,10 +181,14 @@ DOSSIER.fillRanges = function(value, labels, paths) {
     var photo = value.ranges[i].person.photo;
     line += "<li id=\"" + value.ranges[i].id + "\" data-algem-memberid=\"" + value.ranges[i].memberId + "\"><div class=\"monitoring-element\">";// scheduleRange Id
     if (photo != null) {
-      line += "<img data-algem-followupid=\"" + value.ranges[i].followUp.id + "\" class=\"photo-id-thumbnail dlg\" src=\"data:image/jpg;base64," + photo + "\" title=\"" + indTitle + "\"/>";
+      line += "<img data-algem-followupid=\"" + value.ranges[i].followUp.id + "\" class=\"photo-id-thumbnail dlg\" src=\"data:image/jpg;base64," + photo + "\" title=\"" + indTitle + "\"";
     } else {
-      line += "<img data-algem-followupid=\"" + value.ranges[i].followUp.id + "\" class=\"photo-id-thumbnail dlg\" src=\"" + paths["def_photo_id"] + "\" />";
+      line += "<img data-algem-followupid=\"" + value.ranges[i].followUp.id + "\" class=\"photo-id-thumbnail dlg\" src=\"" + paths["def_photo_id"] + "\"";// />";
     }
+    if (isPhotosMasked) {
+      line += " style=\"display:none\"";
+    }
+    line += "/>";
     // RANGE ID AND NAME
     line += "<a id=\"" + value.ranges[i].followUp.id + "\" href=\"javascript:;\" class=\"dlg\" title=\"" + indTitle + "\" accessKey=\"D\">" + firstNameName + "</a>";
     //CONTACT INFO
@@ -196,9 +202,7 @@ DOSSIER.fillRanges = function(value, labels, paths) {
     line += "<p class=\"subContent\">" + sub + "</p>";
     line += "</div></li>";
   }
-  if ($("#maskPhotos").is(":checked")) {
-    $(".photo-id-thumbnail").hide();
-  } else {$(".photo-id-thumbnail").show();}
+
   return line;
 };
 
@@ -743,10 +747,12 @@ DOSSIER.setWeekDates = function(firstDay, lastDay) {
   $("#weekFrom").datepicker('setDate', firstDay);
   $("#weekTo").datepicker('setDate', lastDay);
 };
+
 DOSSIER.setStudentWeekDates = function(firstDay, lastDay) {
   $("#student-weekFrom").datepicker('setDate', firstDay);
   $("#student-weekTo").datepicker('setDate', lastDay);
 };
+
 DOSSIER.setWeekChange = function(url, idper, labels, paths) {
   var from = $("#weekFrom");
   var to = $("#weekTo");

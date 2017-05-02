@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningCtrl.java 1.6.1 26/04/17
+ * @(#)PlanningCtrl.java 1.6.1 29/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -130,7 +130,7 @@ public class PlanningCtrl
   }
 
   @RequestMapping(method = RequestMethod.GET, value={ "perso/weekly.html"})
-  String loadWeekSchedule(Model model, HttpServletRequest request) throws ParseException {
+  String loadWeekSchedule(Model model, HttpServletRequest request,@CookieValue(value = "ALGEM_LANG", defaultValue = "fr_FR") String lang) throws ParseException {
     int idper = Integer.parseInt(request.getParameter("id"));
     String sow = request.getParameter("d");
     Calendar cal = Calendar.getInstance();
@@ -148,7 +148,8 @@ public class PlanningCtrl
     Date next = cal.getTime();
 
     model.addAttribute("planning", schedules);
-    DateFormatSymbols dfs = DateFormatSymbols.getInstance();
+
+    DateFormatSymbols dfs = DateFormatSymbols.getInstance(getLocaleFromCode(lang));
     model.addAttribute("weekDays", dfs.getWeekdays());
     model.addAttribute("start", start);
     model.addAttribute("end", end);

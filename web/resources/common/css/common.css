@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.6.1 28/04/17
+ * @(#) common.css Algem Web App 1.6.1 02/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -162,6 +162,9 @@ ul.horizontal-panel-menu li {
 ol {list-style-position: inside;}
 dl dt  {font-weight: bold;}
 dl dd {margin-left: 1em;}
+
+code {font-family: monospace;font-weight: bold;background-color: #eee;padding: .1em .2em}
+sup {font-size: x-small;font-weight: bold;margin-left: .2em}
 
 /*Pure css hack pour restreindre la largeur des menus*/
 .custom-restricted-width {
@@ -370,7 +373,7 @@ span.error {display: block;}
 .note {font-size: smaller;}
 .footnote {font-size: smaller; line-height: 1.2em}
 .warning {background-color: lightpink;}
-.export-panel {display: inline-block; margin-top: 0.4em}
+.export-panel {display: inline-block;margin: 0.4em 0 0.4em 1em;vertical-align: middle}
 .ellipsed {
   display: block;
   overflow: hidden;

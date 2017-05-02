@@ -1,5 +1,5 @@
 /*
- * @(#) custom.css Algem Web App 1.6.1 28/04/17
+ * @(#) custom.css Algem Web App 1.6.1 30/04/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -51,7 +51,7 @@ h1 {color: #eee;}
 h2, h3, h4, h5, h6, h7, fieldset > legend {color: #444;}
 #follow-up-form fieldset div > legend {color: #444}
 h2, h3, h4, fieldset > legend {border-color: #444;}
-ul.disc{list-style-image: url('../img/puce-blue.png');}
+ul.disc{list-style-image: url('../img/puce-gray.png');}
 a:link,a:visited, a:active, a:hover,
 .pure-menu, .pure-menu-heading, #menu
 {
@@ -83,13 +83,13 @@ footer a:link,footer a:visited,footer a:active,footer a:hover {color: #FFF;}
   color: #444;
 }
 
-.title_col {
-  background-color: #555;
-  padding:0;
-}
+.title_col {background-color: #555;}
+.title_col:hover {background:ivory;color:#444}
 .doc-ref {color: #888}
 .doc-ref:hover {color: #444}
-.fa-chevron-circle-left:hover, .fa-chevron-circle-right:hover {color: #ccc}
+
+i[class="fa fa-bars"]:hover{color:#222;text-shadow: rgba(255, 255, 255, 0.5) -1px -1px 10px,  rgba(0, 0, 0, 0.2) 1px 1px 5px;}
+i[class*="fa-"]:not([class*="fa-bars"]):hover{color: #ddd;text-shadow:rgba(0, 0, 0, 0.5)  -1px -1px 10px,  rgba(255, 255, 255, 0.1) 1px 1px 5px;}
 #datepicker {box-shadow: inset 0px 0px 1px 0px #444;}
 #datepicker:hover {box-shadow: 0px 0px 3px 1px #eee;}
 .week-date {box-shadow: 0px 0px 3px 1px #eee;}

@@ -90,7 +90,7 @@ footer a:link,footer a:visited,footer a:active,footer a:hover {color: #FFF;}
 .title_col { background-color: #013D76;}
 .title_col:hover {background:ivory;color:#666}
 .doc-ref:hover {color: #0078e7}
-.fa-chevron-circle-left:hover, .fa-chevron-circle-right:hover {color: #98cbfd}
+ i[class^="fa fa-"]:hover{color: #dfeffc;text-shadow: rgba(255, 255, 255, 0.1) -1px -1px 10px, rgba(0, 0, 0, 0.8) 1px 1px 10px;}
 #datepicker, .week-date {box-shadow: inset 0px 0px 1px 0px #0078e7;}
 #datepicker:hover, .week-date:hover {box-shadow: 0px 0px 3px 1px #75BAFD;}
 #accordion h3.ui-state-active {
