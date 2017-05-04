@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java	1.6.1 26/04/17
+ * @(#)UserCtrl.java	1.6.2 03/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -39,7 +39,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Principal;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -99,7 +98,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Controller for login operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.1
+ * @version 1.6.2
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -298,12 +297,9 @@ public class UserCtrl
 
       user.setTeacher(service.isTeacher(user.getId())); // detect user status
       service.create(user);
-    } catch (DataAccessException ex) {
+    } catch (DataAccessException | UserException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
-      bindingResult.rejectValue("id", "data.exception", new Object[]{ex.getLocalizedMessage()}, ex.getMessage());
-      return "signup";
-    } catch (SQLException ex) {
-      bindingResult.rejectValue("id", "data.exception", new Object[]{ex.getLocalizedMessage()}, ex.getMessage());
+      bindingResult.rejectValue("id", "user.account.create.exception", new Object[]{ex.getLocalizedMessage()}, ex.getMessage());
       return "signup";
     }
 

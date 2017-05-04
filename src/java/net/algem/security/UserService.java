@@ -1,5 +1,5 @@
 /*
- * @(#)UserService.java	1.4.0 20/07/16
+ * @(#)UserService.java	1.6.2 03/05/17
  *
  * Copyright (c) 2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.0
+ * @version 1.6.2
  * @since 1.0.0 11/02/13
  */
 @Component
@@ -69,7 +69,7 @@ public interface UserService
    * @param u the user to create
    * @throws SQLException
    */
-  public void create(User u) throws SQLException;
+  public void create(User u) throws UserException;
 
   /**
    * Updates current user.

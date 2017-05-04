@@ -1,5 +1,5 @@
 /*
- * @(#)CommonUserService.java	1.5.2 05/01/17
+ * @(#)CommonUserService.java	1.6.2 03/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.2
+ * @version 1.6.2
  * @since 1.0.6 18/11/15
  */
 @Service
@@ -82,14 +82,10 @@ public class CommonUserService
   }
 
   @Override
-  public void create(User u) throws SQLException {
-    try {
-      UserPass pass = getEncryptionService().createPassword(u.getPassword());
-      u.setPass(pass);
-      dao.createAccount(u);
-    } catch (UserException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
-    }
+  public void create(User u) throws UserException {
+    UserPass pass = getEncryptionService().createPassword(u.getPassword());
+    u.setPass(pass);
+    dao.createAccount(u);
   }
 
   @Override

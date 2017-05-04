@@ -1,5 +1,5 @@
 /*
- * @(#)UserDaoImpl.java	1.5.2 05/01/17
+ * @(#)UserDaoImpl.java	1.6.2 03/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -65,7 +65,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.2
+ * @version 1.6.2
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -74,7 +74,13 @@ public class UserDaoImpl
 
   public static final String TABLE = "login";
   public static final String T_TOKEN = "jeton_login";
+
   public static final String T_PASSCARD = "carteabopersonne";
+  private static final String T_MENU = "menu2";
+  private static final String T_PROFILE = "menuprofil";
+  private static final String T_ACCESS = "menuaccess";
+  private static final String T_ESTAB = "etablissement";
+  private static final String T_RIGHTS = "droits";
   private final static Logger LOGGER = Logger.getLogger(UserDaoImpl.class.getName());
   private static final String FOLLOWUP_STATEMENT
     = "SELECT p.id,p.action,p.jour,pl.id,pl.debut,pl.fin,p.idper,per.nom,per.prenom,p.lieux,s.nom,c.id,c.titre,n1.id,n1.texte,n1.note,n1.statut,n2.id,n2.texte,n2.statut"
@@ -93,7 +99,7 @@ public class UserDaoImpl
 
   @Autowired
   private ConfigIO configIO;
-  
+
   @Autowired
   private ActionDocumentDaoImpl docDao;
 
@@ -314,7 +320,9 @@ public class UserDaoImpl
   }
 
   @Override
+  @Transactional
   public void createAccount(final User user) {
+    user.setProfile(user.isTeacher() ? Profile.Teacher : Profile.Member);
     jdbcTemplate.update(new PreparedStatementCreator() {
 
       @Override
@@ -322,9 +330,51 @@ public class UserDaoImpl
         PreparedStatement ps = con.prepareStatement("INSERT INTO " + TABLE + " VALUES(?,?,?,?,?)");
         ps.setInt(1, user.getId());
         ps.setString(2, user.getLogin());
-        ps.setInt(3, user.isTeacher() ? Profile.Teacher.getId() : Profile.Member.getId());
+        ps.setInt(3, user.getProfile().getId());
         ps.setString(4, Base64.encodeBase64String(user.getPass().getPass()));
         ps.setString(5, Base64.encodeBase64String(user.getPass().getKey()));
+
+        return ps;
+      }
+    });
+    initMenus(user);
+    initEstabStatus(user.getId());
+  }
+
+   /**
+   * Menus access initialization.
+   *
+   * @param u user
+   * @throws java.sql.SQLException
+   */
+  private void initMenus(final User u) {
+    //idper,idmenu,auth
+    final String query = "INSERT INTO " + T_ACCESS + " SELECT ?,id,auth FROM " + T_MENU + ", " + T_PROFILE + " WHERE id = idmenu AND profil = ?";
+    jdbcTemplate.update(new PreparedStatementCreator() {
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, u.getId());
+        assert(u.getProfile() != null);
+        ps.setInt(2, u.getProfile().getId());
+
+        return ps;
+      }
+    });
+  }
+
+   /**
+   * Establishment active status initialization.
+   * @param idper user id
+   * @throws SQLException
+   */
+  private void initEstabStatus(final int idper) {
+    final String query = "INSERT INTO " + T_ESTAB + " SELECT p.id,?,true FROM personne p WHERE p.ptype = " + Person.ESTABLISHMENT;
+    jdbcTemplate.update(new PreparedStatementCreator() {
+      @Override
+      public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, idper);
 
         return ps;
       }
