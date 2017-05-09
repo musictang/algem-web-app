@@ -3,3 +3,5 @@ CORRECTIFS
 * Les droits d'accès aux menus du logiciel (version de bureau) n'étaient pas initialisés lors de la création d'un nouveau compte utilisateur. Cela ne posait pas de problèmes pour les utilisateurs de type "Adhérent", qui par définition n'ont pas accès à Algem. Cela pouvait en poser néanmoins si un utilisateur changeait de profil au cours du temps.
 
 * Certaines erreurs n'étaient pas signalées lors de la procédure de création de compte et l'utilisateur pouvait croire que tout s'était bien déroulé alors que ce n'était pas le cas.
+
+* Optimisation d'affichage des polices sous Windows.

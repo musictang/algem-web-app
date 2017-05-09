@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.6.2 08/05/17
+ * @(#) common.css Algem Web App 1.6.2 09/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.6.2 08/05/17
+    Last: 1.6.2 09/05/17
 */
 
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
@@ -179,7 +179,7 @@ sup {font-size: x-small;font-weight: bold;margin-left: .2em}
 
 .header-top {
   position: relative;
-  height: 6%;
+  height: 7%; /* @see #planning, #title_col in planning.css*/
   /*background-image: url('../img/bg-thumb.png');*/
   background-position: bottom;
   background-repeat: repeat-x;
@@ -341,7 +341,7 @@ table.mobile {
 .button-secondary {background: rgb(66, 184, 221);} /* this is a light blue */
 .button-large {font-size: 110%;background-color: orange;}
 .button-xlarge {font-size: 125%;background-color: orange;}
-.pure-button {box-shadow: 0px 2px 2px 0px #656565;}
+.pure-button {box-shadow: 0px 2px 2px 0px #656565;font-family: ubuntumedium,Arial,sans-serif}
 .pure-button:hover {box-shadow: inset 0px 0px 16px 0px #999;}
 .bt-close {
   position:relative;
@@ -527,7 +527,7 @@ nav.horizontal-panel-menu {margin: 0; padding: 0}
 
 #help-panel, #info-panel, #login-panel {
   position: absolute;
-  top:6%;
+  top: 7%;
   right:0;
   display: none;
   border: 1px dotted gray;
@@ -600,7 +600,6 @@ form input[type='button'], form input[type='submit'] {
   margin-top: 1em
 }
 form input + span {display: inline;}
-form input[type='checkbox'], input[type='checkbox'] {vertical-align: middle}
 
 input[type=submit] {margin: 1em 0;}
 select {font-size: small;}
@@ -609,7 +608,7 @@ form label {
   margin-top: 0.5em;
   font-family: 'ubuntumedium','Segoe UI',Verdana,sans-serif;
 }
-form input[type='checkbox'] ~ label,form input[type='radio'] ~ label {margin-left: .2em}
+form input[type='checkbox'] ~ label,form input[type='radio'] ~ label {margin-left: .2em;}
 fieldset legend {font-size: 1.3em;}
 form legend + label {
   display: block;
