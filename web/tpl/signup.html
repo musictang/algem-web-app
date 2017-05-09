@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) signup.html Algem Web App 1.6.1 28/04/17
+ * @(#) signup.html Algem Web App 1.6.2 07/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -49,7 +49,7 @@
             <input class="tt" type="text" required="required" th:field="*{email}" th:title="#{signup.email.tip}" />
             <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorclass="error">Id Error</span>
             <!--<p class="field-help" ></p>-->
-            <label for="login" th:text="#{form.username.label} + ' *'" >Login *</label>
+            <label for="login" th:text="#{form.username.create.label} + ' *'" >Login *</label>
             <!--<%-- Les messages d'erreur doivent être affichés à l'intérieur du formulaire --%>-->
             <input class="tt" type="text"  required="required" th:field="*{login}" th:title="#{signup.login.tip}"/>
             <span th:if="${#fields.hasErrors('login')}" th:errors="*{login}" th:errorclass="error">Login Error</span>

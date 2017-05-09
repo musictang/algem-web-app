@@ -1,5 +1,5 @@
 /*
- * @(#) planning.css Algem Web App 1.6.0 13/02/17
+ * @(#) planning.css Algem Web App 1.6.2 08/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 /*
     Created on : 9 mai 2015, 09:23:44
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last       : 1.6.0 01/02/17
+    Last       : 1.6.2 08/05/17
 */
 
 .ui-dialog{
@@ -44,14 +44,12 @@
   border-spacing: 0;
   width: 100%;
   height: 720px;
-  /*height: 100%;*/
   /* border-top:1px and border-bottom:1px */
   font-size: x-small;
   text-align: left;
   background-color: ivory;
   border:1px solid gray;
   z-index: 1000;
-  /*box-sizing: border-box;*/
 }
 
 #grid tr {
@@ -78,11 +76,9 @@
 #canvas {
   background-color: ivory;
   position: absolute;
-  /*top: 6%;*/
   left:2.2em;
   height:720px;
-  font-family: 'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
-  font-stretch: condensed;
+  font-family: 'Ubuntu Condensed','Arial Narrow',Arial,sans-serif;
 }
 
 .schedule_col {
@@ -124,7 +120,6 @@
   line-height: 1em;
   width: 101px;
   font-size: x-small;
-  font-family: 'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
   font-weight: bold;
   font-stretch: condensed;
   text-align: center;
@@ -140,14 +135,10 @@
   width: 100%;
   padding:0;
   font-size: x-small;
-  font-family: 'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
-  font-weight: bold;
-  font-stretch: condensed;
   text-align: center;
   overflow: hidden;
   text-overflow: '.';
   white-space: nowrap;
-  /*padding: 0 0.2em;*/
   box-sizing: border-box;
   box-shadow: 0px 1px 1px 0px #656565;
   z-index: 1004;
@@ -159,7 +150,6 @@
   font-size: x-small;
   text-align: center;
   text-wrap: normal;
-  /*border-top: 1px solid gray;*/
   border-bottom: 1px solid gray;
   z-index: 1001;
   background: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */

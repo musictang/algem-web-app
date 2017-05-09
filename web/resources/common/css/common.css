@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.6.1 02/05/17
+ * @(#) common.css Algem Web App 1.6.2 08/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,10 +21,12 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.6.0 15/02/17
+    Last: 1.6.2 08/05/17
 */
 
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
+/*@import url('https://fonts.googleapis.com/css?family=Ubuntu');*/
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Condensed');
 @font-face {
     font-family: 'Exo 2';
     src: url('../fonts/Exo2-Bold-webfont.eot');
@@ -53,10 +55,11 @@
          url('../fonts/ubuntu-r-webfont.woff2') format('woff2'),
          url('../fonts/ubuntu-r-webfont.woff') format('woff'),
          url('../fonts/ubuntu-r-webfont.ttf') format('truetype'),
-         url('../fonts/ubuntu-r-webfont.svg#ubuntumedium') format('svg');
+         url('../fonts/ubuntu-r-webfont.svg#ubuntu') format('svg');
     font-weight: normal;
     font-style: normal;
 }
+
 @font-face {
   font-family: 'icomoon';
   src:  url('../fonts/icomoon.eot?td4dni');
@@ -206,7 +209,7 @@ footer > address {
   font-style: normal;
   font-size: smaller;
   padding-left: .4em;
-  font-family:'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
+  font-family:'Ubuntu Condensed','Arial Narrow',Arial,sans-serif;
 }
 /*Emplacement du logo*/
 footer a.logo {
@@ -253,13 +256,13 @@ h2, h3, h4, h5, h6, fieldset > legend {
 h2.help > a.img-link, h3.help > a.img-link, h4.help > a.img-link {margin-left: 0}
 
 h2, h3, h4, fieldset > legend {
-  font-family: ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;
+  font-family: 'ubuntumedium','Segoe UI',Verdana,Helvetica,sans-serif;
   border-bottom-width: 4px;
   border-style: solid;
 }
 h2 {font-size: 1.75em;}
 h3 {font-size: 1.5em;}
-h4 {font-size: 1.25em;}
+h4 {font-size: 1.25em;font-weight: normal}
 h5 {font-size: 1.15em;}
 h6 {font-size: 1em;}
 
@@ -273,7 +276,7 @@ table.vertical-header th, table.vertical-header td {
 }
 table.simple th, table.simple td {padding: 0 0.5em;}
 table.condensed th, table.condensed td {padding: 0 0.5em}
-.pure-table th, .pure-table-th {font-family: ubuntumedium}
+.pure-table th, .pure-table-th {font-family: 'ubuntumedium'}
 .pure-table-horizontal {border: none;}
 .pure-table-horizontal th, .pure-table-horizontal td {
   text-align: left;
@@ -483,8 +486,8 @@ nav.horizontal-panel-menu {margin: 0; padding: 0}
   display: block;
   font-size: small;
   line-height: .3em;
-  font-family: 'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
-  font-stretch: condensed;
+  font-family: 'Ubuntu Condensed','Arial Narrow',Arial,sans-serif;
+  /*font-stretch: condensed;*/
 }
 /*PANELS*/
 #bars {
@@ -547,8 +550,8 @@ nav.horizontal-panel-menu {margin: 0; padding: 0}
 
 /*JQUERY UI*/
 .ui-dialog {z-index: 2002 !important ;}
-.ui-dialog-title {font-family: ubuntu,ubuntumedium,'Segoe UI',Verdana,Helvetica,sans-serif;}
-.ui-widget,#datepicker,.week-date {font-family: ubuntu,Verdana,sans-serif}
+.ui-dialog-title {font-family: 'ubuntumedium','Segoe UI',Verdana,Helvetica,sans-serif;font-weight: normal}
+.ui-widget,#datepicker,.week-date {font-family:'ubuntu',Arial,sans-serif;}
 .ui-dialog-titlebar {border: none;}
 .ui-dialog-titlebar button.ui-dialog-titlebar-close {border: none}
 .ui-dialog .ui-dialog-buttonpane {text-align: center}
@@ -558,7 +561,7 @@ nav.horizontal-panel-menu {margin: 0; padding: 0}
 .ui-dialog-buttonset button.ui-state-active,
 .ui-dialog-buttonset button.ui-state-hover {
   /*border: 1px solid #555*/
-  border: none
+  border: none;
 }
 .ui-dialog-buttonset button.ui-state-default {background: #0078e7;box-shadow: 0px 2px 2px 0px #656565;}
 .ui-dialog-buttonset button.ui-state-active,
@@ -573,8 +576,10 @@ nav.horizontal-panel-menu {margin: 0; padding: 0}
   /*box-shadow: 0px 4px 4px 0px #656565;*/
   box-shadow: inset 0px 0px 8px 0px #999;
 }
-.ui-button-text {color: #fff}
+.ui-button-text {color: #fff;font-family: ubuntumedium,Arial,sans-serif;font-weight: normal}
 .ui-datepicker-title {color: #444;}
+.ui-datepicker-calendar{font-family: 'Trebuchet MS',ubuntu,sans-serif;font-weight: normal}
+.ui-datepicker-month, .ui-datepicker-year{font-family: ubuntumedium,sans-serif;font-weight: normal}
 #accordion .ui-accordion-content {padding: 1em 0.8em}
 #accordion .ui-accordion-icons {padding-left: 1.6em}
 #accordion .ui-widget-content {background: white}
@@ -604,23 +609,18 @@ form label {
   margin-top: 0.5em;
   font-family: 'ubuntumedium','Segoe UI',Verdana,sans-serif;
 }
+form input[type='checkbox'] ~ label,form input[type='radio'] ~ label {margin-left: .2em}
 fieldset legend {font-size: 1.3em;}
 form legend + label {
   display: block;
 }
 #ajax-login-form input, #login-form input, #signup-form input, #recover-form input {width: 100%}
-/*#ajax-login-form input[type=submit],#login-form input[type=submit] {width: 100%}*/
- /*{box-sizing: border-box;width: 100%}*/
 .pure-g label[class*="pure-u"] {font-family: 'ubuntumedium','Segoe UI',Verdana,sans-serif;vertical-align: middle}
 .row-form {margin: 0.5em 0;}
 .field-help {font-size: smaller;max-width: 320px;display:none}
 
-#booking input[type='radio'] + label {
-  padding: 0 0.5em;
-}
 #groupInfo > label {width:20%;margin-right:1%}
 #groupInfo > select {width:77%;}
-
 
 .pending {color: red;}
 .confirmed {color: green;}
@@ -628,7 +628,7 @@ form legend + label {
   display: block;
   font-size: small;
   line-height: 0;
-  font-family: 'Ubuntu condensed','Arial Narrow',Arial,sans-serif;
+  font-family: 'Ubuntu Condensed','Arial Narrow',Arial,sans-serif;
   font-stretch: condensed;
 }
 

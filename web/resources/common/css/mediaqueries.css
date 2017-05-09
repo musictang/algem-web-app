@@ -1,5 +1,5 @@
 /*
- * @(#) mediaqueries.css Algem Web App 1.6.1 02/05/17
+ * @(#) mediaqueries.css Algem Web App 1.6.2 08/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -149,6 +149,12 @@ and (orientation : landscape) {
   .centered {width: 100%;}
   #help-menu { float: none; width:100%;}
   .help-content{margin-left: 0}
+}
+@media only screen
+and (max-height : 700px)
+and (orientation : landscape) {
+  .header-top {height: 60px}
+  #planning{top: 60px}
 }
 @media only screen
 and (max-width : 480px)

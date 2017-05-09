@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) user.html Algem Web App 1.6.0 11/02/17
+ * @(#) user.html Algem Web App 1.6.2 08/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -49,8 +49,8 @@
           <input id="xmember-url" type="hidden" th:value="@{/xmember}" />
           <input name="estab" type="hidden" th:value="${param.e[0]}"/>
           <ul class="simple" id="bookingType">
-            <li><input id="member" type="radio" th:field="*{type}" th:value="${T(net.algem.planning.Schedule).BOOKING_MEMBER}" /><label class="inline" for="member" th:text="#{booking.member.label}"></label></li>
-            <li><input id="group" type="radio" th:field="*{type}" th:value="${T(net.algem.planning.Schedule).BOOKING_GROUP}" /><label class="inline" for="group" th:text="#{booking.group.label}"></label></li>
+            <li><input id="member" type="radio" th:field="*{type}" th:value="${T(net.algem.planning.Schedule).BOOKING_MEMBER}" /><label for="member" th:text="#{booking.member.label}"></label></li>
+            <li><input id="group" type="radio" th:field="*{type}" th:value="${T(net.algem.planning.Schedule).BOOKING_GROUP}" /><label for="group" th:text="#{booking.group.label}"></label></li>
           </ul>
           <!--<div class="pure-g">-->
           <div>
@@ -106,7 +106,7 @@
               <option th:each="entry : ${freeplace}" th:value="${entry.key.id}" th:text="${entry.key.name}"></option>
             </select>
             <p  id="passInfo">
-              <input id="pass" type="checkbox" th:field="*{pass}" /><label class="inline" style="padding: 0.5em" for="pass" th:text="#{booking.pass.label}">Pass</label>
+              <input id="pass" type="checkbox" th:field="*{pass}" /><label for="pass" th:text="#{booking.pass.label}">Pass</label>
             </p>
 
             <div style="text-align: center;margin-top: 1em;padding-top: 1em;border-top: 1px solid gray">
