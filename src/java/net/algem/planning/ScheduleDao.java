@@ -1,5 +1,5 @@
 /*
- * @(#)ScheduleDao.java	1.6.1 26/04/17
+ * @(#)ScheduleDao.java	1.6.3 21/06/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -50,7 +50,7 @@ import org.springframework.stereotype.Repository;
  * IO methods for class {@link net.algem.planning.Schedule}.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.1
+ * @version 1.6.3
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -302,7 +302,7 @@ public class ScheduleDao
   }
 
   private List<Equipment> findRoomEquipment(final int roomId) {
-    String query = "SELECT libelle,qte,idx from sallequip WHERE idsalle = ? ORDER BY idx";
+    String query = "SELECT libelle,qte,idx from sallequip WHERE idsalle = ? AND visible = TRUE ORDER BY idx";
     return jdbcTemplate.query(query, new RowMapper<Equipment>() {
      @Override
       public Equipment mapRow(ResultSet rs, int row) throws SQLException {
