@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) weekly.html Algem Web App 1.6.1 28/04/17
+ * @(#) weekly.html Algem Web App 1.6.3 27/06/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -83,19 +83,20 @@
                th:data-algem-time="${p.timeLabel}"
                th:data-algem-room="${p.detail['room']}"
                th:class="'schedule' + ${p.label == null ? ' closed' :''}"
-               th:with="pos=${p.minutes - timeOffset},h=${p.length}"
-               th:style="'top:'+${pos}+'px;height:'+${h}+'px;background-color:'+${p.htmlColor}+';color:'+${p.labelColor}">
+               th:with="pos=${p.minutes - timeOffset},h=${p.length},courseType=${T(net.algem.planning.Schedule).COURSE}"
+               th:style="'top:'+${pos}+'px;height:'+${h}+'px;background-color:'+${p.collective || p.type != courseType ? p.htmlColor : '#FCD300'} +';color:'+${p.labelColor}">
           </div>
           <div th:each="p : ${entry.value}" class="labels"
                th:data-algem-id="${p.id}"
                th:if="${p.label} != null"
                th:title="|${p.label};${p.timeLabel};#{room.label} ${p.detail['room']};${p.detail['person'] ?: ''}|"
-               th:with="pos=${p.minutes - timeOffset}"
-               th:style="'top:'+${pos}+'px;color:'+${p.labelColor}">
-            <span th:text="${p.label}" th:class="${p.length >= 45 || #strings.length(p.label) <= 10 ? 'course_label wrapped' : 'course_label ellipsed'}"></span>
-            <span th:text="${p.timeLabel}" ></span>
-            <span th:with="rName=${'Sle ' + p.detail['room']}" th:class="${p.length >= 60 || #strings.length(rName) <= 10 ? 'wrapped' : 'ellipsed'}" th:text="${rName}"></span>
-            <span th:class="${p.length >= 45 ? 'wrapped' : 'ellipsed'}" th:if="${p.length >= 45}" th:text="${p.detail['person'] ?: ''}"></span>
+               th:with="pos=${p.minutes - timeOffset},meeting=${T(net.algem.planning.Schedule).MEETING}"
+               th:style="'top:'+${pos}+'px;color:'+${p.labelColor}+(${p.type == meeting} ? ';height:'+${p.length}+'px': '')">
+            <span th:if="${p.type != meeting}" th:text="${p.label}" th:class="${p.length >= 45 || #strings.length(p.label) <= 10 ? 'course_label wrapped' : 'course_label ellipsed'}"></span>
+            <span th:if="${p.type != meeting}" th:text="${p.timeLabel}" ></span>
+            <span th:if="${p.type != meeting}" th:with="rName=${'Sle ' + p.detail['room']}" th:class="${p.length >= 60 || #strings.length(rName) <= 10 ? 'wrapped' : 'ellipsed'}" th:text="${rName}"></span>
+            <span th:if="${p.type != meeting && p.length >= 45}" th:class="${p.length >= 45 ? 'wrapped' : 'ellipsed'}" th:text="${p.detail['person'] ?: ''}"></span>
+            <span th:if="${p.type == meeting}" th:text="${p.label}" th:class="meeting_label"></span>
           </div>
           <div th:each="p : ${entry.value}" th:remove="tag">
             <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
@@ -136,7 +137,7 @@
         //hover style
         $('div.schedule, div.labels').hover(
           function () {
-            $(this).css({cursor: "zoom-in",opacity: "0.8"});
+            $(this).css({cursor: "pointer",opacity: "0.8"});
           },
           function () {
             $(this).css({cursor: "default",opacity: "1"});

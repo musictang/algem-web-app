@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.6.2 09/05/17
+ * @(#) common.css Algem Web App 1.6.3 27/06/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 /*
     Created on : 20 nov. 2015, 19:42:53
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last: 1.6.2 09/05/17
+    Last: 1.6.3 27/06/17
 */
 
 /*@import url(https://fonts.googleapis.com/css?family=Exo+2:800,700,900);*/
@@ -462,7 +462,7 @@ a.dlg ~ a {
   text-align: center;
   color:#fff8dc;
 }
-nav.horizontal-panel-menu {margin: 0; padding: 0}
+nav.horizontal-panel-menu,nav.horizontal-panel-menu-p {margin: 0; padding: 0}
 #datepicker, #pickerFrom, #pickerTo {
   position: relative;
   z-index: 3000;

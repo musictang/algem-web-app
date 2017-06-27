@@ -1,0 +1,8 @@
+1.6.3
+CORRECTIFS
+* Les plages de cours individuels dans le planning hebdomadaire d'une personne s'affichent désormais dans la couleur appropriée (jaune par défaut).
+* Les zones horaires de réunion (planning administratif) sont désormais prises en compte dans le planning hebdomadaire.
+* Les informations de salle dans le planning jour ne font maintenant apparaître que les équipements marqués "publics".
+* Le nom abrégé du jour n'apparaissait pas lorsqu'on imprimait le planning jour à partir du navigateur.
+* Les dates de période n'apparaissaient pas lorsqu'on imprimait le suivi enseignant ou élève à partir du navigateur.
+* Le changement de curseur n'était pas pris en compte sous Internet Explorer lorsqu'on survolait une séance de planning avec les profils "Utilisateur" ou "Administrateur".

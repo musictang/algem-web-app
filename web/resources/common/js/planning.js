@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.6.1 25/04/17
+ * @(#)planning.js	1.6.3 27/06/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -23,7 +23,7 @@
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @since 09/05/15
- * @version 1.6.1
+ * @version 1.6.3
  * @returns {void}
  */
 //var isMobileAndWebkit = isMobile() && 'WebkitAppearance' in document.documentElement.style;
@@ -209,7 +209,7 @@ function setHoverStyle(commonParams) {
   $('div.labels,div.schedule').hover(
     function () {
       if (commonParams.hasDetailAccess) {
-        $(this).css({cursor: "zoom-in"});
+        $(this).css({cursor: "pointer"});
       } else {
         $(this).css({cursor: "not-allowed"});
       }

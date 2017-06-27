@@ -1,7 +1,7 @@
 /*
- * @(#) ScheduleColorizer.java Algem Web App 1.2.0 06/04/16
+ * @(#) ScheduleColorizer.java Algem Web App 1.6.3 26/06/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -30,7 +30,7 @@ import net.algem.util.Colorizer;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.2.0
+ * @version 1.6.3
  * @since 1.1.0 30/01/2016
  */
 public class ScheduleColorizer implements Colorizer<ScheduleElement> {
@@ -71,6 +71,8 @@ public class ScheduleColorizer implements Colorizer<ScheduleElement> {
         return colorPref.getColor(ScheduleColor.BOOKING_MEMBER);
       case Schedule.ADMINISTRATIVE:
         return colorPref.getColor(ScheduleColor.ADMINISTRATIVE);
+      case Schedule.MEETING:
+        return colorPref.getColor(ScheduleColor.RANGE);
     }
     return Color.WHITE;
   }

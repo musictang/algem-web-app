@@ -1,7 +1,7 @@
 /*
- * @(#)Schedule.java	1.2.0 02/04/16
+ * @(#)Schedule.java	1.6.3 26/06/17
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -20,14 +20,14 @@
  */
 package net.algem.planning;
 
-import java.util.Calendar;
+//import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Schedule object model.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.2.0
+ * @version 1.6.3
  * @since 1.0.0 11/02/13
  */
 public class Schedule
@@ -44,10 +44,11 @@ public class Schedule
   public static final int STUDIO = 7;
   public static final int TECH = 8;
   public static final int ADMINISTRATIVE = 9;
+  public static final int MEETING = 10;
   public static final int BOOKING_GROUP = 13;
   public static final int BOOKING_MEMBER = 14;
   
-  private static final Calendar CAL = Calendar.getInstance();
+  //private static final Calendar CAL = Calendar.getInstance();
   private static final long serialVersionUID = 1L;
 
   protected int id;
@@ -70,10 +71,7 @@ public class Schedule
       return false;
     }
     final Schedule other = (Schedule) obj;
-    if (this.id != other.id) {
-      return false;
-    }
-    return true;
+    return this.id == other.id;
   }
 
   @Override
@@ -85,7 +83,6 @@ public class Schedule
 
   @Override
   public String toString() {
-    //return "Planning:" + date + " " + start + " " + end + " " + idper + " " + idAction + " " + place;
     return date + " : " + start + "-" + end;
   }
 
@@ -181,37 +178,4 @@ public class Schedule
     return note;
   }
 
-//	public List<ScheduleRange> getRanges() {
-//		return ranges;
-//	}
-//
-//	public void setRanges(List<ScheduleRange> ranges) {
-//		this.ranges = ranges;
-//	}
-
-//  public boolean isValid() {
-//    return true;
-//  }
-//
-//  public static String attribFromLabel(String label) {
-//    String attrib = label;
-//    if (label.equals("prof")) {
-//      attrib = "idper";
-//    } else if (label.equals("d.prof")) {
-//      attrib = "d.idper";
-//    } else if (label.equals("salle")) {
-//      attrib = "lieux";
-//    } else if (label.equals("d.salle")) {
-//      attrib = "d.lieux";
-//    } else if (label.equals("cours")) {
-//      attrib = "action";
-//    } else if (label.equals("d.cours")) {
-//      attrib = "d.action";
-//    } else if (label.equals("atelier")) {
-//      attrib = "atelier";
-//    } else if (label.equals("d.atelier")) {
-//      attrib = "d.atelier";
-//    }
-//    return attrib;
-//  }
 }

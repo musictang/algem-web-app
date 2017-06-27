@@ -540,6 +540,7 @@ public class ScheduleDao
     schedules.addAll(findWeekRehearsal(start, end, idper));
     schedules.addAll(findWeekAdministrative(start, end, idper));
     schedules.addAll(findWeekTech(start, end, idper));
+    schedules.addAll(findWeekMeetings(start, end, idper));
     return schedules;
   }
 
@@ -573,6 +574,13 @@ public class ScheduleDao
     }, start, end, idper, idper);
   }
 
+  /**
+   * Find all sessions where {@code idper} is a participant.
+   * @param start starting date
+   * @param end ending date
+   * @param idper participant's id
+   * @return a list of schedules
+   */
   private List<ScheduleElement> findWeekCourse(Date start, Date end, int idper) {
     String query = "SELECT p.id,p.jour,pl.debut,pl.fin,p.ptype,p.idper,p.action,p.lieux,p.note, c.id, c.titre, c.collectif, c.code, s.nom, n.prenom, n.nom"
       + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
@@ -614,6 +622,13 @@ public class ScheduleDao
     }, idper, start, end);
   }
 
+  /**
+   * Find all sessions where {@code idper} is involved as teacher or administrative.
+   * @param start starting date
+   * @param end ending date
+   * @param idper person's id
+   * @return a list of schedules
+   */
   private List<ScheduleElement> findWeekAdministrative(Date start, Date end, int idper) {
     String query = "SELECT p.id,p.jour,p.debut,p.fin,p.ptype,p.idper,p.action,p.lieux,p.note, c.id, c.titre, c.collectif, c.code, s.nom"
       + " FROM " + TABLE + " p INNER JOIN action a LEFT OUTER JOIN cours c ON (a.cours = c.id)"
@@ -647,6 +662,42 @@ public class ScheduleDao
         if (d.type == Schedule.COURSE && !d.isCollective()) {
           d.setRanges(getTimeSlots(d.getId()));
         }
+        return d;
+      }
+    }, idper, start, end);
+  }
+  
+  private List<ScheduleElement> findWeekMeetings(Date start, Date end, int idper) {
+    String query = "SELECT pl.id,p.jour,pl.debut,pl.fin,p.ptype,p.idper,p.action,p.lieux,pl.note,s.nom, v.texte"
+      + " FROM " + TABLE + " p JOIN plage pl ON p.id = pl.idplanning JOIN suivi v ON pl.note = v.id JOIN salle s ON p.lieux = s.id "
+      + " WHERE p.ptype = (" + Schedule.ADMINISTRATIVE + ")"
+      + " AND pl.adherent = ?"
+      + " AND jour BETWEEN ? AND ?"
+      + " ORDER BY p.jour, p.debut";
+    return jdbcTemplate.query(query, new RowMapper<ScheduleElement>() {
+
+      @Override
+      public ScheduleElement mapRow(ResultSet rs, int rowNum) throws SQLException {
+        ScheduleElement d = new ScheduleElement();
+        d.setId(rs.getInt(1));
+        d.setDateFr(new DateFr(rs.getString(2)));
+        d.setStart(new Hour(rs.getString(3)));
+        String end = rs.getString(4);
+        d.setEnd("00:00:00".equals(end) ? new Hour("24:00") : new Hour(end));
+        //d.setEnd(new Hour(rs.getString(4)));
+        d.setType(Schedule.MEETING);
+        d.setIdPerson(rs.getInt(6));
+        d.setIdAction(rs.getInt(7));
+        d.setPlace(rs.getInt(8));
+        d.setNote(rs.getInt(9));
+        d.setDetail("room", new NamedModel(d.getPlace(), rs.getString(10)));
+        d.setDetail("course", null);
+        d.setLabel(rs.getString(11));
+        d.setCollective(false);
+        //d.setCode(0);
+        
+        d.setDetail("estab", null);
+
         return d;
       }
     }, idper, start, end);
@@ -692,16 +743,33 @@ public class ScheduleDao
         return findGroupScheduleDetail(id, ptype);
       case Schedule.MEMBER:
         return findMemberScheduleDetail(id, ptype);
+      case Schedule.MEETING:
+        return findMeetingScheduleDetail(id, ptype);
       default:
         return findCourseScheduleDetail(id, ptype);
     }
+  }
+  
+  private List<ScheduleRangeElement> findMeetingScheduleDetail(int id, int ptype) {
+    String query = "SELECT DISTINCT pl.id,pl.adherent,pl.debut,pl.fin,pl.note,per.nom,per.prenom,per.pseudo,i.id,i.nom"
+      + " FROM plage pl JOIN personne per ON (pl.adherent = per.id)"
+      + " LEFT JOIN person_instrument pi ON (per.id = pi.idper AND pi.idx = 0 AND pi.ptype = " + getInstrumentFromScheduleType(ptype) + ")"
+      + " LEFT JOIN instrument i ON (pi.instrument = i.id)"
+      + " WHERE idplanning = (SELECT idplanning FROM " + ScheduleRangeIO.TABLE + " WHERE id = ?)"
+      + " ORDER BY pl.debut,per.nom,per.prenom";
+    return jdbcTemplate.query(query, new RowMapper<ScheduleRangeElement>() {
+
+      @Override
+      public ScheduleRangeElement mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return getRangeFromRS(rs);
+      }
+    }, id);
   }
 
   private List<ScheduleRangeElement> findCourseScheduleDetail(int id, int ptype) {
     String query = "SELECT DISTINCT pl.id,pl.adherent,pl.debut,pl.fin,pl.note,p.nom,p.prenom,p.pseudo,i.id,i.nom"
       + " FROM plage pl JOIN personne p ON (pl.adherent = p.id)"
-      + " LEFT JOIN person_instrument pi ON (p.id = pi.idper AND pi.idx = 0 "
-      + " AND pi.ptype = " + getInstrumentFromScheduleType(ptype) + ")"
+      + " LEFT JOIN person_instrument pi ON (p.id = pi.idper AND pi.idx = 0 AND pi.ptype = " + getInstrumentFromScheduleType(ptype) + ")"
       + " LEFT JOIN instrument i ON (pi.instrument = i.id)"
       + " WHERE idplanning = ?"
       + " ORDER BY pl.debut,p.nom,p.prenom";
@@ -710,19 +778,7 @@ public class ScheduleDao
 
       @Override
       public ScheduleRangeElement mapRow(ResultSet rs, int rowNum) throws SQLException {
-        ScheduleRangeElement r = new ScheduleRangeElement();
-        r.setId(rs.getInt(1));
-        r.setMemberId(rs.getInt(2));
-        r.setStart(new Hour(rs.getString(3)));
-        r.setEnd(new Hour(rs.getString(4)));
-        r.setNote(rs.getInt(5));
-        Person p = new Person(r.getMemberId());
-        p.setName(rs.getString(6));
-        p.setFirstName(rs.getString(7));
-        p.setNickName(rs.getString(8));
-        p.setInstrument(new Instrument(rs.getInt(9), 0, rs.getString(10)));
-        r.setPerson(p);
-        return r;
+        return getRangeFromRS(rs);
       }
     }, id);
   }
@@ -740,19 +796,7 @@ public class ScheduleDao
 
       @Override
       public ScheduleRangeElement mapRow(ResultSet rs, int rowNum) throws SQLException {
-        ScheduleRangeElement r = new ScheduleRangeElement();
-        r.setId(rs.getInt(1));
-        r.setMemberId(rs.getInt(2));
-        r.setStart(new Hour(rs.getString(3)));
-        r.setEnd(new Hour(rs.getString(4)));
-        r.setNote(rs.getInt(5));
-        Person p = new Person(r.getMemberId());
-        p.setName(rs.getString(6));
-        p.setFirstName(rs.getString(7));
-        p.setNickName(rs.getString(8));
-        p.setInstrument(new Instrument(rs.getInt(9), 0, rs.getString(10)));
-        r.setPerson(p);
-        return r;
+        return getRangeFromRS(rs);
       }
     }, id);
   }
@@ -771,28 +815,32 @@ public class ScheduleDao
 
       @Override
       public ScheduleRangeElement mapRow(ResultSet rs, int rowNum) throws SQLException {
-        ScheduleRangeElement r = new ScheduleRangeElement();
-        r.setId(rs.getInt(1));
-        r.setMemberId(rs.getInt(2));
-        r.setStart(new Hour(rs.getString(3)));
-        r.setEnd(new Hour(rs.getString(4)));
-        r.setNote(rs.getInt(5));
-        Person p = new Person(r.getMemberId());
-        p.setName(rs.getString(6));
-        p.setFirstName(rs.getString(7));
-        p.setNickName(rs.getString(8));
-        p.setInstrument(new Instrument(rs.getInt(9), 0, rs.getString(10)));
-
-        r.setPerson(p);
-        return r;
+        return getRangeFromRS(rs);
       }
     }, id);
   }
 
+  private ScheduleRangeElement getRangeFromRS(ResultSet rs) throws SQLException {
+    ScheduleRangeElement r = new ScheduleRangeElement();
+    r.setId(rs.getInt(1));
+    r.setMemberId(rs.getInt(2));
+    r.setStart(new Hour(rs.getString(3)));
+    r.setEnd(new Hour(rs.getString(4)));
+    r.setNote(rs.getInt(5));
+    Person p = new Person(r.getMemberId());
+    p.setName(rs.getString(6));
+    p.setFirstName(rs.getString(7));
+    p.setNickName(rs.getString(8));
+    p.setInstrument(new Instrument(rs.getInt(9), 0, rs.getString(10)));
+    r.setPerson(p);
+    return r;
+  }
+  
   private int getInstrumentFromScheduleType(int type) {
     switch (type) {
       case Schedule.COURSE:
       case Schedule.ADMINISTRATIVE:
+      case Schedule.MEETING:
         return Instrument.MEMBER;
       case Schedule.GROUP:
         return Instrument.MUSICIAN;

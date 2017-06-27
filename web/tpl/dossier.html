@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.6.1 02/05/17
+ * @(#) dossier.html Algem Web App 1.6.3 27/06/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -114,7 +114,7 @@
         <h3 th:if="${user.student}" th:text="#{student.monitoring.label}">Suivi</h3>
         <section th:if="${user.student}">
           <header>
-            <nav class="horizontal-panel-menu">
+            <nav class="horizontal-panel-menu-p">
               <ul class="horizontal-panel-menu">
                 <li><a href="javascript:;" id="student-follow-d" th:text="#{today.label}" th:title="#{today.tip}" th:formaction="@{/perso/xFollowUpStudent}" /></li>
                 <li><a href="javascript:;" id="student-follow-w" th:text="#{current.week.label}" th:title="#{current.week.tip}"/></li>
@@ -136,7 +136,7 @@
         <h3 th:if="${user.teacher}" th:text="#{teacher.monitoring.label}">Suivi</h3>
         <section th:if="${user.teacher}">
           <header>
-            <nav class="horizontal-panel-menu">
+            <nav class="horizontal-panel-menu-p">
               <ul class="horizontal-panel-menu">
                 <li><a href="javascript:;" id="follow-d" th:text="#{today.label}" th:title="#{today.tip}" th:formaction="@{/perso/xFollowUpSchedules}" /></li>
                 <li><a href="javascript:;" id="follow-w" th:text="#{current.week.label}" th:title="#{current.week.tip}"/></li>

@@ -1,5 +1,5 @@
 /*
- * @(#) planning.css Algem Web App 1.6.2 09/05/17
+ * @(#) planning.css Algem Web App 1.6.3 27/06/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 /*
     Created on : 9 mai 2015, 09:23:44
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Last       : 1.6.2 08/05/17
+    Last       : 1.6.3 27/06/17
 */
 
 .ui-dialog{
@@ -172,7 +172,18 @@
   background-color: #eee;
   color: black;*/
   line-height: 0.95em;
-  z-index: 1002;
+  /*z-index: 1004;*/
+}
+.meeting_label {
+  display: block;
+  position: absolute;
+  width:  100%;
+  bottom: .15em;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /*z-index: 1004;*/
 }
 .range {
   position: absolute;

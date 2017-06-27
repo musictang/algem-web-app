@@ -1,5 +1,5 @@
 /*
- * @(#)PlanningServiceImpl.java 1.6.1 26/04/17
+ * @(#)PlanningServiceImpl.java 1.6.3 27/06/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -164,6 +164,7 @@ public class PlanningServiceImpl
     return map;
   }
 
+  @Override
   public Map<Integer, Collection<ScheduleElement>> getWeekSchedule(Date start, Date end, int idper) {
     Map<Integer, Collection<ScheduleElement>> map = new LinkedHashMap<Integer, Collection<ScheduleElement>>();
     Calendar cal = Calendar.getInstance();
@@ -379,6 +380,9 @@ public class PlanningServiceImpl
         break;
       case Schedule.ADMINISTRATIVE:
         t = messageSource.getMessage("administrative.title", null, locale);
+        break;
+      case Schedule.MEETING:
+        t = e.getLabel();
         break;
       default:
         t = "";

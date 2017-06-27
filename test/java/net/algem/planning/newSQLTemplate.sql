@@ -251,3 +251,23 @@ JOIN personne e ON (e.id = s.etablissement)
 LEFT JOIN groupe g ON (p.idper = g.id)
 WHERE r.id < 2147483647 AND r.idper = 1199 ORDER BY r.id DESC LIMIT 10;
 
+-- test meetings
+SELECT p.id,p.jour,pl.debut,pl.fin,p.ptype,p.idper,p.lieux,pl.note,s.nom
+FROM planning p JOIN  plage pl ON p.id = pl.idplanning JOIN salle s ON p.lieux = s.id
+WHERE p.ptype = 9
+AND pl.adherent = 20245
+AND jour BETWEEN '18-06-2017' AND '25-06-2017'
+ORDER BY p.jour, p.debut
+
+SELECT p.id,p.jour,pl.debut,pl.fin,p.ptype,p.idper,p.action,p.lieux,pl.note,s.nom, v.texte
+FROM planning  p JOIN plage pl ON p.id = pl.idplanning JOIN suivi v ON pl.note = v.id JOIN salle s ON p.lieux = s.id 
+WHERE p.ptype = 9
+AND pl.adherent = 20245
+AND jour BETWEEN '18-06-2017' AND '25-06-2017'
+ORDER BY p.jour, p.debut;
+-- detail
+SELECT DISTINCT pl.id,pl.adherent,pl.debut,pl.fin,per.nom,per.prenom,per.pseudo,i.id,i.nom from plage pl
+JOIN personne per ON (pl.adherent = per.id)
+LEFT JOIN person_instrument pi ON (per.id = pi.idper AND pi.idx = 0 AND pi.ptype = 1)
+LEFT JOIN instrument i ON (pi.instrument = i.id)
+where idplanning in (select idplanning from plage where id = 238477);
