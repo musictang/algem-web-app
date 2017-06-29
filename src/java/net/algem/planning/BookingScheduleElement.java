@@ -30,9 +30,9 @@ public class BookingScheduleElement
   extends ScheduleElement
 {
 
-  private byte status;
+  private int status;
 
-  public byte getStatus() {
+  public int getStatus() {
     return status;
   }
 

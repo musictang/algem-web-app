@@ -76,33 +76,33 @@
           <div th:each="p : ${entry.value}"
                th:id="${p.id}"
                th:data-algem-id="${p.id}"
-               data-algem-person=""
+               th:data-algem-person="${p.detail['person']}"
                th:data-algem-label="${p.label}"
                th:data-algem-type="${p.type}"
                th:data-algem-co="${p.collective}"
                th:data-algem-time="${p.timeLabel}"
                th:data-algem-room="${p.detail['room']}"
                th:class="'schedule' + ${p.label == null ? ' closed' :''}"
-               th:with="pos=${p.minutes - timeOffset},h=${p.length},courseType=${T(net.algem.planning.Schedule).COURSE}"
-               th:style="'top:'+${pos}+'px;height:'+${h}+'px;background-color:'+${p.collective || p.type != courseType ? p.htmlColor : '#FCD300'} +';color:'+${p.labelColor}">
+               th:with="pos=${p.minutes - timeOffset},h=${p.length},isRange=${p.detail['person'] != null}"
+               th:style="'top:'+${pos}+'px;height:'+${h}+'px;background-color:'+ ${isRange ? '#FCD300' : p.htmlColor}+';color:'+${p.labelColor}">
           </div>
           <div th:each="p : ${entry.value}" class="labels"
                th:data-algem-id="${p.id}"
                th:if="${p.label} != null"
-               th:title="|${p.label};${p.timeLabel};#{room.label} ${p.detail['room']};${p.detail['person'] ?: ''}|"
+               th:title="|${p.label},${p.timeLabel},#{room.label} ${p.detail['room']},${p.detail['person'] ?: ''}|"
                th:with="pos=${p.minutes - timeOffset},meeting=${T(net.algem.planning.Schedule).MEETING}"
                th:style="'top:'+${pos}+'px;color:'+${p.labelColor}+(${p.type == meeting} ? ';height:'+${p.length}+'px': '')">
             <span th:if="${p.type != meeting}" th:text="${p.label}" th:class="${p.length >= 45 || #strings.length(p.label) <= 10 ? 'course_label wrapped' : 'course_label ellipsed'}"></span>
             <span th:if="${p.type != meeting}" th:text="${p.timeLabel}" ></span>
             <span th:if="${p.type != meeting}" th:with="rName=${'Sle ' + p.detail['room']}" th:class="${p.length >= 60 || #strings.length(rName) <= 10 ? 'wrapped' : 'ellipsed'}" th:text="${rName}"></span>
             <span th:if="${p.type != meeting && p.length >= 45}" th:class="${p.length >= 45 ? 'wrapped' : 'ellipsed'}" th:text="${p.detail['person'] ?: ''}"></span>
-            <span th:if="${p.type == meeting}" th:text="${p.label}" th:class="meeting_label"></span>
+            <span th:if="${p.type == meeting}" th:text="|${p.label} (${p.timeLabel})|" th:class="meeting_label"></span>
           </div>
           <div th:each="p : ${entry.value}" th:remove="tag">
             <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
                  th:data-algem-id="${p.id}"
                  th:with="pos=${r.minutes - timeOffset},h=${r.length}"
-                 class="schedule range" th:style="'top:'+${pos}+'px;height:'+${h}+'px'"></div>
+                 class="schedule range" th:style="'top:'+${pos}+'px;height:'+${h}+'px'+${r.memberId==0? ';background-color:'+ T(net.algem.planning.ScheduleColorizer).BREAK_COLOR : ''}"></div>
           </div>
         </div>
       </section>
@@ -123,7 +123,8 @@
       var labels = {
         "cancel_label": /*[[#{cancel.label}]]*/ "",
         "close_label": /*[[#{close.label}]]*/ "",
-        "save_label": /*[[#{save.label}]]*/ ""
+        "save_label": /*[[#{save.label}]]*/ "",
+        "break_label": /*[[#{break.label}]]*/ ""
       }
       $(function () {
         setCommonEvents();
@@ -145,7 +146,7 @@
         );
 
         $("div.schedule, div.labels").click(function() {
-            console.log("click schedule");
+            //console.log("click schedule");
             var detail = null;
             var dataId = $(this).attr("data-algem-id")
             var e = $("#"+dataId);
@@ -158,7 +159,7 @@
               $(e).attr("data-algem-time"),
               $(e).attr("data-algem-room")
             );
-          displayScheduleDetail(detailURL, detail, labels.close_label);
+          displayScheduleDetail(detailURL, detail, labels.close_label, labels.break_label);
         });
 
       });

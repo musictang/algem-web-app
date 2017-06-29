@@ -260,7 +260,7 @@ AND jour BETWEEN '18-06-2017' AND '25-06-2017'
 ORDER BY p.jour, p.debut
 
 SELECT p.id,p.jour,pl.debut,pl.fin,p.ptype,p.idper,p.action,p.lieux,pl.note,s.nom, v.texte
-FROM planning  p JOIN plage pl ON p.id = pl.idplanning JOIN suivi v ON pl.note = v.id JOIN salle s ON p.lieux = s.id 
+FROM planning  p JOIN plage pl ON p.id = pl.idplanning JOIN suivi v ON pl.note = v.id JOIN salle s ON p.lieux = s.id
 WHERE p.ptype = 9
 AND pl.adherent = 20245
 AND jour BETWEEN '18-06-2017' AND '25-06-2017'
@@ -271,3 +271,10 @@ JOIN personne per ON (pl.adherent = per.id)
 LEFT JOIN person_instrument pi ON (per.id = pi.idper AND pi.idx = 0 AND pi.ptype = 1)
 LEFT JOIN instrument i ON (pi.instrument = i.id)
 where idplanning in (select idplanning from plage where id = 238477);
+
+SELECT r.id,p.action,p.idper,p.jour,p.debut,p.fin,p.ptype,p.lieux,s.nom,e.id,e.nom,
+CASE WHEN (p.ptype = 13 OR p.ptype = 14) THEN g.nom ELSE '' END,r.statut
+FROM reservation r LEFT JOIN planning p ON (r.idaction = p.action) JOIN salle s ON(p.lieux = s.id)
+JOIN personne e ON (e.id = s.etablissement)
+LEFT JOIN groupe g ON (p.idper = g.id)
+WHERE r.id < 10000 AND r.idper = 16094 ORDER BY r.id DESC, p.jour DESC,p.debut  LIMIT 10;

@@ -32,8 +32,7 @@ package net.algem.planning;
  * @since 1.0.0 11/02/13
  */
 public class ScheduleRange
-        implements java.io.Serializable
-{
+  implements java.io.Serializable {
 
   protected int id;
   protected DateFr day;
@@ -45,6 +44,7 @@ public class ScheduleRange
   protected int teacherId;
   protected int roomId;
   protected int note;
+  protected String label;
 
   public ScheduleRange() {
   }
@@ -56,11 +56,11 @@ public class ScheduleRange
 
   public boolean equals(ScheduleRange d) {
     return (d != null
-            && day.equals(d.day)
-            && courseId == d.courseId
-            && memberId == d.memberId
-            && start.equals(d.start)
-            && end.equals(d.end));
+      && day.equals(d.day)
+      && courseId == d.courseId
+      && memberId == d.memberId
+      && start.equals(d.start)
+      && end.equals(d.end));
   }
 
   @Override
@@ -143,14 +143,14 @@ public class ScheduleRange
   public int getNote() {
     return note;
   }
-	
-	public int getMinutes() {
-		return start.toMinutes();
-	}
 
-	public int getLength() {
-		return start.getLength(end);
-	}
+  public int getMinutes() {
+    return start.toMinutes();
+  }
+
+  public int getLength() {
+    return start.getLength(end);
+  }
 
   public void setScheduleId(int id) {
     this.scheduleId = id;
@@ -159,4 +159,13 @@ public class ScheduleRange
   public int getScheduleId() {
     return scheduleId;
   }
+
+  public String getLabel() {
+    return label;
+  }
+
+  public void setLabel(String label) {
+    this.label = label;
+  }
+  
 }

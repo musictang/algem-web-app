@@ -64,7 +64,7 @@ public class BookingCtrl
 {
   private final static Logger LOGGER = Logger.getLogger(BookingCtrl.class.getName());
   private final static Locale CTX_LOCALE = LocaleContextHolder.getLocale();
-  
+
   @Autowired
   private UserService service;
 
@@ -193,26 +193,30 @@ public class BookingCtrl
     try {
       String info = action + " " + date + " " + start;
       LOGGER.log(Level.INFO, info);
-      Date d = GemConstants.DATE_FORMAT.parse(date);
-      Calendar cal = Calendar.getInstance();
-      cal.setTime(d);
-      Date now = new Date();
-//      BookingConf conf = planningService.getBookingConf();
-//      long delay = conf.getMinDelay() * 60 * 60 * 1000;
+
       Booking b = planningService.getBooking(id);
-      if (b != null) {
-        b.setDate(date);
-        if (b.getStatus() == 1) {
-          model.addAttribute("message", messageSource.getMessage("booking.confirmed.cancel.warning", null, CTX_LOCALE));
-          return "error";
-        }
+      if (b == null) {
+        return "redirect:/perso/home.html";
+      }
+      //b.setDate(date);
+      if (Booking.CONFIRMED == b.getStatus()) {
+        model.addAttribute("message", messageSource.getMessage("booking.confirmed.cancel.warning", null, CTX_LOCALE));
+        return "error";
       }
 
-      if (now.getTime() > d.getTime()) {
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(GemConstants.DATE_FORMAT.parse(date));
+      cal.set(Calendar.HOUR_OF_DAY,b.getStartTime().getHour());
+      cal.set(Calendar.MINUTE,b.getStartTime().getMinute());
+
+      BookingConf conf = planningService.getBookingConf();
+      long delay = conf.getCancelDelay() * 60 * 60 * 1000;
+      Date now = new Date();
+      if (now.getTime() > cal.getTimeInMillis() - delay) {
         model.addAttribute("message", messageSource.getMessage("booking.cancel.delay.warning", null, CTX_LOCALE));
         return "error";
       }
-      // n'annuler que si confirmé
+
       if (planningService.cancelBooking(action)) {
         sendMessage(b, "booking.cancel.info", bookingCancelMessage);
         return "redirect:/perso/home.html";

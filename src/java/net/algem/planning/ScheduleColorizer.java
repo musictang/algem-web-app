@@ -1,5 +1,5 @@
 /*
- * @(#) ScheduleColorizer.java Algem Web App 1.6.3 26/06/17
+ * @(#) ScheduleColorizer.java Algem Web App 1.6.3 28/06/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -35,8 +35,9 @@ import net.algem.util.Colorizer;
  */
 public class ScheduleColorizer implements Colorizer<ScheduleElement> {
 
-  private ColorPref colorPref;
+  public static final String BREAK_COLOR = colorToHex(Color.YELLOW.darker());
   private static final int INST_CODE = 1;
+  private ColorPref colorPref;
 
   public ScheduleColorizer(ColorPref colorPref) {
     this.colorPref = colorPref;

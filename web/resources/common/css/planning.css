@@ -177,6 +177,7 @@
 .meeting_label {
   display: block;
   position: absolute;
+  color: #111;
   width:  100%;
   bottom: .15em;
   text-align: center;

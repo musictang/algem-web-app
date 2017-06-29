@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) daily.html Algem Web App 1.6.1 26/04/17
+ * @(#) daily.html Algem Web App 1.6.3 28/06/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -34,13 +34,12 @@
     <script type="text/javascript" th:src="@{/resources/common/js/util.js}"></script>
     <script type="text/javascript" th:src="@{/resources/common/js/common.js}"></script>
     <script type="text/javascript" th:src="@{/resources/common/js/planning.js}"></script>
-     <script type="text/javascript" th:src="@{/resources/common/js/util.js}"></script>
     <script type="text/javascript" th:src="@{/resources/common/js/jquery-ui.datepicker-fr.js}"></script>
 
     <script th:with="delay=24" type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
       var tOffset = /*[[${timeOffset}]]*/ '720';
-      console.log(tOffset)
+      console.log(tOffset);
       var debug = false;
 //      var logged = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
       var offPeakTime = /*[[${conf['offPeakTime']}]]*/ '0';
@@ -121,11 +120,10 @@
                 $(e).attr("data-algem-time"),
                 $(e).attr("data-algem-room")
               );
-            displayScheduleDetail(detailURL, detail, /*[[#{close.label}]]*/ "!Close!");
+            displayScheduleDetail(detailURL, detail, /*[[#{close.label}]]*/ "!Close!", /*[[#{break.label}]]*/ "!BREAK!");
           }
         });
         $("p.title_col").click(function(){
-          console.log("room clicked");
           // get room info
           showRoomDetail(this, roomDetailURL, planningLabels);
         });
@@ -204,8 +202,9 @@
           <div th:each="p : ${entry.value}" th:remove="tag">
             <div th:if="${p.ranges} != null" th:each="r : ${p.ranges}"
                  th:with="pos=${r.minutes - timeOffset},h=${r.length}"
-                 class="schedule range" th:style="'top:'+${pos}+'px;height:'+${h}+'px'"
+                 class="schedule range" th:style="'top:'+${pos}+'px;height:'+${h}+'px'+${r.memberId==0? ';background-color:'+ T(net.algem.planning.ScheduleColorizer).BREAK_COLOR : ''}"
                  th:data-algem-id="${p.id}">
+              <span class="meeting_label" th:if="${p.type == T(net.algem.planning.Schedule).ADMINISTRATIVE}" th:text="${r.label}"></span>
             </div>
           </div>
         </div>

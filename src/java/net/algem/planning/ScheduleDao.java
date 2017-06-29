@@ -151,7 +151,7 @@ public class ScheduleDao
           name = firstName == null ? (lastName == null ? "" : lastName) : firstName + " " + lastName;
         }
         d.setDetail("person", new NamedModel(d.getIdPerson(), name));
-        if (d.type == Schedule.COURSE && !d.isCollective()) {
+        if ((Schedule.COURSE == d.type && !d.isCollective()) || Schedule.ADMINISTRATIVE == d.type) {
           d.setRanges(getTimeSlots(d.getId()));
         }
         return d;
@@ -192,7 +192,7 @@ public class ScheduleDao
    * @return a collection of schedule ranges
    */
   private Collection<ScheduleRange> getTimeSlots(int id) {
-    String query = " SELECT pl.* FROM " + ScheduleRangeIO.TABLE + " pl WHERE pl.idplanning = ?";
+    String query = " SELECT pl.*,s.texte FROM " + ScheduleRangeIO.TABLE + " pl LEFT JOIN suivi s ON pl.note = s.id WHERE pl.idplanning = ?";
     return jdbcTemplate.query(query, new RowMapper<ScheduleRange>() {
 
       @Override
@@ -206,6 +206,8 @@ public class ScheduleDao
         //r.setEnd(new Hour(rs.getString(4)));
         r.setMemberId(rs.getInt(5));
         r.setNote(rs.getInt(6));
+        String lb = rs.getString(7);
+        r.setLabel(lb != null ? lb : null);
 
         return r;
       }
@@ -399,7 +401,7 @@ public class ScheduleDao
    * @return a booking instance
    */
   Booking getBooking(int id) {
-    String query = "SELECT id,idper,idaction,dateres,pass,statut FROM " + T_BOOKING + " WHERE id = ?";
+    String query = "SELECT DISTINCT b.id,b.idper,b.idaction,b.dateres,b.pass,b.statut,p.debut FROM " + T_BOOKING + " b JOIN action a ON b.idaction = a.id JOIN " + ScheduleDao.TABLE + " p ON a.id = p.action WHERE b.id = ? LIMIT 1";
     return jdbcTemplate.queryForObject(query, new RowMapper<Booking>() {
       @Override
       public Booking mapRow(ResultSet rs, int arg1) throws SQLException {
@@ -411,6 +413,7 @@ public class ScheduleDao
         b.setDate(GemConstants.DATE_FORMAT.format(new java.util.Date(t.getTime())));
         b.setPass(rs.getBoolean(5));
         b.setStatus(rs.getByte(6));
+        b.setStartTime(new Hour(rs.getString(7)));
         return b;
       }
 
@@ -497,8 +500,10 @@ public class ScheduleDao
     // n'annuler que si la reservation n'a pas été confirmée
     String sql = "DELETE FROM " + TABLE + " WHERE action = ?";
     jdbcTemplate.update(sql, action);
-    String sql2 = "DELETE FROM " + T_BOOKING + " WHERE idaction = ?";
-    jdbcTemplate.update(sql2, action);
+    //String sql2 = "DELETE FROM " + T_BOOKING + " WHERE idaction = ?";
+    //jdbcTemplate.update(sql2, action);
+    String sql2 = "UPDATE " + T_BOOKING + " SET idaction = ?, statut = ? WHERE idaction = ?";
+    jdbcTemplate.update(sql2, 0, -1, action);
   }
 
   private int createBooking(final Booking booking) throws ParseException {
@@ -666,7 +671,7 @@ public class ScheduleDao
       }
     }, idper, start, end);
   }
-  
+
   private List<ScheduleElement> findWeekMeetings(Date start, Date end, int idper) {
     String query = "SELECT pl.id,p.jour,pl.debut,pl.fin,p.ptype,p.idper,p.action,p.lieux,pl.note,s.nom, v.texte"
       + " FROM " + TABLE + " p JOIN plage pl ON p.id = pl.idplanning JOIN suivi v ON pl.note = v.id JOIN salle s ON p.lieux = s.id "
@@ -695,7 +700,7 @@ public class ScheduleDao
         d.setLabel(rs.getString(11));
         d.setCollective(false);
         //d.setCode(0);
-        
+
         d.setDetail("estab", null);
 
         return d;
@@ -749,7 +754,7 @@ public class ScheduleDao
         return findCourseScheduleDetail(id, ptype);
     }
   }
-  
+
   private List<ScheduleRangeElement> findMeetingScheduleDetail(int id, int ptype) {
     String query = "SELECT DISTINCT pl.id,pl.adherent,pl.debut,pl.fin,pl.note,per.nom,per.prenom,per.pseudo,i.id,i.nom"
       + " FROM plage pl JOIN personne per ON (pl.adherent = per.id)"
@@ -835,7 +840,7 @@ public class ScheduleDao
     r.setPerson(p);
     return r;
   }
-  
+
   private int getInstrumentFromScheduleType(int type) {
     switch (type) {
       case Schedule.COURSE:

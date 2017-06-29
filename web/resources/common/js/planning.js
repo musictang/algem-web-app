@@ -1,5 +1,5 @@
 /*
- * @(#)planning.js	1.6.3 27/06/17
+ * @(#)planning.js	1.6.3 28/06/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -561,13 +561,14 @@ function ScheduleDetail(id, person, label, type, collective, time, room) {
   this.room = room;
 }
 
-function displayScheduleDetail(url, detail, btLabel) {
+function displayScheduleDetail(url, detail, btLabel, breakLabel) {
   $.get(url, {id: detail.id, type: detail.type}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("empty detail");
     } else {
       var d = "";
-      if (detail.type != 4) {
+      //console.log(detail.type);
+      if (detail.type != 4 && detail.type != 10 && detail.person) {// not member nor meeting
         d += "<p><strong>" + detail.person + "</strong></p>";
       }
 
@@ -579,7 +580,7 @@ function displayScheduleDetail(url, detail, btLabel) {
         } else {
           var st = value.start.hour + ":" + (value.start.minute == 0 ? "00" : value.start.minute);
           var et = value.end.hour + ":" + (value.end.minute == 0 ? "00" : value.end.minute);
-          d += "<tr><td id=\"" + value.id + "\">" + st + "-" + et + "</td><td>" + value.person.firstName + " " + value.person.name + "</td></tr>";
+          d += "<tr><td id=\"" + value.id + "\">" + st + "-" + et + "</td><td>" + (value.memberId == 0 ? breakLabel : value.person.firstName + " " + value.person.name) + "</td></tr>";
         }
       });
       d += "</tbody></table>"
@@ -620,9 +621,9 @@ function initRoomDetailDialog(element, closingLabel) {
 
 function showRoomDetail(element, url, labels) {
   var roomId = $(element).closest("div").attr("id");
-  console.log(roomId);
+  //console.log(roomId);
   $.get(url, {id: roomId}, function (data) {
-    console.log(data);
+    //console.log(data);
     if (typeof data === 'undefined' || data === null) {
       console.log("empty detail");
     } else {
@@ -632,7 +633,6 @@ function showRoomDetail(element, url, labels) {
       if (data.equipment && data.equipment.length > 0) {
         content += "<h4>"+labels.equipment_label+"</h4><table><tr><th>"+labels.quantity_label+"</th><th>"+labels.name_label+"</th></tr>";
         for (var i = 0; i < data.equipment.length; i++) {
-//          content +="<li>"+data.equipment[i].name+"</li>";
           content += "<tr><td>" + data.equipment[i].quantity + "</td><td>" + data.equipment[i].name + "</td></tr>";
         }
         content += "</table>";

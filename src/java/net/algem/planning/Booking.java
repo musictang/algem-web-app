@@ -28,6 +28,9 @@ package net.algem.planning;
 public class Booking
 {
 
+  public static final byte PENDING = 0;
+  public static final byte CONFIRMED = 1;
+  public static final byte CANCELLED = 2;
   private int id;
   private int type;
   private int person;
