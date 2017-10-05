@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherDaoImpl.java Algem Web App 1.6.0 01/02/17
+ * @(#) TeacherDaoImpl.java Algem Web App 1.7.0 04/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -51,7 +51,7 @@ import org.springframework.stereotype.Repository;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.0
+ * @version 1.7.0
  * @since 1.0.6 06/01/2016
  */
 @Repository
@@ -78,7 +78,7 @@ public class TeacherDaoImpl
 
   @Autowired
   private CommonDao commonDao;
-  
+
   @Autowired
   private ActionDocumentDaoImpl docDao;
 
@@ -203,69 +203,96 @@ public class TeacherDaoImpl
   }
 
   @Override
-  public int updateFollowUp(final FollowUp follow) {
-    String text = follow.getContent();
+  public int updateFollowUp(final FollowUp up) {
+    String text = up.getContent();
     if ((text == null || text.isEmpty())
-      && (follow.getNote() == null || follow.getNote().isEmpty())
-      && !follow.isAbsent() && !follow.isExcused()) {
-      deleteFollowUp(follow);
+      && (up.getNote() == null || up.getNote().isEmpty())
+      && !up.isAbsent() && !up.isExcused()) {
+      deleteFollowUp(up);
       return 0;
-    } else if (follow.getId() > 0) {
-      updateFollowUpContent(follow);
+    } else if (up.getId() > 0) {
+      updateFollowUpContent(up);
       return 1;
     } else {
-//      LOG.log(Level.INFO, follow.toString());
-      createFollowUp(follow);
-      updateSchedule(follow.getScheduleId(), follow.getId(), follow.isCollective());
+      createFollowUp(up);
+      updateSchedule(up.getScheduleId(), up.getId(), up.isCollective());
       return 2;
     }
 
   }
 
   @Override
-  public void createFollowUp(final FollowUp follow) {
+  public int updateAbsenceStatus(final FollowUp up) {
+    if (up.getId() == 0) {
+      if (up.getStatus() > 0) {
+        createFollowUp(up);
+        updateSchedule(up.getScheduleId(), up.getId(), false);
+        return 2;
+      }
+      return 0;
+    } else {
+      final String sql = "UPDATE suivi SET statut=? WHERE id = ?";
+      jdbcTemplate.update(new PreparedStatementCreator() {
+        @Override
+        public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+          PreparedStatement ps = con.prepareStatement(sql);
+          ps.setShort(1, up.getStatus());
+          ps.setInt(2, up.getId());
+
+          LOGGER.log(Level.INFO, ps.toString());
+          return ps;
+        }
+      });
+      return 1;
+    }
+  }
+
+  @Override
+  public void createFollowUp(final FollowUp up) {
     final int id = nextId(FOLLOW_UP_SEQ);
-    follow.setId(id);
-    LOGGER.log(Level.INFO, follow.toString());
+    up.setId(id);
+
     final String sql = "INSERT INTO suivi(id,texte,note,statut) VALUES(?,?,?,?)";
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, id);
-        ps.setString(2, follow.getContent());
-        ps.setString(3, follow.getNote());
-        ps.setShort(4, follow.getStatus());
+        ps.setString(2, up.getContent());
+        ps.setString(3, up.getNote());
+        ps.setShort(4, up.getStatus());
+
+        LOGGER.log(Level.INFO, ps.toString());
         return ps;
       }
     });
 
   }
 
-  private void deleteFollowUp(final FollowUp follow) {
+  private void deleteFollowUp(final FollowUp up) {
     final String sql = "DELETE FROM suivi WHERE id = ?";
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
         PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, follow.getId());
+        ps.setInt(1, up.getId());
         return ps;
       }
     });
-    updateSchedule(follow.getScheduleId(), 0, follow.isCollective());// reset
+    updateSchedule(up.getScheduleId(), 0, up.isCollective());// reset
 //    follow.setId(0);
   }
 
-  private void updateFollowUpContent(final FollowUp follow) {
+  private void updateFollowUpContent(final FollowUp up) {
     final String sql = "UPDATE suivi SET texte = ?, note=?, statut=? WHERE id = ?";
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
         PreparedStatement ps = con.prepareStatement(sql);
-        ps.setString(1, follow.getContent());
-        ps.setString(2, follow.getNote());
-        ps.setShort(3, follow.getStatus());
-        ps.setInt(4, follow.getId());
+        ps.setString(1, up.getContent());
+        ps.setString(2, up.getNote());
+        ps.setShort(3, up.getStatus());
+        ps.setInt(4, up.getId());
         return ps;
       }
     });

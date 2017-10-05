@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.6.1 29/04/17
+ * @(#) dossier.js Algem Web App 1.7.0 04/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -31,20 +31,18 @@ DOSSIER.getBookings = function (url, userId, planningUrl, cancelUrl, labels) {
       var dateFr = GEMUTILS.dateFormatFR(new Date(b.date));
       var start = b.start.hour.pad() + ":" + b.start.minute.pad();
       var timeInfo = start + "-&#8203;" + b.end.hour.pad() + ":" + b.end.minute.pad();
-      var link = planningUrl+"?d=" + dateFr + "&e=" + b.detail['estab'].id;
-      var cancelLink = "<a href=" +cancelUrl+"?id="+b.id+"&action="+b.idAction+"&date="+dateFr+"&start="+start + ">"+labels.cancel_label+"</a>";
+      var link = planningUrl + "?d=" + dateFr + "&e=" + b.detail['estab'].id;
+      var cancelLink = "<a href=" + cancelUrl + "?id=" + b.id + "&action=" + b.idAction + "&date=" + dateFr + "&start=" + start + ">" + labels.cancel_label + "</a>";
       var statusClass = b.status === 0 ? "pending" : "confirmed";
       var statusLabel = b.status === 0 ? labels.booking_pending_label : labels.booking_confirmed_label;
-//      console.log(cancelLink);
-//      console.log(link);
       var tr = "<tr data-booking-id=\"" + b.id + "\">\n";
       tr += "\n\t<td>" + group + "</td>";
       tr += "\n\t<td>" + estab + "</td>";
       tr += "\n\t<td>" + room + "</td>";
-      tr += "\n\t<td><a href=" + link + ">"+dateFr+"</a></td>";
-      tr += "\n\t<td>"+timeInfo+"</td>";
-      tr += "\n\t<td class=\""+statusClass+"\" >"+statusLabel+"</td>";
-      tr += "\n\t<td>"+ (b.status === 0 ? cancelLink : "")+"</td>";
+      tr += "\n\t<td><a href=" + link + ">" + dateFr + "</a></td>";
+      tr += "\n\t<td>" + timeInfo + "</td>";
+      tr += "\n\t<td class=\"" + statusClass + "\" >" + statusLabel + "</td>";
+      tr += "\n\t<td>" + (b.status === 0 ? cancelLink : "") + "</td>";
       tr += "\n</tr>\n";
       $("#bookingList").append(tr);
     });
@@ -106,61 +104,122 @@ function FollowUpObject(id, scheduleId, text, note, status, co) {
  * @param {type} paths
  * @returns {undefined}
  */
-DOSSIER.getFollowUpSchedules = function(urlPath, user, dateFrom, dateTo, labels, paths) {
+DOSSIER.getFollowUpSchedules = function (urlPath, user, dateFrom, dateTo, labels, paths) {
   $.get(urlPath, {userId: user, from: dateFrom, to: dateTo}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("no data");
       $("#follow-up-result tbody").empty(); // supprimer contenu
+      $("#follow-up-result-c tbody").empty();
     } else {
       var result = "";
       var total = 0;
-      var coTitle = labels.collective_monitoring_action;
       var supportLocales = GEMUTILS.toLocaleStringSupportsLocales();
       var isPhotosMasked = $("#maskPhotos").is(":checked");
+      var isQuickEdit = $("#quickEdit").is(":checked");
+
       // zero-width space (&#8203;) inserted after hyphens to authorize breaks
       $.each(data, function (index, value) {
-        var d = new Date(value.date);
-        var df = GEMUTILS.dateFormatFR(d);
-        var dateInfo = supportLocales ? d.toLocaleString(GEMUTILS.getLocale(), {weekday: 'long'}) + " " + df : df;
-        var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-&#8203;" + value.end.hour.pad() + ":" + value.end.minute.pad();
-        var ms = (value.start.hour * 60) + value.start.minute;
-        var me = (value.end.hour * 60) + value.end.minute;
-        var length = me - ms;
-        var roomInfo = value.detail['room'].name;
-        var courseInfo = value.ranges[0] ? value.detail['course'].name : "PAUSE";
-        //var firstNameName = "";
-        var noteCo = value.followUp.content || "";
-        // do not include breaks in total
-        if (value.collective || (value.ranges[0] && value.ranges[0].person.id > 0)) {
-          total += length;
-        }
-        result += "<tr id=\"" + value.id + "\" class=\"" + (value.collective ? "co" : "notco") +"\">"// scheduleId
-          + "<td>" + dateInfo + "</td>"
-          + "<td>" + timeInfo + "</td>"
-          + "<td>" + getTimeFromMinutes(length) + "</td>"
-          + "<td>" + roomInfo + "</td>"
-          + "<td title=\""+ courseInfo + "\">"
-          + (value.collective ? DOSSIER.getMailtoLinksFromRanges(value.ranges, labels.mailto_all_participants_tip, courseInfo) : courseInfo)
-          + DOSSIER.fillTeacherDocumentPanel(value, labels)
-          + "</td><td style=\"min-width: 8em\">";
-        if (value.collective) {
-          result += "<a href=\"javascript:;\" class=\"expand\" title=\""+labels.collapse_expand+"\"><i>"+labels.student_list+"&nbsp;...</i></a><ul class=\"simple\">";
+        if (isQuickEdit) {
+          result += DOSSIER.getCondensedLogBookRow(value, labels, supportLocales);
         } else {
-          result += "<ul class=\"simple\">";
+          var ms = (value.start.hour * 60) + value.start.minute;
+          var me = (value.end.hour * 60) + value.end.minute;
+          var length = me - ms;
+          if (value.collective || (value.ranges[0] && value.ranges[0].person.id > 0)) {
+            total += length;
+          }
+          result += DOSSIER.getFullLogBookRow(value, length, labels, supportLocales, isPhotosMasked, paths);
         }
-        result += DOSSIER.fillRanges(value, labels, paths, isPhotosMasked);
-        result += "</ul>";
-        result += "</td><td id=\"" + value.note + "\" accessKey=\"C\"";
-        if(value.collective) {
-          result += " class=\"cell-edit dlg\" title=\"" + coTitle + "\">";
-        } else {result += ">";}
-        result +="<p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + DOSSIER.getFollowUpSubContent(value.followUp, labels) + "</p></td></tr>\n";
       });
-      result += "<tr><th colspan=\"2\">Total</th><td colspan=\"5\"><b>" + getTimeFromMinutes(total) + "</b></td></tr>";
-      $("#collapseAll").prop("checked", false);
-      $("#follow-up-result tbody").html(result);
+
+      if (isQuickEdit) {
+        $("#follow-up-result-c tbody").html(result);
+      } else {
+        result += "<tr><th colspan=\"2\">Total</th><td colspan=\"5\"><b>" + getTimeFromMinutes(total) + "</b></td></tr>";
+        $("#collapseAll").prop("checked", false);
+        $("#follow-up-result tbody").html(result);
+      }
     }
   }, "json");
+};
+
+/**
+ *
+ * @param {Object} value ajax data
+ * @param {Object} length range length
+ * @param {Object} labels common labels
+ * @param {Boolean} supportLocales is locales supported
+ * @param {Boolean} isPhotosMasked
+ * @param {Object} paths common paths
+ * @returns {String}
+ */
+DOSSIER.getFullLogBookRow = function (value, length, labels, supportLocales, isPhotosMasked, paths) {
+  var result = "";
+  var coTitle = labels.collective_monitoring_action;
+  // zero-width space (&#8203;) inserted after hyphens to authorize breaks
+
+  var d = new Date(value.date);
+  var df = GEMUTILS.dateFormatFR(d);
+  var dateInfo = supportLocales ? d.toLocaleString(GEMUTILS.getLocale(), {weekday: 'long'}) + " " + df : df;
+  var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-&#8203;" + value.end.hour.pad() + ":" + value.end.minute.pad();
+  var roomInfo = value.detail['room'].name;
+  var courseInfo = value.ranges[0] ? value.detail['course'].name : "PAUSE";
+  var noteCo = value.followUp.content || "";
+
+  result += "<tr id=\"" + value.id + "\" class=\"" + (value.collective ? "co" : "notco") + "\">"// scheduleId
+    + "<td>" + dateInfo + "</td>"
+    + "<td>" + timeInfo + "</td>"
+    + "<td>" + getTimeFromMinutes(length) + "</td>"
+    + "<td>" + roomInfo + "</td>"
+    + "<td title=\"" + courseInfo + "\">"
+    + (value.collective ? DOSSIER.getMailtoLinksFromRanges(value.ranges, labels.mailto_all_participants_tip, courseInfo) : courseInfo)
+    + DOSSIER.fillTeacherDocumentPanel(value, labels)
+    + "</td><td style=\"min-width: 8em\">";
+  if (value.collective) {
+    result += "<a href=\"javascript:;\" class=\"expand\" title=\"" + labels.collapse_expand + "\"><i>" + labels.student_list + "&nbsp;...</i></a><ul class=\"simple\">";
+  } else {
+    result += "<ul class=\"simple\">";
+  }
+  result += DOSSIER.fillRanges(value, labels, paths, isPhotosMasked);
+  result += "</ul>";
+  result += "</td><td id=\"" + value.note + "\" accessKey=\"C\"";
+  if (value.collective) {
+    result += " class=\"cell-edit dlg\" title=\"" + coTitle + "\">";
+  } else {
+    result += ">";
+  }
+  result += "<p>" + $('<div />').text(noteCo).html() + "</p><p class=\"subContent\">" + DOSSIER.getFollowUpSubContent(value.followUp, labels) + "</p></td></tr>\n";
+
+  return result;
+};
+
+/**
+ *
+ * @param {Object} value ajax value
+ * @param {type} labels common labels
+ * @param {Boolean} supportLocales
+ * @returns {String}
+ */
+DOSSIER.getCondensedLogBookRow = function (value, labels, supportLocales) {
+  var result = "";
+  var d = new Date(value.date);
+  var df = GEMUTILS.dateFormatFR(d);
+  var dateInfo = supportLocales ? d.toLocaleString(GEMUTILS.getLocale(), {weekday: 'long'}) + " " + df : df;
+  var timeInfo = value.start.hour.pad() + ":" + value.start.minute.pad() + "-&#8203;" + value.end.hour.pad() + ":" + value.end.minute.pad();
+  var roomInfo = value.detail['room'].name;
+  var courseInfo = value.ranges[0] ? value.detail['course'].name : "PAUSE";
+
+  result += "<tr id=\"" + value.id + "\" class=\"" + (value.collective ? "co" : "notco") + "\">"// scheduleId
+    + "<td>" + dateInfo + "</td>"
+    + "<td>" + timeInfo + "</td>"
+    + "<td>" + roomInfo + "</td>"
+    + "<td title=\"" + courseInfo + "\">" + courseInfo + "</td><td style=\"min-width: 8em\">";
+  result += "<ul class=\"simple\">";
+  result += DOSSIER.fillSimpleRanges(value, labels);
+  result += "</ul>";
+  result += "</td></tr>\n";
+
+  return result;
 };
 
 /**
@@ -168,9 +227,10 @@ DOSSIER.getFollowUpSchedules = function(urlPath, user, dateFrom, dateTo, labels,
  * @param {Object} value json data
  * @param {Object} labels common labels
  * @param {Object} paths default locations
+ * @param {Boolean} isPhotosMasked
  * @returns {String} full content html li element
  */
-DOSSIER.fillRanges = function(value, labels, paths, isPhotosMasked) {
+DOSSIER.fillRanges = function (value, labels, paths, isPhotosMasked) {
   var line = "";
   var indTitle = labels.individual_monitoring_action;
 
@@ -207,12 +267,43 @@ DOSSIER.fillRanges = function(value, labels, paths, isPhotosMasked) {
 };
 
 /**
+ *
+ * @param {Object} value
+ * @param {Object} labels
+ * @returns {String}
+ */
+DOSSIER.fillSimpleRanges = function (value, labels) {
+  var line = "";
+
+  for (var i = 0, len = value.ranges.length; i < len; i++) {
+    var firstNameName = value.ranges[i].person.firstName + " " + value.ranges[i].person.name;
+    var upId = value.ranges[i].followUp.id;
+    var pre = (upId === 0 || value.ranges[i].followUp.status === 0);
+    var abs = (value.ranges[i].followUp.status === 1);
+    var exc = (value.ranges[i].followUp.status === 2);
+
+    line += "<li id=\"" + value.ranges[i].id + "\" data-algem-memberid=\"" + value.ranges[i].memberId + "\"><div class=\"monitoring-element\">";// scheduleRange Id
+
+    line += "<a id=\"" + upId + "\" href=\"javascript:;\">" + firstNameName + "</a>";
+    line += "<form id=\"up-status-" + value.ranges[i].id + "\">";
+    line += "<input type=\"hidden\" name=\"id\" value=\"" + upId + "\" />";
+    line += "<input type=\"hidden\" name=\"scheduleId\" value=\"" + value.ranges[i].id + "\"/>";
+    line += "<input id=\"pre-status-" + value.ranges[i].id + "\" type=\"radio\" name=\"status\" " + (pre ? "checked" : "") + " value=\"0\" /><label for=\"pre-status-" + value.ranges[i].id + "\" title=\"" + labels.present_label + "\">PRE</label>&nbsp;&nbsp;";
+    line += "<input id=\"abs-status-" + value.ranges[i].id + "\" type=\"radio\" name=\"status\" " + (abs ? "checked" : "") + " value=\"1\" /><label for=\"abs-status-" + value.ranges[i].id + "\" " + (abs ? "class=\"absent\"" : "") + " title=\"" + labels.absent_label + "\">ABS</label>&nbsp;&nbsp;";
+    line += "<input id=\"exc-status-" + value.ranges[i].id + "\" type=\"radio\" name=\"status\" " + (exc ? "class=\"excused\" checked" : "") + " value=\"2\" /><label for=\"exc-status-" + value.ranges[i].id + "\" " + (exc ? "class=\"excused\"" : "") + " title=\"" + labels.excused_label + "\">EXC</label>";
+    line += "</form>";
+    line += "</div></li>";
+  }
+  return line;
+};
+
+/**
  * Fills teacher monitoring document entries.
  * @param {Object} schedule schedule element
  * @param {Object} labels common labels
  * @returns {String} a tag as string
  */
-DOSSIER.fillTeacherDocumentPanel = function(schedule, labels) {
+DOSSIER.fillTeacherDocumentPanel = function (schedule, labels) {
   if (schedule.documents) {
     var p = "<div class=\"doc-icon-panel\" style=\"margin-top: 0.5em\">";
     var sDate = new Date(schedule.date);
@@ -221,8 +312,10 @@ DOSSIER.fillTeacherDocumentPanel = function(schedule, labels) {
     for (var i = 0, len = schedule.documents.length; i < len; i++) {
       var doc = schedule.documents[i];
       var dDate = new Date(doc.firstDate);
-      if (sDate.getTime() < dDate.getTime()) {continue;}
-      var refTag = "<span class=\"doc-ref "+ this.getIconFromDocType(doc.docType) + "\" data-algem-actionref=\""+ schedule.idAction +"\" data-algem-docid=\"" + doc.id + "\" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\"></span>";
+      if (sDate.getTime() < dDate.getTime()) {
+        continue;
+      }
+      var refTag = "<span class=\"doc-ref " + this.getIconFromDocType(doc.docType) + "\" data-algem-actionref=\"" + schedule.idAction + "\" data-algem-docid=\"" + doc.id + "\" title=\"" + this.getDocTypeFromNumber(doc.docType, labels) + " : " + doc.name + "\"></span>";
       if (doc.scheduleId === 0 && doc.memberId === 0) {
         p += refTag;
       } else if (doc.scheduleId > 0) {
@@ -239,12 +332,12 @@ DOSSIER.fillTeacherDocumentPanel = function(schedule, labels) {
     }
   }
 
-  p += "<a data-algem-docid=\"0\" data-algem-actionref=\""+ schedule.idAction +"\" class=\"img-link doc-ref doc-plus\" title=\"" + labels["document_add_label"] + "\" href=\"javascript:;\"><img alt=\"" + labels["document_add_label"] + "\" src=\"../resources/common/img/plus.png\" /></a>";
+  p += "<a data-algem-docid=\"0\" data-algem-actionref=\"" + schedule.idAction + "\" class=\"img-link doc-ref doc-plus\" title=\"" + labels["document_add_label"] + "\" href=\"javascript:;\"><img alt=\"" + labels["document_add_label"] + "\" src=\"../resources/common/img/plus.png\" /></a>";
   p += "</div>";
   return p;
 };
 
-DOSSIER.fillStudentDocumentPanel = function(schedule, userId, labels) {
+DOSSIER.fillStudentDocumentPanel = function (schedule, userId, labels) {
   if (!schedule.documents) {
     return "";
   }
@@ -255,9 +348,6 @@ DOSSIER.fillStudentDocumentPanel = function(schedule, userId, labels) {
   for (var i = 0, len = schedule.documents.length; i < len; i++) {
     var doc = schedule.documents[i];
     var dDate = new Date(doc.firstDate);
-    //dDate.setHours(13);
-    //console.log("schedule", sDate);
-    //console.log("doc", dDate);
     if (sDate.getTime() < dDate.getTime()) {
       continue;
     }
@@ -286,14 +376,20 @@ DOSSIER.fillStudentDocumentPanel = function(schedule, userId, labels) {
  * @param {type} labels common labels
  * @returns {String}
  */
-DOSSIER.getDocTypeFromNumber = function(n, labels) {
-  switch(n) {
-    case -1: return labels["document_type_label"];
-    case 0: return labels["document_type_other_label"];
-    case 1: return labels["document_type_music_sheet_label"];
-    case 2: return labels["document_type_music_label"];
-    case 3: return labels["document_type_video_label"];
-    default: return "";
+DOSSIER.getDocTypeFromNumber = function (n, labels) {
+  switch (n) {
+    case -1:
+      return labels["document_type_label"];
+    case 0:
+      return labels["document_type_other_label"];
+    case 1:
+      return labels["document_type_music_sheet_label"];
+    case 2:
+      return labels["document_type_music_label"];
+    case 3:
+      return labels["document_type_video_label"];
+    default:
+      return "";
   }
 };
 
@@ -304,14 +400,17 @@ DOSSIER.getDocTypeFromNumber = function(n, labels) {
  * @returns {String} class name
  * @see https://icomoon.io/
  */
-DOSSIER.getIconFromDocType = function(n) {
-  switch(n) {
+DOSSIER.getIconFromDocType = function (n) {
+  switch (n) {
     case -1:
     case 0:
       return "icon-share2";
-    case 1: return "icon-file-music";
-    case 2: return "icon-headphones";
-    case 3: return "icon-video-camera";
+    case 1:
+      return "icon-file-music";
+    case 2:
+      return "icon-headphones";
+    case 3:
+      return "icon-video-camera";
   }
 };
 
@@ -321,7 +420,7 @@ DOSSIER.getIconFromDocType = function(n) {
  * @param {String} url controller url
  * @param {Object} labels translations
  */
-DOSSIER.getAndFillDocumentDialog = function(element, url, labels) {
+DOSSIER.getAndFillDocumentDialog = function (element, url, labels) {
   var row = $(element).closest("tr");
   var actionRef = $(element).attr("data-algem-actionref");
   var scheduleRef = $(row).attr("id");
@@ -359,8 +458,8 @@ DOSSIER.getAndFillDocumentDialog = function(element, url, labels) {
         $("#docType").val(data.docType);
         $("#docName").val(data.name);
         $("#docUri").val(data.uri);
-        var docActionsTag = "<div id=\"docActions\" style=\"margin-top: 1em\"><a id=\"docRemoveLink\" data-algem-remove-link-id=\""+data.id+"\" href=\"javascript:;\">"+labels['document_remove_label']+"</a></div>";
-        var lnk = "<p id=\"docUriLink\"><a href=\""+data.uri+"\" target=\"_blank\">"+labels['document_access_label']+"</a></p>";
+        var docActionsTag = "<div id=\"docActions\" style=\"margin-top: 1em\"><a id=\"docRemoveLink\" data-algem-remove-link-id=\"" + data.id + "\" href=\"javascript:;\">" + labels['document_remove_label'] + "</a></div>";
+        var lnk = "<p id=\"docUriLink\"><a href=\"" + data.uri + "\" target=\"_blank\">" + labels['document_access_label'] + "</a></p>";
         $(docActionsTag).insertAfter($("#docUri"));
         $(lnk).insertBefore($("#docRemoveLink"));
       }
@@ -373,7 +472,7 @@ DOSSIER.getAndFillDocumentDialog = function(element, url, labels) {
  * Clears document form entries.
  * @returns {undefined}
  */
-DOSSIER.resetDocumentDialog = function() {
+DOSSIER.resetDocumentDialog = function () {
   $("#docId").val(0);
   $("#docFirstDate").val(null);
   $("#docActionId").val(0);
@@ -393,7 +492,7 @@ DOSSIER.resetDocumentDialog = function() {
  * @param {type} label link label
  * @returns {String} a string as link
  */
-DOSSIER.getMailtoLinksFromRanges = function(ranges, title, label) {
+DOSSIER.getMailtoLinksFromRanges = function (ranges, title, label) {
   var getFirstMail = function (range) {
     var emails = range.person.emails;
     if (emails.length > 0) {
@@ -417,7 +516,7 @@ DOSSIER.getMailtoLinksFromRanges = function(ranges, title, label) {
   for (var i = 1, len = emails.length; i < len; i++) {
     mailto += emails[i] + ","; // comma delimiter
   }
-  mailto += "\" title=\""+title+"\"><i class=\"fa fa-envelope\"></i>&nbsp;"+label+"</a>";
+  mailto += "\" title=\"" + title + "\"><i class=\"fa fa-envelope\"></i>&nbsp;" + label + "</a>";
   return mailto;
 }
 /**
@@ -429,7 +528,7 @@ DOSSIER.getMailtoLinksFromRanges = function(ranges, title, label) {
  * @param {type} labels
  * @returns {undefined}
  */
-DOSSIER.getFollowUpStudent = function(urlPath, userId, dateFrom, dateTo, labels) {
+DOSSIER.getFollowUpStudent = function (urlPath, userId, dateFrom, dateTo, labels) {
   $.get(urlPath, {userId: userId, from: dateFrom, to: dateTo}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("no data");
@@ -482,7 +581,7 @@ DOSSIER.getFollowUpStudent = function(urlPath, userId, dateFrom, dateTo, labels)
  * @param {Object} paths default locations
  * @returns {FollowUpObject}
  */
-DOSSIER.getAndFillFollowUp = function(url, element, co, paths) {
+DOSSIER.getAndFillFollowUp = function (url, element, co, paths) {
   var id = 0;
   if (element.is("img")) {
     id = $(element).attr("data-algem-followupid");
@@ -490,8 +589,8 @@ DOSSIER.getAndFillFollowUp = function(url, element, co, paths) {
     id = $(element).attr("id");
   }
   if (!co) {
-      var parent = $(element).closest("li");// <li> element
-      $("#follow-up-photo").attr("src", $(parent).find("img").attr("src"));
+    var parent = $(element).closest("li");// <li> element
+    $("#follow-up-photo").attr("src", $(parent).find("img").attr("src"));
   } else {
     $("#follow-up-photo").attr("src", paths["def_photo_co"]);
   }
@@ -517,11 +616,11 @@ DOSSIER.getAndFillFollowUp = function(url, element, co, paths) {
  * @param {Object} labels translations
  * @returns {String}
  */
-DOSSIER.getFollowUpSubContent = function(followUp, labels) {
+DOSSIER.getFollowUpSubContent = function (followUp, labels) {
   var note = followUp.note;
   var abs = (followUp.status === 1);
   var exc = (followUp.status === 2);
-  var sub = (followUp.id > 0 && note !== null && note.length > 0) ? "<span class=\"follow-up-note\">"+labels.score_label +" : " + note + "</span>" : "";
+  var sub = (followUp.id > 0 && note !== null && note.length > 0) ? "<span class=\"follow-up-note\">" + labels.score_label + " : " + note + "</span>" : "";
   sub += abs ? "<span class=\"absent\">ABS</span>" : "";
   sub += exc ? "<span class=\"excused\">EXC</span>" : "";
   return sub || "";
@@ -533,15 +632,15 @@ DOSSIER.getFollowUpSubContent = function(followUp, labels) {
  * @param {Object} labels
  * @returns {undefined}
  */
-DOSSIER.initFollowUpDialog = function(element, labels) {
+DOSSIER.initFollowUpDialog = function (element, labels) {
   $(element).dialog({
     modal: false,
     autoOpen: false,
     maxWidth: 320,
-    position: { my: "top", at: "top", of: window },
+    position: {my: "top", at: "top", of: window},
     buttons: [
       {
-        text: labels.abort_label,
+        text: labels.cancel_label,
         class: "button-secondary",
         click: function () {
           $(this).dialog("close");
@@ -557,7 +656,7 @@ DOSSIER.initFollowUpDialog = function(element, labels) {
   });
 }
 
-DOSSIER.initErrorDialog = function() {
+DOSSIER.initErrorDialog = function () {
   $("#errorDialog").dialog({
     autoOpen: false,
     buttons: {
@@ -568,7 +667,7 @@ DOSSIER.initErrorDialog = function() {
   });
 }
 
-DOSSIER.initDocumentDialog = function(labels) {
+DOSSIER.initDocumentDialog = function (labels) {
 
   var documentForm = $("#documentForm");
   $("#docEditor").dialog({
@@ -576,7 +675,7 @@ DOSSIER.initDocumentDialog = function(labels) {
     title: labels.document_link_label,
     buttons: [
       {
-        text: labels.abort_label,
+        text: labels.cancel_label,
         class: "button-secondary",
         click: function () {
           $(this).dialog("close");
@@ -592,7 +691,7 @@ DOSSIER.initDocumentDialog = function(labels) {
   });
 };
 
-DOSSIER.resetFollowUpDialog = function(defPhoto) {
+DOSSIER.resetFollowUpDialog = function (defPhoto) {
   $("#follow-up-photo").attr("src", defPhoto);
   $("#follow-content").val('');
   $("#follow-status").val('0');
@@ -600,7 +699,7 @@ DOSSIER.resetFollowUpDialog = function(defPhoto) {
   $("#follow-up-dlg").find(".error").text('');
 };
 
-DOSSIER.updateFollowUp = function(form, labels) {
+DOSSIER.updateFollowUp = function (form, labels) {
   var url = $(form).attr("action");
   //update hidden field before sending
   $("#status").val($("#follow-status").val());
@@ -620,7 +719,34 @@ DOSSIER.updateFollowUp = function(form, labels) {
   }, "json");
 };
 
-DOSSIER.refreshFollowContent = function(operation, followUp, labels) {
+DOSSIER.updateAbsenceStatus = function (url, form) {
+  var formId = form.attr("id");
+
+  $.post(url, form.serialize(), function (data) {
+    if (data.success) {
+      if (data.operation === 2) {
+        console.log("creation");
+        // update up id in view
+        $("#" + formId).children("[name=id]").attr("value", data.followUp.id);
+      }
+      console.log("status update : " + data.followUp.status);
+      if (data.followUp.status === 1) {
+        $("#" + formId).children(":radio[value=1]").next().addClass("absent");
+        $("#" + formId).children(":radio[value=2]").next().removeClass("excused");
+      } else if (data.followUp.status === 2) {
+        $("#" + formId).children(":radio[value=1]").next().removeClass("absent");
+        $("#" + formId).children(":radio[value=2]").next().addClass("excused");
+      } else {
+        $("#" + formId).children(":radio[value=1]").next().removeClass("absent");
+        $("#" + formId).children(":radio[value=2]").next().removeClass("excused");
+      }
+    } else {
+      console.log("no update");
+    }
+  }, "json");
+}
+
+DOSSIER.refreshFollowContent = function (operation, followUp, labels) {
   var subContent = this.getFollowUpSubContent(followUp, labels);
   var id = followUp.id;
   if (followUp.collective === 'true') {
@@ -628,14 +754,14 @@ DOSSIER.refreshFollowContent = function(operation, followUp, labels) {
       var el = $(this).children("td").last();
       $(el).find("p").first().text(followUp.content);
       $(el).find(".subContent").html(subContent);
-      if (operation == 2) {// creation
+      if (operation === 2) {// creation
         $(el).attr("id", followUp.id);
-      } else if (operation == 0) {//suppression
+      } else if (operation === 0) {//suppression
         $(el).attr("id", 0);
       }
     });
   } else {
-    if (operation == 2) {
+    if (operation === 2) {
       //console.log("creation " + creation)
       var ref = $("#" + followUp.scheduleId); // <li> element
       $(ref).find("p.follow-up-content").text(followUp.content);
@@ -648,8 +774,8 @@ DOSSIER.refreshFollowContent = function(operation, followUp, labels) {
       var p1 = $(parent).find('p.follow-up-content');
       $(p1).text(followUp.content);
       $(parent).find("p.subContent").html(subContent);
-      if (operation == 0) {//suppression
-        $("#" + id).attr("id",0);
+      if (operation === 0) {//suppression
+        $("#" + id).attr("id", 0);
         parent.find("img.dlg").attr("data-algem-followupid", 0);
       }
     }
@@ -657,7 +783,7 @@ DOSSIER.refreshFollowContent = function(operation, followUp, labels) {
   }
 };
 
-DOSSIER.updateActionDocument = function(form, labels) {
+DOSSIER.updateActionDocument = function (form, labels) {
   var updateUrl = $(form).attr("action");
   var creation = $("#docId").val() == "0" ? true : false;
   var name = $("#docName").val();
@@ -691,7 +817,7 @@ DOSSIER.updateActionDocument = function(form, labels) {
         } else {
           target = table.find("a[data-algem-actionref='" + actionId + "']");
         }
-        $(target).each(function() {
+        $(target).each(function () {
           var tr = $(this).closest("tr");
           var dateText = $(tr).children("td:first-child").text();
           var rowDate = GEMUTILS.getDateFromString(dateText.split(" ").pop());
@@ -700,10 +826,10 @@ DOSSIER.updateActionDocument = function(form, labels) {
           }
         });
       } else {
-        var imgTag = $("span[data-algem-docid="+data.id+"]");
-        $(imgTag).each(function() {
-          $(this).attr("class","doc-ref " + DOSSIER.getIconFromDocType(data.docType));
-          $(this).attr("title",DOSSIER.getDocTypeFromNumber(data.docType, labels) + " : " + data.name);
+        var imgTag = $("span[data-algem-docid=" + data.id + "]");
+        $(imgTag).each(function () {
+          $(this).attr("class", "doc-ref " + DOSSIER.getIconFromDocType(data.docType));
+          $(this).attr("title", DOSSIER.getDocTypeFromNumber(data.docType, labels) + " : " + data.name);
         });
       }
       $("#docEditor").dialog("close");
@@ -714,11 +840,11 @@ DOSSIER.updateActionDocument = function(form, labels) {
 
 };
 
-DOSSIER.removeActionDocument = function(element, url) {
+DOSSIER.removeActionDocument = function (element, url) {
   var id = $(element).attr("data-algem-remove-link-id");
   $.post(url, {docId: id}, function (data) {
     if (data && data === true) {
-      var imgTag = $("[data-algem-docid="+id+"]");
+      var imgTag = $("[data-algem-docid=" + id + "]");
       $(imgTag).remove();
     } else {
       console.log("erreur suppression");
@@ -727,7 +853,7 @@ DOSSIER.removeActionDocument = function(element, url) {
   });
 };
 
-DOSSIER.initWeekDates = function(today) {
+DOSSIER.initWeekDates = function (today) {
   var from = $("#weekFrom");
   var to = $("#weekTo");
   $(from).datepicker({changeMonth: true, changeYear: true, dateFormat: 'dd-mm-yy'}).datepicker('setDate', today);
@@ -743,17 +869,17 @@ DOSSIER.initWeekDates = function(today) {
   $(studentTo).val(GEMUTILS.dateFormatFR(today));
 };
 
-DOSSIER.setWeekDates = function(firstDay, lastDay) {
+DOSSIER.setWeekDates = function (firstDay, lastDay) {
   $("#weekFrom").datepicker('setDate', firstDay);
   $("#weekTo").datepicker('setDate', lastDay);
 };
 
-DOSSIER.setStudentWeekDates = function(firstDay, lastDay) {
+DOSSIER.setStudentWeekDates = function (firstDay, lastDay) {
   $("#student-weekFrom").datepicker('setDate', firstDay);
   $("#student-weekTo").datepicker('setDate', lastDay);
 };
 
-DOSSIER.setWeekChange = function(url, idper, labels, paths) {
+DOSSIER.setWeekChange = function (url, idper, labels, paths) {
   var from = $("#weekFrom");
   var to = $("#weekTo");
   from.change(function () {
@@ -775,7 +901,7 @@ DOSSIER.setWeekChange = function(url, idper, labels, paths) {
   });
 };
 
-DOSSIER.setStudentWeekChange = function(url, idper, labels) {
+DOSSIER.setStudentWeekChange = function (url, idper, labels) {
   var studentFrom = $("#student-weekFrom");
   var studentTo = $("#student-weekTo");
   studentFrom.change(function () {
@@ -797,7 +923,7 @@ DOSSIER.setStudentWeekChange = function(url, idper, labels) {
   });
 };
 
-DOSSIER.setTeacherDateNavigation = function(url, userId, weekDates, labels, paths) {
+DOSSIER.setTeacherDateNavigation = function (url, userId, weekDates, labels, paths) {
   $("#follow-d").click(function () {
     var now = new Date();
     var dfnow = GEMUTILS.dateFormatFR(now);
@@ -819,7 +945,7 @@ DOSSIER.setTeacherDateNavigation = function(url, userId, weekDates, labels, path
   });
 };
 
-DOSSIER.setStudentDateNavigation = function(url, userId, weekDates, labels) {
+DOSSIER.setStudentDateNavigation = function (url, userId, weekDates, labels) {
   $("#student-follow-d").click(function () {
     var now = new Date();
     var dfnow = GEMUTILS.dateFormatFR(now);

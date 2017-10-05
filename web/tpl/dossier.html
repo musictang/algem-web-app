@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.6.3 27/06/17
+ * @(#) dossier.html Algem Web App 1.7.0 04/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -73,7 +73,7 @@
         <div>
           <ul class="simple">
             <li th:if="${e != null && T(java.lang.Integer).parseInt(e) > 0}"><i class="fa fa-calendar-plus-o"></i>
-              <a th:with="n=${#dates.createNow()}" th:href="@{/daily.html(d=${#dates.format(n,'dd-MM-yyyy')},e=${e})}" th:text="|#{see.label}/#{book.label}|"th:title="#{book.and.see.tip}" ></a>
+              <a th:with="n=${#dates.createNow()}" th:href="@{/daily.html(d=${#dates.format(n,'dd-MM-yyyy')},e=${e})}" th:text="|#{view.label}/#{book.label}|"th:title="#{book.and.view.tip}" ></a>
             </li>
             <li><i class="fa fa-calendar"></i>
               <a th:href="@{/perso/weekly.html(d=${#dates.format(startOfW,'dd-MM-yyyy')},id=${user.id})}" th:text="#{my.weekly.schedule.label}" th:title="#{my.weekly.schedule.tip}">Mon planning</a>
@@ -95,7 +95,7 @@
           </thead>
           <tfoot>
             <tr style="border-top:1px solid #ccc">
-              <td colspan="7"><a id="bookingLinkPlus" href="javascript:;" th:text="#{see.more}" th:title="#{booking.see.more.tip}"></a><p class="error" id="bookingListStatus"></p></td>
+              <td colspan="7"><a id="bookingLinkPlus" href="javascript:;" th:text="#{view.more}" th:title="#{booking.view.more.tip}"></a><p class="error" id="bookingListStatus"></p></td>
             </tr>
           </tfoot>
           <tbody id="bookingList">
@@ -158,10 +158,21 @@
               <input id="maskPhotos" type="checkbox"/>
               <label for="maskPhotos" th:text="#{mask.all.photos.label}" th:title="#{mask.all.photos.tip}">Photos</label>
             </div>
+            <div class="export-panel">
+              <input id="quickEdit" type="checkbox"/>
+              <label for="quickEdit" th:text="#{quick.edit.label}" th:title="#{quick.edit.tip}">Saisie rapide</label>
+            </div>
           </header>
           <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed printable">
             <thead>
               <tr><th th:text="#{day.label}">Jour</th><th th:text="#{time.label}">Horaire</th><th th:text="#{time.length.label}">Durée</th><th th:text="#{room.label}">Salle</th><th th:text="#{course.label}">Cours</th><th th:text="#{individual.monitoring.label}">Suivi individuel</th><th th:text="#{collective.monitoring.label}">Suivi co.</th></tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot></tfoot>
+          </table>
+          <table id="follow-up-result-c" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed printable" style="display: none">
+            <thead>
+              <tr><th th:text="#{day.label}">Jour</th><th th:text="#{time.label}">Horaire</th><th th:text="#{room.label}">Salle</th><th th:text="#{course.label}">Cours</th><th th:text="#{individual.monitoring.label}">Suivi</th></tr>
             </thead>
             <tbody></tbody>
             <tfoot></tfoot>
@@ -176,7 +187,7 @@
             <img id="follow-up-photo" th:src="@{/resources/common/img/idphoto.png}" style="float: left;margin:0 0.5em 0.5em 0"/>
           <legend>PIANO<br />mercredi 01-06-2016<br />17:00-17:30</legend>
           <!--<label for="follow-content" th:text="#{follow-up.label}">Suivi</label>-->
-          <textarea style="display: block;width: 98%" rows="3" id="follow-content" th:name="content" maxlength="512" th:placeholder="#{follow-up.label}"></textarea>
+          <textarea style="display: block;width: 98%" rows="3" id="follow-content" th:name="content" maxlength="512" th:placeholder="#{comment.placeholder.label}"></textarea>
           </div>
           <div style="margin-top: 1em">
             <label for="note" th:text="#{score.label}" style="margin-right: 0.5em">Note</label><input id="note" type="text" th:name="note" maxlength="8" style="display: inline-block;width: 4em" />
@@ -240,14 +251,17 @@
     var url2 = $("#student-follow-d").attr("formaction");
     var labels = {
       "abort_label": /*[[#{abort.label}]]*/ "!abort!",
+      "absent_label": /*[[#{absent.label}]]*/ "!absent!",
       "call_label": /*[[#{call.label}]]*/ "!call!",
       "cancel_label": /*[[#{cancel.label}]]*/ "!cancel!",
       "collective_monitoring_action": /*[[#{collective.monitoring.action.title}]]*/ "!collective monitoring!",
       "collective_monitoring_title": /*[[#{collective.monitoring.title}]]*/ "!collective monitoring!",
       "collective_monitoring_warning" : /*[[#{collective.monitoring.warning}]]*/ "!collective monitoring!",
       "collapse_expand": /*[[#{collapse.expand.label}]]*/ "!expand_collapse!",
+      "excused_label": /*[[#{excused.label}]]*/ "!excusé!",
       "individual_monitoring_action": /*[[#{individual.monitoring.action.title}]]*/ "!individual_monitoring!",
       "mailto_all_participants_tip" : /*[[#{mailto.all.participants.tip}]]*/ "!mailto!",
+      "present_label": /*[[#{present.label}]]*/ "!present!",
       "remove_label" : /*[[#{remove.label}]]*/ "!remove!",
       "send_email_label" : /*[[#{send.email.label}]]*/ "!send!",
       "save_label": /*[[#{save.label}]]*/ "!save!",
@@ -326,6 +340,18 @@
       }
     });
 
+    $("#quickEdit").click(function() {
+      var upUrl = /*[[@{/perso/xFollowUpSchedules}]]*/ "";
+      if ($(this).is(":checked")) {
+        $("#follow-up-result").hide();
+        $("#follow-up-result-c").show();
+      } else {
+        $("#follow-up-result").show();
+        $("#follow-up-result-c").hide();
+      }
+      DOSSIER.getFollowUpSchedules(upUrl, userId, $("#weekFrom").val(), $("#weekTo").val(), labels, paths);
+    });
+
     DOSSIER.setTeacherDateNavigation(url1, userId, cwd, labels, paths);
     DOSSIER.setStudentDateNavigation(url2, userId, cwd, labels);
 
@@ -343,6 +369,11 @@
 
     $(document).on("click", "#bookingLinkPlus", function () {
       DOSSIER.getBookings(/*[[@{/perso/jxBookings}]]*/ "" , userId,/*[[@{/daily.html}]]*/ "", /*[[@{/perso/book-cancel.html}]]*/ "", labels);
+    });
+
+    $(document).on("change", "input[name='status']", function () {
+      console.log("change abs-status");
+      DOSSIER.updateAbsenceStatus(/*[[@{/perso/xUpdateAbsenceStatus}]]*/ "", $(this).parent("form"));
     });
 
     /** Opens followUp dialog. */

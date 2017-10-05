@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.6.0 15/02/17
+ * @(#) TeacherCtrl.java Algem Web App 1.7.0 04/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -74,7 +74,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.0
+ * @version 1.7.0
  * @since 1.4.0 21/06/2016
  */
 @Controller
@@ -301,11 +301,32 @@ public class TeacherCtrl
       return getErrorResponse(ex.getMessage());
     }
     LOGGER.log(Level.INFO, up.toString());
-    int result = service.updateFollowUp(up);
-    if (result < 0) {
+    int op = service.updateFollowUp(up);
+    if (op < 0) {
       return getErrorResponse("error.has.occurred");
     } else {
-      return new FollowUpResponse(true, result, up);
+      return new FollowUpResponse(true, op, up);
+    }
+
+  }
+
+  @RequestMapping(method = RequestMethod.POST, value = "/perso/xUpdateAbsenceStatus")
+  public @ResponseBody
+  FollowUpResponse updateAbsenceStatus(
+    @RequestParam String id,
+    @RequestParam String scheduleId,
+    @RequestParam String status
+  ) {
+    FollowUp up = new FollowUp();
+    try {
+      up.setId(Integer.parseInt(id));
+      up.setScheduleId(Integer.parseInt(scheduleId));
+      up.setStatus(Short.parseShort(status));
+
+      int op = service.updateAbsenceStatus(up);
+      return new FollowUpResponse(op >= 0, op, up);
+    } catch (IllegalArgumentException ex) {
+      return new FollowUpResponse(false, 0, up);
     }
 
   }

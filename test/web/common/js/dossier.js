@@ -273,7 +273,7 @@ function initFollowUpDialog(element, labels) {
     position: { my: "top", at: "top", of: window },
     buttons: [
       {
-        text: labels.abort_label,
+        text: labels.cancel_label,
         class: "button-secondary",
         click: function () {
           $(this).dialog("close");

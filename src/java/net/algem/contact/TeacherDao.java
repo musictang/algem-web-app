@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherDao.java Algem Web App 1.4.0 05/07/2016
+ * @(#) TeacherDao.java Algem Web App 1.7.0 04/10/17
  *
  * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
  *
@@ -28,7 +28,7 @@ import net.algem.planning.ScheduleElement;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.4.0
+ * @version 1.7.0
  * @since 1.4.0 05/07/2016
  */
 public interface TeacherDao {
@@ -38,5 +38,7 @@ public interface TeacherDao {
   void createFollowUp(final FollowUp follow);
 
   int updateFollowUp(final FollowUp follow);
+
+  int updateAbsenceStatus(final FollowUp follow);
 
 }

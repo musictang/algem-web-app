@@ -1,5 +1,5 @@
 /*
- * @(#) util.js Algem Web App 1.6.3 27/06/17
+ * @(#) util.js Algem Web App 1.7.0 04/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -81,7 +81,7 @@ GEMUTILS.getCurrentWeekDates = function(d) {
   last.setHours(0, -last.getTimezoneOffset(), 0, 0);
 
   return {first: first, last: last};
-}
+};
 
 /**
  * Gets first and last day of the current month.
@@ -93,6 +93,15 @@ GEMUTILS.getCurrentMonthDates = function() {
   first.setHours(0, -first.getTimezoneOffset(), 0, 0); //removing the timezone offset.
   var last = new Date();
   var last = new Date(last.getFullYear(), last.getMonth() + 1, 0);
+  last.setHours(0, -last.getTimezoneOffset(), 0, 0);
+
+  return {first: first, last: last};
+};
+
+GEMUTILS.getCurrentDateRange = function(from, to) {
+  var first = new Date(from.getFullYear(), from.getMonth(), 1);
+  first.setHours(0, -first.getTimezoneOffset(), 0, 0); //removing the timezone offset.
+  var last = new Date(to.getFullYear(), to.getMonth() + 1, 0);
   last.setHours(0, -last.getTimezoneOffset(), 0, 0);
 
   return {first: first, last: last};
@@ -215,7 +224,7 @@ GEMUTILS.getCookie = function(cname) {
 
 function isIE() {
   var userAgent = navigator.userAgent;
-  console.log("userAgent", userAgent); 
+  console.log("userAgent", userAgent);
   return userAgent.indexOf("MSIE ") > -1 || userAgent.indexOf("Trident/") > -1  > -1; //|| userAgent.indexOf("Edge/")
 }
 

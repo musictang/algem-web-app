@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherServiceImpl.java Algem Web App 1.6.0 08/02/17
+ * @(#) TeacherServiceImpl.java Algem Web App 1.7.0 04/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import net.algem.planning.FollowUp;
 import net.algem.planning.ActionDocument;
 import net.algem.planning.ActionDocumentDaoImpl;
+import net.algem.planning.FollowUpException;
 import net.algem.planning.ScheduleElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -36,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.0
+ * @version 1.7.0
  * @since 1.4.0 21/06/2016
  */
 @Service
@@ -73,6 +74,17 @@ public class TeacherServiceImpl
     } catch(DataAccessException ex) {
       LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
       return -1;
+    }
+  }
+
+  @Override
+  public int updateAbsenceStatus(FollowUp up) {
+    try {
+      LOGGER.log(Level.INFO, up.toString());
+      return dao.updateAbsenceStatus(up);
+    } catch(DataAccessException ex) {
+      LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+      throw new FollowUpException(ex.getMessage());
     }
   }
 

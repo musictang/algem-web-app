@@ -1,5 +1,5 @@
 /*
- * @(#) TeacherService.java Algem Web App 1.6.0 08/02/17
+ * @(#) TeacherService.java Algem Web App 1.7.0 04/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -28,7 +28,7 @@ import net.algem.planning.ScheduleElement;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.0
+ * @version 1.7.0
  * @since 1.4.0 21/06/2016
  */
 public interface TeacherService
@@ -39,6 +39,8 @@ public interface TeacherService
   FollowUp getFollowUp(int id);
 
   int updateFollowUp(FollowUp up);
+
+  int updateAbsenceStatus(FollowUp up);
 
   ActionDocument getDocument(int docId);
 
