@@ -127,7 +127,7 @@
                 <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="student-weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="student-weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""/>&nbsp;<label for="student-weekTo" th:text="#{to.label}"></label>&nbsp;<input id="student-weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value=""/></li>
               </ul>
             </nav>
-            <div class="export-panel"><a class="img-link" href="javascript:;" id="saveStudentPDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}" /></a></div>
+            <div class="option-panel"><a class="img-link" href="javascript:;" id="saveStudentPDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}" /></a></div>
           </header>
           <table id="follow-up-student" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
             <thead>
@@ -149,16 +149,16 @@
                 <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date" tabindex="3" readonly value=""/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" tabindex="4" readonly value=""/></li>
               </ul>
             </nav>
-            <div class="export-panel"><a class="img-link" href="javascript:;" id="saveCSV" th:title="#{save.to.csv.label}"><img th:src="@{/resources/common/img/csv.png}" th:alt="#{save.to.csv.label}" /></a><a class="img-link" href="javascript:;" id="savePDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}"/></a></div>
-            <div class="export-panel">
+            <div class="option-panel"><a class="img-link" href="javascript:;" id="saveCSV" th:title="#{save.to.csv.label}"><img th:src="@{/resources/common/img/csv.png}" th:alt="#{save.to.csv.label}" /></a><a class="img-link" href="javascript:;" id="savePDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}"/></a></div>
+            <div class="option-panel">
               <input id="collapseAll" type="checkbox" />
               <label for="collapseAll" th:text="#{collapse.expand.all.label}" th:title="#{collapse.expand.all.collective.tip}">Tout replier/déplier</label>
             </div>
-            <div class="export-panel">
+            <div class="option-panel">
               <input id="maskPhotos" type="checkbox"/>
               <label for="maskPhotos" th:text="#{mask.all.photos.label}" th:title="#{mask.all.photos.tip}">Photos</label>
             </div>
-            <div class="export-panel">
+            <div class="option-panel">
               <input id="quickEdit" type="checkbox"/>
               <label for="quickEdit" th:text="#{quick.edit.label}" th:title="#{quick.edit.tip}">Saisie rapide</label>
             </div>

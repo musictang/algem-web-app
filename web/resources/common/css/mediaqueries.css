@@ -94,7 +94,7 @@ and (orientation : portrait) {
 @media only screen
 and (max-width : 480px)
 and (orientation : portrait) {
-  .export-panel {display: block}
+  .option-panel {display: block}
 }
 
 @media only screen
@@ -177,5 +177,5 @@ and (orientation : landscape) {
   .centered {width: 100%;}
   #help-menu { float: none; width:100%;}
   .help-content{margin-left: 0}
-  .export-panel {display: block}
+  .option-panel {display: block}
 }

@@ -30,7 +30,7 @@
   margin: 10mm;  
 } 
 body {height: auto;background-color: white}
-#menu, #bottom-menu, #bars, .gallery, .postit, nav.horizontal-panel-menu, footer,.export-panel {display: none}
+#menu, #bottom-menu, #bars, .gallery, .postit, nav.horizontal-panel-menu, footer,.option-panel {display: none}
 #dow {color: black}
 .printable {display: block !important;}
 .printable img {display: none;}

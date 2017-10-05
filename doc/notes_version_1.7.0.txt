@@ -1,0 +1,11 @@
+1.7.0
+CORRECTIFS
+* Amélioration de la traduction anglaise de l'interface et modifications diverses des différents libellés et boutons d’action.
+
+SUIVI PEDAGOGIQUE ENSEIGNANT
+Une nouvelle option permet maintenant d'accélerer la saisie du suivi pédagogique : Saisie rapide.
+
+Ce mode de saisie est optimisé pour la gestion des absences : en cas d'absence d'un élève, il suffit à l'enseignant de cocher l'une des 2 options en-dessous du nom de chaque élève : ABS (pour absent) et EXC (pour excusé). L'option PRE (présent) est cochée par défaut.
+Afin de gagner de la place, notamment sur les petits écrans, les colonnes "Durée" et "Suivi collectif" ont été omises ainsi que les photos et les liens vers les mails et téléphones.
+On peut à tout moment revenir à la saisie standard en décochant l'option.
+La saisie rapide est plus condensée et ne permet de modifier que le statut d’absence. Ce mode de saisie ne permet pas non plus de gérer les liens vers les documents de cours.

@@ -376,7 +376,7 @@ span.error {display: block;}
 .note {font-size: smaller;}
 .footnote {font-size: smaller; line-height: 1.2em}
 .warning {background-color: lightpink;}
-.export-panel {display: inline-block;margin: 0.4em 0 0.4em 1em;vertical-align: middle}
+.option-panel {display: inline-block;margin: 0.4em 0 0.4em 1em;vertical-align: middle}
 .ellipsed {
   display: block;
   overflow: hidden;
