@@ -68,8 +68,8 @@ function getFollowUpSchedules(urlPath, user, dateFrom, dateTo) {
     } else {
       var result = "";
       var total = 0;
-      var indTitle = labels.individual_monitoring_action;
-      var coTitle = labels.collective_monitoring_action;
+      var indTitle = labels.individual_logbook_action;
+      var coTitle = labels.collective_comment_action;
       var supportLocales = GEMUTILS.toLocaleStringSupportsLocales();
       // zero-width space (&#8203;) inserted after hyphens to authorize breaks
       $.each(data, function (index, value) {

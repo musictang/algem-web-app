@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java	1.6.2 03/05/17
+ * @(#)UserCtrl.java	1.7.1 06/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -489,8 +489,8 @@ public class UserCtrl
     String abs = messageSource.getMessage("absence.label", null, CTX_LOCALE);
     table.addCell(new PdfPCell(new Phrase(abs != null ? abs.substring(0,3) + "." : "", boldFont)));
     table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("score.label", null, CTX_LOCALE), boldFont)));
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("individual.monitoring.label", null, CTX_LOCALE), boldFont)));
-    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("collective.monitoring.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("individual.logbook.label", null, CTX_LOCALE), boldFont)));
+    table.addCell(new PdfPCell(new Phrase(messageSource.getMessage("collective.comment.label", null, CTX_LOCALE), boldFont)));
 
     fillPdfTable(table, getFollowUpSchedules(userId, from, to), normalFont);
 

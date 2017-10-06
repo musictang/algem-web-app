@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) help.html Algem Web App 1.6.1 29/04/17
+ * @(#) help.html Algem Web App 1.7.1 06/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -49,8 +49,8 @@
               <li><a href="#account-info-help">Informations</a></li>
               <li><a href="#weekly-help" th:text="#{schedule.label}">Planning</a></li>
               <li><a href="#book-help" th:text="#{my.bookings.label}">Réservations</a></li>
-              <li sec:authorize="hasAnyRole('1','2','4', '11')"><a href="#followup-help" th:text="#{student.monitoring.label}">Suivi pédagogique</a></li>
-              <li sec:authorize="hasAnyRole('1','2','4')"><a href="#teacher-help" th:text="#{teacher.monitoring.label}">Suivi enseignant</a></li>
+              <li sec:authorize="hasAnyRole('1','2','4', '11')"><a href="#followup-help" th:text="#{student.logbook.label}">Suivi pédagogique</a></li>
+              <li sec:authorize="hasAnyRole('1','2','4')"><a href="#teacher-help" th:text="#{teacher.logbook.label}">Suivi enseignant</a></li>
               <li sec:authorize="hasAnyRole('1','2','4')"><a href="#teacher-documents" th:text="#{educational.documents.label}" >Documents</a></li>
             </ul>
           </li>

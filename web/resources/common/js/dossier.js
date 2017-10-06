@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.7.0 04/10/17
+ * @(#) dossier.js Algem Web App 1.7.1 06/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -155,7 +155,7 @@ DOSSIER.getFollowUpSchedules = function (urlPath, user, dateFrom, dateTo, labels
  */
 DOSSIER.getFullLogBookRow = function (value, length, labels, supportLocales, isPhotosMasked, paths) {
   var result = "";
-  var coTitle = labels.collective_monitoring_action;
+  var coTitle = labels.collective_comment_action;
   // zero-width space (&#8203;) inserted after hyphens to authorize breaks
 
   var d = new Date(value.date);
@@ -232,7 +232,7 @@ DOSSIER.getCondensedLogBookRow = function (value, labels, supportLocales) {
  */
 DOSSIER.fillRanges = function (value, labels, paths, isPhotosMasked) {
   var line = "";
-  var indTitle = labels.individual_monitoring_action;
+  var indTitle = labels.individual_logbook_action;
 
   for (var i = 0, len = value.ranges.length; i < len; i++) {
     var firstNameName = value.ranges[i].person.firstName + " " + value.ranges[i].person.name;

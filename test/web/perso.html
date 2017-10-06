@@ -285,11 +285,11 @@
       "abort_label": 'Abandonner',
       "call_label": 'Appeler',
       "cancel_label": 'Annuler',
-      "collective_monitoring_action": 'Editer le suivi collectif',
-      "collective_monitoring_title": 'Suivi collectif',
-      "collective_monitoring_warning": 'Le suivi collectif n\'est pas \xE9ditable pour les cours individuels.',
+      "collective_comment_action": 'Editer le suivi collectif',
+      "collective_comment_title": 'Suivi collectif',
+      "collective_comment_warning": 'Le suivi collectif n\'est pas \xE9ditable pour les cours individuels.',
       "collapse_expand": 'Plier/D\xE9plier',
-      "individual_monitoring_action": 'Editer le suivi de l\'\xE9l\xE8ve (ou signaler son absence)',
+      "individual_logbook_action": 'Editer le suivi de l\'\xE9l\xE8ve (ou signaler son absence)',
       "mailto_all_participants_tip": 'Envoyer un mail \xE0 tous les participants',
       "send_email_label": 'Envoyer un email',
       "save_label": 'Enregistrer',
@@ -379,7 +379,7 @@ $(".doc-link").click(function(){
       var legend = $(dlg).find("legend");
       var isImage = $(this).is("img");
       // set dialog's title
-      var t = isCoCell ? labels.collective_monitoring_title : (isImage ? $(this).next().html() : $(this).html());
+      var t = isCoCell ? labels.collective_comment_title : (isImage ? $(this).next().html() : $(this).html());
       var isCo = row.hasClass("co");
       $(legend).html(legendInfo + " <i class='fa fa-mail'></i>");
       // complete form
@@ -397,7 +397,7 @@ $(".doc-link").click(function(){
       if (!isCoCell || (isCo && isCoCell)) {
         $(dlg).dialog({title: t}).dialog("open");
       } else {
-        $("#errorDialog").text(labels.collective_monitoring_warning).dialog("open");
+        $("#errorDialog").text(labels.collective_comment_warning).dialog("open");
       }
     });
 

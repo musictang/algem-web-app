@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.7.0 04/10/17
+ * @(#) dossier.html Algem Web App 1.7.1 06/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -95,7 +95,7 @@
           </thead>
           <tfoot>
             <tr style="border-top:1px solid #ccc">
-              <td colspan="7"><a id="bookingLinkPlus" href="javascript:;" th:text="#{view.more}" th:title="#{booking.view.more.tip}"></a><p class="error" id="bookingListStatus"></p></td>
+              <td colspan="7"><a id="bookingLinkPlus" href="javascript:;" th:text="#{view.more.label}" th:title="#{booking.view.more.tip}"></a><p class="error" id="bookingListStatus"></p></td>
             </tr>
           </tfoot>
           <tbody id="bookingList">
@@ -111,12 +111,12 @@
                 <p th:case="'1'" th:text="#{booking.confirmed.label}" th:class="confirmed"></p>
               </td>
 <!--              <td th:class="${b.status == 0 ? 'pending' : 'confirmed'}" th:text="#{${b.status == 0} ? booking.pending.label : booking.confirmed.label}"></td>-->
-              <td><a th:if="${b.status == 0}" th:text="#{cancel.label}" th:href="@{/perso/book-cancel.html(id=${b.id},action=${b.idAction},date=${b.dateFr},start=${b.start})}">Annuler</a></td>
+              <td><a th:if="${b.status == 0}" th:text="#{undo.label}" th:href="@{/perso/book-cancel.html(id=${b.id},action=${b.idAction},date=${b.dateFr},start=${b.start})}">Annuler</a></td>
             </tr>
           </tbody>
         </table>
 
-        <h3 th:if="${user.student}" th:text="#{student.monitoring.label}">Suivi</h3>
+        <h3 th:text="#{${user.teacher} ? teacher.student.logbook.label : student.logbook.label}">Suivi</h3>
         <section th:if="${user.student}">
           <header>
             <nav class="horizontal-panel-menu-p">
@@ -131,14 +131,14 @@
           </header>
           <table id="follow-up-student" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed">
             <thead>
-              <tr><th th:text="#{day.label}">Jour</th><th th:text="#{time.label}">Horaire</th><th th:text="#{time.length.label}">Durée</th><th th:text="#{room.label}">Salle</th><th th:text="#{course.label}">Cours</th><th th:text="#{teacher.label}">Professeur</th><th th:text="#{individual.monitoring.label}">Suivi individuel</th><th th:text="#{collective.monitoring.label}">Suivi co.</th></tr>
+              <tr><th th:text="#{day.label}">Jour</th><th th:text="#{time.label}">Horaire</th><th th:text="#{time.length.label}">Durée</th><th th:text="#{room.label}">Salle</th><th th:text="#{course.label}">Cours</th><th th:text="#{teacher.label}">Professeur</th><th th:text="#{individual.logbook.label}">Suivi individuel</th><th th:text="#{collective.comment.label}">Suivi co.</th></tr>
             </thead>
             <tbody>
             </tbody>
             <tfoot></tfoot>
           </table>
         </section>
-        <h3 th:if="${user.teacher}" th:text="#{teacher.monitoring.label}">Suivi</h3>
+        <h3 th:if="${user.teacher}" th:text="#{teacher.logbook.label}">Suivi</h3>
         <section th:if="${user.teacher}">
           <header>
             <nav class="horizontal-panel-menu-p">
@@ -165,14 +165,14 @@
           </header>
           <table id="follow-up-result" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed printable">
             <thead>
-              <tr><th th:text="#{day.label}">Jour</th><th th:text="#{time.label}">Horaire</th><th th:text="#{time.length.label}">Durée</th><th th:text="#{room.label}">Salle</th><th th:text="#{course.label}">Cours</th><th th:text="#{individual.monitoring.label}">Suivi individuel</th><th th:text="#{collective.monitoring.label}">Suivi co.</th></tr>
+              <tr><th th:text="#{day.label}">Jour</th><th th:text="#{time.label}">Horaire</th><th th:text="#{time.length.label}">Durée</th><th th:text="#{room.label}">Salle</th><th th:text="#{course.label}">Cours</th><th th:text="#{individual.logbook.label}">Suivi individuel</th><th th:text="#{collective.comment.label}">Suivi co.</th></tr>
             </thead>
             <tbody></tbody>
             <tfoot></tfoot>
           </table>
           <table id="follow-up-result-c" class="pure-table pure-table-vertical pure-table-bordered pure-table-striped mobile condensed printable" style="display: none">
             <thead>
-              <tr><th th:text="#{day.label}">Jour</th><th th:text="#{time.label}">Horaire</th><th th:text="#{room.label}">Salle</th><th th:text="#{course.label}">Cours</th><th th:text="#{individual.monitoring.label}">Suivi</th></tr>
+              <tr><th th:text="#{day.label}">Jour</th><th th:text="#{time.label}">Horaire</th><th th:text="#{room.label}">Salle</th><th th:text="#{course.label}">Cours</th><th th:text="#{individual.logbook.label}">Suivi</th></tr>
             </thead>
             <tbody></tbody>
             <tfoot></tfoot>
@@ -254,12 +254,12 @@
       "absent_label": /*[[#{absent.label}]]*/ "!absent!",
       "call_label": /*[[#{call.label}]]*/ "!call!",
       "cancel_label": /*[[#{cancel.label}]]*/ "!cancel!",
-      "collective_monitoring_action": /*[[#{collective.monitoring.action.title}]]*/ "!collective monitoring!",
-      "collective_monitoring_title": /*[[#{collective.monitoring.title}]]*/ "!collective monitoring!",
-      "collective_monitoring_warning" : /*[[#{collective.monitoring.warning}]]*/ "!collective monitoring!",
+      "collective_comment_action": /*[[#{collective.comment.action.title}]]*/ "!collective comment!",
+      "collective_comment_title": /*[[#{collective.comment.title}]]*/ "!collective comment!",
+      "collective_comment_warning" : /*[[#{collective.comment.warning}]]*/ "!collective comment!",
       "collapse_expand": /*[[#{collapse.expand.label}]]*/ "!expand_collapse!",
       "excused_label": /*[[#{excused.label}]]*/ "!excusé!",
-      "individual_monitoring_action": /*[[#{individual.monitoring.action.title}]]*/ "!individual_monitoring!",
+      "individual_logbook_action": /*[[#{individual.logbook.action.title}]]*/ "!individual_comment!",
       "mailto_all_participants_tip" : /*[[#{mailto.all.participants.tip}]]*/ "!mailto!",
       "present_label": /*[[#{present.label}]]*/ "!present!",
       "remove_label" : /*[[#{remove.label}]]*/ "!remove!",
@@ -389,7 +389,7 @@
       var legend = $(dlg).find("legend");
       var isImage = $(this).is("img");
       // set dialog's title
-      var t = isCoCell ?  labels.collective_monitoring_title : (isImage ? $(this).next().html() : $(this).html());
+      var t = isCoCell ?  labels.collective_comment_title : (isImage ? $(this).next().html() : $(this).html());
       var isCo = row.hasClass("co");
       $(legend).html(legendInfo  + " <i class='fa fa-mail'></i>");
       // complete form
@@ -407,7 +407,7 @@
       if (!isCoCell || (isCo && isCoCell)) {
         $(dlg).dialog({title: t}).dialog("open");
       } else {
-        $("#errorDialog").text(labels.collective_monitoring_warning).dialog("open");
+        $("#errorDialog").text(labels.collective_comment_warning).dialog("open");
       }
     });
 
