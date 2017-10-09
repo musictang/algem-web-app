@@ -1,5 +1,5 @@
 /*
- * @(#) dossier.js Algem Web App 1.7.1 06/10/17
+ * @(#) dossier.js Algem Web App 1.7.1 09/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -32,7 +32,7 @@ DOSSIER.getBookings = function (url, userId, planningUrl, cancelUrl, labels) {
       var start = b.start.hour.pad() + ":" + b.start.minute.pad();
       var timeInfo = start + "-&#8203;" + b.end.hour.pad() + ":" + b.end.minute.pad();
       var link = planningUrl + "?d=" + dateFr + "&e=" + b.detail['estab'].id;
-      var cancelLink = "<a href=" + cancelUrl + "?id=" + b.id + "&action=" + b.idAction + "&date=" + dateFr + "&start=" + start + ">" + labels.cancel_label + "</a>";
+      var cancelLink = "<a href=" + cancelUrl + "?id=" + b.id + "&action=" + b.idAction + "&date=" + dateFr + "&start=" + start + ">" + labels.undo_label + "</a>";
       var statusClass = b.status === 0 ? "pending" : "confirmed";
       var statusLabel = b.status === 0 ? labels.booking_pending_label : labels.booking_confirmed_label;
       var tr = "<tr data-booking-id=\"" + b.id + "\">\n";

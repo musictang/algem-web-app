@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.7.1 06/10/17
+ * @(#) dossier.html Algem Web App 1.7.1 09/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -115,8 +115,7 @@
             </tr>
           </tbody>
         </table>
-
-        <h3 th:text="#{${user.teacher} ? teacher.student.logbook.label : student.logbook.label}">Suivi</h3>
+        <h3 th:if="${user.student}" th:text="#{${user.teacher} ? teacher.student.logbook.label : student.logbook.label}">Suivi</h3>
         <section th:if="${user.student}">
           <header>
             <nav class="horizontal-panel-menu-p">
@@ -254,6 +253,7 @@
       "absent_label": /*[[#{absent.label}]]*/ "!absent!",
       "call_label": /*[[#{call.label}]]*/ "!call!",
       "cancel_label": /*[[#{cancel.label}]]*/ "!cancel!",
+      "undo_label": /*[[#{undo.label}]]*/ "!undo!",
       "collective_comment_action": /*[[#{collective.comment.action.title}]]*/ "!collective comment!",
       "collective_comment_title": /*[[#{collective.comment.title}]]*/ "!collective comment!",
       "collective_comment_warning" : /*[[#{collective.comment.warning}]]*/ "!collective comment!",

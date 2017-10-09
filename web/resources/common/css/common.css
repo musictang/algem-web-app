@@ -1,5 +1,5 @@
 /*
- * @(#) common.css Algem Web App 1.6.3 27/06/17
+ * @(#) common.css Algem Web App 1.7.1 09/10/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -622,7 +622,7 @@ form legend + label {
 #groupInfo > select {width:77%;}
 
 .pending {color: red;}
-.confirmed {color: green;}
+.confirmed {padding: 0;color: green;}
 .pseudo {
   display: block;
   font-size: small;
