@@ -1,7 +1,7 @@
 /*
- * @(#) TeacherCtrl.java Algem Web App 1.7.1 06/10/17
+ * @(#) TeacherCtrl.java Algem Web App 1.7.3 15/02/18
  *
- * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -74,7 +74,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.7.0
+ * @version 1.7.3
  * @since 1.4.0 21/06/2016
  */
 @Controller
@@ -253,6 +253,7 @@ public class TeacherCtrl
   private List<ScheduleElement> getFollowUpSchedules(String userId, String from, String to) {
     Date dateFrom = null;
     Date dateTo = null;
+    long max = 1000L * 60L * 60L * 24L * 365L;// 1year
     try {
       dateFrom = DATE_FORMAT.parse(from);
       dateTo = DATE_FORMAT.parse(to);
@@ -260,6 +261,13 @@ public class TeacherCtrl
       LOGGER.log(Level.SEVERE, null, ex);
       dateFrom = new Date();
       dateTo = new Date();
+    }
+    if (dateFrom.after(dateTo)) {
+      dateFrom.setTime(dateTo.getTime());
+    }
+    long interval = dateTo.getTime() - dateFrom.getTime();
+    if (interval > max) {
+      dateTo.setTime(dateFrom.getTime() + max);
     }
     try {
       return service.getFollowUpSchedules(Integer.parseInt(userId), dateFrom, dateTo);

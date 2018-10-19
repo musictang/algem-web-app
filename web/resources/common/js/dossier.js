@@ -1,7 +1,7 @@
 /*
- * @(#) dossier.js Algem Web App 1.7.1 09/10/17
+ * @(#) dossier.js Algem Web App 1.7.3 15/02/18
  *
- * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -305,7 +305,7 @@ DOSSIER.fillSimpleRanges = function (value, labels) {
  */
 DOSSIER.fillTeacherDocumentPanel = function (schedule, labels) {
   if (schedule.documents) {
-    var p = "<div class=\"doc-icon-panel\" style=\"margin-top: 0.5em\">";
+    var p = "<div class=\"doc-icon-panel\">";
     var sDate = new Date(schedule.date);
     // adjust with timezone offset
     sDate.setTime(sDate.getTime() + new Date().getTimezoneOffset() * 60 * 1000);
@@ -341,7 +341,7 @@ DOSSIER.fillStudentDocumentPanel = function (schedule, userId, labels) {
   if (!schedule.documents) {
     return "";
   }
-  var panel = "<div class=\"doc-icon-panel\" style=\"margin-top: 0.5em\">";
+  var panel = "<div class=\"doc-icon-panel\">";
   var sDate = new Date(schedule.date);
   // adjust with timezone offset
   sDate.setTime(sDate.getTime() + new Date().getTimezoneOffset() * 60 * 1000);
@@ -378,7 +378,7 @@ DOSSIER.fillStudentDocumentPanel = function (schedule, userId, labels) {
  */
 DOSSIER.getDocTypeFromNumber = function (n, labels) {
   switch (n) {
-    case -1:
+    case - 1:
       return labels["document_type_label"];
     case 0:
       return labels["document_type_other_label"];
@@ -402,7 +402,7 @@ DOSSIER.getDocTypeFromNumber = function (n, labels) {
  */
 DOSSIER.getIconFromDocType = function (n) {
   switch (n) {
-    case -1:
+    case - 1:
     case 0:
       return "icon-share2";
     case 1:
@@ -879,7 +879,100 @@ DOSSIER.setStudentWeekDates = function (firstDay, lastDay) {
   $("#student-weekTo").datepicker('setDate', lastDay);
 };
 
+/**
+ *
+ * @param {type} url
+ * @param {type} idper
+ * @param {type} labels
+ * @param {type} paths
+ * @returns {undefined}
+ */
 DOSSIER.setWeekChange = function (url, idper, labels, paths) {
+  console.log("DOSSIER.setWeekChange");
+  var from = $("#weekFrom");
+  var to = $("#weekTo");
+  var max = 1000 * 60 * 60 * 24 * 365;// 1year
+  console.log(from, to);
+
+  /*from.change(function () {
+    var first = new Date(from.datepicker('getDate'));
+    var last = new Date(to.datepicker('getDate'));
+    if (first.getTime() > last.getTime()) {
+      first = new Date(last.getTime());
+      $(from).datepicker('setDate', first);
+      $(from).blur();
+    } else if (last.getTime() - first.getTime() > max) {
+      alert(labels.too_long_period_warning);
+      first = new Date(last.getTime() - max);
+      $(from).datepicker('setDate', first);
+      $(from).blur();
+    }
+    DOSSIER.getFollowUpSchedules(url, idper, GEMUTILS.dateFormatFR(first), GEMUTILS.dateFormatFR(last), labels, paths);
+  });*/
+
+  to.change(function () {
+    var first = new Date(from.datepicker('getDate'));
+    var last = new Date(to.datepicker('getDate'));
+    if (last.getTime() < first.getTime()) {
+      last = new Date(first.getTime());
+      $(to).datepicker('setDate', last);
+      $(to).blur();
+    } else if (last.getTime() - first.getTime() > max) {
+      alert(labels.too_long_period_warning);
+      last = new Date(first.getTime() + max);
+      $(to).datepicker('setDate', last);
+      $(to).blur();
+    }
+    DOSSIER.getFollowUpSchedules(url, idper, GEMUTILS.dateFormatFR(first), GEMUTILS.dateFormatFR(last), labels, paths);
+  });
+};
+
+DOSSIER.setStudentWeekChange = function (url, idper, labels) {
+  var studentFrom = $("#student-weekFrom");
+  var studentTo = $("#student-weekTo");
+  var max = 1000 * 60 * 60 * 24 * 365;// 1year
+  /*studentFrom.change(function () {
+    var first = new Date(studentFrom.datepicker('getDate'));
+    var last = new Date(studentTo.datepicker('getDate'));
+    if (first.getTime() > last.getTime()) {
+      first = new Date(last.getTime());
+      $(studentFrom).datepicker('setDate', first);
+      $(studentFrom).blur();
+    } else if (last.getTime() - first.getTime() > max) {
+      alert(labels.too_long_period_warning);
+      first = new Date(last.getTime() - max);
+      $(studentFrom).datepicker('setDate', first);
+      $(studentFrom).blur();
+    }
+    DOSSIER.getFollowUpStudent(url, idper, GEMUTILS.dateFormatFR(first), GEMUTILS.dateFormatFR(last), labels);
+  });*/
+
+  studentTo.change(function () {
+    var first = new Date(studentFrom.datepicker('getDate'));
+    var last = new Date(studentTo.datepicker('getDate'));
+    if (last.getTime() < first.getTime()) {
+      last = new Date(first.getTime());
+      $(studentTo).datepicker('setDate', last);
+      $(studentTo).blur();
+    } else if (last.getTime() - first.getTime() > max) {
+      alert(labels.too_long_period_warning);
+      last = new Date(first.getTime() + max);
+      $(studentTo).datepicker('setDate', last);
+      $(studentTo).blur();
+    }
+    DOSSIER.getFollowUpStudent(url, idper, GEMUTILS.dateFormatFR(first), GEMUTILS.dateFormatFR(last), labels);
+  });
+};
+
+/**
+ *
+ * @param {string} url service url
+ * @param {number} idper current person's id
+ * @param {Object} labels message labels
+ * @param {Object} paths common paths
+ * @returns {undefined}
+ */
+DOSSIER.setChangeCurrentWeek = function (url, idper, labels, paths) {
   var from = $("#weekFrom");
   var to = $("#weekTo");
   from.change(function () {
@@ -901,7 +994,7 @@ DOSSIER.setWeekChange = function (url, idper, labels, paths) {
   });
 };
 
-DOSSIER.setStudentWeekChange = function (url, idper, labels) {
+DOSSIER.setChangeStudentCurrentWeek = function (url, idper, labels) {
   var studentFrom = $("#student-weekFrom");
   var studentTo = $("#student-weekTo");
   studentFrom.change(function () {

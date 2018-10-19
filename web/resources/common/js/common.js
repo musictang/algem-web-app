@@ -1,7 +1,7 @@
 /*
- * @(#)common.js    1.5.2 14/01/17
+ * @(#)common.js    1.7.3 14/02/18
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -22,7 +22,7 @@
 /**
  * Global script for algem web module.
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.5.2
+ * @version 1.7.3
  * @since 1.0.6 28/12/15
  */
 function redirectLoginPage() {
@@ -35,11 +35,13 @@ function setCommonEvents() {
   jQuery.ajaxSetup({
     beforeSend: function () {$("#busy").show();},
     complete: function () {$("#busy").hide();},
+//    xhrFields: { withCredentials: true },
     cache: false // IMPORTANT : IE,Edge fix
   });
   // redirect if session timeout
   $(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
     if (jqXHR && (jqXHR.status == 403 || jqXHR.status == 405)) {
+      console.log("jqXHR.status ",jqXHR.status);
       redirectLoginPage();
     }
   });

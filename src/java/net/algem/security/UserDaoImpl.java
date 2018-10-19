@@ -175,6 +175,9 @@ public class UserDaoImpl
   }
 
   @Override
+  /**
+   * Must return a single mapped User.
+   */
   public User findByEmail(final String email) {
     String query = "SELECT l.idper,l.login,l.profil FROM "
       + TABLE + " l INNER JOIN email e ON (l.idper = e.idper)"

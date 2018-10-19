@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) login.html Algem Web App 1.7.1 06/10/17
+ * @(#) login.html Algem Web App 1.7.3 15/02/18
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -60,8 +60,9 @@
           <h5 style="display:block">Suivi élève</h5>
           <p>Si vous êtes inscrit en tant qu'élève dans la structure, vous pouvez consulter votre propre suivi pédagogique : appréciations des professeurs, notes, contenu des séances de cours, morceaux et techniques abordées, etc.<br />
             Cliquez respectivement sur <strong>Aujourd'hui</strong>, <strong>Cette semaine</strong>, <strong>Ce mois</strong> pour afficher les séances du jour, de la semaine ou du mois courants.<br />
-            Vous pouvez également choisir n'importe quelle semaine dans l'année en cliquant sur l'une des dates et en vous déplaçant dans le calendrier.<br />
+            Vous pouvez également choisir n'importe quelle période en modifiant directement les dates de début et de fin : cliquez tout d'abord dans le calendrier de gauche pour choisir la date de début, puis sélectionnez une date de fin dans le calendrier de droite *.<br />
             Vos absences sont signalées par les mentions <span class="absent">ABS</span> ou <span class="excused">EXC</span> (si le motif de l'absence a été donné).</p>
+            <p class="footnote">* Notez cependant que l'intervalle entre deux dates ne peut être supérieur à 1 an.</p>
           <h5>Exportation du suivi</h5>
           <p>Vous pouvez exporter votre suivi pédagogique de deux manières :</p>
           <ol>
@@ -74,17 +75,19 @@
         <div sec:authorize="hasAnyRole('1','2','4')">
           <h4 class="help" id="teacher-help"><a class="img-link" href="#top"><i class="fa fa-arrow-circle-up"></i></a>&nbsp;[[#{teacher.logbook.label}]]</h4>
           <p>Si vous êtes enregistré en tant qu'enseignant, c'est ici que vous pouvez éditer et consulter le suivi de vos élèves. Cliquez respectivement sur <code>Aujourd'hui</code>, <code>Cette semaine</code>, <code>Ce mois</code> pour afficher vos séances du jour, de la semaine ou du mois courants.<br />
-            Vous pouvez également choisir n'importe quelle semaine dans l'année en cliquant sur l'une des dates et en vous déplaçant dans le calendrier.</p>
+            Vous pouvez également choisir n'importe quelle période en modifiant directement les dates de début et de fin : cliquez tout d'abord dans le calendrier de gauche pour choisir la date de début, puis sélectionnez une date de fin dans le calendrier de droite *.</p>
           <p>Vos cours sont présentés sous forme de liste, comportant pour chacun d'eux ses horaires, son emplacement et ses participants. Vous pouvez masquer la liste des élèves d'un cours collectif en cliquant sur <code>Liste des élèves...</code> en haut de cellule. Parallèlement, vous pouvez le faire sur l'<strong>ensemble des cours collectifs</strong> en cochant l'option <code>Tout replier/déplier</code> en haut de tableau.</p>
           <p>Les absences de vos élèves sont signalées par les mentions <span class="absent">ABS</span> ou <span class="excused">EXC</span>  (si le motif de l'absence a été donné).
           </p>
           <p>Chaque élève présent dans la liste est accompagné de sa photo (si elle existe) et de ses coordonnées de contact (<strong>email</strong> et <strong>téléphone</strong>). Cliquez sur l'adresse email pour ouvrir votre lecteur de courrier. Cliquez de même sur le numéro de téléphone pour passer directement un appel (uniquement sur smartphone).<br />
             Pour rendre l'affichage plus compact, vous pouvez masquer les photos des élèves en cliquant sur l'option <code>Cacher/Afficher photos</code> en haut de tableau.</p>
           <p>Vous pouvez envoyer un email à <strong>tous les participants d'un cours collectif</strong> en cliquant sur le nom du cours à gauche de la liste des élèves.</p>
+          <p class="footnote">* Notez cependant que l'intervalle entre 2 dates ne peut être supérieur à 1 an.</p>
           <h6>Saisie du suivi individuel</h6>
           <p>Dans le tableau *, cliquez sur le nom ou la photo de l'élève à l'intérieur de la colonne <strong>Suivi individuel</strong> **. Une fenêtre de dialogue vous permet de saisir votre appréciation ou d'évaluer l'élève en lui donnant une note.</p>
           <p>Les notes ne sont pas restreintes au format numérique. Vous pouvez utiliser des lettres ou les signes <b>+</b> et <b>-</b>. Tout dépendra ici de la convention adoptée par l'école ou le centre de formation. Quelques exemples possibles : <tt><b>12; 12,5; 12.5; A; B+; B-; ++A;</b></tt> etc. Vous pouvez saisir jusqu'à <b>8</b> caractères.</p>
-          <p>Par défaut, l'élève est considéré comme <strong>&laquo;&nbsp;Présent&nbsp;&raquo;</strong>. S'il est absent, marquez-le comme tel en choisissant la mention <strong>&laquo;&nbsp;Absent(e)&nbsp;&raquo;</strong>. Si l'élève s'est excusé pour son absence ou si le motif de l'absence vous a été signalé, vous pouvez alternativement le marquer comme <strong>&laquo;&nbsp;Excusé(e)&nbsp;&raquo;</strong>. N'oubliez pas de <strong>Valider</strong> pour enregistrer votre saisie.</p><p class="footnote">* Sur les smartphones (en particulier, en mode portrait), faites glisser le tableau de gauche à droite pour faire apparaître toutes les colonnes.
+          <p>Par défaut, l'élève est considéré comme <strong>&laquo;&nbsp;Présent&nbsp;&raquo;</strong>. S'il est absent, marquez-le comme tel en choisissant la mention <strong>&laquo;&nbsp;Absent(e)&nbsp;&raquo;</strong>. Si l'élève s'est excusé pour son absence ou si le motif de l'absence vous a été signalé, vous pouvez alternativement le marquer comme <strong>&laquo;&nbsp;Excusé(e)&nbsp;&raquo;</strong>. N'oubliez pas de <strong>Valider</strong> pour enregistrer votre saisie.</p>
+          <p class="footnote">* Sur les smartphones (en particulier, en mode portrait), faites glisser le tableau de gauche à droite pour faire apparaître toutes les colonnes.
             <br />** La liste des élèves composant un cours collectif peut être pliée ou dépliée si nécessaire. Cliquez pour cela sur <i>Liste des élèves...</i>.</p>
           <h6>Saisie du suivi collectif</h6>
           <p>Il est également possible d'entrer une appréciation de suivi collective. Cette appréciation est visible de tous les élèves ayant participé au cours et permet généralement de rappeler les notions ou les morceaux abordés durant la séance.<br />

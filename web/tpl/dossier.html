@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * @(#) dossier.html Algem Web App 1.7.1 09/10/17
+ * @(#) dossier.html Algem Web App 1.7.1 14/10/18
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
  *
@@ -123,7 +123,7 @@
                 <li><a href="javascript:;" id="student-follow-d" th:text="#{today.label}" th:title="#{today.tip}" th:formaction="@{/perso/xFollowUpStudent}" /></li>
                 <li><a href="javascript:;" id="student-follow-w" th:text="#{current.week.label}" th:title="#{current.week.tip}"/></li>
                 <li><a href="javascript:;" id="student-follow-m" th:text="#{current.month.label}" th:title="#{current.month.tip}"/></li>
-                <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="student-weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="student-weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""/>&nbsp;<label for="student-weekTo" th:text="#{to.label}"></label>&nbsp;<input id="student-weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value=""/></li>
+                <li><label style="text-transform: lowercase" for="student-weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="student-weekFrom" type="text" class="week-date"  readonly="readonly" tabindex="3" value=""  th:title="#{datepicker.first.title}"/>&nbsp;<label for="student-weekTo" th:text="#{to.label}"></label>&nbsp;<input id="student-weekTo" type="text" class="week-date" readonly="readonly" tabindex="4" value="" th:title="#{datepicker.last.title}"/></li>
               </ul>
             </nav>
             <div class="option-panel"><a class="img-link" href="javascript:;" id="saveStudentPDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}" /></a></div>
@@ -145,7 +145,7 @@
                 <li><a href="javascript:;" id="follow-d" th:text="#{today.label}" th:title="#{today.tip}" th:formaction="@{/perso/xFollowUpSchedules}" /></li>
                 <li><a href="javascript:;" id="follow-w" th:text="#{current.week.label}" th:title="#{current.week.tip}"/></li>
                 <li><a href="javascript:;" id="follow-m" th:text="#{current.month.label}" th:title="#{current.month.tip}"/></li>
-                <li th:title="#{week.datepicker.title}"><label style="text-transform: lowercase" for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date" tabindex="3" readonly value=""/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" tabindex="4" readonly value=""/></li>
+                <li><label style="text-transform: lowercase" for="weekFrom" th:text="#{from.label}"></label>&nbsp;<input id="weekFrom" type="text" class="week-date" tabindex="3" readonly value=""  th:title="#{datepicker.first.title}"/>&nbsp;<label for="weekTo" th:text="#{to.label}"></label>&nbsp;<input id="weekTo" type="text" class="week-date" tabindex="4" readonly value="" th:title="#{datepicker.last.title}"/></li>
               </ul>
             </nav>
             <div class="option-panel"><a class="img-link" href="javascript:;" id="saveCSV" th:title="#{save.to.csv.label}"><img th:src="@{/resources/common/img/csv.png}" th:alt="#{save.to.csv.label}" /></a><a class="img-link" href="javascript:;" id="savePDF" th:title="#{save.to.pdf.label}" ><img th:src="@{/resources/common/img/pdf.png}" th:alt="#{save.to.pdf.label}"/></a></div>
@@ -283,7 +283,8 @@
       "empty_field_warning": /*[[#{empty.field.warning}]]*/ "!must not be empty!",
       "booking_confirmed_label": /*[[#{booking.confirmed.label}]]*/ "!confirmed!",
       "booking_pending_label": /*[[#{booking.pending.label}]]*/ "!pending!",
-      "booking_list_full_history_warning": /*[[#{booking.list.full.history.warning}]]*/ "!no more booking!"
+      "booking_list_full_history_warning": /*[[#{booking.list.full.history.warning}]]*/ "!no more booking!",
+      "too_long_period_warning": /*[[#{too.long.period.warning}]]*/ "!too long!"
     };
     var paths = {
       "def_photo_id": /*[[@{/resources/common/img/idphoto.png}]]*/ "",
@@ -295,13 +296,17 @@
     DOSSIER.initDocumentDialog(labels);
     DOSSIER.initWeekDates(new Date());
     DOSSIER.setWeekChange(url1, userId, labels, paths);
-    DOSSIER.setStudentWeekChange(url2, userId, labels);
+    DOSSIER.setStudentWeekChange(url2, userId, labels);//TODO
     var cwd = GEMUTILS.getCurrentWeekDates(new Date());
-
+    var urlParam = location.search.substr(1);//url parameter
+    var sectionIndex = -1;
+    if (urlParam.startsWith("section")) {
+      sectionIndex = parseInt(urlParam.split("=")[1]);//retrieve value
+    }
     $("#accordion").accordion({
       heightStyle: "content",
       collapsible: "true",
-      active: (userProfile === 2) ? $(this).children("h3:last").index() : 1,
+      active: sectionIndex > -1 ? sectionIndex : ((userProfile === 2) ? $(this).children("h3:last").index() : 1),
       animate: false
       //animate: {easing: "linear",duration: 200}
     });

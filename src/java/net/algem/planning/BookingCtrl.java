@@ -1,7 +1,7 @@
 /*
- * @(#) BookingCtrl.java Algem Web App 1.6.0 10/02/17
+ * @(#) BookingCtrl.java Algem Web App 1.7.3 15/02/18
  *
- * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -20,7 +20,9 @@
 package net.algem.planning;
 
 import java.security.Principal;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -43,7 +45,6 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -56,17 +57,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.0
+ * @version 1.7.3
  * @since 1.0.6 20/01/2016
  */
 @Controller
-public class BookingCtrl
-{
+public class BookingCtrl {
+
   private final static Logger LOGGER = Logger.getLogger(BookingCtrl.class.getName());
   private final static Locale CTX_LOCALE = LocaleContextHolder.getLocale();
 
   @Autowired
-  private UserService service;
+  private UserService userService;
 
   @Autowired
   private PlanningService planningService;
@@ -84,7 +85,7 @@ public class BookingCtrl
   private SimpleMailMessage bookingCancelMessage;
 
   public void setService(UserService service) {
-    this.service = service;
+    this.userService = service;
   }
 
   public void setPlanningService(PlanningService planningService) {
@@ -93,8 +94,8 @@ public class BookingCtrl
 
   @RequestMapping(method = RequestMethod.GET, value = "/xgroups")
   public @ResponseBody
-    List<Group> getGroups(Principal p) {
-    List<Group> groups = service.getGroups(p.getName());
+  List<Group> getGroups(Principal p) {
+    List<Group> groups = userService.getGroups(p.getName());
     return groups;
   }
 
@@ -102,7 +103,7 @@ public class BookingCtrl
   public @ResponseBody
   boolean hasPass(Principal p) {
     try {
-      return service.hasPass(p.getName());
+      return userService.hasPass(p.getName());
     } catch (DataAccessException de) {
       return false;
     }
@@ -110,50 +111,58 @@ public class BookingCtrl
 
   @RequestMapping(method = RequestMethod.POST, value = "/book.html")
   public String doPostBooking(
-          @ModelAttribute Booking booking,
-          @RequestParam int estab,
-          RedirectAttributes redirectAttributes,
-          Principal p,
-          Model model) {
+    @ModelAttribute Booking booking,
+    @RequestParam int estab,
+    RedirectAttributes redirectAttributes,
+    Principal p,
+    Model model) {
 
-    redirectAttributes.addAttribute("d", booking.getDate());
-    redirectAttributes.addAttribute("e", estab);
+    //redirectAttributes.addAttribute("d", booking.getDate());
+    //redirectAttributes.addAttribute("e", estab);
+    redirectAttributes.addAttribute("section", "2");
+
     SecurityContext secuContext = SecurityContextHolder.getContext();
     if (!secuContext.getAuthentication().isAuthenticated()) {
       model.addAttribute("message", messageSource.getMessage("booking.auth.error", null, CTX_LOCALE));
       return "error";
     }
 
-    User u = service.findUserByLogin(p.getName());
+    User u = userService.findUserByLogin(p.getName());
     if (u == null) {
       model.addAttribute("message", messageSource.getMessage("booking.user.error", null, CTX_LOCALE));
       return "error";
     }
 
     try {
+      BookingValidator validator = new BookingValidator();
+      validator.isValidTimeLength(booking.getTimeLength());
+
       // end time is disabled in form
-      Hour hEnd = new Hour(booking.getStartTime());
-      int tl = (int) (booking.getTimeLength() * 60F);//!IMPORTANT 60F (float)
-      // change end time if after midnight
-      if (hEnd.toMinutes() + tl > 1440) {
-        tl = 1440 - hEnd.toMinutes();
+      booking.setEndTime(getBookingEndTime(booking.getStartTime(), booking.getTimeLength()));
+
+      DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+      Date date = df.parse(booking.getDate() + " " + booking.getStartTime().toString());
+      //LOGGER.log(Level.INFO, date.toString());
+      BookingConf conf = planningService.getBookingConf();
+
+      StringBuilder msgBuilder = new StringBuilder();
+      if (!validator.isValidMaxBookingDate(date, conf.getMaxDelay())) {
+        msgBuilder.append(messageSource.getMessage("booking.max.delay.warning", new Object[]{conf.getMaxDelay()}, CTX_LOCALE));
       }
-      hEnd.incMinute(tl);
-      if (Hour.NULL_HOUR.equals(hEnd.toString())) {
-        hEnd = new Hour("24:00");
+      if (!validator.isValidMinBookingDate(date, conf.getMinDelay())) {
+        msgBuilder.append(messageSource.getMessage("booking.min.delay.warning", new Object[]{conf.getMinDelay()}, CTX_LOCALE));
       }
-      booking.setEndTime(hEnd);
-      Date date = GemConstants.DATE_FORMAT.parse(booking.getDate());
+
       Calendar cal = Calendar.getInstance();
       cal.setTime(date);
       int dow = cal.get(Calendar.DAY_OF_WEEK);
-      DailyTimes dt = planningService.getDailyTimes(booking.getRoom(), dow);
-      if (dt.getOpening().after(booking.getStartTime()) || dt.getClosing().before(booking.getEndTime())) {
-        String msg = messageSource.getMessage("booking.room.closed.error",
-                new Object[]{dt.getOpening().toString(), dt.getClosing().toString()},
-                CTX_LOCALE);
-        LOGGER.log(Level.INFO, msg);
-        model.addAttribute("message", msg);
+      String msg = validator.isValidBookingTimes(booking, planningService.getDailyTimes(booking.getRoom(), dow), messageSource);
+      if (msg != null) {
+        msgBuilder.append(msg);
+      };
+      if (msgBuilder.length() > 0) {
+        LOGGER.log(Level.INFO, msgBuilder.toString());
+        model.addAttribute("message", msgBuilder.toString());
         return "error";
       }
 
@@ -172,6 +181,7 @@ public class BookingCtrl
         model.addAttribute("data", personConflicts);
         return "error";
       }
+      //person may also attend some course or group rehearsal : TODO check conflicts ?
 
       LOGGER.log(Level.INFO, booking.toString());
       planningService.book(booking);
@@ -186,6 +196,20 @@ public class BookingCtrl
     }
 
     return "redirect:/perso/home.html";
+  }
+
+  private Hour getBookingEndTime(Hour start, float timeLength) {
+    Hour end = new Hour(start);
+    int tl = (int) (timeLength * 60F);//!IMPORTANT 60F (float)
+    // change end time if after midnight
+    if (end.toMinutes() + tl > 1440) {
+      tl = 1440 - end.toMinutes();
+    }
+    end.incMinute(tl);
+    if (Hour.NULL_HOUR.equals(end.toString())) {
+      end = new Hour("24:00");
+    }
+    return end;
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/perso/book-cancel.html")
@@ -206,8 +230,8 @@ public class BookingCtrl
 
       Calendar cal = Calendar.getInstance();
       cal.setTime(GemConstants.DATE_FORMAT.parse(date));
-      cal.set(Calendar.HOUR_OF_DAY,b.getStartTime().getHour());
-      cal.set(Calendar.MINUTE,b.getStartTime().getMinute());
+      cal.set(Calendar.HOUR_OF_DAY, b.getStartTime().getHour());
+      cal.set(Calendar.MINUTE, b.getStartTime().getMinute());
 
       BookingConf conf = planningService.getBookingConf();
       long delay = conf.getCancelDelay() * 60 * 60 * 1000;
@@ -241,13 +265,14 @@ public class BookingCtrl
 
   /**
    * Post mail info.
+   *
    * @param booking booking instance
    * @param msgKey property key
    * @param template template message
    */
   private void sendMessage(Booking booking, String msgKey, SimpleMailMessage template) {
     SimpleMailMessage mail = new SimpleMailMessage(template);
-    Person p = service.getPersonFromUser(booking.getPerson());
+    Person p = userService.getPersonFromUser(booking.getPerson());
     String from = "info@localhost";
     try {
       if (p != null && p.getEmails().size() > 0) {
@@ -268,6 +293,52 @@ public class BookingCtrl
 
   private void addMessageAttribute(Model m, String key, Object[] params) {
     m.addAttribute("message", messageSource.getMessage(key, params, CTX_LOCALE));
+  }
+
+  class BookingValidator {
+
+    private final static float MIN_TIME_LENGTH = 0.5f;
+    private final static float MAX_TIME_LENGTH = 8f;
+
+    boolean isValidTimeLength(float length) {
+      return length >= MIN_TIME_LENGTH && length <= MAX_TIME_LENGTH;
+    }
+
+    boolean isValidMinBookingDate(Date d, int minDelay) {
+      Calendar cal = Calendar.getInstance();
+
+      cal.setTime(new Date());
+      cal.add(Calendar.HOUR_OF_DAY, minDelay);
+      Date min = cal.getTime();
+
+      return !d.before(min);
+    }
+
+    boolean isValidMaxBookingDate(Date d, int maxDelay) {
+      Calendar cal = Calendar.getInstance();
+
+      cal.setTime(new Date());
+      cal.add(Calendar.DATE, maxDelay);
+      Date max = cal.getTime();
+      return !d.after(max);
+    }
+
+    String isValidBookingTimes(Booking b, DailyTimes dt, MessageSource msgSource) {
+      String msg = null;
+
+      if (dt.getOpening().after(b.getStartTime())
+        || dt.getClosing().before(b.getEndTime())) {
+        if (dt.getOpening().equals(dt.getClosing())) {
+          msg = msgSource.getMessage("booking.room.closed.error", null, CTX_LOCALE);
+        } else {
+          msg = msgSource.getMessage("booking.room.closed.warning",
+            new Object[]{dt.getOpening().toString(), dt.getClosing().toString()},
+            CTX_LOCALE);
+        }
+      }
+      return msg;
+    }
+
   }
 
 }

@@ -1,7 +1,7 @@
 /*
- * @(#)UserCtrl.java	1.7.1 06/10/17
+ * @(#)UserCtrl.java    1.7.3 15/02/18
  *
- * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -98,7 +98,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Controller for login operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.2
+ * @version 1.7.3
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -193,7 +193,7 @@ public class UserCtrl
       secuContext.setAuthentication(auth);
 //      secCtxRepo.saveContext(secuContext, request, response);
       String msg = messageSource.getMessage("login.success.label", new Object[]{username}, CTX_LOCALE);
-//			rememberMeServices.loginSuccess(request, response, auth);
+//          rememberMeServices.loginSuccess(request, response, auth);
       return "{\"msg\":\"" + msg + "\"}";
     } catch (BadCredentialsException ex) {
       return "{\"status\": \"" + ex.getMessage() + "\"}";
@@ -216,7 +216,7 @@ public class UserCtrl
    * @return a view as string
    */
   @RequestMapping(method = RequestMethod.GET, value = "perso/home.html")
-  public String showHome(Principal p, Model model, @CookieValue(value = "_PRS", defaultValue = "false") String _prs) {
+  public String showHome(Principal p, Model model, @CookieValue(value = "_PRS", defaultValue = "false") String _prs, @RequestParam(value="section",required=false) Integer section) {
 
     User u = service.findUserByLogin(p.getName());
     model.addAttribute("user", u);
@@ -238,17 +238,15 @@ public class UserCtrl
       }
       model.addAttribute("postitList", postitList);
     }
+
     return "dossier";
   }
-
 
   @RequestMapping(method = RequestMethod.GET, value = "/perso/jxBookings")
   public @ResponseBody List<BookingScheduleElement> getBookings(
     @RequestParam("idper") int idper,  @RequestParam("key") int key) {
       return planningService.getBookings(idper, key);
   }
-
-
 
   @RequestMapping(method = RequestMethod.GET, value = "signup.html")
   public String signUp(User u) {
@@ -326,7 +324,9 @@ public class UserCtrl
     }
 
     String token = UUID.randomUUID().toString();
-    String url = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    //FIX https
+    //String url = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 
     try {
       service.setToken(found.getId(), token);
@@ -436,6 +436,8 @@ public class UserCtrl
   private List<ScheduleElement> getFollowUpSchedules(String userId, String from, String to) {
     Date dateFrom = null;
     Date dateTo = null;
+    // !important : convert all numbers to long
+    long max = 1000L * 60L * 60L * 24L * 365L;// 1year
     try {
       dateFrom = DATE_FORMAT.parse(from);
       dateTo = DATE_FORMAT.parse(to);
@@ -444,6 +446,15 @@ public class UserCtrl
       dateFrom = new Date();
       dateTo = new Date();
     }
+
+    if (dateFrom.after(dateTo)) {
+      dateFrom.setTime(dateTo.getTime());
+    }
+    long interval = dateTo.getTime() - dateFrom.getTime();
+    if (interval > max) {
+      dateTo.setTime(dateFrom.getTime() + max);
+    }
+
     try {
       return service.getFollowUp(Integer.parseInt(userId), dateFrom, dateTo);
     } catch (DataAccessException ex) {

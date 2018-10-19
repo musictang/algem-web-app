@@ -1,8 +1,0 @@
-build
-dist
-nbproject
-web/META-INF/context.xml
-web/web-inf/sender.xml
-web/web-inf/client.xml
-web/WEB-INF/sender.xml
-web/WEB-INF/client.xml

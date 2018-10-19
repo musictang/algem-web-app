@@ -1,7 +1,7 @@
 /*
- * @(#)planning.js	1.6.3 28/06/17
+ * @(#)planning.js	1.7.3 14/02/18
  *
- * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -23,7 +23,7 @@
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
  * @since 09/05/15
- * @version 1.6.3
+ * @version 1.7.3
  * @returns {void}
  */
 //var isMobileAndWebkit = isMobile() && 'WebkitAppearance' in document.documentElement.style;
@@ -361,7 +361,9 @@ function setBooking(params, steps) {
     $(this).data("lastValue",$(this).val());
   });
   $("#startTime").change(function(event) {
-    if (checkBookingDelay(date, params.minDelay)) {
+    var currentDate = $("#bookdate").datepicker("getDate");
+    //console.log("currentDate" + currentDate);
+    if (checkBookingDelay(currentDate, params.minDelay)) {
       setEndIndex($(this), steps);
     } else {
       var last = $(this).data("lastValue");
@@ -519,15 +521,18 @@ function setPassChecked() {
 
 /**
  * Init booking date picker.
- * @param {type} date the date to set
+ * @param {date} date the date to set
+ * @param {Object} params booking parameters
  * @returns {undefined}
  */
-function initBookingDate(date) {
+function initBookingDate(date, params) {
   var bookDatePicker = $("#bookdate");
   bookDatePicker.datepicker({
     changeMonth: true,
     changeYear: true,
-    dateFormat: "dd-mm-yy"
+    dateFormat: "dd-mm-yy",
+    minDate:0,
+    maxDate:params.maxDelay
     //showOn: "button",
     //buttonImage: "images/calendar.gif",
     //buttonImageOnly: true,

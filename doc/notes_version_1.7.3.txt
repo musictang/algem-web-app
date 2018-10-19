@@ -1,0 +1,13 @@
+1.7.3
+CORRECTIFS
+* Dans le popup de réservation, on pouvait outrepasser le délai maximal de réservation en choisissant une date dans le calendrier différente de celle du jour sur lequel on avait cliqué. Les dates accessibles dans le calendrier sont maintenant limitées au délai maximal de réservation, tel qu'il est spécifié dans les paramètres généraux du logiciel.
+
+* Lorsqu'une réservation vient d'être validée, la rubrique Réservations est maintenant directement affichée dans sa page perso, afin d'avoir une confirmation visuelle plus rapide.
+
+* Lorsqu'on changeait l'heure de début d'une réservation, le message "Hors délai" était affiché même si ce n'était pas le cas (par exemple, après avoir modifié la date dans le calendrier).
+
+SUIVI ELEVE ET ENSEIGNANT
+Dans le suivi, parallèlement aux liens cliquables (aujourd'hui, cette semaine, ce mois), les élèves et professeurs pouvaient choisir une semaine de leur choix en cliquant sur une date dans l'un des deux calendriers. Certains d'entre vous souhaitaient que cette période ne soit pas limitée à une semaine et c'est maintenant possible : on peut par exemple indiquer une période s'étendant sur plusieurs mois ou sur un mois spécifique (on ne peut pas néanmoins choisir une période supérieure à un an, pour des raisons de performance et de temps d'accès).
+Les calendriers fonctionnent donc maintenant comme suit :
+- cliquer sur le calendrier de gauche pour choisir une date de début
+- cliquer sur le calendrier de droite pour choisir une date de fin et charger automatiquement la période sélectionnée.
