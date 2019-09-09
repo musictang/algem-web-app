@@ -1,7 +1,7 @@
 /*
- * @(#) weekly.css Algem Web App 1.2.1 10/05/16
+ * @(#) weekly.css Algem Web App 1.7.4 19/10/18
  *
- * Copyright (c) 2015-2016 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -16,11 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
-*/
-/*
-    Created on : 02/04/2016, 21:10:32
-    Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
-    Version    : 1.2.0
 */
 #canvas {
   width: 93.1%; /* (7*13.3) */

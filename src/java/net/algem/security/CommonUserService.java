@@ -1,7 +1,7 @@
 /*
- * @(#)CommonUserService.java	1.6.2 03/05/17
+ * @(#)CommonUserService.java	1.7.4 19/10/18
  *
- * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.2
+ * @version 1.7.4
  * @since 1.0.6 18/11/15
  */
 @Service
@@ -104,9 +104,9 @@ public class CommonUserService
   }
 
   @Override
-  public User findUserByEmail(String email) {
+  public User findAuthenticatedUser(String email, int id) {
     try {
-      return dao.findByEmail(email);
+      return dao.findAuthenticated(email, id);
     } catch(DataAccessException ex) {
       return null;
     }

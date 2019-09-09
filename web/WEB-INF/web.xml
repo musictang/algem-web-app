@@ -25,7 +25,7 @@
     <url-pattern>*.html</url-pattern>
   </servlet-mapping>
   <session-config>
-    <session-timeout>15</session-timeout>
+    <session-timeout>45</session-timeout>
 
     <!-- Tomcat >= 7 (servlet 3 only) -->
     <cookie-config>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
- * @(#) recover.html Algem Web App 1.6.1 28/04/17
+ * @(#) recover.html Algem Web App 1.7.4 19/10/18
  *
- * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -32,6 +32,8 @@
       <div class="centered" style="max-width: 320px">
         <form action="#" id="recover-form" th:action="@{recover.html}" method="post" accept-charset="UTF-8">
           <fieldset><legend th:text="#{recover.legend}"></legend>
+            <label for="contactId" th:text="#{member.id.label}">Member's id</label>
+            <input id="contactId" type="text" required="required" name="contactId" />
             <label for="email" th:text="#{email.label}">Email</label>
             <input id="email" type="text" required="required" name="email" />
             <input type="submit" th:value="#{submit.label}" class="pure-button pure-button-primary"/>

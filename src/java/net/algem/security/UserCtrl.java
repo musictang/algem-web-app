@@ -1,5 +1,5 @@
 /*
- * @(#)UserCtrl.java    1.7.3 15/02/18
+ * @(#)UserCtrl.java    1.7.4 19/10/18
  *
  * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
@@ -98,7 +98,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Controller for login operations.
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.7.3
+ * @version 1.7.4
  * @since 1.0.0 11/02/13
  */
 @Controller
@@ -288,7 +288,7 @@ public class UserCtrl
         return "signup";
       }
 
-      if (!isEmailValid(p, user.getEmail())) {
+      if (!existingEmail(p, user.getEmail())) {
         bindingResult.rejectValue("email", "user.email.error", new Object[]{user.getEmail()}, "");
         return "signup";
       }
@@ -316,8 +316,19 @@ public class UserCtrl
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "recover.html")
-  public String doRecoverPassword(@RequestParam String email, HttpServletRequest request, Model model) {
-    User found = service.findUserByEmail(email);
+  public String doRecoverPassword(@RequestParam String email, @RequestParam String contactId,HttpServletRequest request, Model model) {
+    long userId;
+    try {
+      userId = Integer.parseInt(contactId);
+      if (userId < 0 || userId > Integer.MAX_VALUE) {
+        throw new NumberFormatException();
+      }
+    } catch(NumberFormatException nfe) {
+      model.addAttribute("errorMessage", messageSource.getMessage("invalid.member.id", null, CTX_LOCALE));
+      return "recover";
+    }
+
+    User found = service.findAuthenticatedUser(email, (int) userId);
     if (found == null) {
       model.addAttribute("errorMessage", messageSource.getMessage("unknown.user", null, CTX_LOCALE));
       return "recover";
@@ -535,7 +546,7 @@ public class UserCtrl
     }
   }
 
-  private boolean isEmailValid(Person p, String email) {
+  private boolean existingEmail(Person p, String email) {
     for (Email e : p.getEmails()) {
       if (e.getEmail().equals(email)) {
         return true;
@@ -548,10 +559,11 @@ public class UserCtrl
     // Create a thread safe "copy" of the template message and customize it
     SimpleMailMessage mail = new SimpleMailMessage(recoverMessage);
     String args = "/recover.html?id=" + user.getId() + "&token=" + token;
-    String msg = messageSource.getMessage("recover.info", new Object[]{user.toString()}, CTX_LOCALE);
+    String msg = messageSource.getMessage("recover.info", new Object[]{user.toString(), user.getLogin()}, CTX_LOCALE);
     String url = path + args;
+    String signature = "\r\n\r\n--\r\n" + organization.get("name.label") + "\r\n" + organization.get("address.label");
     mail.setTo(user.getEmail());
-    mail.setText(msg + url);
+    mail.setText(msg + url + signature);
     mailSender.send(mail);
   }
 }

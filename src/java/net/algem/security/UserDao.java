@@ -42,7 +42,7 @@ public interface UserDao {
 
   List<User> findAll();
 
-  User findByEmail(final String email);
+  User findAuthenticated(final String email, final int id);
 
   User findById(int id);
 

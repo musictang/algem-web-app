@@ -1,7 +1,7 @@
 /*
- * @(#)UserDaoImpl.java	1.6.2 03/05/17
+ * @(#)UserDaoImpl.java	1.7.4 19/10/18
  *
- * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -65,7 +65,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
- * @version 1.6.2
+ * @version 1.7.4
  * @since 1.0.0 11/02/13
  */
 @Repository
@@ -178,21 +178,26 @@ public class UserDaoImpl
   /**
    * Must return a single mapped User.
    */
-  public User findByEmail(final String email) {
-    String query = "SELECT l.idper,l.login,l.profil FROM "
+  public User findAuthenticated(final String email, final int id) {
+    String query = "SELECT l.idper,l.login,l.profil,p.nom,p.prenom FROM "
       + TABLE + " l INNER JOIN email e ON (l.idper = e.idper)"
-      + " WHERE e.email = ?";
+      + " JOIN personne p ON e.idper = p.id"
+      + " WHERE e.email = ? AND l.idper = ?";
     return jdbcTemplate.queryForObject(query, new RowMapper<User>() {
       @Override
       public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         User u = new User();
+
         u.setId(rs.getInt(1));
         u.setLogin(getLoginFromStringResult(rs.getString(2)));
         u.setProfile(getProfileFromId(rs.getShort(3)));
+        u.setName(rs.getString(4));
+        u.setFirstName(rs.getString(5));
         u.setEmail(email);
+
         return u;
       }
-    }, email);
+    }, email, id);
   }
 
   @Override

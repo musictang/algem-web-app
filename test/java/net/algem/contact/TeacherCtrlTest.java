@@ -1,7 +1,7 @@
 /*
- * @(#) TeacherCtrlTest.java Algem Web App 1.6.0 15/02/2017
+ * @(#) TeacherCtrlTest.java Algem Web App 1.7.4 19/10/2018
  *
- * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2018 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -19,16 +19,13 @@
  */
 package net.algem.contact;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
  * @author <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
+ * @version 1.7.4
  * @since 1.6.0 15/02/17
  */
 public class TeacherCtrlTest {
@@ -36,56 +33,40 @@ public class TeacherCtrlTest {
   public TeacherCtrlTest() {
   }
 
-  @BeforeClass
-  public static void setUpClass() {
+  @Test
+  public void testUri() {
+    TeacherCtrl ctrl = new TeacherCtrl();
+    String uri = "http://www.algem.net";
+    assertTrue(ctrl.isValidURI(uri));
+
+    uri = "http://algem.net";
+    assertTrue(ctrl.isValidURI(uri));
+
+    uri = "www.algem.net";
+    assertTrue(ctrl.isValidURI(uri));
+
+    uri = "file://C:\\Users\\jm\\fichier.txt";
+    assertTrue(ctrl.isValidURI(uri));
+
+    uri = "sftp://jm@mustang:2422:/home/jm/";
+    assertTrue(ctrl.isValidURI(uri));
+
+    uri = "htp://algem.net";
+    assertFalse(ctrl.isValidURI(uri));
+
+    uri = "http://\"algem.net\"";
+    assertFalse(ctrl.isValidURI(uri));
+
+    uri = "http://<script>console.log('bad');</script>";
+    assertFalse(ctrl.isValidURI(uri));
+
+    uri = "http://algem.net?test=alert('hello')";
+    assertFalse(ctrl.isValidURI(uri));
+
+    uri = "http://algem.net#alert";
+    assertTrue(ctrl.isValidURI(uri));
+
+    uri = "http://algem.net?test=javascript:console.log('hello');";
+    assertFalse(ctrl.isValidURI(uri));
   }
-
-  @AfterClass
-  public static void tearDownClass() {
-  }
-
-  @Before
-  public void setUp() {
-  }
-
-  @After
-  public void tearDown() {
-  }
-
-   @Test
-   public void testUri() {
-     TeacherCtrl ctrl = new TeacherCtrl();
-     String uri = "http://www.algem.net";
-     assertTrue(ctrl.isValidURI(uri));
-
-     uri = "http://algem.net";
-     assertTrue(ctrl.isValidURI(uri));
-
-     uri="www.algem.net";
-     assertTrue(ctrl.isValidURI(uri));
-
-     uri="file://C:\\Users\\jm\\fichier.txt";
-     assertTrue(ctrl.isValidURI(uri));
-
-     uri="sftp://jm@mustang:2422:/home/jm/";
-     assertTrue(ctrl.isValidURI(uri));
-
-     uri = "htp://algem.net";
-     assertFalse(ctrl.isValidURI(uri));
-
-     uri = "http://\"algem.net\"";
-     assertFalse(ctrl.isValidURI(uri));
-
-     uri = "http://<script>console.log('bad');</script>";
-     assertFalse(ctrl.isValidURI(uri));
-
-     uri = "http://algem.net?test=alert('hello')";
-     assertFalse(ctrl.isValidURI(uri));
-
-     uri = "http://algem.net#alert";
-     assertTrue(ctrl.isValidURI(uri));
-
-     uri = "http://algem.net?test=javascript:console.log('hello');";
-     assertFalse(ctrl.isValidURI(uri));
-   }
 }

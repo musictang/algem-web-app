@@ -98,7 +98,7 @@ public interface UserService
    * @param email the email of the user
    * @return a user
    */
-  public User findUserByEmail(String email);
+  public User findAuthenticatedUser(String email, int id);
 
   /**
    * Gets the list of users corresponding to this user id or this user login.
