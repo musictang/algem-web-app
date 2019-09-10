@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
- * @(#) signup.html Algem Web App 1.6.2 07/05/17
+ * @(#) signup.html Algem Web App 1.7.5 10/09/19
  *
- * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ * Copyright (c) 2015-2019 Musiques Tangentes. All Rights Reserved.
  *
  * This file is part of Algem Web App.
  * Algem Web App is free software: you can redistribute it and/or modify it
@@ -76,7 +76,7 @@
         <h5 th:text="#{note.label}">Note</h5>
         <p class="note framed" th:text="#{signup.prerequisite(${@organization['name.label']})}"></p>
         <p th:if="${@options['rules-of-procedure.url']}">
-          <a th:href="${@options['rules-of-procedure.url']}" th:text="${@options['rules-of-procedure.url.label']}"></a>
+          <a th:href="${@options['rules-of-procedure.url']}" th:text="${@options['rules-of-procedure.url.label']}" target="_blank"></a>
         </p>
       </div>
     </div>
@@ -105,7 +105,7 @@
         var submitBt = document.querySelector('input[type=submit]');
         submitBt.disabled = !isRulesOfProcedureAccepted();
       }
-      
+
       $(document).ready(function () {
         checkSubmit();
       });
