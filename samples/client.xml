@@ -21,8 +21,8 @@
   </util:map>
   
   <util:map id="options" key-type="java.lang.String" >
-    <entry key="rules-of-procedure.required" value="true" />
-    <entry key="rules-of-procedure.required.label" value="J'affirme avoir pris connaissance du règlement intérieur" />
+    <entry key="rules-of-procedure.required" value="false" />
+    <entry key="rules-of-procedure.required.label" value="Je déclare avoir pris connaissance du règlement intérieur" />
     <entry key="rules-of-procedure.url" value="" />
     <entry key="rules-of-procedure.url.label" value="Consulter le règlement intérieur" />
   </util:map>
