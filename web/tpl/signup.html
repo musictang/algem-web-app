@@ -33,7 +33,7 @@
   </head>
   <body>
     <div id="bars" title="Menu"><i class="fa fa-bars"></i><span class="menu-label" th:text="#{menu.label}">Menu</span></div>
-   <div id="menu"><ul th:replace="fragments/menu :: basic"></ul></div>
+    <div id="menu"><ul th:replace="fragments/menu :: basic"></ul></div>
     <header class="header-top">
       <h1 th:utext="${@organization['name.label']}"></h1>
     </header>
@@ -62,7 +62,10 @@
             <!--<p class="field-help" ></p>-->
             <span id="signup-error" class="error"></span>
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="error">Password Error</span>
-            <input type="submit" th:value="#{submit.label}" class="pure-button pure-button-primary"/>
+            <div style="margin-top: 1em" th:if="${@options['rules-of-procedure.required']}">
+              <input style="display: inline" id="rules-of-procedure" type="checkbox" onchange="checkSubmit()"/><label style="display: inline" for="rules-of-procedure" th:text="${@options['rules-of-procedure.required.label']}"></label>
+            </div>
+            <input type="submit" th:value="#{submit.label}" class="pure-button pure-button-primary" />
             <!--            <div th:if="${#fields.hasAnyErrors()}">
                           <p th:each="err : ${#fields.allErrors()}" th:text="${err}">...</p>
                         </div>-->
@@ -72,6 +75,9 @@
       <div class="centered">
         <h5 th:text="#{note.label}">Note</h5>
         <p class="note framed" th:text="#{signup.prerequisite(${@organization['name.label']})}"></p>
+        <p th:if="${@options['rules-of-procedure.url']}">
+          <a th:href="${@options['rules-of-procedure.url']}" th:text="${@options['rules-of-procedure.url.label']}"></a>
+        </p>
       </div>
     </div>
     <footer th:replace="fragments/layout :: footer"></footer>
@@ -85,6 +91,23 @@
         $(this).tooltip("close").tooltip("disable");
       }).on("mouseout", function () {
         $(this).tooltip("close").tooltip("disable");
+      });
+
+      function isRulesOfProcedureAccepted() {
+        var rulesCheck = document.getElementById('rules-of-procedure');
+        if (!rulesCheck) {
+          return true;
+        }
+        return rulesCheck.checked;
+      }
+
+      function checkSubmit() {
+        var submitBt = document.querySelector('input[type=submit]');
+        submitBt.disabled = !isRulesOfProcedureAccepted();
+      }
+      
+      $(document).ready(function () {
+        checkSubmit();
       });
     </script>
   </body>

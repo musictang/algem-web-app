@@ -19,6 +19,13 @@
     <entry key="facebook.label" value="https://fr-fr.facebook.com/myaddress" />
     <entry key="twitter.label" value="https://twitter.com/myaddress" />
   </util:map>
+  
+  <util:map id="options" key-type="java.lang.String" >
+    <entry key="rules-of-procedure.required" value="true" />
+    <entry key="rules-of-procedure.required.label" value="J'affirme avoir pris connaissance du règlement intérieur" />
+    <entry key="rules-of-procedure.url" value="" />
+    <entry key="rules-of-procedure.url.label" value="Consulter le règlement intérieur" />
+  </util:map>
 
   <util:map id="hotline" key-type="java.lang.String" >
     <!--FIRST ENTRY : MANDATORY-->

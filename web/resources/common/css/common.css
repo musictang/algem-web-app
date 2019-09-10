@@ -611,7 +611,7 @@ fieldset legend {font-size: 1.3em;}
 form legend + label {
   display: block;
 }
-#ajax-login-form input, #login-form input, #signup-form input, #recover-form input {width: 100%}
+#ajax-login-form input, #login-form input, #signup-form input[type='text'], #signup-form input[type='password'], #signup-form input[type='submit'], #recover-form input {width: 100%}
 .pure-g label[class*="pure-u"] {font-family: 'ubuntumedium','Segoe UI',Verdana,sans-serif;vertical-align: middle}
 .row-form {margin: 0.5em 0;}
 .field-help {font-size: smaller;max-width: 320px;display:none}
