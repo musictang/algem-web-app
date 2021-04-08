@@ -134,6 +134,8 @@ public interface PlanningService
 
   List<ScheduleRangeElement> getScheduleDetail(int id, int type);
 
+  List<ScheduleRangeElement> getScheduleDetail(int id, int type, boolean withAge);
+
   Booking getBooking(int id);
 
   /**

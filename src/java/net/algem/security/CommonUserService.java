@@ -104,6 +104,11 @@ public class CommonUserService
   }
 
   @Override
+  public List<User> findChildrenById(int id) {
+      return dao.findChildren(id);
+  }
+
+  @Override
   public User findAuthenticatedUser(String email, int id) {
     try {
       return dao.findAuthenticated(email, id);

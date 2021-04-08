@@ -146,6 +146,28 @@ public class UserDaoImpl
   }
 
   @Override
+  public List<User> findChildren(int id) {
+    String query = "SELECT per.id,per.nom,per.prenom"
+      + " FROM "+ PersonIO.TABLE + " per"
+      + " LEFT OUTER JOIN eleve e ON (per.id = e.idper)"
+      + " WHERE e.famille = ? AND per.id != e.famille";
+    return jdbcTemplate.query(query, new RowMapper<User>() {
+
+      @Override
+      public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+        User u = new User();
+        u.setId(rs.getInt(1));
+        u.setName(rs.getString(2));
+        u.setFirstName(rs.getString(3));
+        u.setStudent(true);
+        u.setProfile(getProfileFromId(11));
+        
+        return u;
+      }
+    }, id);
+  }
+
+  @Override
   public List<User> exist(int id, String login) {
     String query = "SELECT idper,login FROM " + TABLE + " WHERE idper = ? OR login = ?";
     return jdbcTemplate.query(query, new RowMapper<User>() {

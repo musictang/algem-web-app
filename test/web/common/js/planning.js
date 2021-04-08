@@ -573,7 +573,7 @@ function displayScheduleDetail(url, detail, btLabel) {
         } else {
           var st = value.start.hour + ":" + (value.start.minute == 0 ? "00" : value.start.minute);
           var et = value.end.hour + ":" + (value.end.minute == 0 ? "00" : value.end.minute);
-          d += "<tr><td id=\"" + value.id + "\">" + st + "-" + et + "</td><td>" + value.person.firstName + " " + value.person.name + "</td></tr>";
+          d += "<tr><td id=\"" + value.id + "\">" + st + "-" + et + "</td><td>" + value.person.firstName + " " + value.person.name + " ("+ value.person.age + ")</td></tr>";
         }
       });
       d += "</tbody></table>"

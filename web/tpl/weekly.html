@@ -44,6 +44,13 @@
         <li><a href="#" class="close-link" th:title="#{close.label}"><i class="fa fa-close"></i><span class="menu-label" th:text="#{close.label}">Fermer !</span></a></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a><span class="menu-label" th:text="#{home.label}">Accueil</span></li>
         <li th:replace="fragments/menu :: cnx"></li>
+              
+          <li sec:authorize="hasAnyRole('1','2','3','4','11')" th:if="${famille}" th:each="children : ${famille?.childrens}">
+              <!-- a th:href="@{/perso/weekly.html(d=${#dates.format(start,'dd-MM-yyyy')},id=${children.id})}" id="dossier" th:title="#{my.account.label}"><i class="fa fa-user-plus" th:attr="aria-label=#{my.account.label}"></i></a><span class="menu-label" th:text="${children.firstName}"></span -->
+              <a th:href="@{/perso/home.html(idchild=${children.id})}" id="dossier" th:title="#{my.account.label}"><i class="fa fa-user-plus" th:attr="aria-label=#{my.account.label}"></i></a><span class="menu-label" th:text="${children.firstName}"></span>
+          </li>
+      
+
         <li><a id="info" href="#info-panel" th:title="#{informations.label}"><i class="fa fa-info-circle"></i><span class="menu-label" th:text="#{informations.label}">Infos</span></a></li>
       </ul>
     </div>

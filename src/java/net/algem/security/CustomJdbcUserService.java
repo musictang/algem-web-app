@@ -73,21 +73,19 @@ public class CustomJdbcUserService
     return getJdbcTemplate().query(customUsersByUsernameQuery, new Object[]{login}, new RowMapper<UserDetails>()
     {
       public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
-//        String idAsString = String.valueOf(rs.getString(1)); // idper
+
         String login = rs.getString(1);
         String password = rs.getString(2);
         String salt = rs.getString(3);
-//        String fullName = rs.getString(5);
+
         boolean enabled = true;
-//        if (idAsString == null || idAsString.isEmpty()) {
-//          idAsString = "";
-//        }
+
         if (password == null || password.isEmpty()) {
           password = " ";
         }
         CustomUserDetails cu = new CustomUserDetails(login, password, enabled, true, true, true, AuthorityUtils.NO_AUTHORITIES);
         cu.setSalt(salt == null || salt.isEmpty() ? " " : salt);
-//        cu.setFullName(fullName);
+
         return cu;
       }
 

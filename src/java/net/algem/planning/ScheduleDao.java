@@ -740,10 +740,10 @@ public class ScheduleDao
     }, idper, start, end);
   }
 
-  public List<ScheduleRangeElement> findScheduleDetail(int id, int ptype) {
+  public List<ScheduleRangeElement> findScheduleDetail(int id, int ptype, boolean withAge) {
     switch (ptype) {
       case Schedule.COURSE:
-        return findCourseScheduleDetail(id, ptype);
+        return findCourseScheduleDetail(id, ptype, withAge);
       case Schedule.GROUP:
         return findGroupScheduleDetail(id, ptype);
       case Schedule.MEMBER:
@@ -751,7 +751,7 @@ public class ScheduleDao
       case Schedule.MEETING:
         return findMeetingScheduleDetail(id, ptype);
       default:
-        return findCourseScheduleDetail(id, ptype);
+        return findCourseScheduleDetail(id, ptype, withAge);
     }
   }
 
@@ -762,6 +762,7 @@ public class ScheduleDao
       + " LEFT JOIN instrument i ON (pi.instrument = i.id)"
       + " WHERE idplanning = (SELECT idplanning FROM " + ScheduleRangeIO.TABLE + " WHERE id = ?)"
       + " ORDER BY pl.debut,per.nom,per.prenom";
+    System.out.println("ScheduleDao.FINDMEETINGSCHEDULEDETAIL query="+query);
     return jdbcTemplate.query(query, new RowMapper<ScheduleRangeElement>() {
 
       @Override
@@ -771,12 +772,18 @@ public class ScheduleDao
     }, id);
   }
 
-  private List<ScheduleRangeElement> findCourseScheduleDetail(int id, int ptype) {
-    String query = "SELECT DISTINCT pl.id,pl.adherent,pl.debut,pl.fin,pl.note,p.nom,p.prenom,p.pseudo,i.id,i.nom"
-      + " FROM plage pl JOIN personne p ON (pl.adherent = p.id)"
+  private List<ScheduleRangeElement> findCourseScheduleDetail(int id, int ptype, boolean withAge) {
+    String query = "SELECT DISTINCT pl.id,pl.adherent,pl.debut,pl.fin,pl.note,p.nom,p.prenom,p.pseudo,i.id,i.nom";
+    if (withAge) {
+      query += " ,e.datenais";
+    }
+    query += " FROM plage pl JOIN personne p ON (pl.adherent = p.id)"
       + " LEFT JOIN person_instrument pi ON (p.id = pi.idper AND pi.idx = 0 AND pi.ptype = " + getInstrumentFromScheduleType(ptype) + ")"
-      + " LEFT JOIN instrument i ON (pi.instrument = i.id)"
-      + " WHERE idplanning = ?"
+      + " LEFT JOIN instrument i ON (pi.instrument = i.id)";
+    if (withAge) {
+      query += " LEFT JOIN eleve e ON (p.id = e.idper)";
+    }
+    query += " WHERE idplanning = ?"
       + " ORDER BY pl.debut,p.nom,p.prenom";
 
     return jdbcTemplate.query(query, new RowMapper<ScheduleRangeElement>() {
@@ -797,6 +804,7 @@ public class ScheduleDao
       + " JOIN instrument i ON (pi.instrument = i.id)"
       + " WHERE p.id = ?"
       + " ORDER BY per.nom,per.prenom";
+    System.out.println("ScheduleDao.FINDMEMBERSSCHEDULEDETAIL query="+query);
     return jdbcTemplate.query(query, new RowMapper<ScheduleRangeElement>() {
 
       @Override
@@ -837,6 +845,11 @@ public class ScheduleDao
     p.setFirstName(rs.getString(7));
     p.setNickName(rs.getString(8));
     p.setInstrument(new Instrument(rs.getInt(9), 0, rs.getString(10)));
+    try {
+        Date datenais = rs.getDate(11);
+        p.setAge(new Date().getYear()-datenais.getYear());
+    } catch (Exception ignore) {}
+    
     r.setPerson(p);
     return r;
   }

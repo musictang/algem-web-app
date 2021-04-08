@@ -45,6 +45,12 @@
       <ul>
         <li><a href="#" id="menu-close" th:title="#{close.label}"><i class="fa fa-close"></i></a><span class="menu-label" th:text="#{close.label}">Fermer</span></li>
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a><span class="menu-label" th:text="#{home.label}">Accueil</span></li>
+          <li th:if="${famille != null && famille.currentId != famille.parent.id}">
+            <a th:href="@{/perso/home.html}" id="dossier" th:title="#{my.account.label}"><i class="fa fa-user-plus" th:attr="aria-label=#{my.account.label}"></i></a><span class="menu-label" th:text="${famille.parent.login}"></span>
+          </li>
+          <li th:if="${famille}" th:each="children : ${famille?.childrens}">
+            <a th:href="@{/perso/home.html(idchild=${children.id})}" id="dossier" th:title="#{my.account.label}"><i class="fa fa-user-plus" th:attr="aria-label=#{my.account.label}"></i></a><span class="menu-label" th:text="${children.firstName}"></span>
+          </li>
         <li sec:authorize="isAuthenticated()"><a th:href="@{/j_spring_security_logout}" id="menu-logout" th:title="#{logout.label}"><i class="fa fa-sign-out" th:attr="aria-label=#{logout.label}"></i></a><span class="menu-label" th:text="#{logout.label}">Déconnexion</span></li>
         <li><a id="help" th:href="@{/help.html}" th:title="#{help.label}"><i class="fa fa-question-circle"></i></a><span class="menu-label" th:text="#{help.label}">Aide</span></li>
       </ul>

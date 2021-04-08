@@ -89,6 +89,7 @@
 }
 
 #schedule-detail-dlg, #roomDetailDialog {font-size: smaller}
+#schedule-detail-dlg {min-width: 320px}
 #roomDetailDialog h4 {margin-bottom: .25em}
 #roomDetailDialog p {line-height: 1em}
 #roomDetailDialog table th, #roomDetailDialog table td {padding: 0}

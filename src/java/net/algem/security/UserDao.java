@@ -40,6 +40,8 @@ public interface UserDao {
 
   User find(String login);
 
+  List<User> findChildren(int id);
+
   List<User> findAll();
 
   User findAuthenticated(final String email, final int id);

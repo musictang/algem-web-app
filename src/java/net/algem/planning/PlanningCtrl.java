@@ -34,15 +34,18 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import net.algem.room.Room;
 import net.algem.util.AuthUtil;
+import net.algem.util.Famille;
 import net.algem.util.GemConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
  * MVC Controller for planning view.
@@ -52,6 +55,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @since 1.0.0 11/02/13
  */
 @Controller
+@SessionAttributes( value="famille", types={Famille.class})
 public class PlanningCtrl
 {
 
@@ -130,7 +134,7 @@ public class PlanningCtrl
   }
 
   @RequestMapping(method = RequestMethod.GET, value={ "perso/weekly.html"})
-  String loadWeekSchedule(Model model, HttpServletRequest request,@CookieValue(value = "ALGEM_LANG", defaultValue = "fr_FR") String lang) throws ParseException {
+  String loadWeekSchedule(Model model, HttpServletRequest request,@CookieValue(value = "ALGEM_LANG", defaultValue = "fr_FR") String lang,@ModelAttribute("famille") Famille famille) throws ParseException {
     int idper = Integer.parseInt(request.getParameter("id"));
     String sow = request.getParameter("d");
     Calendar cal = Calendar.getInstance();
@@ -139,7 +143,7 @@ public class PlanningCtrl
     cal.add(Calendar.DATE, 6);
     int week = cal.get(Calendar.WEEK_OF_YEAR);
     Date end = cal.getTime();
-
+    
     Map<Integer, Collection<ScheduleElement>> schedules = service.getWeekSchedule(start, end, idper);
 
     cal.add(Calendar.DATE,-13);
@@ -164,8 +168,10 @@ public class PlanningCtrl
   @RequestMapping(method = RequestMethod.GET, value = "/perso/xScheduleDetail")
   public @ResponseBody List<ScheduleRangeElement> getScheduleDetail(
     @RequestParam("id") String id,
-    @RequestParam("type") String type) {
-    return service.getScheduleDetail(Integer.parseInt(id), Integer.parseInt(type));
+    @RequestParam("type") String type,
+    @ModelAttribute("famille") Famille famille) {
+
+    return service.getScheduleDetail(Integer.parseInt(id), Integer.parseInt(type), famille.getParent().isTeacher());
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/xRoomDetail")

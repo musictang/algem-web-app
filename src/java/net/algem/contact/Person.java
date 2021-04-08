@@ -50,7 +50,8 @@ public class Person
   private String photo;
   private Instrument instrument;
   private Map<Integer,List<Instrument>> instruments = new HashMap<Integer, List<Instrument>>();
-
+  private int age;
+  
   public Person() {
   }
 
@@ -166,6 +167,14 @@ public class Person
   public void setPhoto(String photo) {
     this.photo = photo;
   }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
   @Override
   public String toString() {

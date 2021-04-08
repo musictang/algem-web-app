@@ -577,15 +577,15 @@ function displayScheduleDetail(url, detail, btLabel, breakLabel) {
         d += "<p><strong>" + detail.person + "</strong></p>";
       }
 
-      d += "<table class=\"pure-table pure-table-horizontal\" ><tbody>"
+      d += "<table class=\"pure-table pure-table-horizontal\" ><tbody>";
       data.forEach(function (value, index) {
         if (detail.collective === "true" || detail.type != 1) {
           var instr = $.isEmptyObject(value.person.instrument.name);
-          d += "<tr><td id=\"" + value.id + "\">" + value.person.firstName + " " + value.person.name + "</td><td>" + (instr ? "" : value.person.instrument.name) + "</td></tr>";
+          d += "<tr><td id=\"" + value.id + "\">" + value.person.firstName + " " + value.person.name + (value.person.age && value.person.age > 0 ? " (" + value.person.age + ")" : "") + "</td><td>" + (instr ? "" : value.person.instrument.name) + "</td></tr>";
         } else {
           var st = value.start.hour + ":" + (value.start.minute == 0 ? "00" : value.start.minute);
           var et = value.end.hour + ":" + (value.end.minute == 0 ? "00" : value.end.minute);
-          d += "<tr><td id=\"" + value.id + "\">" + st + "-" + et + "</td><td>" + (value.memberId == 0 ? breakLabel : value.person.firstName + " " + value.person.name) + "</td></tr>";
+          d += "<tr><td id=\"" + value.id + "\">" + st + "-" + et + "</td><td>" + (value.memberId == 0 ? breakLabel : value.person.firstName + " " + value.person.name + (value.person.age > 0 ? " ("+ value.person.age + ")": "")) + "</td></tr>";
         }
       });
       d += "</tbody></table>"

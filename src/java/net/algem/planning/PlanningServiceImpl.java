@@ -219,7 +219,12 @@ public class PlanningServiceImpl
 
   @Override
   public List<ScheduleRangeElement> getScheduleDetail(int id, int type) {
-    return scheduleDao.findScheduleDetail(id, type);
+    return scheduleDao.findScheduleDetail(id, type, false);
+  }
+
+  @Override
+  public List<ScheduleRangeElement> getScheduleDetail(int id, int type, boolean withAge) {
+    return scheduleDao.findScheduleDetail(id, type, withAge);
   }
 
   @Override

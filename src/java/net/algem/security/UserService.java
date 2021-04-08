@@ -93,6 +93,13 @@ public interface UserService
   public User findUserByLogin(String login);
 
   /**
+   * Gets some children by his parent id 
+   * @param login username
+   * @return some user or null if no user was found
+   */
+  public List<User> findChildrenById(int id);
+
+  /**
    * Find a user by his email.
    *
    * @param email the email of the user

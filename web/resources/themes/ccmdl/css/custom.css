@@ -1,0 +1,127 @@
+/*
+ * @(#) custom.css Algem Web App 1.6.2 08/05/17
+ *
+ * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
+ *
+ * This file is part of Algem Web App.
+ * Algem Web App is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Algem Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
+*/
+/*
+    Created on : 05/12/2015, 10:29:34
+    Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
+    Version    : 1.6.2 08/05/17
+*/
+/*Personnalisation BLUE THEME*/
+
+body {
+  background-color: #4a983b;
+  /* #002fa7 = bleu klein*/
+  /*background-color: #002fa7;*/
+  color: white;
+}
+.main-text-color {color: #4a983b;}
+.global {
+  color: #444;
+  background-color: white;
+}
+.header-top{
+  background-color: #4a983b; /* test ERIC */
+  background: linear-gradient(to bottom, rgba(74,137,59,1) 0%,rgba(148,191,52,1) 100%);
+}
+header nav select, #datepicker {color: #444;}
+
+header nav #previous, header nav #next {color: white;}
+footer, #bottom-menu {
+  background-color: #4a983b;
+  box-shadow: 0px -1px 1px 0px #444;
+  background: linear-gradient(to bottom,rgba(148,191,52,1) 0%, rgba(74,137,59,1) 100%);
+}
+
+.pure-button-primary {
+    background-color: #4a983b;
+}
+#login-submit-button {
+    background-color: #4a983b;
+}
+
+h1 {color: #f5f5f5;}
+
+h2, h3, h4, h5, h6, h7, fieldset > legend {color: #4a983b;}
+#follow-up-form fieldset div > legend {color: #4a983b}
+h2, h3, h4, fieldset > legend {border-color: #4a983b;}
+ul.disc > li {list-style-image: url('../img/puce-blue.png');}
+ul.disc ul li {list-style-image:none;list-style: disc}
+a:link,a:visited, a:active, a:hover,
+.pure-menu, .pure-menu-heading, #menu
+{
+  color: #4a983b;
+}
+.closing-bar {background-color: #4a983b;}
+
+a:link,a:visited, a:active {border-bottom-color: #4a983b;}
+a:hover {border-bottom-color: #75BAFD;}
+
+footer a:link,footer a:visited,footer a:active,footer a:hover {color: #FFF;}
+
+#bars {color: #aaa}
+#menu {background: #4a983b; /*#1E90FF;*/}
+#bottom-menu {
+  color: white;
+  background-color: #4a983b;
+}
+#bottom-menu a:link, #bottom-menu a:visited, #bottom-menu a:hover, #bottom-menu a:active
+{color: white;border-color:white}
+#bottom-menu a:hover {background-color: white;color: #4a983b;}
+.pure-menu-link:hover {
+  color: #75BAFD;
+  background-color: #4a983b;
+}
+
+#help-panel, #info-panel, #login-panel, .side-panel {
+  background-color: aliceblue;
+  color: #444;
+}
+
+.title_col { background-color: #4a983b;}
+.title_col:hover {background:ivory;color:#222}
+.doc-ref:hover {color: #4a983b}
+
+i[class*="fa-"]:hover{text-shadow: rgba(255, 255, 255, 0.1) -1px -1px 10px, rgba(0, 0, 0, 0.8) 1px 1px 10px;}
+i[class="fa fa-bars"]:hover{color:#98cbfd;text-shadow: rgba(255, 255, 255, 0.1) -1px -1px 2px, rgba(0, 0, 0, 0.8) 1px 1px 2px;}
+i[class="fa fa-chevron-circle-left"]:hover,
+i[class="fa fa-chevron-circle-right"]:hover
+{text-shadow: rgba(255, 255, 255, 0.1) -1px -1px 6px, rgba(117, 186, 253, 0.8) 1px 1px 6px;}
+#datepicker, .week-date {box-shadow: inset 0px 0px 1px 0px #4a983b;}
+#datepicker:hover, .week-date:hover {box-shadow: 0px 0px 3px 1px #75BAFD;}
+#accordion h3.ui-state-active {
+  background: #4a983b;
+  background: linear-gradient(to bottom, rgba(74,137,59,1) 0%,rgba(148,191,52,1) 100%);
+  box-shadow: 0px 2px 2px 0px #656565;
+}
+#accordion .ui-widget-content a {color: #4a983b;}
+#accordion .ui-widget-content a.dlg {font-weight: bold}
+.ui-widget {font-size: 1em;}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {font-size: 0.95em;/* orig = 1em */}
+.ui-datepicker {width: 20em}
+.ui-datepicker-calendar td > a {height:2em}
+.ui-datepicker-header {background: #4a983b;}
+.ui-dialog-titlebar {
+  background: #4a983b;
+  background: linear-gradient(to bottom, rgba(74,137,59,1) 0%,rgba(148,191,52,1) 100%);
+  box-shadow: 0px 2px 2px 0px #656565;
+}
+
