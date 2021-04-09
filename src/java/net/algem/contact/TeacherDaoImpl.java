@@ -42,6 +42,7 @@ import net.algem.planning.ScheduleRangeIO;
 import net.algem.util.AbstractGemDao;
 import net.algem.util.CommonDao;
 import net.algem.util.NamedModel;
+import net.algem.util.GemConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -140,10 +141,16 @@ public class TeacherDaoImpl
       + " pl JOIN " + PersonIO.TABLE + " p ON (pl.adherent = p.id)"
       + " JOIN eleve e ON (p.id = e.idper)"
       + " LEFT JOIN email em1 ON (e.idper = em1.idper AND em1.idx = 0)"
-      + " LEFT JOIN email em2 ON (e.payeur = em2.idper AND em2.idx = 0)"
-      + " LEFT JOIN telephone t1 ON (e.idper = t1.idper AND t1.idx = 0)"
-      + " LEFT JOIN telephone t2 ON (e.payeur = t2.idper AND t2.idx = 0)"
-      + " LEFT JOIN suivi s ON (pl.note = s.id)"
+      + " LEFT JOIN telephone t1 ON (e.idper = t1.idper AND t1.idx = 0)";
+    if (GemConstants.CLIENT.equals("ccmdl")) {
+      query += " LEFT JOIN email em2 ON (e.famille = em2.idper AND em2.idx = 0)"
+      + " LEFT JOIN telephone t2 ON (e.famille = t2.idper AND t2.idx = 0)";
+        
+    } else {
+      query += " LEFT JOIN email em2 ON (e.payeur = em2.idper AND em2.idx = 0)"
+      + " LEFT JOIN telephone t2 ON (e.payeur = t2.idper AND t2.idx = 0)";
+    }
+    query += " LEFT JOIN suivi s ON (pl.note = s.id)"
       + " WHERE pl.idplanning = ? AND pl.debut = ? ORDER BY pl.debut";
 
     return jdbcTemplate.query(query, new RowMapper<ScheduleRangeElement>() {

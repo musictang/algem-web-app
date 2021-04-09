@@ -33,4 +33,5 @@ public class GemConstants {
 
   public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
   public static String ESTAB_TABLE = "etablissement";
+  public static String CLIENT = "ccmdl";
 }
