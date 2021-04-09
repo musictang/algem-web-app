@@ -162,6 +162,9 @@ public class PlanningCtrl
     model.addAttribute("w", week);
     model.addAttribute("timeOffset", service.getTimeOffset());
     model.addAttribute("colorDefs", service.getDefaultColorCodes());
+    if (GemConstants.CLIENT.equals("ccmdl")) {
+        model.addAttribute("detailPlage", famille.getParent().isTeacher() || famille.getParent().isTech());
+    }
     return "weekly";
   }
 

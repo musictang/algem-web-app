@@ -566,13 +566,14 @@ function ScheduleDetail(id, person, label, type, collective, time, room) {
   this.room = room;
 }
 
-function displayScheduleDetail(url, detail, btLabel, breakLabel) {
+function displayScheduleDetail(url, detail, btLabel, breakLabel, plages=true, uid) {
   $.get(url, {id: detail.id, type: detail.type}, function (data) {
     if (typeof data === 'undefined' || !data.length) {
       console.log("empty detail");
     } else {
       var d = "";
-      //console.log(detail.type);
+      console.log(plages);
+      console.log(uid);
       if (detail.type != 4 && detail.type != 10 && detail.person) {// not member nor meeting
         d += "<p><strong>" + detail.person + "</strong></p>";
       }
@@ -582,10 +583,10 @@ function displayScheduleDetail(url, detail, btLabel, breakLabel) {
         if (detail.collective === "true" || detail.type != 1) {
           var instr = $.isEmptyObject(value.person.instrument.name);
           d += "<tr><td id=\"" + value.id + "\">" + value.person.firstName + " " + value.person.name + (value.person.age && value.person.age > 0 ? " (" + value.person.age + ")" : "") + "</td><td>" + (instr ? "" : value.person.instrument.name) + "</td></tr>";
-        } else {
-          var st = value.start.hour + ":" + (value.start.minute == 0 ? "00" : value.start.minute);
-          var et = value.end.hour + ":" + (value.end.minute == 0 ? "00" : value.end.minute);
-          d += "<tr><td id=\"" + value.id + "\">" + st + "-" + et + "</td><td>" + (value.memberId == 0 ? breakLabel : value.person.firstName + " " + value.person.name + (value.person.age > 0 ? " ("+ value.person.age + ")": "")) + "</td></tr>";
+        } else if (plages || value.memberId == uid) {
+              var st = value.start.hour + ":" + (value.start.minute == 0 ? "00" : value.start.minute);
+              var et = value.end.hour + ":" + (value.end.minute == 0 ? "00" : value.end.minute);
+              d += "<tr><td id=\"" + value.id + "\">" + st + "-" + et + "</td><td>" + (value.memberId == 0 ? breakLabel : value.person.firstName + " " + value.person.name + (value.person.age > 0 ? " ("+ value.person.age + ")": "")) + "</td></tr>";
         }
       });
       d += "</tbody></table>"

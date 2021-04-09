@@ -123,6 +123,7 @@
     <div id="schedule-detail-dlg" title="Détail planning"></div>
     <script type="text/javascript" th:inline="javascript">
        /*<![CDATA[*/
+      var detailPlage = /*[[${detailPlage}]]*/ 'false';
       var h = /*[[${timeOffset}]]*/ '720';
       var fdow = /*[[${param.d[0]}]]*/ '04-01-2016';
       var idper = /*[[${param.id[0]}]]*/ '1234';
@@ -166,7 +167,7 @@
               $(e).attr("data-algem-time"),
               $(e).attr("data-algem-room")
             );
-          displayScheduleDetail(detailURL, detail, labels.close_label, labels.break_label);
+          displayScheduleDetail(detailURL, detail, labels.close_label, labels.break_label, detailPlage, idper);
         });
 
       });
