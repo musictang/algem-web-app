@@ -1,4 +1,5 @@
 /*
+* // TODO : change author and dates
  * @(#) custom.css Algem Web App 1.6.2 08/05/17
  *
  * Copyright (c) 2015-2017 Musiques Tangentes. All Rights Reserved.
@@ -22,7 +23,7 @@
     Author     : <a href="mailto:jmg@musiques-tangentes.asso.fr">Jean-Marc Gobat</a>
     Version    : 1.6.2 08/05/17
 */
-/*Personnalisation BLUE THEME*/
+/* // TODO : change to ccmdl Personnalisation BLUE THEME*/
 
 body {
   background-color: #4a983b;
@@ -45,7 +46,7 @@ header nav #previous, header nav #next {color: white;}
 footer, #bottom-menu {
   background-color: #4a983b;
   box-shadow: 0px -1px 1px 0px #444;
-  background: linear-gradient(to bottom,rgba(148,191,52,1) 0%, rgba(74,137,59,1) 100%);
+  background: linear-gradient(to bottom, rgb(148, 191, 52) 0%, rgba(74,137,59,1) 100%);
 }
 
 .pure-button-primary {
@@ -70,7 +71,7 @@ a:link,a:visited, a:active, a:hover,
 .closing-bar {background-color: #4a983b;}
 
 a:link,a:visited, a:active {border-bottom-color: #4a983b;}
-a:hover {border-bottom-color: #75BAFD;}
+a:hover {border-bottom-color: #94BF34;}
 
 footer a:link,footer a:visited,footer a:active,footer a:hover {color: #FFF;}
 

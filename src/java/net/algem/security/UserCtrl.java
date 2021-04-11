@@ -140,7 +140,7 @@ public class UserCtrl {
     private SimpleMailMessage recoverMessage;
     
     @Autowired 
-    private ApplicationContext appContext;
+    private ApplicationContext appContext; // TODO : not used
 
     public UserCtrl() {
     }

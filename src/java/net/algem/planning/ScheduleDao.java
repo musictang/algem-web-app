@@ -772,6 +772,7 @@ public class ScheduleDao
     }, id);
   }
 
+  // TODO : suppress boolean (include directly)
   private List<ScheduleRangeElement> findCourseScheduleDetail(int id, int ptype, boolean withAge) {
     String query = "SELECT DISTINCT pl.id,pl.adherent,pl.debut,pl.fin,pl.note,p.nom,p.prenom,p.pseudo,i.id,i.nom";
     if (withAge) {

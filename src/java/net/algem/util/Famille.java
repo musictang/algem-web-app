@@ -30,7 +30,7 @@ import net.algem.security.User;
  * @version 1.7.5b
  * @since 1.7.5b 18/03/2021
  */
-public class Famille {
+public class Famille { // TODO : rename to Family and move (refacto) to contact package
 
     private int currentId;
     private User parent;
