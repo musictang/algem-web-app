@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import net.algem.room.Room;
 import net.algem.util.AuthUtil;
-import net.algem.util.Famille;
+import net.algem.contact.Family;
 import net.algem.util.GemConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -55,7 +55,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  * @since 1.0.0 11/02/13
  */
 @Controller
-@SessionAttributes( value="famille", types={Famille.class})
+@SessionAttributes( value="family", types={Family.class})
 public class PlanningCtrl
 {
 
@@ -134,7 +134,7 @@ public class PlanningCtrl
   }
 
   @RequestMapping(method = RequestMethod.GET, value={ "perso/weekly.html"})
-  String loadWeekSchedule(Model model, HttpServletRequest request,@CookieValue(value = "ALGEM_LANG", defaultValue = "fr_FR") String lang,@ModelAttribute("famille") Famille famille) throws ParseException {
+  String loadWeekSchedule(Model model, HttpServletRequest request,@CookieValue(value = "ALGEM_LANG", defaultValue = "fr_FR") String lang,@ModelAttribute("family") Family family) throws ParseException {
     int idper = Integer.parseInt(request.getParameter("id"));
     String sow = request.getParameter("d");
     Calendar cal = Calendar.getInstance();
@@ -163,7 +163,7 @@ public class PlanningCtrl
     model.addAttribute("timeOffset", service.getTimeOffset());
     model.addAttribute("colorDefs", service.getDefaultColorCodes());
     if (GemConstants.CLIENT.equals("ccmdl")) {
-        model.addAttribute("detailPlage", famille.getParent().isTeacher() || famille.getParent().isTech());
+        model.addAttribute("detailPlage", family.getParent().isTeacher() || family.getParent().isTech());
     }
     return "weekly";
   }
@@ -172,9 +172,9 @@ public class PlanningCtrl
   public @ResponseBody List<ScheduleRangeElement> getScheduleDetail(
     @RequestParam("id") String id,
     @RequestParam("type") String type,
-    @ModelAttribute("famille") Famille famille) {
+    @ModelAttribute("family") Family family) {
 
-    return service.getScheduleDetail(Integer.parseInt(id), Integer.parseInt(type), famille.getParent().isTeacher());
+    return service.getScheduleDetail(Integer.parseInt(id), Integer.parseInt(type), family.getParent().isTeacher());
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/xRoomDetail")

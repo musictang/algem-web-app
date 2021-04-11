@@ -1,5 +1,5 @@
 /*
- * @(#) Famille.java Algem Web App 1.7.5b 18/03/2021
+ * @(#) Family.java Algem Web App 1.7.5b 18/03/2021
  *
  * Copyright (c) 2015-2021 Musiques Tangentes. All Rights Reserved.
  *
@@ -18,7 +18,7 @@
  * along with Algem Web App. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.algem.util;
+package net.algem.contact;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +30,13 @@ import net.algem.security.User;
  * @version 1.7.5b
  * @since 1.7.5b 18/03/2021
  */
-public class Famille { // TODO : rename to Family and move (refacto) to contact package
+public class Family {
 
     private int currentId;
     private User parent;
     private List<User> childrens = new ArrayList<User>();
 
-    public Famille() {
+    public Family() {
     }
 
     public int getCurrentId() {

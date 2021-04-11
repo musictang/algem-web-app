@@ -52,7 +52,7 @@
     <ul th:fragment="secondary" th:remove="tag">
       <li><i class="fa fa-home" th:attr="aria-label=#{home.label}"></i>&nbsp;<a th:href="@{/index.html}" th:text="#{home.label}"></a></li>
       <li sec:authorize="not isAnonymous()" ><i class="fa fa-rotate-left" th:attr="aria-label=#{my.account.label}"></i>&nbsp;<a th:href="@{/perso/home.html}" th:title="#{my.account.label}" sec:authentication="name"></a></li>
-          <li sec:authorize="hasAnyRole('1','2','3','4','11')" th:if="${famille}" th:each="children : ${famille?.childrens}">
+          <li sec:authorize="hasAnyRole('1','2','3','4','11')" th:if="${family}" th:each="children : ${family?.childrens}">
               <a th:if="${start}" th:href="@{/perso/weekly.html(d=${#dates.format(start,'dd-MM-yyyy')},id=${children.id})}" id="dossier" th:title="#{my.account.label}"><i class="fa fa-user-plus" th:attr="aria-label=#{my.account.label}"></i></a><span class="menu-label" th:text="${children.firstName}"></span>
           </li>
       

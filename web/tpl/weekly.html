@@ -45,7 +45,7 @@
         <li><a th:href="@{/index.html}" th:title="#{home.label}"><i class="fa fa-home"></i></a><span class="menu-label" th:text="#{home.label}">Accueil</span></li>
         <li th:replace="fragments/menu :: cnx"></li>
               
-          <li sec:authorize="hasAnyRole('1','2','3','4','11')" th:if="${famille}" th:each="children : ${famille?.childrens}">
+          <li sec:authorize="hasAnyRole('1','2','3','4','11')" th:if="${family}" th:each="children : ${family?.childrens}">
               <!-- a th:href="@{/perso/weekly.html(d=${#dates.format(start,'dd-MM-yyyy')},id=${children.id})}" id="dossier" th:title="#{my.account.label}"><i class="fa fa-user-plus" th:attr="aria-label=#{my.account.label}"></i></a><span class="menu-label" th:text="${children.firstName}"></span -->
               <a th:href="@{/perso/home.html(idchild=${children.id})}" id="dossier" th:title="#{my.account.label}"><i class="fa fa-user-plus" th:attr="aria-label=#{my.account.label}"></i></a><span class="menu-label" th:text="${children.firstName}"></span>
           </li>

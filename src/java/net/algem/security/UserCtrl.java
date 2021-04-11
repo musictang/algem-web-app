@@ -65,7 +65,7 @@ import net.algem.planning.PlanningService;
 import net.algem.planning.ScheduleElement;
 import net.algem.planning.ScheduleRangeElement;
 import net.algem.util.CommonDao;
-import net.algem.util.Famille;
+import net.algem.contact.Family;
 import static net.algem.util.GemConstants.DATE_FORMAT;
 import net.algem.util.Postit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +108,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  */
 @Controller
 //@Scope("session")
-@SessionAttributes(value = "famille", types = {net.algem.util.Famille.class})
+@SessionAttributes(value = "family", types = {net.algem.contact.Family.class})
 public class UserCtrl {
 
     private final static Logger LOGGER = Logger.getLogger(UserCtrl.class.getName());
@@ -139,8 +139,8 @@ public class UserCtrl {
     @Autowired
     private SimpleMailMessage recoverMessage;
     
-    @Autowired 
-    private ApplicationContext appContext; // TODO : not used
+    //@Autowired 
+    //private ApplicationContext appContext;
 
     public UserCtrl() {
     }
@@ -157,9 +157,9 @@ public class UserCtrl {
         this.recoverMessage = recoverMessage;
     }
 
-    @ModelAttribute("famille")
-    public Famille addFamille() {
-        return new Famille();
+    @ModelAttribute("family")
+    public Family addFamily() {
+        return new Family();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "login.html")
@@ -238,27 +238,27 @@ public class UserCtrl {
             @CookieValue(value = "_PRS", defaultValue = "false") String _prs,
             @RequestParam(value = "section", required = false) Integer section,
             @RequestParam(value = "idchild", required = false) Integer idchild,
-            @ModelAttribute("famille") Famille famille) {
+            @ModelAttribute("family") Family family) {
 
         User u = service.findUserByLogin(p.getName());
 
-        if (famille.getCurrentId() == 0) {
-            famille.setParent(u);
-            famille.setChildrens(service.findChildrenById(u.getId()));
-            famille.setCurrentId(u.getId());
+        if (family.getCurrentId() == 0) {
+            family.setParent(u);
+            family.setChildrens(service.findChildrenById(u.getId()));
+            family.setCurrentId(u.getId());
         }
 
         if (idchild != null) {
             if (idchild != u.getId()) {
-                for (User child : famille.getChildrens()) {
+                for (User child : family.getChildrens()) {
                     if (child.getId() == idchild) {
                         u = child;
-                        famille.setCurrentId(idchild);
+                        family.setCurrentId(idchild);
                     }
                 }
             }
         } else {
-            famille.setCurrentId(u.getId());
+            family.setCurrentId(u.getId());
         }
 
         model.addAttribute("user", u);
