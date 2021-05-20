@@ -48,7 +48,7 @@ footer, #bottom-menu {
   background: linear-gradient(to bottom, rgb(148, 191, 52) 0%, rgba(74,137,59,1) 100%);
 }
 
-.pure-button-primary,.pure-button-secondary, .ui-button-text, .button-secondary {
+.pure-button-primary,.pure-button-secondary, .ui-button-text, .button-secondary { 
     background-color: #4a983b;
 }
 #login-submit-button {
@@ -60,7 +60,7 @@ h1 {color: #f5f5f5;}
 h2, h3, h4, h5, h6, h7, fieldset > legend {color: #4a983b;}
 #follow-up-form fieldset div > legend {color: #4a983b}
 h2, h3, h4, fieldset > legend {border-color: #4a983b;}
-ul.disc > li {list-style-image: url('../img/puce-blue.png');}
+ul.disc > li {list-style-image: url('../img/puce-green.png');}
 ul.disc ul li {list-style-image:none;list-style: disc}
 a:link,a:visited, a:active, a:hover,
 .pure-menu, .pure-menu-heading, #menu
@@ -124,4 +124,6 @@ i[class="fa fa-chevron-circle-right"]:hover
   background: linear-gradient(to bottom, rgba(74,137,59,1) 0%,rgba(148,191,52,1) 100%);
   box-shadow: 0px 2px 2px 0px #656565;
 }
-
+.ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text {
+   background-color: transparent;
+}
