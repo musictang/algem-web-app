@@ -39,11 +39,9 @@ import net.algem.planning.ActionDocumentDaoImpl;
 import net.algem.planning.ScheduleElement;
 import net.algem.planning.ScheduleRangeElement;
 import net.algem.planning.ScheduleRangeIO;
-import net.algem.util.AbstractGemDao;
-import net.algem.util.CommonDao;
-import net.algem.util.NamedModel;
-import net.algem.util.GemConstants;
+import net.algem.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -82,6 +80,9 @@ public class TeacherDaoImpl
 
   @Autowired
   private ActionDocumentDaoImpl docDao;
+
+  @Autowired
+  private GemOptions options;
 
   private Map<Integer,String> photoCache = new HashMap<>();
 
@@ -142,7 +143,7 @@ public class TeacherDaoImpl
       + " JOIN eleve e ON (p.id = e.idper)"
       + " LEFT JOIN email em1 ON (e.idper = em1.idper AND em1.idx = 0)"
       + " LEFT JOIN telephone t1 ON (e.idper = t1.idper AND t1.idx = 0)";
-    if (GemConstants.CLIENT.equals("ccmdl")) {
+    if (options.withFamilyManagement()) {
       query += " LEFT JOIN email em2 ON (e.famille = em2.idper AND em2.idx = 0)"
       + " LEFT JOIN telephone t2 ON (e.famille = t2.idper AND t2.idx = 0)";
         

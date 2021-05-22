@@ -36,6 +36,7 @@ import net.algem.room.Room;
 import net.algem.util.AuthUtil;
 import net.algem.contact.Family;
 import net.algem.util.GemConstants;
+import net.algem.util.GemOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,11 +60,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class PlanningCtrl
 {
 
-//  private static DateFormat DATE_FORMAT;
   private final static Logger LOGGER = Logger.getLogger(PlanningCtrl.class.getName());
 
   @Autowired
   private PlanningService service;
+
+  @Autowired
+  private GemOptions options;
 
   public void setService(PlanningService service) {
     this.service = service;
@@ -162,8 +165,8 @@ public class PlanningCtrl
     model.addAttribute("w", week);
     model.addAttribute("timeOffset", service.getTimeOffset());
     model.addAttribute("colorDefs", service.getDefaultColorCodes());
-    if (GemConstants.CLIENT.equals("ccmdl")) {
-        model.addAttribute("detailPlage", family.getParent().isTeacher() || family.getParent().isTech());
+    if (options.withFamilyManagement()) {
+      model.addAttribute("detailPlage", family.getParent().isTeacher() || family.getParent().isTech());
     }
     return "weekly";
   }

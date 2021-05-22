@@ -48,7 +48,7 @@ footer, #bottom-menu {
   background: linear-gradient(to bottom, rgb(148, 191, 52) 0%, rgba(74,137,59,1) 100%);
 }
 
-.pure-button-primary,.pure-button-secondary, .ui-button-text, .button-secondary { 
+.pure-button-primary,.pure-button-secondary, .button-secondary {
     background-color: #4a983b;
 }
 #login-submit-button {
@@ -124,6 +124,7 @@ i[class="fa fa-chevron-circle-right"]:hover
   background: linear-gradient(to bottom, rgba(74,137,59,1) 0%,rgba(148,191,52,1) 100%);
   box-shadow: 0px 2px 2px 0px #656565;
 }
-.ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text {
+
+.ui-button-text {
    background-color: transparent;
 }

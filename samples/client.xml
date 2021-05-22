@@ -25,6 +25,7 @@
     <entry key="rules-of-procedure.required.label" value="Je déclare avoir pris connaissance du règlement intérieur" />
     <entry key="rules-of-procedure.url" value="" />
     <entry key="rules-of-procedure.url.label" value="Consulter le règlement intérieur" />
+    <entry key="family-management" value="true" />
   </util:map>
 
   <util:map id="hotline" key-type="java.lang.String" >

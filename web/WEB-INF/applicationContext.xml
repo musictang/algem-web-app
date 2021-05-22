@@ -21,7 +21,7 @@
   <!--========================-->
   <!--DATASOURCE CONFIGURATION-->
   <!--========================-->
-  <jee:jndi-lookup id="dataSource" jndi-name="jdbc/mustang"/>
+  <jee:jndi-lookup id="dataSource" jndi-name="jdbc/algem"/>
   <!--bean id="propertyConfigurer"
   class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
   p:location="/WEB-INF/jdbc.properties" />-->
